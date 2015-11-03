@@ -26,5 +26,13 @@
     "hmpo-template-mixins": "^1.1.0",
     "i18n-future": "^0.1.4",
     "i18n-lookup": "^0.1.0"
+  },
+  "browser": {
+    "hmpo-form-wizard": false,
+    "hmpo-govuk-template": false,
+    "hmpo-model": false,
+    "hmpo-template-mixins": false,
+    "i18n-future": false,
+    "i18n-lookup": false
   }
 }
