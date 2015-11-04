@@ -9,8 +9,8 @@
   },
   "keywords": [
     "forms",
-    "Home",
-    "Office"
+    "Home Office Forms",
+    "hof"
   ],
   "author": "HomeOffice",
   "license": "GPLv2",
@@ -23,7 +23,7 @@
     "hmpo-frontend-toolkit": "^1.2.1",
     "hmpo-govuk-template": "0.0.3",
     "hmpo-model": "^0.1.2",
-    "hmpo-template-mixins": "^1.1.0",
+    "hmpo-template-mixins": "^3.1.0",
     "i18n-future": "^0.1.4",
     "i18n-lookup": "^0.1.0"
   },
