@@ -1,14 +1,10 @@
 # HOF
 
-Home Office Forms (HOF) single package that bundles up a collection of packages used to create forms at the Home Office in node.js.
+Home Office Forms (HOF) is a single package that bundles up a collection of modules used to create forms at the Home Office in node.js.
 
-## Installation
+[Read the support documentation](./documentation) for more details or see use the simple instructions below to get started.
 
-```npm install --save hof```
-
-## Usage
-
-HOF comprises of the following modules.
+HOF comprises the following modules.
 
  * [hmpo-form-wizard](https://github.com/UKHomeOffice/passports-form-wizard)
  * [hmpo-frontend-toolkit](https://github.com/UKHomeOffice/passports-frontend-toolkit)
@@ -20,9 +16,15 @@ HOF comprises of the following modules.
  * [i18n-future](https://github.com/lennym/i18n-future)
  * [i18n-lookup](https://github.com/UKHomeOffice/i18n-lookup)
 
-Each one is avalable from the hof package for convinience.
+And each module is available as a property of `hof`
 
+## Installation
+```bash
+$ npm install --save hof
 ```
+
+## Usage
+```js
 var hof = require('hof');
 
 var wizard = hof.wizard;
