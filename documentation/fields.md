@@ -50,15 +50,12 @@ The following are examples of various fields and their configuration options
   hint: 'For example, 31 3 1970'
 },
 'my-date-day': {
-  validate: ['required', 'numeric'],
   label: 'Day'
 },
 'my-date-month': {
-  validate: ['required', 'numeric'],
   label: 'Month'
 },
 'my-date-year': {
-  validate: ['required', 'numeric'],
   label: 'Year'
 }
 ```
@@ -68,12 +65,28 @@ The following are examples of various fields and their configuration options
     - a date day (`my-date-day`),
     - a date month (`my-date-month`)
     - and a date year (`my-date-year`).
-- Preceeding the name of a date part with the name of the date container will link it with the date container field. I.e. `my-date-day` is associated with `my-date` because the name of the date day part is is `day` preceeded with `my-date`.
+
+- Preceding the name of a date part with the name of the date container will link it with the date container field. I.e. `my-date-day` is associated with `my-date` because the name of the date day part is is `day` preceeded with `my-date`.
+
 - The date container contains configuration for the date as a whole, which can include options such as;
   - `legend`
   - `hint`
-- Each date part can have its own validation rules
-- Validation will propogate updawards; If any date part has a validation rule, the date container will validate against that rule.
+
+- A date has a set of default, date-specific validation rules, `required`, `numeric`, `format` and `future`, and each one is set by default.
+- A dates' validation rules can be overriden with a `validate` property;
+
+In the following example, the date will validate to an error only when all date-related fields in the group have a value and either contain non-numeric values, or are in the future.
+
+
+```js
+{
+  'my-date': {
+    legend: 'Date',
+    hint: 'For example, 31 3 1970',
+    validate: ['numeric', 'future']
+  }
+}
+```
 
 ### Text field
 
