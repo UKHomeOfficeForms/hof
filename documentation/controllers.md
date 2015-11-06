@@ -36,6 +36,8 @@ Controllers can be used to alter the behaviour of an entire journey or a single 
 
 ### Journey
 
+The controller for the journey as a whole determines behaviour for things like navigation that apply to the whole journey. We recommend using the base controller here, as shown in the example app.
+
 To add a controller to a journey, pass it in as an option to the [HOF Wizard](https://github.com/UKHomeOffice/passports-form-wizard).
 
 ```js
@@ -46,6 +48,8 @@ wizard(steps, fields, {controller: MyController});
 ```
 
 ### Step
+
+The controller for a step is used if specific behaviour for a step is needed for a given step - for example having more heavily customised validation that may for example call on a third party service.
 
 To add a controller to a step, pass the controller to the `controller` option of the appropriate step options.
 ```js
