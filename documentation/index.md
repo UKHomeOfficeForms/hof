@@ -4,3 +4,4 @@ Successfully developing a form-based application using HOF requires the implemen
 
 * [fields](./fields)
 * [controllers](./controllers)
+* [views, templates and mixins](./views)
