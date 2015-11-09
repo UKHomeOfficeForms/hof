@@ -11,7 +11,6 @@ HOF comprises the following modules.
  * [hmpo-govuk-template](https://github.com/UKHomeOffice/govuk-template-compiler)
  * [hmpo-model](https://github.com/UKHomeOffice/passports-model)
  * [hmpo-template-mixins](https://github.com/UKHomeOffice/passports-template-mixins)
- * [hmpo-template-mixins](https://github.com/UKHomeOffice/passports-template-mixins)
  * [hof-controllers](https://github.com/UKHomeOffice/hof-controllers)
  * [i18n-future](https://github.com/lennym/i18n-future)
  * [i18n-lookup](https://github.com/UKHomeOffice/i18n-lookup)
