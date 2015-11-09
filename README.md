@@ -2,7 +2,9 @@
 
 Home Office Forms (HOF) is a single package that bundles up a collection of modules used to create forms at the Home Office in node.js.
 
-[Read the support documentation](./documentation) for more details or see use the simple instructions below to get started.
+[Read the support documentation](./documentation/index.md) for more details or see use the simple instructions below to get started.
+
+## What is it?
 
 HOF comprises the following modules.
 
