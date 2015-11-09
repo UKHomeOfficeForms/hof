@@ -2,7 +2,7 @@
 
 Successfully developing a form-based application using HOF requires the implementation of the following components;
 
-* [fields](./fields)
-* [controllers](./controllers)
-* [views, templates and mixins](./views)
-* [translations](./translations)
+* [fields](./fields.md)
+* [controllers](./controllers.md)
+* [views, templates and mixins](./views.md)
+* [translations](./translations.md)
