@@ -1,4 +1,4 @@
-# HOF
+# HOF [![npm version](https://badge.fury.io/js/hof.svg)](https://badge.fury.io/js/hof)
 
 Home Office Forms (HOF) is a single package that bundles up a collection of modules used to create forms at the Home Office in node.js.
 
