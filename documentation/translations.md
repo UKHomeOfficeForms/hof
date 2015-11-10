@@ -62,12 +62,12 @@ This makes i18n available [internally](https://github.com/UKHomeOffice/passports
 
 ## Structure
 
-Across HOF apps it is recommended you break translations down into sensible chunks to ensure they don't become unwieldy. By convention we like translations to live within your journey apps for example:
+Across HOF apps it is recommended you break translations down into sensible chunks to ensure they don't become unwieldy. By convention we like translations to live within your journeys, for example:
 
 ```
 my_hof_app
 │
-└───apps
+└───journeys
     │
     ├───journey-one
     │   │

@@ -58,8 +58,11 @@ In the index file of each journey directory, initialize the wizard and pass it i
     │   └───index.js
 ```
 
-Export the router, and in your applications' main file - in our case, this is app.js - require the index file and pass the export into the apps' middleware
+Export the router, and in your applications' main file - in our case this is app.js - require the index file and pass the export into the Express middleware
 
 ```js
+
+var app = express();
+
 app.use('./journeys/one/');
 ```
