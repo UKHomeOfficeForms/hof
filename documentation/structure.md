@@ -23,16 +23,16 @@ my_hof_app
 
 ```
 
-However, as the application grows in size, it makes sense to add some structure. We advocate a structure that separates and compartmentalises the project based on the concept of "apps" or journeys.
+However, as the application grows in size, it makes sense to add some structure. We advocate a structure that separates and compartmentalises the project based on the concept of journeys.
 
 ## Compartmentalised
 
-The following example shows an "apps" directory containing two journeys and a directory called "common" that we use for any shared components.
+The following example shows the "journeys" directory containing two journeys and a directory called "common" that we use for any shared components.
 
 ```
 my_hof_app
 │
-└───apps/
+└───journeys/
     │
     ├───common/
     │   │
@@ -65,4 +65,4 @@ my_hof_app
 
 In the preceding example each journey contains the components related to that specific journey, with the exception of any shared resources - which exist in common.
 
-The entry point for each journey is `index.js`, which is where the set up for each HOF wizard and application route exists.
+The entry point for each journey is `index.js`, which is where the [set up for each HOF wizard and application route exists](./wizard#finally).
