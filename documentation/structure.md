@@ -65,4 +65,4 @@ my_hof_app
 
 In the preceding example each journey contains the components related to that specific journey, with the exception of any shared resources - which exist in common.
 
-The entry point for each journey is `index.js`, which is where the set up for each HOF wizard and application route exists.
+The entry point for each journey is `index.js`, which is where the [set up for each HOF wizard and application route exists](./wizard#finally).

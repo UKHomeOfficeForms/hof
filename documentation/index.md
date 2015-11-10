@@ -7,3 +7,4 @@ Successfully developing a form-based application using HOF requires the implemen
 * [views, templates and mixins](./views.md)
 * [translations](./translations.md)
 * [structure](./structure.md)
+* [wizard](./wizard.md)
