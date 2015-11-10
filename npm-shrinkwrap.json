@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "dependencies": {
     "hmpo-form-wizard": {
       "version": "3.2.0",
@@ -443,7 +443,7 @@
         },
         "underscore": {
           "version": "1.8.3",
-          "from": "underscore@>=1.8.2 <2.0.0",
+          "from": "underscore@>=1.7.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
         }
       }
@@ -717,7 +717,7 @@
                 },
                 "minimist": {
                   "version": "0.0.10",
-                  "from": "minimist@>=0.0.1 <0.1.0",
+                  "from": "minimist@>=0.0.7 <0.1.0",
                   "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz"
                 }
               }
@@ -909,7 +909,7 @@
                       "dependencies": {
                         "esprima": {
                           "version": "1.0.4",
-                          "from": "esprima@>=1.0.2 <1.1.0",
+                          "from": "esprima@>=1.0.4 <1.1.0",
                           "resolved": "https://registry.npmjs.org/esprima/-/esprima-1.0.4.tgz"
                         },
                         "estraverse": {
@@ -1109,7 +1109,7 @@
               "dependencies": {
                 "minimist": {
                   "version": "0.0.10",
-                  "from": "minimist@>=0.0.1 <0.1.0",
+                  "from": "minimist@>=0.0.7 <0.1.0",
                   "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.10.tgz"
                 }
               }
@@ -1189,7 +1189,7 @@
                       "dependencies": {
                         "source-map": {
                           "version": "0.1.43",
-                          "from": "source-map@>=0.1.31 <0.2.0",
+                          "from": "source-map@>=0.1.7 <0.2.0",
                           "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.43.tgz",
                           "dependencies": {
                             "amdefine": {
@@ -1336,7 +1336,7 @@
         },
         "underscore": {
           "version": "1.8.3",
-          "from": "underscore@>=1.8.3 <2.0.0",
+          "from": "underscore@>=1.7.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
         }
       }
@@ -1521,7 +1521,7 @@
         },
         "underscore": {
           "version": "1.8.3",
-          "from": "underscore@>=1.8.2 <2.0.0",
+          "from": "underscore@>=1.7.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
         }
       }
@@ -1557,20 +1557,20 @@
         },
         "moment": {
           "version": "2.10.6",
-          "from": "moment@>=2.9.0 <3.0.0",
+          "from": "moment@>=2.10.3 <3.0.0",
           "resolved": "https://registry.npmjs.org/moment/-/moment-2.10.6.tgz"
         },
         "underscore": {
           "version": "1.8.3",
-          "from": "underscore@>=1.8.2 <2.0.0",
+          "from": "underscore@>=1.7.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
         }
       }
     },
     "hof-controllers": {
-      "version": "0.0.3",
-      "from": "hof-controllers@0.0.3",
-      "resolved": "https://registry.npmjs.org/hof-controllers/-/hof-controllers-0.0.3.tgz",
+      "version": "0.0.4",
+      "from": "hof-controllers@0.0.4",
+      "resolved": "https://registry.npmjs.org/hof-controllers/-/hof-controllers-0.0.4.tgz",
       "dependencies": {
         "hof": {
           "version": "0.0.1",
@@ -2046,7 +2046,7 @@
         },
         "moment": {
           "version": "2.10.6",
-          "from": "moment@>=2.9.0 <3.0.0",
+          "from": "moment@>=2.10.3 <3.0.0",
           "resolved": "https://registry.npmjs.org/moment/-/moment-2.10.6.tgz"
         },
         "moment-business": {
@@ -2082,7 +2082,7 @@
         },
         "underscore": {
           "version": "1.8.3",
-          "from": "underscore@>=1.8.2 <2.0.0",
+          "from": "underscore@>=1.7.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
         }
       }
@@ -2171,7 +2171,7 @@
       "dependencies": {
         "underscore": {
           "version": "1.8.3",
-          "from": "underscore@>=1.8.2 <2.0.0",
+          "from": "underscore@>=1.7.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
         }
       }
