@@ -4,6 +4,8 @@ Home Office Forms (HOF) is a single package that bundles up a collection of modu
 
 [Read the support documentation](./documentation/index.md) for more details or see use the simple instructions below to get started.
 
+[The example app](https://github.com/UKHomeOffice/hof-example-form) is also a good place to start. We recommend cloning the repository, cleaning the commit history, and replacing the example form in there with one of your own. The example shows examples for most of the common ways you might want to use the libraries.
+
 ## What is it?
 
 HOF comprises the following modules.
