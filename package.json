@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Home Office Forms (HOF) single package that bundles up a collection of packages used to create forms at the Home Office in node.js.",
   "main": "index.js",
   "repository": {
