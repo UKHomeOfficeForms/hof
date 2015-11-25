@@ -1,6 +1,6 @@
 # HOF ChangeLog
 
-## 2015-11-25, Version 1.0.8 (Stable), @Joechapman
+## 2015-11-25, Version 1.1.0 (Stable), @Joechapman
 
 ### Notable changes
 

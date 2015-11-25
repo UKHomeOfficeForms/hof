@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "dependencies": {
     "hmpo-form-wizard": {
       "version": "3.2.0",
@@ -419,7 +419,7 @@
         },
         "hogan.js": {
           "version": "3.0.2",
-          "from": "hogan.js@>=3.0.2 <4.0.0",
+          "from": "hogan.js@3.0.2",
           "resolved": "https://registry.npmjs.org/hogan.js/-/hogan.js-3.0.2.tgz",
           "dependencies": {
             "nopt": {
@@ -787,9 +787,9 @@
                   "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-0.3.0.tgz",
                   "dependencies": {
                     "lru-cache": {
-                      "version": "2.7.1",
+                      "version": "2.7.2",
                       "from": "lru-cache@>=2.0.0 <3.0.0",
-                      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.7.1.tgz"
+                      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.7.2.tgz"
                     },
                     "sigmund": {
                       "version": "1.0.1",
@@ -1568,9 +1568,9 @@
       }
     },
     "hof-controllers": {
-      "version": "0.0.5",
-      "from": "hof-controllers@0.0.5",
-      "resolved": "https://registry.npmjs.org/hof-controllers/-/hof-controllers-0.0.5.tgz",
+      "version": "0.1.0",
+      "from": "hof-controllers@0.1.0",
+      "resolved": "https://registry.npmjs.org/hof-controllers/-/hof-controllers-0.1.0.tgz",
       "dependencies": {
         "moment": {
           "version": "2.10.6",
