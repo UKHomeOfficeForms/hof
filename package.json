@@ -23,7 +23,7 @@
     "hmpo-frontend-toolkit": "^1.5.0",
     "hmpo-govuk-template": "0.0.3",
     "hmpo-model": "^0.1.2",
-    "hmpo-template-mixins": "^3.2.0",
+    "hmpo-template-mixins": "^3.2.2",
     "hof-controllers": "0.1.1",
     "i18n-future": "^0.1.4",
     "i18n-lookup": "^0.1.0"
