@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Home Office Forms (HOF) single package that bundles up a collection of packages used to create forms at the Home Office in node.js.",
   "main": "index.js",
   "repository": {
@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/UKHomeOffice/hof",
   "dependencies": {
-    "hmpo-form-wizard": "^3.3.0",
+    "hmpo-form-wizard": "^4.0.0",
     "hmpo-frontend-toolkit": "^2.0.0",
     "hmpo-govuk-template": "0.0.3",
     "hmpo-model": "^0.2.0",
