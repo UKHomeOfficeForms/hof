@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "dependencies": {
     "hmpo-form-wizard": {
       "version": "4.0.0",
@@ -1468,9 +1468,9 @@
       }
     },
     "hmpo-template-mixins": {
-      "version": "3.5.0",
-      "from": "hmpo-template-mixins@>=3.5.0 <4.0.0",
-      "resolved": "https://registry.npmjs.org/hmpo-template-mixins/-/hmpo-template-mixins-3.5.0.tgz",
+      "version": "3.6.0",
+      "from": "hmpo-template-mixins@>=3.6.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/hmpo-template-mixins/-/hmpo-template-mixins-3.6.0.tgz",
       "dependencies": {
         "hogan.js": {
           "version": "3.0.2",
@@ -1498,7 +1498,7 @@
         },
         "moment": {
           "version": "2.11.2",
-          "from": "moment@>=2.9.0 <3.0.0",
+          "from": "moment@>=2.10.3 <3.0.0",
           "resolved": "https://registry.npmjs.org/moment/-/moment-2.11.2.tgz"
         },
         "underscore": {
@@ -1598,7 +1598,7 @@
                   "dependencies": {
                     "mime-types": {
                       "version": "2.1.10",
-                      "from": "mime-types@>=2.1.6 <2.2.0",
+                      "from": "mime-types@>=2.1.9 <2.2.0",
                       "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.10.tgz",
                       "dependencies": {
                         "mime-db": {
@@ -1782,7 +1782,7 @@
                     },
                     "mime-types": {
                       "version": "2.1.10",
-                      "from": "mime-types@>=2.1.6 <2.2.0",
+                      "from": "mime-types@>=2.1.9 <2.2.0",
                       "resolved": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.10.tgz",
                       "dependencies": {
                         "mime-db": {
@@ -1959,7 +1959,7 @@
         },
         "moment": {
           "version": "2.11.2",
-          "from": "moment@>=2.9.0 <3.0.0",
+          "from": "moment@>=2.10.3 <3.0.0",
           "resolved": "https://registry.npmjs.org/moment/-/moment-2.11.2.tgz"
         },
         "moment-business": {
