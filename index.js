@@ -1,3 +1,5 @@
+'use strict';
+
 var hof = {
   wizard: require('hmpo-form-wizard'),
   toolkit: require('hmpo-frontend-toolkit'),
@@ -5,7 +7,8 @@ var hof = {
   Model: require('hmpo-model'),
   mixins: require('hmpo-template-mixins'),
   controllers: require('hof-controllers'),
-  i18n: require('i18n-future')
+  i18n: require('i18n-future'),
+  middleware: require('./lib/middleware')
 };
 
 module.exports = hof;
