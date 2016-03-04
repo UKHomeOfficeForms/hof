@@ -1,11 +1,16 @@
 {
   "name": "hof",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Home Office Forms (HOF) single package that bundles up a collection of packages used to create forms at the Home Office in node.js.",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/UKHomeOffice/hof.git"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test mocha",
+    "lint": "eslint .",
+    "style": "jscs **/*.js --config=./.jscsrc.json"
   },
   "keywords": [
     "forms",
@@ -19,6 +24,7 @@
   },
   "homepage": "https://github.com/UKHomeOffice/hof",
   "dependencies": {
+    "express": "^4.13.4",
     "hmpo-form-wizard": "^4.0.0",
     "hmpo-frontend-toolkit": "^2.0.0",
     "hmpo-govuk-template": "0.0.3",
@@ -27,13 +33,32 @@
     "hof-controllers": "0.1.1",
     "i18n-future": "^0.2.0"
   },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "eslint": "^0.23.0",
+    "eslint-plugin-filenames": "^0.1.1",
+    "eslint-plugin-mocha": "^0.2.2",
+    "eslint-plugin-one-variable-per-var": "0.0.3",
+    "jscs": "^1.13.1",
+    "mocha": "^2.2.5",
+    "node-mocks-http": "^1.5.1",
+    "pre-commit": "^1.0.10",
+    "sinomocha": "^0.2.4",
+    "sinon": "^1.15.3",
+    "sinon-chai": "^2.8.0"
+  },
+  "pre-commit": [
+    "lint",
+    "style",
+    "test"
+  ],
   "browser": {
     "hmpo-form-wizard": false,
     "hmpo-govuk-template": false,
     "hmpo-model": false,
     "hmpo-template-mixins": false,
     "i18n-future": false,
-    "i18n-lookup": false,
-    "hof-controllers": false
+    "hof-controllers": false,
+    "./lib/middleware.js": false
   }
 }
