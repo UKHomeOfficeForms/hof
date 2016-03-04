@@ -1,5 +1,14 @@
 # HOF ChangeLog
 
+## 2016-03-04, Version 4.0.0 (Stable), @easternbloc
+
+### Notable changes
+
+* **hmpo-form-wizard**: Upgraded to 4.1.0
+* **hmpo-template-mixins**: Upgraded to 4.0.0
+
+# HOF ChangeLog
+
 ## 2016-03-03, Version 3.2.0 (Stable), @easternbloc
 
 ### Notable changes
