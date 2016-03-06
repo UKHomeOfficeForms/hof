@@ -9,17 +9,20 @@ describe('lib/middleware', function () {
   describe('cookies', function () {
     var req;
     var res;
+    var next;
 
     beforeEach(function () {
       res = httpMock.createResponse({
         eventEmitter: require('events').EventEmitter
       });
       middleware = require('../../../lib/middleware')({
-        'cookie-name': 'hof_cookie'
+        'cookie-name': 'hof_cookie',
+        'param-name': 'hof_param'
       });
+      next = sinon.stub();
     });
 
-    describe('cookie middleware (ensureCookie)', function () {
+    describe('cookie middleware (testCookieSupport)', function () {
 
       beforeEach(function () {
         req = httpMock.createRequest({
@@ -28,75 +31,44 @@ describe('lib/middleware', function () {
         });
 
         res.cookie = sinon.stub();
-
         res.redirect = sinon.stub();
+      });
+
+      it('passes to the next middleware when a cookie is set', function () {
+        req.cookies = {
+          foo: 'bar'
+        };
+
+        middleware(req, res, next);
+
+        next.should.have.been.calledWith();
       });
 
       it('attempts to set a cookie if one is not available', function () {
-        middleware.handle(req, res);
+        middleware(req, res);
 
-        res.cookie.should.have.been.calledWith('hof_cookie', '/my-hof-journey');
+        res.cookie.should.have.been.calledWith('hof_cookie', 1);
       });
 
-      it('redirects to /cookies-required', function () {
-        middleware.handle(req, res);
+      it('redirects to self with query parameter', function () {
+        middleware(req, res);
 
-        res.redirect.should.have.been.calledWith('/cookies-required?location=' + encodeURIComponent('/my-hof-journey'));
+        res.redirect.should.have.been.calledWith('/my-hof-journey?' + encodeURIComponent('hof_param'));
       });
 
-    });
-
-    describe('/cookies-required', function () {
-
-      beforeEach(function () {
-        req = httpMock.createRequest({
-          method: 'GET',
-          url: '/cookies-required',
-          query: {
-            location: '/my-hof-journey'
-          }
-        });
-
-        res.redirect = sinon.stub();
-        res.render = sinon.stub();
-      });
-
-      it('renders cookies-required if no cookies are set', function () {
+      it('raises an error when a cookie could not be set', function () {
         req.cookies = {};
-
-        middleware.handle(req, res);
-
-        res.render.should.have.been.calledWith('cookies-required');
-      });
-
-      it('renders cookies-required if no configured cookie is set', function () {
-        req.cookies = {
-          'hof-cookie-check': '/my-hof-journey'
+        req.query = {
+          'hof_param': true
         };
 
-        middleware.handle(req, res);
+        middleware(req, res, next);
 
-        res.render.should.have.been.calledWith('cookies-required');
-      });
+        var err = new Error();
 
-      it('renders cookies-required if cookie does not match query string param', function () {
-        req.cookies = {
-          'hof_cookie': '/HaX0r'
-        };
+        err.code = 'NO_COOKIES';
 
-        middleware.handle(req, res);
-
-        res.render.should.have.been.calledWith('cookies-required');
-      });
-
-      it('redirects to url set in the cookie and query string param', function () {
-        req.cookies = {
-          'hof_cookie': '/my-hof-journey'
-        };
-
-        middleware.handle(req, res);
-
-        res.redirect.should.have.been.calledWith('/my-hof-journey');
+        next.should.have.been.calledWith(err, req, res, next);
       });
 
     });
