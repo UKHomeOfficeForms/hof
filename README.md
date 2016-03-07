@@ -8,7 +8,7 @@ Home Office Forms (HOF) is a single package that bundles up a collection of modu
 
 ## What is it?
 
-HOF comprises the following modules.
+HOF provides the following which can be accessed through its properties.
 
  * [hmpo-form-wizard](https://github.com/UKHomeOffice/passports-form-wizard)
  * [hmpo-frontend-toolkit](https://github.com/UKHomeOffice/passports-frontend-toolkit)
@@ -17,9 +17,7 @@ HOF comprises the following modules.
  * [hmpo-template-mixins](https://github.com/UKHomeOffice/passports-template-mixins)
  * [hof-controllers](https://github.com/UKHomeOffice/hof-controllers)
  * [i18n-future](https://github.com/lennym/i18n-future)
- * [middleware](https://github.com/UKHomeOffice/hof/documentation/middleware.md)
-
-And each module is available as a property of `hof`
+ * [middleware](https://github.com/UKHomeOffice/hof/blob/master/documentation/middleware.md)
 
 ## Installation
 ```bash
