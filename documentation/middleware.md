@@ -24,5 +24,5 @@ you are using elsewhere. In almost all cases the default value of
 
 The error raised when cookies are not supported by the client can then
 be handled in you error handler by identifying it using its `code`
-property which will be set to `NO_COOKIES`.
+property which will be set to `NO_COOKIES`. An example of handling this error can be found in the [hof-example-form](https://github.com/UKHomeOffice/hof-example-form/blob/master/errors/index.js).
 
