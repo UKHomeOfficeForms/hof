@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "dependencies": {
     "express": {
       "version": "4.13.4",
@@ -240,9 +240,9 @@
       }
     },
     "hmpo-form-wizard": {
-      "version": "4.1.0",
+      "version": "4.2.0",
       "from": "hmpo-form-wizard@>=4.1.0 <5.0.0",
-      "resolved": "https://registry.npmjs.org/hmpo-form-wizard/-/hmpo-form-wizard-4.1.0.tgz",
+      "resolved": "https://registry.npmjs.org/hmpo-form-wizard/-/hmpo-form-wizard-4.2.0.tgz",
       "dependencies": {
         "csrf": {
           "version": "2.0.7",
@@ -296,9 +296,9 @@
           "resolved": "https://registry.npmjs.org/hmpo-form-controller/-/hmpo-form-controller-0.5.0.tgz",
           "dependencies": {
             "moment": {
-              "version": "2.11.2",
+              "version": "2.12.0",
               "from": "moment@>=2.9.0 <3.0.0",
-              "resolved": "https://registry.npmjs.org/moment/-/moment-2.11.2.tgz"
+              "resolved": "https://registry.npmjs.org/moment/-/moment-2.12.0.tgz"
             }
           }
         },
@@ -314,7 +314,7 @@
               "dependencies": {
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@>=2.0.1 <2.1.0",
+                  "from": "inherits@>=2.0.0 <3.0.0",
                   "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                 },
                 "typedarray": {
@@ -1204,16 +1204,9 @@
                           "resolved": "https://registry.npmjs.org/camelcase/-/camelcase-1.2.1.tgz"
                         },
                         "decamelize": {
-                          "version": "1.1.2",
+                          "version": "1.2.0",
                           "from": "decamelize@>=1.0.0 <2.0.0",
-                          "resolved": "https://registry.npmjs.org/decamelize/-/decamelize-1.1.2.tgz",
-                          "dependencies": {
-                            "escape-string-regexp": {
-                              "version": "1.0.5",
-                              "from": "escape-string-regexp@>=1.0.4 <2.0.0",
-                              "resolved": "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz"
-                            }
-                          }
+                          "resolved": "https://registry.npmjs.org/decamelize/-/decamelize-1.2.0.tgz"
                         },
                         "window-size": {
                           "version": "0.1.0",
@@ -1289,7 +1282,7 @@
         },
         "underscore": {
           "version": "1.8.3",
-          "from": "underscore@>=1.8.3 <2.0.0",
+          "from": "underscore@>=1.7.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.8.3.tgz"
         }
       }
@@ -1509,9 +1502,9 @@
           }
         },
         "moment": {
-          "version": "2.11.2",
+          "version": "2.12.0",
           "from": "moment@>=2.9.0 <3.0.0",
-          "resolved": "https://registry.npmjs.org/moment/-/moment-2.11.2.tgz"
+          "resolved": "https://registry.npmjs.org/moment/-/moment-2.12.0.tgz"
         },
         "underscore": {
           "version": "1.8.3",
@@ -1750,9 +1743,9 @@
           "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
         },
         "moment": {
-          "version": "2.11.2",
+          "version": "2.12.0",
           "from": "moment@>=2.9.0 <3.0.0",
-          "resolved": "https://registry.npmjs.org/moment/-/moment-2.11.2.tgz"
+          "resolved": "https://registry.npmjs.org/moment/-/moment-2.12.0.tgz"
         },
         "moment-business": {
           "version": "2.0.0",
@@ -1794,7 +1787,7 @@
       "dependencies": {
         "lodash": {
           "version": "3.10.1",
-          "from": "lodash@>=3.7.0 <4.0.0",
+          "from": "lodash@>=3.10.1 <4.0.0",
           "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
         },
         "glob": {
