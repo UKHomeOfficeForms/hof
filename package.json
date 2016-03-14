@@ -25,10 +25,10 @@
   "homepage": "https://github.com/UKHomeOffice/hof",
   "dependencies": {
     "express": "^4.13.4",
-    "hmpo-form-wizard": "^4.1.0",
-    "hmpo-frontend-toolkit": "^2.0.0",
+    "hmpo-form-wizard": "^4.3.0",
+    "hmpo-frontend-toolkit": "^3.0.0",
     "hmpo-govuk-template": "0.0.3",
-    "hmpo-model": "^0.2.0",
+    "hmpo-model": "^0.3.0",
     "hmpo-template-mixins": "^4.0.0",
     "hof-controllers": "0.1.1",
     "i18n-future": "^0.2.0"
