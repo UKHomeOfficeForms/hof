@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "dependencies": {
     "express": {
       "version": "4.13.4",
