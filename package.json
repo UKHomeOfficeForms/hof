@@ -26,7 +26,7 @@
   "dependencies": {
     "express": "^4.13.4",
     "hmpo-form-wizard": "^4.3.0",
-    "hmpo-frontend-toolkit": "^3.0.0",
+    "hmpo-frontend-toolkit": "^3.0.1",
     "hmpo-govuk-template": "0.0.3",
     "hmpo-model": "^0.3.0",
     "hmpo-template-mixins": "^4.0.0",
