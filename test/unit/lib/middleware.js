@@ -57,6 +57,21 @@ describe('lib/middleware', function () {
       });
 
       it('raises an error when a cookie could not be set', function () {
+        req.cookies = undefined;
+        req.query = {
+          'hof_param': true
+        };
+
+        middleware(req, res, next);
+
+        var err = new Error();
+
+        err.code = 'NO_COOKIES';
+
+        next.should.have.been.calledWith(err, req, res, next);
+      });
+
+      it('raises an error when a cookie could not be set', function () {
         req.cookies = {};
         req.query = {
           'hof_param': true
