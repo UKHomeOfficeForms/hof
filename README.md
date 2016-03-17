@@ -19,6 +19,14 @@ HOF provides the following which can be accessed through its properties.
  * [i18n-future](https://github.com/lennym/i18n-future)
  * [middleware](./documentation/middleware.md)
 
+## Who's using HOF
+
+ * [Contact UK Trade & Investment (UK Trade & Investment)](https://github.com/UKTradeInvestment/contact-ukti)
+ * [Biometric Residence Permit (Home Office)](https://github.com/UKHomeOffice/brp_app)
+ * [Report terrorist material (Home Office)](https://github.com/UKHomeOffice/RTM)
+ * [HOF Example Form (Home Office)](https://github.com/UKHomeOffice/hof-example-form)
+ * [UKVI Complaints (Home Office)](https://github.com/UKHomeOffice/Complaints)
+
 ## Installation
 ```bash
 $ npm install --save hof
