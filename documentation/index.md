@@ -8,4 +8,4 @@ Successfully developing a form-based application using HOF requires the implemen
 * [translations](./translations.md)
 * [structure](./structure.md)
 * [wizard](./wizard.md)
-* [middleware](./middleware.md)
+* [middleware](https://github.com/UKHomeOffice/hof-middleware/blob/master/README.md)

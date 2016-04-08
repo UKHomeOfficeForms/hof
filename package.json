@@ -8,9 +8,9 @@
     "url": "https://github.com/UKHomeOffice/hof.git"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha",
+    "test": "echo 'Error: no test specified'",
     "lint": "eslint .",
-    "style": "jscs **/*.js --config=./.jscsrc.json"
+    "style": "jscs index.js --config=./.jscsrc.json"
   },
   "keywords": [
     "forms",
@@ -31,7 +31,8 @@
     "hmpo-model": "^0.3.0",
     "hmpo-template-mixins": "^4.0.0",
     "hof-controllers": "^0.3.0",
-    "i18n-future": "^0.2.0"
+    "i18n-future": "^0.2.0",
+    "hof-middleware": "0.0.1"
   },
   "devDependencies": {
     "chai": "^3.0.0",
@@ -59,6 +60,6 @@
     "hmpo-template-mixins": false,
     "i18n-future": false,
     "hof-controllers": false,
-    "./lib/middleware.js": false
+    "hof-middleware.js": false
   }
 }
