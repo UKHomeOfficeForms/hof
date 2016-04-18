@@ -1,5 +1,8 @@
 # HOF ChangeLog
 
+## 2016-04-18, Version 6.1.0 (Stable), @easternbloc
+* **hof-controllers**: Upgraded to 0.2.0
+
 ## 2016-03-14, Version 6.0.0 (Stable), @easternbloc
 * **hmpo-frontend-toolkit**: Upgraded to 3.0.1
 * **hmpo-form-wizard**: Upgraded to 4.3.0
