@@ -30,7 +30,7 @@
     "hmpo-govuk-template": "0.0.3",
     "hmpo-model": "^0.3.0",
     "hmpo-template-mixins": "^4.0.0",
-    "hof-controllers": "0.3.0",
+    "hof-controllers": "^0.3.0",
     "i18n-future": "^0.2.0"
   },
   "devDependencies": {
