@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/UKHomeOffice/hof",
   "dependencies": {
-    "express": "^4.13.4",
     "hmpo-form-wizard": "^4.3.0",
     "hmpo-frontend-toolkit": "^3.0.1",
     "hmpo-govuk-template": "0.0.3",
@@ -35,23 +34,16 @@
     "hof-middleware": "0.0.1"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
     "eslint": "^0.23.0",
     "eslint-plugin-filenames": "^0.1.1",
     "eslint-plugin-mocha": "^0.2.2",
     "eslint-plugin-one-variable-per-var": "0.0.3",
     "jscs": "^1.13.1",
-    "mocha": "^2.2.5",
-    "node-mocks-http": "^1.5.1",
-    "pre-commit": "^1.0.10",
-    "sinomocha": "^0.2.4",
-    "sinon": "^1.15.3",
-    "sinon-chai": "^2.8.0"
+    "pre-commit": "^1.0.10"
   },
   "pre-commit": [
     "lint",
-    "style",
-    "test"
+    "style"
   ],
   "browser": {
     "hmpo-form-wizard": false,
