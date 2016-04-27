@@ -8,7 +8,7 @@ var hof = {
   mixins: require('hmpo-template-mixins'),
   controllers: require('hof-controllers'),
   i18n: require('i18n-future'),
-  middleware: require('./lib/middleware')
+  middleware: require('hof-middleware')
 };
 
 module.exports = hof;

@@ -17,7 +17,7 @@ HOF provides the following which can be accessed through its properties.
  * [hmpo-template-mixins](https://github.com/UKHomeOffice/passports-template-mixins)
  * [hof-controllers](https://github.com/UKHomeOffice/hof-controllers)
  * [i18n-future](https://github.com/lennym/i18n-future)
- * [middleware](./documentation/middleware.md)
+ * [hof-middleware](https://github.com/UKHomeOffice/hof-middleware)
 
 ## Who's using HOF
 
