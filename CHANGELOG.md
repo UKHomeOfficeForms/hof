@@ -1,10 +1,11 @@
 # HOF ChangeLog
 
-## 2016-05-03, Version 6.3.0 (Stable), @easternbloc
+## 2016-05-03, Version 7.0.0 (Stable), @easternbloc
 * **hof-controllers**: Upgraded to 0.4.0
 * **hmpo-model**: 0.4.0
 * **hmpo-template-mixins**: 4.0.1
 * **hmpo-frontend-toolkit**: 3.1.1
+* **hof-middleware**: 0.0.1 (This release removes support for node `0.12` due to es6 features)
 
 ## 2016-04-18, Version 6.2.0 (Stable), @easternbloc
 * **hof-controllers**: Upgraded to 0.3.0
