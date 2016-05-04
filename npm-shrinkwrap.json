@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "dependencies": {
     "hmpo-form-wizard": {
       "version": "4.3.0",
@@ -302,7 +302,7 @@
               "dependencies": {
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@>=2.0.1 <2.1.0",
+                  "from": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz",
                   "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                 },
                 "typedarray": {
