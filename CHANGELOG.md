@@ -1,5 +1,8 @@
 # HOF ChangeLog
 
+## 2016-05-04, Version 7.0.1 (Stable), @easternbloc
+Fixes browserify bug (a backend module was not being removed from the frontend)
+
 ## 2016-05-03, Version 7.0.0 (Stable), @easternbloc
 * **hof-controllers**: Upgraded to 0.4.0
 * **hmpo-model**: 0.4.0
