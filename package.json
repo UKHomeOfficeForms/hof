@@ -53,6 +53,6 @@
     "hmpo-template-mixins": false,
     "i18n-future": false,
     "hof-controllers": false,
-    "hof-middleware.js": false
+    "hof-middleware": false
   }
 }
