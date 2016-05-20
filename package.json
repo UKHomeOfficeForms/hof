@@ -1,0 +1,35 @@
+{
+  "name": "hof-bootstrap",
+  "description": "A bootstrap for HOF projects",
+  "version": "1.0.0",
+  "readme": "./README.md",
+  "license": "GPLv3",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test istanbul cover _mocha",
+    "style": "jscs index.js **/*.js test --config=./.jscsrc",
+    "lint": "eslint .",
+    "ci": "npm run test && npm run style && npm run lint"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "connect-redis-crypto": "^2.1.0",
+    "cookie-parser": "^1.4.1",
+    "express": "^4.13.4",
+    "express-partial-templates": "^0.1.0",
+    "express-session": "^1.13.0",
+    "hogan-express-strict": "^0.5.4",
+    "redis": "^2.6.0-2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^0.23.0",
+    "eslint-config-homeoffice": "^0.1.4",
+    "hof": "^7.0.0",
+    "hof-dotfiles": "^2.0.0",
+    "istanbul": "^0.4.3",
+    "jscs": "^3.0.3",
+    "mocha": "^2.4.5",
+    "supertest": "^1.2.0"
+  }
+}
