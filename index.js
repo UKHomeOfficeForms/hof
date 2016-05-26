@@ -25,6 +25,9 @@ module.exports = options => {
         this.config = getConfig(config);
       }
       return new Promise((resolve, reject) => {
+        if (this.config.startOnInitialise === false) {
+          return resolve(bootstrap);
+        }
         bootstrap.server = require(this.config.protocol).createServer(app);
         try {
           bootstrap.server.listen(this.config.port, this.config.host, () => {
@@ -44,7 +47,7 @@ module.exports = options => {
 
   const load = () => {
     this.config.routes.forEach((route) => {
-      app.use(router(Object.assign({}, this.config, route)));
+      app.use(router(route, this.config));
     });
   };
 
@@ -53,6 +56,18 @@ module.exports = options => {
     if (!config || !config.routes || !config.routes.length) {
       throw new Error('Must be called with a list of routes');
     }
+
+    config.routes.forEach(route => {
+      if (!route.fields) {
+        throw new Error('Each route must define a relative path to its fields');
+      }
+      if (!route.templates) {
+        throw new Error('Each route must define a relative path to its templates');
+      }
+      if (!route.steps) {
+        throw new Error('Each route must define a set of one or more steps');
+      }
+    })
 
     this.config = getConfig(config);
 
@@ -72,9 +87,8 @@ module.exports = options => {
 
     bootstrap.use(this.config.errorHandler || hof.middleware.errors);
 
-    if (this.config.startOnInitialise === true) {
-      return bootstrap.start();
-    }
+    return bootstrap.start();
+
   }).call(null, options);
 
 };

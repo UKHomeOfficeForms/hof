@@ -9,13 +9,37 @@ describe('bootstrap()', () => {
 
   let promise;
 
-  describe('when called without settings', () =>
-    it('should throw \'Must be called with a list of routes\'', () =>
-      (() => bootstrap()).should.Throw('Must be called with a list of routes')
-    )
+  it('Must be called with a list of routes', () =>
+    (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
 
-  describe('when called with routes and steps', () => {
+  it('Routes must each define a relative path to its fields', () =>
+    (() => bootstrap({
+      routes: [{
+        nofields: {}
+      }]
+    })).should.Throw('Each route must define a relative path to its fields')
+  );
+
+  it('Routes must each define a relative path to its templates', () =>
+    (() => bootstrap({
+      routes: [{
+        fields: {},
+        notemplates: {}
+      }]
+    })).should.Throw('Each route must define a relative path to its templates')
+  );
+
+  it('Routes must each define a set of one or more steps\'', () =>
+    (() => bootstrap({
+      routes: [{
+        fields: {},
+        templates: {}
+      }]
+    })).should.Throw('Each route must define a set of one or more steps')
+  );
+
+  describe('with required properties', () => {
 
     beforeEach(() =>
       promise = bootstrap({
@@ -54,7 +78,7 @@ describe('bootstrap()', () => {
 
   });
 
-  describe('when called with a route with two steps', () => {
+  describe('called with a route with two steps', () => {
 
     beforeEach(() =>
       promise = bootstrap({
@@ -88,6 +112,28 @@ describe('bootstrap()', () => {
           .expect(200)
           .expect(res => res.text.should.eql('<div>two</div>\n'))
       )
+    );
+
+  });
+
+  describe('with option startOnInitialise:false', () => {
+
+    beforeEach(() =>
+      promise = bootstrap({
+        startOnInitialise: false,
+        routes: [{
+          baseUrl: '/path',
+          fields: path.resolve(__dirname, 'fixtures/fields'),
+          templates: path.resolve(__dirname, 'fixtures/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      })
+    );
+
+    it('should not start the server', () =>
+      promise.then(strap => should.equal(strap.server, undefined))
     );
 
   });
