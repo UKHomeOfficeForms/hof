@@ -21,20 +21,20 @@ describe('bootstrap()', () => {
     })).should.Throw('Each route must define a relative path to its fields')
   );
 
-  it('Routes must each define a relative path to its templates', () =>
+  it('Routes must each define a relative path to its views', () =>
     (() => bootstrap({
       routes: [{
         fields: {},
-        notemplates: {}
+        noviews: {}
       }]
-    })).should.Throw('Each route must define a relative path to its templates')
+    })).should.Throw('Each route must define a relative path to its views')
   );
 
   it('Routes must each define a set of one or more steps\'', () =>
     (() => bootstrap({
       routes: [{
         fields: {},
-        templates: {}
+        views: {}
       }]
     })).should.Throw('Each route must define a set of one or more steps')
   );
@@ -45,7 +45,7 @@ describe('bootstrap()', () => {
       promise = bootstrap({
         routes: [{
           fields: path.resolve(__dirname, 'fixtures/fields'),
-          templates: path.resolve(__dirname, 'fixtures/views'),
+          views: path.resolve(__dirname, 'fixtures/views'),
           steps: {
             '/one': {}
           }
@@ -85,7 +85,7 @@ describe('bootstrap()', () => {
         routes: [{
           baseUrl: '/path',
           fields: path.resolve(__dirname, 'fixtures/fields'),
-          templates: path.resolve(__dirname, 'fixtures/views'),
+          views: path.resolve(__dirname, 'fixtures/views'),
           steps: {
             '/one': {},
             '/two': {}
@@ -124,7 +124,7 @@ describe('bootstrap()', () => {
         routes: [{
           baseUrl: '/path',
           fields: path.resolve(__dirname, 'fixtures/fields'),
-          templates: path.resolve(__dirname, 'fixtures/views'),
+          views: path.resolve(__dirname, 'fixtures/views'),
           steps: {
             '/one': {}
           }

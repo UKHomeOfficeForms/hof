@@ -61,8 +61,8 @@ module.exports = options => {
       if (!route.fields) {
         throw new Error('Each route must define a relative path to its fields');
       }
-      if (!route.templates) {
-        throw new Error('Each route must define a relative path to its templates');
+      if (!route.views) {
+        throw new Error('Each route must define a relative path to its views');
       }
       if (!route.steps) {
         throw new Error('Each route must define a set of one or more steps');
