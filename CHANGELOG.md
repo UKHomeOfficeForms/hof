@@ -1,5 +1,12 @@
 # HOF ChangeLog
 
+## 2016-06-2, Versions 8.0.0 (Stable) @joefitter
+* **hmpo-template-mixins**: Upgraded to 4.2.0
+* **hmpo-frontend-toolkit**: Upgraded to 4.2.0
+* **hmpo-model**: Upgraded to 0.6.0
+* **hmpo-form-controller**: Upgraded to 0.8.0
+* **hmpo-form-wizard**: Upgraded to 4.4.1
+
 ## 2016-05-11, Version 7.1.0 (Stable), @joechapman
 * **hof-middleware**: Upgraded to 0.1.1
 
