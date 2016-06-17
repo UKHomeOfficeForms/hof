@@ -73,7 +73,7 @@ module.exports = options => {
 
     statics(app, this.config);
     settings(app, this.config);
-    sessions(app, this.config);
+    this.config.store(app, this.config);
 
     load();
 
