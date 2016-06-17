@@ -12,7 +12,7 @@
     "ci": "npm run test && npm run style && npm run lint"
   },
   "dependencies": {
-    "hof": "^8.0.0",
+    "hof": "https://github.com/UKHomeOffice/hof.git#so-master",
     "body-parser": "^1.15.1",
     "connect-redis-crypto": "^2.1.0",
     "cookie-parser": "^1.4.1",
@@ -27,7 +27,6 @@
     "debug": "^2.2.0",
     "eslint": "^0.23.0",
     "eslint-config-homeoffice": "^0.1.4",
-    "hof": "^8.0.0",
     "hof-dotfiles": "^2.0.0",
     "istanbul": "^0.4.3",
     "jscs": "^3.0.3",
