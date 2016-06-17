@@ -85,7 +85,7 @@ module.exports = options => {
       app.get('/terms-and-conditions', (req, res) => res.render('terms'));
     }
 
-    bootstrap.use(this.config.errorHandler || hof.middleware.errors);
+    bootstrap.use(this.config.errorHandler);
 
     return bootstrap.start();
 

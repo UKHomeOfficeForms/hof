@@ -28,6 +28,12 @@ bootstrap({ ... }).then(bootstrapInterface => {
 });
 ```
 
+## Options
+
+- views: base views
+- viewEngine: defaults to <app name>/views
+
+
 ## Routes
 
 Probably the most important element of your service are the routes. These are what you will use to define the path your user will take when completing your forms.
@@ -54,6 +60,7 @@ steps: {
 
 #### Options
 - `baseUrl`: the base url from which all steps will be relative. Defaults to `/`.
-- `fields`: the path to the fields folder or file, relative to your project root.
-- `templates`: the path to the templates folder or file, relative to your project root.
+- `fields`: the path to the fields folder or file, relative to your project root. Required
+- `views`: the path to the templates folder or file, relative to your project root. Required
+- `steps`: steps are the configuration of the form journey. Required
 
