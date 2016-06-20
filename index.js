@@ -1,7 +1,6 @@
 'use strict';
 
 const app = require('express')();
-const session = require('express-session');
 // const churchill = require('churchill');
 const hof = require('hof');
 const router = require('./lib/router');
@@ -74,7 +73,7 @@ module.exports = options => {
 
     statics(app, this.config);
     settings(app, this.config);
-    sessions(app, session, this.config)
+    sessions(app, this.config)
 
     load();
 
