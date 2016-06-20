@@ -1,8 +1,9 @@
 'use strict';
 
 const app = require('express')();
-// const churchill = require('churchill');
+const churchill = require('churchill');
 const hof = require('hof');
+const logger = require('./lib/logger');
 const router = require('./lib/router');
 const statics = require('./lib/serve-static');
 const sessions = require('./lib/sessions');
@@ -70,6 +71,10 @@ module.exports = options => {
     })
 
     this.config = getConfig(config);
+
+    if (this.config.env !== 'ci') {
+      bootstrap.use(churchill(logger));
+    }
 
     statics(app, this.config);
     settings(app, this.config);
