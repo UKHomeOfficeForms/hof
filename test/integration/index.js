@@ -36,23 +36,23 @@ describe('bootstrap()', () => {
       })
     );
 
-    afterEach(() => promise.then(strap => strap.stop()));
+    afterEach(() => promise.then(api => api.stop()));
 
     it('should return a promise that resolves with the bootstrap interface', () =>
-      promise.then(strap =>
-        strap.server.should.be.an.instanceof(http.Server)
+      promise.then(api =>
+        api.server.should.be.an.instanceof(http.Server)
       )
     );
 
     it('should resolve with an instance of the server on the bootstrap', () =>
-      promise.then(strap =>
-        strap.server.should.be.an.instanceof(http.Server)
+      promise.then(api =>
+        api.server.should.be.an.instanceof(http.Server)
       )
     );
 
     it('should start an Express server', () =>
-      promise.then(strap =>
-        request(strap.server)
+      promise.then(api =>
+        request(api.server)
           .get('/one')
           .expect(200)
 
@@ -77,11 +77,11 @@ describe('bootstrap()', () => {
       })
     );
 
-    afterEach(() => promise.then(strap => strap.stop()));
+    afterEach(() => promise.then(api => api.stop()));
 
     it('should serve a template at the first of those steps on GET request', () =>
-      promise.then(strap =>
-        request(strap.server)
+      promise.then(api =>
+        request(api.server)
           .get('/path/one')
           .expect(200)
           .expect(res => res.text.should.eql('<div>one</div>\n'))
@@ -89,8 +89,8 @@ describe('bootstrap()', () => {
     );
 
     it('should serve a template at the second of those steps on GET request', () =>
-      promise.then(strap =>
-        request(strap.server)
+      promise.then(api =>
+        request(api.server)
           .get('/path/two')
           .expect(200)
           .expect(res => res.text.should.eql('<div>two</div>\n'))
@@ -116,8 +116,26 @@ describe('bootstrap()', () => {
     );
 
     it('should not start the server', () =>
-      promise.then(strap => should.equal(strap.server, undefined))
+      promise.then(api => should.equal(api.server, undefined))
     );
+
+
+    describe('until start is called with start:true', () => {
+
+      afterEach(() => promise.then(api => api.stop()));
+
+      it('then should serve a template at the first of the steps on GET request', () =>
+        promise.then(api =>
+          api.start({start: true}).then(api =>
+            request(api.server)
+              .get('/path/one')
+              .expect(200)
+              .expect(res => res.text.should.eql('<div>one</div>\n'))
+          )
+        )
+      );
+
+    })
 
   });
 

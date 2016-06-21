@@ -9,7 +9,13 @@ const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
 
-const getConfig = config => Object.assign({}, defaults, config);
+const getConfig = function (options) {
+  let assigned;
+  [].slice.call(arguments).forEach((arg) => {
+    assigned = Object.assign({}, defaults, arg);
+  })
+  return assigned
+}
 
 module.exports = options => {
 
@@ -27,12 +33,12 @@ module.exports = options => {
     },
 
     start: config => {
-      if (!config) {
-        let config = getConfig(options);
-      }
       return new Promise((resolve, reject) => {
         if (config.start === false) {
           return resolve(bootstrap);
+        }
+        if (!config.protocol) {
+          config = getConfig(options, config);
         }
         bootstrap.server = require(config.protocol).createServer(app);
         try {
