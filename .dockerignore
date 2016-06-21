@@ -1,8 +1,0 @@
-deploy
-public
-secrets.env
-node_modules
-apps/**/translations/**/default.json
-LICENSE
-README.md
-CONTRIBUTING.md
