@@ -1,19 +1,24 @@
 'use strict';
 
+const hof = require('hof');
 const app = require('express')();
 const churchill = require('churchill');
-const hof = require('hof');
-const logger = require('./lib/logger');
+
 const router = require('./lib/router');
-const statics = require('./lib/serve-static');
-const sessions = require('./lib/sessions');
+const serveStatic = require('./lib/serve-static');
+const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
 
-const getConfig = options =>
-  Object.assign({}, defaults, options);
+const getConfig = config => Object.assign({}, defaults, config);
 
 module.exports = options => {
+
+  const load = (config) => {
+    config.routes.forEach((route) => {
+      app.use(router(route, config));
+    });
+  };
 
   const bootstrap = {
 
@@ -22,16 +27,16 @@ module.exports = options => {
     },
 
     start: config => {
-      if (!this.config) {
-        this.config = getConfig(config);
+      if (!config) {
+        let config = getConfig(options);
       }
       return new Promise((resolve, reject) => {
-        if (this.config.startOnInitialise === false) {
+        if (config.startOnInitialise === false) {
           return resolve(bootstrap);
         }
-        bootstrap.server = require(this.config.protocol).createServer(app);
+        bootstrap.server = require(config.protocol).createServer(app);
         try {
-          bootstrap.server.listen(this.config.port, this.config.host, () => {
+          bootstrap.server.listen(config.port, config.host, () => {
             resolve(bootstrap);
           });
         } catch (err) {
@@ -46,54 +51,46 @@ module.exports = options => {
 
   };
 
-  const load = () => {
-    this.config.routes.forEach((route) => {
-      app.use(router(route, this.config));
-    });
-  };
+  const config = getConfig(options);
 
-  return (config => {
+  if (!config || !config.routes || !config.routes.length) {
+    throw new Error('Must be called with a list of routes');
+  }
 
-    if (!config || !config.routes || !config.routes.length) {
-      throw new Error('Must be called with a list of routes');
+  config.routes.forEach(route => {
+    if (!route.fields) {
+      throw new Error('Each route must define a relative path to its fields');
     }
-
-    config.routes.forEach(route => {
-      if (!route.fields) {
-        throw new Error('Each route must define a relative path to its fields');
-      }
-      if (!route.views) {
-        throw new Error('Each route must define a relative path to its views');
-      }
-      if (!route.steps) {
-        throw new Error('Each route must define a set of one or more steps');
-      }
-    })
-
-    this.config = getConfig(config);
-
-    if (this.config.env !== 'ci') {
-      bootstrap.use(churchill(logger));
+    if (!route.views) {
+      throw new Error('Each route must define a relative path to its views');
     }
-
-    statics(app, this.config);
-    settings(app, this.config);
-    sessions(app, this.config)
-
-    load();
-
-    if (this.config.getCookies === true) {
-      app.get('/cookies', (req, res) => res.render('cookies'));
+    if (!route.steps) {
+      throw new Error('Each route must define a set of one or more steps');
     }
+  })
 
-    if (this.config.getTerms === true) {
-      app.get('/terms-and-conditions', (req, res) => res.render('terms'));
-    }
+  const logger = config.logger = require('./lib/logger')(config);
 
-    bootstrap.use(this.config.errorHandler);
+  if (config.env !== 'ci') {
+    bootstrap.use(churchill(logger));
+  }
 
-    return bootstrap.start();
+  serveStatic(app, config);
+  settings(app, config);
+  sessionStore(app, config)
 
-  }).call(null, options);
+  load(config);
+
+  if (config.getCookies === true) {
+    app.get('/cookies', (req, res) => res.render('cookies'));
+  }
+
+  if (config.getTerms === true) {
+    app.get('/terms-and-conditions', (req, res) => res.render('terms'));
+  }
+
+  bootstrap.use(config.errorHandler);
+
+  return bootstrap.start(config);
 
 };
