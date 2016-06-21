@@ -13,23 +13,6 @@ describe('bootstrap()', () => {
     (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
 
-  it('Routes must each define a relative path to its fields', () =>
-    (() => bootstrap({
-      routes: [{
-        nofields: {}
-      }]
-    })).should.Throw('Each route must define a relative path to its fields')
-  );
-
-  it('Routes must each define a relative path to its views', () =>
-    (() => bootstrap({
-      routes: [{
-        fields: {},
-        noviews: {}
-      }]
-    })).should.Throw('Each route must define a relative path to its views')
-  );
-
   it('Routes must each define a set of one or more steps\'', () =>
     (() => bootstrap({
       routes: [{
@@ -116,11 +99,11 @@ describe('bootstrap()', () => {
 
   });
 
-  describe('with option startOnInitialise:false', () => {
+  describe('with option start:false', () => {
 
     beforeEach(() =>
       promise = bootstrap({
-        startOnInitialise: false,
+        start: false,
         routes: [{
           baseUrl: '/path',
           fields: path.resolve(__dirname, 'fixtures/fields'),
