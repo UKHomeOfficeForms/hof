@@ -1,0 +1,20 @@
+instrumentation:
+  root: lib
+  extensions:
+    - .js
+  default-excludes: true
+  include-all-sources: true
+check:
+  global:
+    statements: 80
+    lines: 80
+    branches: 80
+    functions: 80
+reporting:
+  print: summary
+  reports:
+    - html
+  dir: ./coverage
+  report-config:
+    html:
+      dir: coverage

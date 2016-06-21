@@ -1,0 +1,6 @@
+extends:
+  - '../.eslintrc'
+  - 'homeoffice/config/testing'
+
+env:
+  es6: true
