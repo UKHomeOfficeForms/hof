@@ -10,18 +10,16 @@ const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
 
 const getConfig = function (options) {
-  let assigned;
-  [].slice.call(arguments).forEach((arg) => {
-    assigned = Object.assign({}, defaults, arg);
-  })
-  return assigned
+  const args = [].slice.call(arguments);
+  return Object.assign.apply(null, [{}, defaults].concat(args));
+
 }
 
 module.exports = options => {
 
   const load = (config) => {
     config.routes.forEach((route) => {
-      const routeConfig = Object.assign({route}, config)
+      const routeConfig = Object.assign({}, {route}, config)
       app.use(router(routeConfig));
     });
   };
