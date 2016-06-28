@@ -3,20 +3,24 @@
 const hof = require('hof');
 const app = require('express')();
 const churchill = require('churchill');
-
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
 
-const getConfig = config => Object.assign({}, defaults, config);
+const getConfig = function (options) {
+  const args = [].slice.call(arguments);
+  return Object.assign.apply(null, [{}, defaults].concat(args));
+
+}
 
 module.exports = options => {
 
   const load = (config) => {
     config.routes.forEach((route) => {
-      app.use(router(route, config));
+      const routeConfig = Object.assign({}, {route}, config)
+      app.use(router(routeConfig));
     });
   };
 
@@ -27,12 +31,12 @@ module.exports = options => {
     },
 
     start: config => {
-      if (!config) {
-        let config = getConfig(options);
-      }
       return new Promise((resolve, reject) => {
-        if (config.startOnInitialise === false) {
+        if (config.start === false) {
           return resolve(bootstrap);
+        }
+        if (!config.protocol) {
+          config = getConfig(options, config);
         }
         bootstrap.server = require(config.protocol).createServer(app);
         try {
@@ -58,20 +62,16 @@ module.exports = options => {
   }
 
   config.routes.forEach(route => {
-    if (!route.fields) {
-      throw new Error('Each route must define a relative path to its fields');
-    }
-    if (!route.views) {
-      throw new Error('Each route must define a relative path to its views');
-    }
     if (!route.steps) {
       throw new Error('Each route must define a set of one or more steps');
     }
-  })
+  });
 
-  const logger = config.logger = require('./lib/logger')(config);
+  if (config.env !== 'test') {
+    const logger = config.logger = require('./lib/logger')(config);
+  }
 
-  if (config.env !== 'ci') {
+  if (config.env !== 'test' && config.env !== 'ci') {
     bootstrap.use(churchill(logger));
   }
 

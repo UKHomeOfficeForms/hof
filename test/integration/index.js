@@ -13,23 +13,6 @@ describe('bootstrap()', () => {
     (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
 
-  it('Routes must each define a relative path to its fields', () =>
-    (() => bootstrap({
-      routes: [{
-        nofields: {}
-      }]
-    })).should.Throw('Each route must define a relative path to its fields')
-  );
-
-  it('Routes must each define a relative path to its views', () =>
-    (() => bootstrap({
-      routes: [{
-        fields: {},
-        noviews: {}
-      }]
-    })).should.Throw('Each route must define a relative path to its views')
-  );
-
   it('Routes must each define a set of one or more steps\'', () =>
     (() => bootstrap({
       routes: [{
@@ -53,23 +36,23 @@ describe('bootstrap()', () => {
       })
     );
 
-    afterEach(() => promise.then(strap => strap.stop()));
+    afterEach(() => promise.then(api => api.stop()));
 
     it('should return a promise that resolves with the bootstrap interface', () =>
-      promise.then(strap =>
-        strap.server.should.be.an.instanceof(http.Server)
+      promise.then(api =>
+        api.server.should.be.an.instanceof(http.Server)
       )
     );
 
     it('should resolve with an instance of the server on the bootstrap', () =>
-      promise.then(strap =>
-        strap.server.should.be.an.instanceof(http.Server)
+      promise.then(api =>
+        api.server.should.be.an.instanceof(http.Server)
       )
     );
 
     it('should start an Express server', () =>
-      promise.then(strap =>
-        request(strap.server)
+      promise.then(api =>
+        request(api.server)
           .get('/one')
           .expect(200)
 
@@ -94,11 +77,11 @@ describe('bootstrap()', () => {
       })
     );
 
-    afterEach(() => promise.then(strap => strap.stop()));
+    afterEach(() => promise.then(api => api.stop()));
 
     it('should serve a template at the first of those steps on GET request', () =>
-      promise.then(strap =>
-        request(strap.server)
+      promise.then(api =>
+        request(api.server)
           .get('/path/one')
           .expect(200)
           .expect(res => res.text.should.eql('<div>one</div>\n'))
@@ -106,8 +89,8 @@ describe('bootstrap()', () => {
     );
 
     it('should serve a template at the second of those steps on GET request', () =>
-      promise.then(strap =>
-        request(strap.server)
+      promise.then(api =>
+        request(api.server)
           .get('/path/two')
           .expect(200)
           .expect(res => res.text.should.eql('<div>two</div>\n'))
@@ -116,11 +99,11 @@ describe('bootstrap()', () => {
 
   });
 
-  describe('with option startOnInitialise:false', () => {
+  describe('with option start:false', () => {
 
     beforeEach(() =>
       promise = bootstrap({
-        startOnInitialise: false,
+        start: false,
         routes: [{
           baseUrl: '/path',
           fields: path.resolve(__dirname, 'fixtures/fields'),
@@ -133,8 +116,26 @@ describe('bootstrap()', () => {
     );
 
     it('should not start the server', () =>
-      promise.then(strap => should.equal(strap.server, undefined))
+      promise.then(api => should.equal(api.server, undefined))
     );
+
+
+    describe('until start is called with start:true', () => {
+
+      afterEach(() => promise.then(api => api.stop()));
+
+      it('then should serve a template at the first of the steps on GET request', () =>
+        promise.then(api =>
+          api.start({start: true}).then(api =>
+            request(api.server)
+              .get('/path/one')
+              .expect(200)
+              .expect(res => res.text.should.eql('<div>one</div>\n'))
+          )
+        )
+      );
+
+    })
 
   });
 

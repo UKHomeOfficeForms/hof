@@ -30,13 +30,20 @@ bootstrap({ ... }).then(bootstrapInterface => {
 
 ## Options
 
-- views: base views
-- viewEngine: defaults to <app name>/views
+- `assets`: Location of the static assets are served relative to the root of your project. Defaults to 'public'.
+- `views`: Location of the base views relative to the root of your project. Defaults to 'views'.
+- `fields`: Location of the common fields relative to the root of your project. Defaults to 'fields'.
+- `translations`: Location of the common translations relative to the root of your project. Defaults to 'translations'.
+- `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
+- `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
+- `getCookies`: Load 'cookies' view at `GET /cookies`.
+- `getTerms`: Load 'terms' view at `GET /terms-and-conditions`.
+- `errorHandler`: Error handling middleware. Defaults to `hof.middleware.errors`.
 
 
 ## Routes
 
-Probably the most important element of your service are the routes. These are what you will use to define the path your user will take when completing your forms.
+The most important element of your service are the routes. These are what you will use to define the path your user will take when completing your forms.
 
 ### Settings
 Not all route settings are mandatory, you can create and launch a service with just a set of steps.
@@ -52,15 +59,19 @@ steps: {
       'name_of_field_one',
       'name_of_field_two'
     ],
-    next: '/two'
+    next: '/two',
+    forks: [{
+      target: '/three',
+      field: 'option1',
+      value: 'yes'
+    }]
   }
 }
 ```
 [Read more about steps and fields](UkHomeOffice/hof/documentation)
 
 #### Options
-- `baseUrl`: the base url from which all steps will be relative. Defaults to `/`.
-- `fields`: the path to the fields folder or file, relative to your project root. Required
-- `views`: the path to the templates folder or file, relative to your project root. Required
-- `steps`: steps are the configuration of the form journey. Required
+- `baseUrl`: Base url from which all steps are relative. Defaults to `/`.
+- `fields`: Location of the routes' fields, relative to the root of your project. Defaults `fields`.
+- `views`: Location of the routes' views relative to the root of your project. Defaults `views`.
 
