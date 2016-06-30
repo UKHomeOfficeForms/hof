@@ -10,8 +10,7 @@ You can call the `bootstrap` function with a list of [routes](#routes) and your 
 const bootstrap = require('hof-bootstrap');
 
 bootstrap({
-  views: ...,
-  errorHandler: ...,
+  views: 'optional_path_to_your_views',
   ...,
   routes: [{ ... }, { ... }]
 });
@@ -38,7 +37,6 @@ bootstrap({ ... }).then(bootstrapInterface => {
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
 - `getCookies`: Load 'cookies' view at `GET /cookies`.
 - `getTerms`: Load 'terms' view at `GET /terms-and-conditions`.
-- `errorHandler`: Error handling middleware. Defaults to `hof.middleware.errors`.
 
 
 ## Routes

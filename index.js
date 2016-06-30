@@ -3,6 +3,7 @@
 const hof = require('hof');
 const app = require('express')();
 const churchill = require('churchill');
+const path = require('path');
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
@@ -57,6 +58,10 @@ module.exports = options => {
 
   const config = getConfig(options);
 
+  const i18n = require('hof').i18n({
+    path: path.resolve(config.caller, config.translations) + '/__lng__/__ns__.json'
+  });
+
   if (!config || !config.routes || !config.routes.length) {
     throw new Error('Must be called with a list of routes');
   }
@@ -67,12 +72,9 @@ module.exports = options => {
     }
   });
 
-  if (config.env !== 'test') {
-    const logger = config.logger = require('./lib/logger')(config);
-  }
-
   if (config.env !== 'test' && config.env !== 'ci') {
-    bootstrap.use(churchill(logger));
+    config.logger = require('./lib/logger')(config);
+    bootstrap.use(churchill(config.logger));
   }
 
   serveStatic(app, config);
@@ -89,7 +91,10 @@ module.exports = options => {
     app.get('/terms-and-conditions', (req, res) => res.render('terms'));
   }
 
-  bootstrap.use(config.errorHandler);
+  bootstrap.use(require('hof').middleware.errors({
+    translate: i18n.translate.bind(i18n),
+    debug: process.env.NODE_ENV === 'development'
+  }));
 
   return bootstrap.start(config);
 
