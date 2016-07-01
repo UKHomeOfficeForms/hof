@@ -25,7 +25,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {},
       }]
-    })).should.Throw('Cannot find fields')
+    })).should.Throw('Cannot find fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
   it('requires the path to the route fields argument to be valid', () =>
@@ -35,7 +35,7 @@ describe('bootstrap()', () => {
         steps: {},
         fields: 'not_a_valid_path'
       }]
-    })).should.Throw('Cannot find route fields')
+    })).should.Throw('Cannot find route fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
   it('requires the path to the views argument to be valid', () =>
@@ -44,7 +44,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {}
       }]
-    })).should.Throw('Path to views is invalid')
+    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
   it('requires the path to the route views argument to be valid', () =>
@@ -53,7 +53,7 @@ describe('bootstrap()', () => {
         steps: {},
         views: 'not_a_valid_path',
       }]
-    })).should.Throw('Path to views is invalid')
+    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
   it('uses the route fields as the path', () =>
