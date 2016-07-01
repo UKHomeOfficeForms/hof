@@ -27,6 +27,38 @@ bootstrap({ ... }).then(bootstrapInterface => {
 });
 ```
 
+## Structure
+`bootstrap` does not dictate how to structure your service, however, it does provide a number of default settings so you don't need to pass in anything other than a `route` and `steps`.
+
+When the service consists of a single form journey
+```
+<service_name>
+  |__ views/
+  |__ fields/
+  |__ translations/
+  |__ public/
+```
+
+If the service consists of multiple form journeys
+```
+<service_name>
+  |__ views/
+  |__ fields/
+  |__ translations/
+  |__ public/
+  |__ apps/
+       |__ <name>
+       |    |__ views/
+       |    |__ fields/
+       |    |__ translations/
+       |__ <name>
+            |__ views/
+            |__ fields/
+            |__ translations/
+```
+
+
+
 ## Options
 
 - `assets`: Location of the static assets are served relative to the root of your project. Defaults to 'public'.
@@ -69,7 +101,9 @@ steps: {
 [Read more about steps and fields](UkHomeOffice/hof/documentation)
 
 #### Options
-- `baseUrl`: Base url from which all steps are relative. Defaults to `/`.
+- `name`: If provided, is used to locate views, fields and translations for a form journey.
+- `baseUrl`: Base url from which all steps are relative. Defaults to `/`. If provided will be used to locate views, fields and translations for a form journey.
 - `fields`: Location of the routes' fields, relative to the root of your project. Defaults `fields`.
 - `views`: Location of the routes' views relative to the root of your project. Defaults `views`.
 
+**NOTE**: `fields` defined in a `route` determine the name of the directory or path, relative to the root, where the `fields` module is located. `fields` defined in a step, are a list of the name of each field you want to use in the step.
