@@ -1,8 +1,7 @@
 {
   "name": "hof-bootstrap",
   "description": "A bootstrap for HOF projects",
-  "version": "0.1.0",
-  "readme": "./README.md",
+  "version": "0.1.1",
   "license": "GPLv3",
   "main": "index.js",
   "scripts": {
