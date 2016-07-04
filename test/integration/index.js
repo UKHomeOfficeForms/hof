@@ -168,7 +168,7 @@ describe('bootstrap()', () => {
       }).then(api => api.stop())
     );
 
-    it('uses a route param', () =>
+    it('accepts a baseController option', () =>
       bootstrap({
         baseController: require('hof').controllers.base,
         routes: [{
@@ -178,7 +178,7 @@ describe('bootstrap()', () => {
         }]
       }).then(api => {
         request(api.server)
-          .get('/one/param')
+          .get('/one')
           .expect(200)
           .expect(res => res.text.should.eql('<div>one</div>\n'))
         return api;
