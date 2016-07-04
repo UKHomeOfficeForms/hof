@@ -9,133 +9,211 @@ describe('bootstrap()', () => {
 
   let promise;
 
-  it('Must be called with a list of routes', () =>
+  it('must be given a list of routes', () =>
     (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
 
-  it('Routes must each define a set of one or more steps\'', () =>
+  it('routes must each have a list of one or more steps', () =>
     (() => bootstrap({
-      routes: [{
-        fields: {},
-        views: {}
-      }]
+      routes: [{}]
     })).should.Throw('Each route must define a set of one or more steps')
   );
 
-  describe('with required properties', () => {
+  it('requires the path to fields argument to be valid', () =>
+    (() => bootstrap({
+      fields: 'not_a_valid_path',
+      routes: [{
+        steps: {},
+      }]
+    })).should.Throw('Cannot find fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+  );
 
-    beforeEach(() =>
-      promise = bootstrap({
+  it('requires the path to the route fields argument to be valid', () =>
+    (() => bootstrap({
+      fields: '',
+      routes: [{
+        steps: {},
+        fields: 'not_a_valid_path'
+      }]
+    })).should.Throw('Cannot find route fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+  );
+
+  it('requires the path to the views argument to be valid', () =>
+    (() => bootstrap({
+      views: 'not_a_valid_path',
+      routes: [{
+        steps: {}
+      }]
+    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+  );
+
+  it('requires the path to the route views argument to be valid', () =>
+    (() => bootstrap({
+      routes: [{
+        steps: {},
+        views: 'not_a_valid_path',
+      }]
+    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+  );
+
+  it('uses the route fields as the path', () =>
+    bootstrap({
+      routes: [{
+        steps: {},
+        fields: 'fields'
+      }]
+    }).then(api => {
+      api.server.should.be.an.instanceof(http.Server)
+      api.stop();
+    })
+  );
+
+  it('uses the name to find a path to the fields', () =>
+    bootstrap({
+      routes: [{
+        name: 'app_1',
+        steps: {}
+      }]
+    }).then(api => {
+      api.server.should.be.an.instanceof(http.Server)
+      api.stop();
+    })
+  );
+
+  describe('with valid routes and steps', () => {
+
+    it('returns a promise that resolves with the bootstrap interface', () =>
+      bootstrap({
         routes: [{
-          fields: path.resolve(__dirname, 'fixtures/fields'),
-          views: path.resolve(__dirname, 'fixtures/views'),
           steps: {
             '/one': {}
           }
         }]
-      })
+      }).then(api => {
+        api.server.should.be.an.instanceof(http.Server);
+        api.stop.should.be.a.function;
+        api.use.should.be.a.function;
+        return api;
+      }).then(api => api.stop())
     );
 
-    afterEach(() => promise.then(api => api.stop()));
-
-    it('should return a promise that resolves with the bootstrap interface', () =>
-      promise.then(api =>
-        api.server.should.be.an.instanceof(http.Server)
-      )
-    );
-
-    it('should resolve with an instance of the server on the bootstrap', () =>
-      promise.then(api =>
-        api.server.should.be.an.instanceof(http.Server)
-      )
-    );
-
-    it('should start an Express server', () =>
-      promise.then(api =>
-        request(api.server)
-          .get('/one')
-          .expect(200)
-
-      )
-    );
-
-  });
-
-  describe('called with a route with two steps', () => {
-
-    beforeEach(() =>
-      promise = bootstrap({
+    it('starts the service and responds successfully', () =>
+      bootstrap({
         routes: [{
-          baseUrl: '/path',
-          fields: path.resolve(__dirname, 'fixtures/fields'),
-          views: path.resolve(__dirname, 'fixtures/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api => {
+        request(api.server).get('/one').expect(200);
+        return api;
+      }).then(api => api.stop())
+    );
+
+    it('serves the correct view when requested from each step', () =>
+      bootstrap({
+        routes: [{
+          // baseUrl: '/path',
           steps: {
             '/one': {},
             '/two': {}
           }
         }]
-      })
-    );
-
-    afterEach(() => promise.then(api => api.stop()));
-
-    it('should serve a template at the first of those steps on GET request', () =>
-      promise.then(api =>
+      }).then(api => {
         request(api.server)
-          .get('/path/one')
+          .get('/one')
           .expect(200)
           .expect(res => res.text.should.eql('<div>one</div>\n'))
-      )
-    );
-
-    it('should serve a template at the second of those steps on GET request', () =>
-      promise.then(api =>
+        return api;
+      }).then(api => {
         request(api.server)
-          .get('/path/two')
+          .get('/two')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>two</div>\n'))
-      )
+          .expect(res => res.text.should.eql('<div>one</div>\n'))
+        return api;
+      }).then(api => api.stop())
     );
 
-  });
+    it('uses a route baseUrl to serve the views and fields at the correct step', () =>
+      bootstrap({
+        routes: [{
+          baseUrl: '/app_1',
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api => {
+        request(api.server)
+          .get('/baseUrl/one')
+          .expect(200)
+          .expect(res => res.text.should.eql('<div>one</div>\n'))
+        return api;
+      }).then(api => api.stop())
+    );
 
-  describe('with option start:false', () => {
+    it('can be given a route param', () =>
+      bootstrap({
+        routes: [{
+          params: '/:action?',
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api => {
+        request(api.server)
+          .get('/one/param')
+          .expect(200)
+          .expect(res => res.text.should.eql('<div>one</div>\n'))
+        return api;
+      }).then(api => api.stop())
+    );
 
-    beforeEach(() =>
-      promise = bootstrap({
+    it('uses a route param', () =>
+      bootstrap({
+        baseController: require('hof').controllers.base,
+        routes: [{
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api => {
+        request(api.server)
+          .get('/one/param')
+          .expect(200)
+          .expect(res => res.text.should.eql('<div>one</div>\n'))
+        return api;
+      }).then(api => api.stop())
+    );
+
+    it('does not start the service if start is false', () =>
+      bootstrap({
         start: false,
         routes: [{
-          baseUrl: '/path',
-          fields: path.resolve(__dirname, 'fixtures/fields'),
-          views: path.resolve(__dirname, 'fixtures/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api => should.equal(api.server, undefined))
+    );
+
+    it('starts the server when start is called', () =>
+      bootstrap({
+        start: false,
+        routes: [{
           steps: {
             '/one': {}
           }
         }]
       })
+      .then(api => api.start({start: true}))
+      .then(api => {
+        request(api.server)
+          .get('/one')
+          .expect(200)
+          .expect(res => res.text.should.eql('<div>one</div>\n'))
+        return api;
+      }).then(api => api.stop())
     );
-
-    it('should not start the server', () =>
-      promise.then(api => should.equal(api.server, undefined))
-    );
-
-
-    describe('until start is called with start:true', () => {
-
-      afterEach(() => promise.then(api => api.stop()));
-
-      it('then should serve a template at the first of the steps on GET request', () =>
-        promise.then(api =>
-          api.start({start: true}).then(api =>
-            request(api.server)
-              .get('/path/one')
-              .expect(200)
-              .expect(res => res.text.should.eql('<div>one</div>\n'))
-          )
-        )
-      );
-
-    })
 
   });
 
