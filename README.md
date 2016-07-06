@@ -98,7 +98,7 @@ steps: {
   }
 }
 ```
-[Read more about steps and fields](UkHomeOffice/hof/documentation)
+[Read more about steps and fields](https://github.com/UKHomeOffice/hof/blob/master/documentation/index.md)
 
 #### Options
 - `name`: If provided, is used to locate views, fields and translations for a form journey.
