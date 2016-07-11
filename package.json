@@ -28,9 +28,6 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "debug": "^2.2.0",
-    "eslint": "^0.23.0",
-    "eslint-config-homeoffice": "^0.1.4",
-    "hof-dotfiles": "^2.0.0",
     "istanbul": "^0.4.3",
     "jscs": "^3.0.3",
     "mocha": "^2.4.5",
