@@ -17,9 +17,10 @@
     "connect-redis-crypto": "^2.1.0",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
-    "express-partial-templates": "^0.1.0",
+    "express-partial-templates": "^0.2.0",
     "express-session": "^1.13.0",
     "hof": "https://github.com/UKHomeOffice/hof.git#so-master",
+    "hof-template-partials": "^1.0.1",
     "hogan-express-strict": "^0.5.4",
     "redis": "^2.6.0-2",
     "winston": "^2.2.0"
