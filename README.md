@@ -1,4 +1,4 @@
-# Home Office Forms Bootstrap
+# Home Office Forms Bootstrap [![Build Status](https://travis-ci.org/UKHomeOffice/hof-bootstrap.svg?branch=master)](https://travis-ci.org/UKHomeOffice/hof-bootstrap) [![npm version](https://badge.fury.io/js/hof-bootstrap.svg)](https://badge.fury.io/js/hof-bootstrap)
 
 Home Office Forms (HOF) Bootstrap is a highly configurable mechanism for creating and optionally, launching your service.
 
