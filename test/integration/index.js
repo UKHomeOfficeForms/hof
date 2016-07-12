@@ -7,8 +7,6 @@ const path = require('path');
 
 describe('bootstrap()', () => {
 
-  let promise;
-
   it('must be given a list of routes', () =>
     (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
@@ -63,7 +61,7 @@ describe('bootstrap()', () => {
         fields: 'fields'
       }]
     }).then(api => {
-      api.server.should.be.an.instanceof(http.Server)
+      api.server.should.be.an.instanceof(http.Server);
       api.stop();
     })
   );
@@ -75,7 +73,7 @@ describe('bootstrap()', () => {
         steps: {}
       }]
     }).then(api => {
-      api.server.should.be.an.instanceof(http.Server)
+      api.server.should.be.an.instanceof(http.Server);
       api.stop();
     })
   );
@@ -113,7 +111,6 @@ describe('bootstrap()', () => {
     it('serves the correct view when requested from each step', () =>
       bootstrap({
         routes: [{
-          // baseUrl: '/path',
           steps: {
             '/one': {},
             '/two': {}
@@ -123,13 +120,13 @@ describe('bootstrap()', () => {
         request(api.server)
           .get('/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'))
+          .expect(res => res.text.should.eql('<div>one</div>\n'));
         return api;
       }).then(api => {
         request(api.server)
           .get('/two')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'))
+          .expect(res => res.text.should.eql('<div>one</div>\n'));
         return api;
       }).then(api => api.stop())
     );
@@ -146,7 +143,7 @@ describe('bootstrap()', () => {
         request(api.server)
           .get('/baseUrl/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'))
+          .expect(res => res.text.should.eql('<div>one</div>\n'));
         return api;
       }).then(api => api.stop())
     );
@@ -163,7 +160,7 @@ describe('bootstrap()', () => {
         request(api.server)
           .get('/one/param')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'))
+          .expect(res => res.text.should.eql('<div>one</div>\n'));
         return api;
       }).then(api => api.stop())
     );
@@ -180,7 +177,7 @@ describe('bootstrap()', () => {
         request(api.server)
           .get('/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'))
+          .expect(res => res.text.should.eql('<div>one</div>\n'));
         return api;
       }).then(api => api.stop())
     );
@@ -210,7 +207,7 @@ describe('bootstrap()', () => {
         request(api.server)
           .get('/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'))
+          .expect(res => res.text.should.eql('<div>one</div>\n'));
         return api;
       }).then(api => api.stop())
     );
