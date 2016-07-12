@@ -81,19 +81,20 @@ module.exports = options => {
 
   load(config);
 
-  if (config.getCookies === true) {
-    app.get('/cookies', (req, res) => res.render('cookies', i18n.translate('base.cookies')));
-  }
-
-  if (config.getTerms === true) {
-    app.get('/terms-and-conditions', (req, res) => res.render('terms'));
-  }
-
-  bootstrap.use(require('hof').middleware.errors({
-    translate: i18n.translate.bind(i18n),
-    debug: config.env === 'development'
-  }));
-
-  return bootstrap.start(config);
+  return new Promise((resolve) => {
+    i18n.on('ready', () => {
+      if (config.getCookies === true) {
+        app.get('/cookies', (req, res) => res.render('cookies', i18n.translate('cookies')));
+      }
+      if (config.getTerms === true) {
+        app.get('/terms-and-conditions', (req, res) => res.render('terms', i18n.translate('terms')));
+      }
+      bootstrap.use(require('hof').middleware.errors({
+        translate: i18n.translate.bind(i18n),
+        debug: config.env === 'development'
+      }));
+      resolve(bootstrap);
+    });
+  }).then(() => bootstrap.start(config));
 
 };
