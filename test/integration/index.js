@@ -82,104 +82,124 @@ describe('bootstrap()', () => {
 
     it('returns a promise that resolves with the bootstrap interface', () =>
       bootstrap({
+        views: false,
         routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
-        api.server.should.be.an.instanceof(http.Server);
-        api.stop.should.be.a.function;
-        api.use.should.be.a.function;
-        return api;
-      }).then(api => api.stop())
+      }).then((api) => api.should.have.keys('start', 'stop', 'use', 'server'))
+    );
+
+    it('resolves with the api and an instance of the server', () =>
+      bootstrap({
+        views: false,
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then((api) => api.server.should.be.an.instanceof(http.Server))
     );
 
     it('starts the service and responds successfully', () =>
       bootstrap({
+        views: false,
         routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
-        request(api.server).get('/one').expect(200);
-        return api;
-      }).then(api => api.stop())
+      }).then(api => request(api.server).get('/one').expect(200))
     );
 
     it('serves the correct view when requested from each step', () =>
       bootstrap({
+        views: false,
         routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
-            '/one': {},
-            '/two': {}
+            '/one': {}
           }
         }]
-      }).then(api => {
+      }).then(api =>
         request(api.server)
           .get('/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        return api;
-      }).then(api => {
+          .expect(res => res.text.should.equal('<div>one</div>\n'))
+      )
+    );
+
+    it('responds with a 404 if the resource is not found', () =>
+      bootstrap({
+        views: false,
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api =>
         request(api.server)
-          .get('/two')
-          .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        return api;
-      }).then(api => api.stop())
+          .get('/not_here')
+          .expect(404)
+      )
     );
 
     it('uses a route baseUrl to serve the views and fields at the correct step', () =>
       bootstrap({
+        views: false,
         routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           baseUrl: '/app_1',
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
+      }).then(api =>
         request(api.server)
-          .get('/baseUrl/one')
+          .get('/app_1/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        return api;
-      }).then(api => api.stop())
+          .expect(res => res.text.should.equal('<div>one</div>\n'))
+      )
     );
 
     it('can be given a route param', () =>
       bootstrap({
+        views: false,
         routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           params: '/:action?',
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
+      }).then(api =>
         request(api.server)
           .get('/one/param')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        return api;
-      }).then(api => api.stop())
+          .expect(res => res.text.should.equal('<div>one</div>\n'))
+      )
     );
 
     it('accepts a baseController option', () =>
       bootstrap({
         baseController: require('hof').controllers.base,
+        views: path.resolve(__dirname, '../apps/app_1/views'),
         routes: [{
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
+      }).then(api =>
         request(api.server)
           .get('/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        return api;
-      }).then(api => api.stop())
+          .expect(res => res.text.should.equal('<div>one</div>\n'))
+      )
     );
 
     it('does not start the service if start is false', () =>
@@ -196,6 +216,7 @@ describe('bootstrap()', () => {
     it('starts the server when start is called', () =>
       bootstrap({
         start: false,
+        views: path.resolve(__dirname, '../apps/app_1/views'),
         routes: [{
           steps: {
             '/one': {}
@@ -203,13 +224,12 @@ describe('bootstrap()', () => {
         }]
       })
       .then(api => api.start({start: true}))
-      .then(api => {
+      .then(api =>
         request(api.server)
           .get('/one')
           .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        return api;
-      }).then(api => api.stop())
+          .expect(res => res.text.should.equal('<div>one</div>\n'))
+      )
     );
 
   });
