@@ -19,7 +19,7 @@
     "test": "NODE_ENV=test istanbul cover _mocha",
     "style": "jscs index.js **/*.js test --config=./.jscsrc",
     "lint": "eslint .",
-    "ci": "NODE_ENV=ci npm run test && npm run style && npm run lint"
+    "ci": "npm run test && npm run style && npm run lint"
   },
   "dependencies": {
     "body-parser": "^1.15.1",

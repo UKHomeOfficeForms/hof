@@ -2,7 +2,6 @@
 
 const request = require('supertest');
 const bootstrap = require('../../');
-const http = require('http');
 const path = require('path');
 
 describe('bootstrap()', () => {
@@ -54,33 +53,9 @@ describe('bootstrap()', () => {
     })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
-  it('uses the route fields as the path', () =>
-    bootstrap({
-      routes: [{
-        steps: {},
-        fields: 'fields'
-      }]
-    }).then(api => {
-      api.server.should.be.an.instanceof(http.Server);
-      api.stop();
-    })
-  );
-
-  it('uses the name to find a path to the fields', () =>
-    bootstrap({
-      routes: [{
-        name: 'app_1',
-        steps: {}
-      }]
-    }).then(api => {
-      api.server.should.be.an.instanceof(http.Server);
-      api.stop();
-    })
-  );
-
   describe('with valid routes and steps', () => {
 
-    it('returns a promise that resolves with the bootstrap interface', () =>
+    it('returns a promise that resolves with the app', () =>
       bootstrap({
         views: false,
         routes: [{
@@ -89,10 +64,10 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then((api) => api.should.have.keys('start', 'stop', 'use', 'server'))
+      }).then(app => app.should.include.keys('listen', 'use'))
     );
 
-    it('resolves with the api and an instance of the server', () =>
+    it('starts the service and responds successfully to get requests', () =>
       bootstrap({
         views: false,
         routes: [{
@@ -101,19 +76,7 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then((api) => api.server.should.be.an.instanceof(http.Server))
-    );
-
-    it('starts the service and responds successfully', () =>
-      bootstrap({
-        views: false,
-        routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
-          steps: {
-            '/one': {}
-          }
-        }]
-      }).then(api => request(api.server).get('/one').expect(200))
+      }).then(app => request(app).get('/one').expect(200).end((err, res) {console.log('ERRORRROROR', err), if (err) throw err}))
     );
 
     it('serves the correct view when requested from each step', () =>
@@ -125,8 +88,8 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api =>
-        request(api.server)
+      }).then(app =>
+        request(app)
           .get('/one')
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))
@@ -142,8 +105,8 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api =>
-        request(api.server)
+      }).then(app =>
+        request(app)
           .get('/not_here')
           .expect(404)
       )
@@ -159,8 +122,8 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api =>
-        request(api.server)
+      }).then(app =>
+        request(app)
           .get('/app_1/one')
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))
@@ -177,8 +140,8 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api =>
-        request(api.server)
+      }).then(app =>
+        request(app)
           .get('/one/param')
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))
@@ -194,38 +157,8 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api =>
-        request(api.server)
-          .get('/one')
-          .expect(200)
-          .expect(res => res.text.should.equal('<div>one</div>\n'))
-      )
-    );
-
-    it('does not start the service if start is false', () =>
-      bootstrap({
-        start: false,
-        routes: [{
-          steps: {
-            '/one': {}
-          }
-        }]
-      }).then(api => should.equal(api.server, undefined))
-    );
-
-    it('starts the server when start is called', () =>
-      bootstrap({
-        start: false,
-        views: path.resolve(__dirname, '../apps/app_1/views'),
-        routes: [{
-          steps: {
-            '/one': {}
-          }
-        }]
-      })
-      .then(api => api.start({start: true}))
-      .then(api =>
-        request(api.server)
+      }).then(app =>
+        request(app)
           .get('/one')
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))

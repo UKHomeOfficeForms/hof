@@ -23,37 +23,6 @@ module.exports = options => {
     });
   };
 
-  const bootstrap = {
-
-    use: middleware => {
-      app.use(middleware);
-    },
-
-    start: config => {
-      return new Promise((resolve, reject) => {
-        if (!config.protocol) {
-          config = getConfig(options, config);
-        }
-        bootstrap.server = require(config.protocol).createServer(app);
-        if (config.start !== false) {
-          try {
-            // bootstrap.server.listen(process.env.PORT, () => {
-              resolve(bootstrap);
-            // });
-          } catch (err) {
-            reject(err);
-          }
-        }
-        return resolve(bootstrap);
-      });
-    },
-
-    stop: () => {
-      bootstrap.server.close();
-    }
-
-  };
-
   const config = getConfig(options);
 
   const i18n = require('hof').i18n({
@@ -72,7 +41,7 @@ module.exports = options => {
 
   if (config.env !== 'test' && config.env !== 'ci') {
     config.logger = require('./lib/logger')(config);
-    bootstrap.use(churchill(config.logger));
+    app.use(churchill(config.logger));
   }
 
   serveStatic(app, config);
@@ -89,12 +58,11 @@ module.exports = options => {
       if (config.getTerms === true) {
         app.get('/terms-and-conditions', (req, res) => res.render('terms', i18n.translate('terms')));
       }
-      bootstrap.use(require('hof').middleware.errors({
+      app.use(require('hof').middleware.errors({
         translate: i18n.translate.bind(i18n),
         debug: config.env === 'development'
       }));
-      resolve(bootstrap);
+      resolve(app);
     });
-  }).then(() => bootstrap.start(config));
-
+  });
 };
