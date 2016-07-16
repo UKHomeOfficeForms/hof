@@ -76,7 +76,10 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(app => request(app).get('/one').expect(200))
+      }).then(app => request(app)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200))
     );
 
     it('serves the correct view when requested from each step', () =>
@@ -91,6 +94,7 @@ describe('bootstrap()', () => {
       }).then(app =>
         request(app)
           .get('/one')
+          .set('Cookie', ['myCookie=1234'])
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))
       )
@@ -108,6 +112,7 @@ describe('bootstrap()', () => {
       }).then(app =>
         request(app)
           .get('/not_here')
+          .set('Cookie', ['myCookie=1234'])
           .expect(404)
       )
     );
@@ -125,6 +130,7 @@ describe('bootstrap()', () => {
       }).then(app =>
         request(app)
           .get('/app_1/one')
+          .set('Cookie', ['myCookie=1234'])
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))
       )
@@ -143,6 +149,7 @@ describe('bootstrap()', () => {
       }).then(app =>
         request(app)
           .get('/one/param')
+          .set('Cookie', ['myCookie=1234'])
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))
       )
@@ -160,6 +167,7 @@ describe('bootstrap()', () => {
       }).then(app =>
         request(app)
           .get('/one')
+          .set('Cookie', ['myCookie=1234'])
           .expect(200)
           .expect(res => res.text.should.equal('<div>one</div>\n'))
       )
