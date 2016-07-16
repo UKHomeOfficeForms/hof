@@ -107,7 +107,6 @@ describe('bootstrap()', () => {
     it('starts the service and responds successfully', () =>
       bootstrap({
         views: false,
-        start: false,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {

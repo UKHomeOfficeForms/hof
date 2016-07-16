@@ -37,9 +37,9 @@ module.exports = options => {
         bootstrap.server = require(config.protocol).createServer(app);
         if (config.start !== false) {
           try {
-            bootstrap.server.listen(process.env.PORT, () => {
+            // bootstrap.server.listen(process.env.PORT, () => {
               resolve(bootstrap);
-            });
+            // });
           } catch (err) {
             reject(err);
           }
