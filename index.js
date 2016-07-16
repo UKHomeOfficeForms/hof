@@ -30,21 +30,9 @@ module.exports = options => {
     },
 
     start: config => {
-      return new Promise((resolve, reject) => {
-        if (config.start !== false) {
-          if (!config.protocol) {
-            config = getConfig(options, config);
-          }
-          bootstrap.server = require(config.protocol).createServer(app);
-          try {
-            bootstrap.server.listen(config.port, config.host, () => {
-              resolve(bootstrap);
-            });
-          } catch (err) {
-            reject(err);
-          }
-        }
-        return resolve(bootstrap);
+      return new Promise((resolve) => {
+        bootstrap.server = require(config.protocol).createServer(app);
+        resolve(bootstrap)
       });
     },
 

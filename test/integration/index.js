@@ -202,36 +202,6 @@ describe('bootstrap()', () => {
       )
     );
 
-    it('does not start the service if start is false', () =>
-      bootstrap({
-        start: false,
-        routes: [{
-          steps: {
-            '/one': {}
-          }
-        }]
-      }).then(api => should.equal(api.server, undefined))
-    );
-
-    it('starts the server when start is called', () =>
-      bootstrap({
-        start: false,
-        views: path.resolve(__dirname, '../apps/app_1/views'),
-        routes: [{
-          steps: {
-            '/one': {}
-          }
-        }]
-      })
-      .then(api => api.start({start: true}))
-      .then(api =>
-        request(api.server)
-          .get('/one')
-          .expect(200)
-          .expect(res => res.text.should.equal('<div>one</div>\n'))
-      )
-    );
-
   });
 
 });
