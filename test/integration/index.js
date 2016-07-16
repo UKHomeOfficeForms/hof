@@ -76,7 +76,7 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(app => request(app).get('/one').expect(200).end((err, res) {console.log('ERRORRROROR', err), if (err) throw err}))
+      }).then(app => request(app).get('/one').expect(200))
     );
 
     it('serves the correct view when requested from each step', () =>

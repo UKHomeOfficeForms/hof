@@ -8,6 +8,7 @@ const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
+const middleware = require('hof').middleware;
 
 const getConfig = function getConfig() {
   const args = [].slice.call(arguments);
@@ -48,6 +49,8 @@ module.exports = options => {
   settings(app, config);
   sessionStore(app, config);
 
+  app.use(middleware.cookies());
+
   load(config);
 
   return new Promise((resolve) => {
@@ -58,7 +61,11 @@ module.exports = options => {
       if (config.getTerms === true) {
         app.get('/terms-and-conditions', (req, res) => res.render('terms', i18n.translate('terms')));
       }
-      app.use(require('hof').middleware.errors({
+      app.use(middleware.notFound({
+        logger: config.logger,
+        translate: i18n.translate.bind(i18n),
+      }));
+      app.use(middleware.errors({
         translate: i18n.translate.bind(i18n),
         debug: config.env === 'development'
       }));
