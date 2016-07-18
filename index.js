@@ -3,6 +3,7 @@
 const app = require('express')();
 const churchill = require('churchill');
 const path = require('path');
+const hofMiddleware = require('hof').middleware;
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
@@ -79,6 +80,9 @@ module.exports = options => {
   settings(app, config);
   sessionStore(app, config);
 
+  // check for cookies
+  app.use(hofMiddleware.cookies());
+
   load(config);
 
   return new Promise((resolve) => {
@@ -89,7 +93,7 @@ module.exports = options => {
       if (config.getTerms === true) {
         app.get('/terms-and-conditions', (req, res) => res.render('terms', i18n.translate('terms')));
       }
-      bootstrap.use(require('hof').middleware.errors({
+      bootstrap.use(hofMiddleware.errors({
         translate: i18n.translate.bind(i18n),
         debug: config.env === 'development'
       }));
