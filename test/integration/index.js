@@ -205,6 +205,38 @@ describe('bootstrap()', () => {
       )
     );
 
+    it('serves from optional assetPath on request to public', () =>
+      bootstrap({
+        assetPath: 'asset-test',
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api => request(api.server)
+        .get('/public/test.js')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+      )
+    );
+
+    it('returns a 404 if the asset does not exist', () =>
+      bootstrap({
+        assetPath: 'asset-test',
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).then(api => request(api.server)
+        .get('/public/not-here.js')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(404)
+      )
+    );
+
   });
 
 });
