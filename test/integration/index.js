@@ -205,9 +205,8 @@ describe('bootstrap()', () => {
       )
     );
 
-    it('serves from optional assetPath on request to public', () =>
+    it('serves static resources from /public', () =>
       bootstrap({
-        assetPath: 'asset-test',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -221,9 +220,8 @@ describe('bootstrap()', () => {
       )
     );
 
-    it('returns a 404 if the asset does not exist', () =>
+    it('returns a 404 if the resource does not exist', () =>
       bootstrap({
-        assetPath: 'asset-test',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
