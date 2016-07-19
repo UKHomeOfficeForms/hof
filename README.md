@@ -59,7 +59,6 @@ If the service consists of multiple form journeys
 
 ## Options
 
-- `assetPath`: Location of the static assets relative to the root of your project. Defaults to 'public'.
 - `views`: Location of the base views relative to the root of your project. Defaults to 'views'.
 - `fields`: Location of the common fields relative to the root of your project. Defaults to 'fields'.
 - `translations`: Location of the common translations relative to the root of your project. Defaults to 'translations'.
