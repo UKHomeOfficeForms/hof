@@ -93,6 +93,10 @@ module.exports = options => {
       if (config.getTerms === true) {
         app.get('/terms-and-conditions', (req, res) => res.render('terms', i18n.translate('terms')));
       }
+      app.use(hofMiddleware.notFound({
+        logger: config.logger,
+        translate: i18n.translate.bind(i18n),
+      }));
       bootstrap.use(hofMiddleware.errors({
         translate: i18n.translate.bind(i18n),
         debug: config.env === 'development'
