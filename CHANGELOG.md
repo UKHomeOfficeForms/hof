@@ -1,3 +1,8 @@
+## 2016-07-20, Version 3.0.0 (Stable), @josephchapman
+* Use hof-middleware.deepTranslate
+* Use hof-middleware.notFound
+* Remove assetPath option (Breaking)
+
 ## 2016-07-18, Version 2.0.0 (Stable), @josephchapman
 * Make async tests run and not fail on travis
 * Use cookie middleware
