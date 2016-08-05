@@ -31,6 +31,7 @@ module.exports = options => {
     },
 
     start: config => {
+      // eslint-disable-next-line consistent-return
       return new Promise((resolve, reject) => {
         if (config.start !== false) {
           if (!config.protocol) {
@@ -39,13 +40,14 @@ module.exports = options => {
           bootstrap.server = require(config.protocol).createServer(app);
           try {
             bootstrap.server.listen(config.port, config.host, () => {
-              resolve(bootstrap);
+              return resolve(bootstrap);
             });
           } catch (err) {
-            reject(err);
+            return reject(err);
           }
+        } else {
+          return resolve(bootstrap);
         }
-        return resolve(bootstrap);
       });
     },
 
