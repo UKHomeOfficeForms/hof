@@ -4,7 +4,7 @@ Home Office Forms (HOF) Bootstrap is a highly configurable mechanism for creatin
 
 ## Bootstrap is a function
 
-You can call the `bootstrap` function with a list of [routes](#routes) and your [custom settings](#custom-settings) to invoke your personally configured service.
+You can call the `bootstrap` function with a list of [routes](#routes) and your [custom settings](#options) to invoke your personally configured service.
 
 ```
 const bootstrap = require('hof-bootstrap');
