@@ -66,7 +66,7 @@ If the service consists of multiple form journeys
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
 - `getCookies`: Load 'cookies' view at `GET /cookies`.
 - `getTerms`: Load 'terms' view at `GET /terms-and-conditions`.
-- `sessionStore`: Provide a sessionStore to be used in place of redis. Suggest using [https://github.com/expressjs/session/blob/master/session/memory.js](express-session.MemoryStore) for development and acceptance testing.
+- `sessionStore`: Provide a sessionStore to be used in place of redis. Suggest using [express-session.MemoryStore](https://github.com/expressjs/session/blob/master/session/memory.js) for development and acceptance testing.
 
 
 ## Routes
