@@ -5,7 +5,7 @@
 
 HOF exports `template` from [HMPO GOVUK Template](https://github.com/UKHomeOffice/govuk-template-compiler), which when extended from, provides the gov.uk chrome.
 
-In your apps' entry point, i.e, `app.js`, require [ExpressJS]() and [HOF](), and pass an instance of `express` into `template.setup()`.
+In your apps' entry point, i.e, `app.js`, require [ExpressJS](https://expressjs.com/) and [HOF](https://github.com/UKHomeOffice/hof), and pass an instance of `express` into `template.setup()`.
 ```js
 var express = require('express');
 var app = express();
@@ -20,7 +20,7 @@ And to make the `govuk-template` partial available, add the following to the top
 
 ## HMPO Template Mixins
 
-HOF exports `mixins` from [HMPO Template Mixins](https://github.com/UKHomeOffice/passports-template-mixins). These are a set of functions, written with [Hogan]() and expressed as in the following example, that render the named partial compiled with its argument.
+HOF exports `mixins` from [HMPO Template Mixins](https://github.com/UKHomeOffice/passports-template-mixins). These are a set of functions, written with [Hogan](http://twitter.github.io/hogan.js/) and expressed as in the following example, that render the named partial compiled with its argument.
 
 In this example, `email` is the argument, which refers to a [field](./fields.md) named 'email'.
 
