@@ -2,7 +2,6 @@
 
 const request = require('supertest-as-promised');
 const bootstrap = require('../../');
-const http = require('http');
 const path = require('path');
 
 describe('bootstrap()', () => {
@@ -54,37 +53,29 @@ describe('bootstrap()', () => {
     })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
-  it('uses the route fields as the path', done =>
-    bootstrap({
+  it('uses the route fields as the path', () =>
+    (() => bootstrap({
       routes: [{
         views: path.resolve(__dirname, '../apps/app_1/views'),
         steps: {},
         fields: 'fields'
       }]
-    }).then(api => {
-      api.server.should.be.an.instanceof(http.Server);
-      api.stop();
-      done();
-    })
+    })).should.not.Throw()
   );
 
-  it('uses the name to find a path to the fields', done =>
-    bootstrap({
+  it('uses the name to find a path to the fields', () =>
+    (() => bootstrap({
       routes: [{
         views: path.resolve(__dirname, '../apps/app_1/views'),
         name: 'app_1',
         steps: {}
       }]
-    }).then(api => {
-      api.server.should.be.an.instanceof(http.Server);
-      api.stop();
-      done();
-    })
+    })).should.not.Throw()
   );
 
   describe('with valid routes and steps', () => {
 
-    it('returns a promise that resolves with the bootstrap interface', done =>
+    it('returns the bootstrap interface object', () =>
       bootstrap({
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -92,78 +83,59 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api => {
-        api.should.have.keys('server', 'stop', 'start', 'use');
-        api.stop();
-        done();
-      })
+      }).should.have.all.keys('server', 'stop', 'start', 'use')
     );
 
-    it('starts the service and responds successfully', done =>
-      bootstrap({
+    it('starts the service and responds successfully', () => {
+      const bs = bootstrap({
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
-        request(api.server)
-          .get('/one')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200);
-        api.stop();
-        done();
-      })
-    );
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200);
+    });
 
-    it('serves the correct view when requested from each step', done =>
-      bootstrap({
+    it('serves the correct view on request', () => {
+      const bs = bootstrap({
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
-            '/one': {},
-            '/two': {}
+            '/one': {}
           }
         }]
-      }).then(api => request(api.server)
-          .get('/one')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n')
-        ).then(() => {
-          request(api.server)
-            .get('/two')
-            .set('Cookie', ['myCookie=1234'])
-            .expect(200)
-            .expect(res => res.text.should.eql('<div>two</div>\n'));
-          api.stop();
-          done();
-        })
-      )
-    );
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>one</div>\n'));
+    });
 
-    it('uses a route baseUrl to serve the views and fields at the correct step', done =>
-      bootstrap({
+    it('serves a view on request to an optional baseUrl', () => {
+      const bs = bootstrap({
         routes: [{
           baseUrl: '/app_1',
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
-        request(api.server)
-          .get('/app_1/one')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        api.stop();
-        done();
-      })
-    );
+      });
+      return request(bs.server)
+        .get('/app_1/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>one</div>\n'));
+    });
 
-    it('can be given a route param', done =>
-      bootstrap({
+    it('serves a view on request to an optional param', () => {
+      const bs = bootstrap({
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           params: '/:action?',
@@ -171,19 +143,16 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api => {
-        request(api.server)
-          .get('/one/param')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        api.stop();
-        done();
-      })
-    );
+      });
+      return request(bs.server)
+        .get('/one/param')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>one</div>\n'));
+    });
 
-    it('accepts a baseController option', done =>
-      bootstrap({
+    it('serves a view on request with an optional baseController', () => {
+      const bs = bootstrap({
         baseController: require('hof').controllers.base,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -191,53 +160,46 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api => {
-        request(api.server)
-          .get('/one')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        api.stop();
-        done();
-      })
-    );
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>one</div>\n'));
+    });
 
-    it('does not start the service if start is false', done =>
-      bootstrap({
+    it('does not start the service if start is false', () => {
+      const bs = bootstrap({
         start: false,
         routes: [{
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
-        should.equal(api.server, undefined);
-        done();
-      })
-    );
+      });
 
-    it('starts the server when start is called', done =>
-      bootstrap({
+      return should.equal(bs.server, null);
+    });
+
+    it('starts the service when start is called', () => {
+      const bs = bootstrap({
         start: false,
         routes: [{
           steps: {
             '/one': {}
           }
         }]
-      })
-      .then(api => api.start({start: true}))
-      .then(api => {
-        request(api.server)
-          .get('/one')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(res => res.text.should.eql('<div>one</div>\n'));
-        api.stop();
-        done();
-      })
-    );
+      }).start();
 
-    it('serves static resources from /public', done =>
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>one</div>\n'));
+    });
+
+    it('stops the service when stop is called', () =>
+
       bootstrap({
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -245,33 +207,45 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).then(api => {
-        request(api.server)
-          .get('/public/test.js')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200);
-        api.stop();
-        done();
-      })
+      }).stop((server) =>
+        request(server)
+          .get('/one')
+          .end(error => {
+            error.should.be.instanceof(Error);
+            error.code.should.equal('ECONNRESET');
+          })
+      )
     );
 
-    it('returns a 404 if the resource does not exist', done =>
-      bootstrap({
+    it('serves static resources from /public', () => {
+      const bs = bootstrap({
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
-      }).then(api => {
-        request(api.server)
-          .get('/public/not-here.js')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(404);
-        api.stop();
-        done();
-      })
-    );
+      });
+      return request(bs.server)
+        .get('/public/test.js')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200);
+    });
+
+    it('returns a 404 if the resource does not exist', () => {
+      const bs = bootstrap({
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/public/not-here.js')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(404);
+    });
 
   });
 
