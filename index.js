@@ -6,6 +6,7 @@ const churchill = require('churchill');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const _ = require('lodash');
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
@@ -37,12 +38,13 @@ const applyErrorMiddlewares = (config, i18n) => {
   }));
 };
 
-const getI18n = (config) =>
-  hof.i18n({
+module.exports = options => {
+
+  let config = getConfig(options);
+
+  const i18n = hof.i18n({
     path: path.resolve(config.caller, config.translations) + '/__lng__/__ns__.json'
   });
-
-module.exports = options => {
 
   const bootstrap = {
 
@@ -53,27 +55,25 @@ module.exports = options => {
       return bootstrap;
     },
 
-    start: config => {
-      if (!config) {
-        config = getConfig(options, config);
+    start: (startConfig) => {
+      if (startConfig) {
+        config = getConfig(config, startConfig);
       }
 
       const protocol = config.protocol === 'http' ? http : https;
 
       bootstrap.server = protocol.createServer(app);
 
-      applyErrorMiddlewares(config, getI18n(config));
+      applyErrorMiddlewares(config, i18n);
 
-      bootstrap.server.listen(config.port, config.port);
+      bootstrap.server.listen(config.port, config.host);
       return bootstrap;
     },
 
     stop: (callback) => {
-      const interval = setInterval(() => {
-        bootstrap.server.close(() => {
-          clearInterval(interval);
-        });
-      }, 0);
+      _.defer(() => {
+        bootstrap.server.close();
+      });
 
       if (callback) {
         callback(bootstrap.server);
@@ -82,9 +82,6 @@ module.exports = options => {
     }
 
   };
-
-  const config = getConfig(options);
-  const i18n = getI18n(config);
 
   i18n.on('ready', () => {
     if (config.getCookies === true) {

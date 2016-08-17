@@ -172,6 +172,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         start: false,
         routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -185,11 +186,33 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         start: false,
         routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
       }).start();
+
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>one</div>\n'));
+    });
+
+    it('merges start options with the bootstrap config', () => {
+      const bs = bootstrap({
+        start: false,
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      }).start({
+        port: '8001',
+        host: '1.1.1.1'
+      });
 
       return request(bs.server)
         .get('/one')
@@ -212,7 +235,7 @@ describe('bootstrap()', () => {
           .get('/one')
           .end(error => {
             error.should.be.instanceof(Error);
-            error.code.should.equal('ECONNRESET');
+            return error.code.should.equal('ECONNRESET');
           })
       )
     );
