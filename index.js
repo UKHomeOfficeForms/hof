@@ -48,7 +48,9 @@ module.exports = options => {
 
   const bootstrap = {
 
-    server: null,
+    app: Object.assign(app, {
+      server: null
+    }),
 
     use: middleware => {
       app.use(middleware);
@@ -62,21 +64,21 @@ module.exports = options => {
 
       const protocol = config.protocol === 'http' ? http : https;
 
-      bootstrap.server = protocol.createServer(app);
+      app.server = protocol.createServer(app);
 
       applyErrorMiddlewares(config, i18n);
 
-      bootstrap.server.listen(config.port, config.host);
+      app.server.listen(config.port, config.host);
       return bootstrap;
     },
 
     stop: (callback) => {
       _.defer(() => {
-        bootstrap.server.close();
+        app.server.close();
       });
 
       if (callback) {
-        callback(bootstrap.server);
+        callback(app.server);
       }
       return bootstrap;
     }

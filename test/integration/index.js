@@ -83,7 +83,7 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).should.have.all.keys('server', 'stop', 'start', 'use')
+      }).should.have.all.keys('app', 'stop', 'start', 'use')
     );
 
     it('starts the service and responds successfully', () => {
@@ -95,7 +95,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
@@ -110,7 +110,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -127,7 +127,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/app_1/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -144,7 +144,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/one/param')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -161,7 +161,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -179,7 +179,7 @@ describe('bootstrap()', () => {
         }]
       });
 
-      return should.equal(bs.server, null);
+      return should.equal(bs.app.server, null);
     });
 
     it('starts the service when start is called', () => {
@@ -193,7 +193,7 @@ describe('bootstrap()', () => {
         }]
       }).start();
 
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -214,7 +214,7 @@ describe('bootstrap()', () => {
         host: '1.1.1.1'
       });
 
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -249,7 +249,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/public/test.js')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
@@ -264,7 +264,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      return request(bs.app.server)
         .get('/public/not-here.js')
         .set('Cookie', ['myCookie=1234'])
         .expect(404);
