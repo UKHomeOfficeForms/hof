@@ -48,14 +48,12 @@ module.exports = options => {
 
   const bootstrap = {
 
-    app: Object.assign(app, {
-      server: null
-    }),
-
     use: middleware => {
-      app.use(middleware);
+      app.use.apply(app, arguments);
       return bootstrap;
     },
+
+    server: null,
 
     start: (startConfig) => {
       if (startConfig) {
@@ -64,21 +62,24 @@ module.exports = options => {
 
       const protocol = config.protocol === 'http' ? http : https;
 
-      app.server = protocol.createServer(app);
+      bootstrap.server = protocol.createServer(app);
 
+      app.use(hof.middleware.cookies());
+
+      loadRoutes(config);
       applyErrorMiddlewares(config, i18n);
 
-      app.server.listen(config.port, config.host);
+      bootstrap.server.listen(config.port, config.host);
       return bootstrap;
     },
 
     stop: (callback) => {
       _.defer(() => {
-        app.server.close();
+        bootstrap.server.close();
       });
 
       if (callback) {
-        callback(app.server);
+        callback(bootstrap.server);
       }
       return bootstrap;
     }
@@ -111,13 +112,13 @@ module.exports = options => {
     app.use(churchill(config.logger));
   }
 
+  if (config.middleware) {
+    config.middleware.forEach(middleware => app.use(middleware));
+  }
+
   serveStatic(app, config);
   settings(app, config);
   sessionStore(app, config);
-
-  app.use(hof.middleware.cookies());
-
-  loadRoutes(config);
 
   if (config.start !== false) {
     bootstrap.start(config);
