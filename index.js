@@ -48,7 +48,7 @@ module.exports = options => {
 
   const bootstrap = {
 
-    use: middleware => {
+    use() {
       app.use.apply(app, arguments);
       return bootstrap;
     },
