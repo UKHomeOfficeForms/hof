@@ -1,66 +1,100 @@
 'use strict';
 
 const app = require('express')();
+const hof = require('hof');
 const churchill = require('churchill');
 const path = require('path');
-const hofMiddleware = require('hof').middleware;
+const http = require('http');
+const https = require('https');
+const _ = require('lodash');
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
+const logger = require('./lib/logger');
 
 const getConfig = function getConfig() {
   const args = [].slice.call(arguments);
   return Object.assign.apply(null, [{}, defaults].concat(args));
 };
 
+const loadRoutes = config => {
+  config.routes.forEach(route => {
+    const routeConfig = Object.assign({}, {route}, config);
+    app.use(router(routeConfig));
+  });
+};
+
+const applyErrorMiddlewares = (config, i18n) => {
+  app.use(hof.middleware.notFound({
+    logger: config.logger,
+    translate: i18n.translate.bind(i18n),
+  }));
+
+  app.use(hof.middleware.errors({
+    translate: i18n.translate.bind(i18n),
+    debug: config.env === 'development'
+  }));
+};
+
 module.exports = options => {
 
-  const load = (config) => {
-    config.routes.forEach((route) => {
-      const routeConfig = Object.assign({}, {route}, config);
-      app.use(router(routeConfig));
-    });
-  };
+  let config = getConfig(options);
+
+  const i18n = hof.i18n({
+    path: path.resolve(config.caller, config.translations) + '/__lng__/__ns__.json'
+  });
 
   const bootstrap = {
 
-    use: middleware => {
-      app.use(middleware);
+    use() {
+      app.use.apply(app, arguments);
+      return bootstrap;
     },
 
-    start: config => {
-      // eslint-disable-next-line consistent-return
-      return new Promise((resolve, reject) => {
-        if (config.start !== false) {
-          if (!config.protocol) {
-            config = getConfig(options, config);
-          }
-          bootstrap.server = require(config.protocol).createServer(app);
-          try {
-            bootstrap.server.listen(config.port, config.host, () => {
-              return resolve(bootstrap);
-            });
-          } catch (err) {
-            return reject(err);
-          }
-        } else {
-          return resolve(bootstrap);
-        }
+    server: null,
+
+    start: (startConfig) => {
+      if (startConfig) {
+        config = getConfig(config, startConfig);
+      }
+
+      const protocol = config.protocol === 'http' ? http : https;
+
+      bootstrap.server = protocol.createServer(app);
+
+      app.use(hof.middleware.cookies());
+
+      loadRoutes(config);
+      applyErrorMiddlewares(config, i18n);
+
+      bootstrap.server.listen(config.port, config.host);
+      return bootstrap;
+    },
+
+    stop: (callback) => {
+      _.defer(() => {
+        bootstrap.server.close();
       });
-    },
 
-    stop: () => {
-      bootstrap.server.close();
+      if (callback) {
+        callback(bootstrap.server);
+      }
+      return bootstrap;
     }
 
   };
 
-  const config = getConfig(options);
-
-  const i18n = require('hof').i18n({
-    path: path.resolve(config.caller, config.translations) + '/__lng__/__ns__.json'
+  i18n.on('ready', () => {
+    if (config.getCookies === true) {
+      app.get('/cookies', (req, res) =>
+        res.render('cookies', i18n.translate('cookies')));
+    }
+    if (config.getTerms === true) {
+      app.get('/terms-and-conditions', (req, res) =>
+        res.render('terms', i18n.translate('terms')));
+    }
   });
 
   if (!config || !config.routes || !config.routes.length) {
@@ -74,37 +108,22 @@ module.exports = options => {
   });
 
   if (config.env !== 'test' && config.env !== 'ci') {
-    config.logger = require('./lib/logger')(config);
-    bootstrap.use(churchill(config.logger));
+    config.logger = logger(config);
+    app.use(churchill(config.logger));
+  }
+
+  if (config.middleware) {
+    config.middleware.forEach(middleware => app.use(middleware));
   }
 
   serveStatic(app, config);
   settings(app, config);
   sessionStore(app, config);
 
-  // check for cookies
-  app.use(hofMiddleware.cookies());
+  if (config.start !== false) {
+    bootstrap.start(config);
+  }
 
-  load(config);
-
-  return new Promise((resolve) => {
-    i18n.on('ready', () => {
-      if (config.getCookies === true) {
-        app.get('/cookies', (req, res) => res.render('cookies', i18n.translate('cookies')));
-      }
-      if (config.getTerms === true) {
-        app.get('/terms-and-conditions', (req, res) => res.render('terms', i18n.translate('terms')));
-      }
-      app.use(hofMiddleware.notFound({
-        logger: config.logger,
-        translate: i18n.translate.bind(i18n),
-      }));
-      bootstrap.use(hofMiddleware.errors({
-        translate: i18n.translate.bind(i18n),
-        debug: config.env === 'development'
-      }));
-      resolve(bootstrap);
-    });
-  }).then(() => bootstrap.start(config));
+  return bootstrap;
 
 };

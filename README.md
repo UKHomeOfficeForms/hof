@@ -16,16 +16,43 @@ bootstrap({
 });
 ```
 
-**NOTE**: `bootstrap` returns a promise that resolves with with the bootstrap interface, which means you can call methods on bootstrap, such as;
-```
-bootstrap({ ... }).then(bootstrapInterface => {
-  if (conditionIsMet)
-    bootstrapInterface.stop();
-    bootstrapInterface.use(middleware);
-    bootstrapInterface.start();
-  }
-});
-```
+
+## Interface
+`bootstrap` returns the bootstrap interface object, which includes `start`, `use`, `stop`, and `server`.
+
+### `start` Function(options)
+
+ * Creates and starts the server listening for connections.
+ * `@param {Object}` options
+ * `@return {Object} bootstrap` interface object.
+
+Convenient if starting was deferred during the initial invocation of `hof-bootstrap` with the option and value `start: false` or the server has been stopped. Returns the `bootstrap` interface object.
+
+Uses the following settings;
+
+  - `port`: 8080 or `NODE_ENV.port`
+  - `host`: '0.0.0.0' or `NODE_ENV.host`
+  - `protocol`: 'http' or `NODE_ENV.protocol`
+
+
+### `stop` Function(callback)
+
+ * Closes the server, stops listening for connections
+ * `@param {Function}` callback. Useful for testing
+ * `@return {Object} bootstrap` interface object.
+
+### `use` Function(middleware)
+
+ * Alias for Express's `app.use`.`
+ * `@param {Function}` middleware.
+ * `@return {Object} bootstrap` interface object.
+
+The use function can only be used if bootstrap is called with `{ start: false }` passed in config, `bootstrap.start()` will need to be called afterwards to start the app. This is due to the significance of the order in which middleware are applied. Alternatively an array of middleware functions can be passed in config.
+
+### `server`
+
+ * Instance of an `http`/`https` server bound to the `app`
+ * `@type {Object}
 
 ## Structure
 `bootstrap` does not dictate how to structure your service, however, it does provide a number of default settings so you don't need to pass in anything other than a `route` and `steps`.
@@ -60,6 +87,7 @@ If the service consists of multiple form journeys
 ## Options
 
 - `views`: Location of the base views relative to the root of your project. Defaults to 'views'.
+- `middleware`: An optional array of middleware functions to add to the application middleware pipeline.
 - `fields`: Location of the common fields relative to the root of your project. Defaults to 'fields'.
 - `translations`: Location of the common translations relative to the root of your project. Defaults to 'translations'.
 - `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
