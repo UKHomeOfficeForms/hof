@@ -191,7 +191,9 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).start();
+      });
+
+      bs.start();
 
       return request(bs.server)
         .get('/one')
@@ -209,7 +211,9 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).start({
+      });
+
+      bs.start({
         port: '8001',
         host: '1.1.1.1'
       });
@@ -221,24 +225,30 @@ describe('bootstrap()', () => {
         .expect(res => res.text.should.eql('<div>one</div>\n'));
     });
 
-    it('stops the service when stop is called', () =>
+    it('stops the service when stop is called', done => {
 
-      bootstrap({
+      const bs = bootstrap({
+        start: false,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
-      }).stop((server) =>
-        request(server)
-          .get('/one')
-          .end(error => {
-            error.should.be.instanceof(Error);
-            return error.code.should.equal('ECONNRESET');
-          })
-      )
-    );
+      });
+
+      bs.start({
+        port: '8002'
+      }).then(() => {
+        bs.stop().then(() => {
+          require('request')('http://localhost:8002', err => {
+            err.should.be.instanceof(Error);
+            err.code.should.equal('ECONNREFUSED');
+            done();
+          });
+        });
+      });
+    });
 
     it('serves static resources from /public', () => {
       const bs = bootstrap({
