@@ -24,7 +24,7 @@ bootstrap({
 
  * Creates and starts the server listening for connections.
  * `@param {Object}` options
- * `@return {Promise.<bootstrap, Error>}` a promise that returns bootstrap interface object if resolved, Error if rejected.
+ * `@return {Promise.<bootstrap|Error>}` a promise that returns bootstrap interface object if resolved, Error if rejected.
 
 Convenient if starting was deferred during the initial invocation of `hof-bootstrap` with the option and value `start: false` or the server has been stopped. Returns a promise which resolves to the `bootstrap` interface object.
 
@@ -39,7 +39,7 @@ Uses the following settings;
 
  * Closes the server, stops listening for connections
  * `@param {Function}` callback. Useful for testing
- * `@return {Promise.<bootstrap, Error>}` a promise that returns bootstrap interface object if resolved, Error if rejected.
+ * `@return {Promise.<bootstrap|Error>}` a promise that returns bootstrap interface object if resolved, Error if rejected.
 
 ### `use` Function(middleware)
 
