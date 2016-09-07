@@ -117,6 +117,57 @@ describe('bootstrap()', () => {
         .expect(res => res.text.should.eql('<div>one</div>\n'));
     });
 
+    it('looks up a view from the route directory', () => {
+      const bs = bootstrap({
+        views: path.resolve(__dirname, '../apps/common/views'),
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_2/views'),
+          steps: {
+            '/common': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/common')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>from app 2</div>\n'));
+    });
+
+    it('falls back to common views if view not found in route views', () => {
+      const bs = bootstrap({
+        views: path.resolve(__dirname, '../apps/common/views'),
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/common': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/common')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>from common</div>\n'));
+    });
+
+    it('looks up from hof-template-partials if not found in any supplied views dir', () => {
+      const bs = bootstrap({
+        views: path.resolve(__dirname, '../apps/common/views'),
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/step': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/step')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.contain('<div class="content">'));
+    });
+
     it('serves a view on request to an optional baseUrl', () => {
       const bs = bootstrap({
         routes: [{
