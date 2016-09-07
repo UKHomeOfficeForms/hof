@@ -78,7 +78,7 @@ module.exports = options => {
           if (err) {
             reject(new Error('Unable to connect to server'));
           }
-          resolve(bootstrap)
+          resolve(bootstrap);
         });
       });
     },
