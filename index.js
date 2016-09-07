@@ -73,13 +73,23 @@ module.exports = options => {
       loadRoutes(app, config);
       applyErrorMiddlewares(app, config, i18n);
 
-      return new Promise(resolve => {
-        bootstrap.server.listen(config.port, config.host, () => resolve(bootstrap));
+      return new Promise((resolve, reject) => {
+        bootstrap.server.listen(config.port, config.host, err => {
+          if (err) {
+            reject(new Error('Unable to connect to server'));
+          }
+          resolve(bootstrap));
+        };
       });
     },
 
     stop() {
-      return new Promise(resolve => bootstrap.server.close(() => resolve(bootstrap)));
+      return new Promise((resolve, reject) => bootstrap.server.close(err => {
+        if (err) {
+          reject(new Error('Unable to stop server'));
+        }
+        resolve(bootstrap);
+      }));
     }
   };
 
