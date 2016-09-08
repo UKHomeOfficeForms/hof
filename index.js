@@ -1,12 +1,11 @@
 'use strict';
 
-const app = require('express')();
+const express = require('express');
 const hof = require('hof');
 const churchill = require('churchill');
 const path = require('path');
 const http = require('http');
 const https = require('https');
-const _ = require('lodash');
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
@@ -19,14 +18,17 @@ const getConfig = function getConfig() {
   return Object.assign.apply(null, [{}, defaults].concat(args));
 };
 
-const loadRoutes = config => {
+const loadRoutes = (app, config) => {
   config.routes.forEach(route => {
-    const routeConfig = Object.assign({}, {route}, config);
-    app.use(router(routeConfig));
+    const routeConfig = Object.assign({}, config, {
+      route,
+      sharedViews: app.get('views')
+    });
+    app.use(route.baseUrl || '/', router(routeConfig));
   });
 };
 
-const applyErrorMiddlewares = (config, i18n) => {
+const applyErrorMiddlewares = (app, config, i18n) => {
   app.use(hof.middleware.notFound({
     logger: config.logger,
     translate: i18n.translate.bind(i18n),
@@ -39,6 +41,8 @@ const applyErrorMiddlewares = (config, i18n) => {
 };
 
 module.exports = options => {
+
+  const app = express();
 
   let config = getConfig(options);
 
@@ -66,24 +70,27 @@ module.exports = options => {
 
       app.use(hof.middleware.cookies());
 
-      loadRoutes(config);
-      applyErrorMiddlewares(config, i18n);
+      loadRoutes(app, config);
+      applyErrorMiddlewares(app, config, i18n);
 
-      bootstrap.server.listen(config.port, config.host);
-      return bootstrap;
+      return new Promise((resolve, reject) => {
+        bootstrap.server.listen(config.port, config.host, err => {
+          if (err) {
+            reject(new Error('Unable to connect to server'));
+          }
+          resolve(bootstrap);
+        });
+      });
     },
 
-    stop: (callback) => {
-      _.defer(() => {
-        bootstrap.server.close();
-      });
-
-      if (callback) {
-        callback(bootstrap.server);
-      }
-      return bootstrap;
+    stop() {
+      return new Promise((resolve, reject) => bootstrap.server.close(err => {
+        if (err) {
+          reject(new Error('Unable to stop server'));
+        }
+        resolve(bootstrap);
+      }));
     }
-
   };
 
   i18n.on('ready', () => {
