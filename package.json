@@ -38,9 +38,11 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "debug": "^2.2.0",
+    "dotenv": "^2.0.0",
     "istanbul": "^0.4.3",
     "jscs": "^3.0.3",
     "mocha": "^2.4.5",
+    "proxyquire": "^1.7.10",
     "sinomocha": "^0.2.4",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
