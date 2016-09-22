@@ -93,17 +93,6 @@ module.exports = options => {
     }
   };
 
-  i18n.on('ready', () => {
-    if (config.getCookies === true) {
-      app.get('/cookies', (req, res) =>
-        res.render('cookies', i18n.translate('cookies')));
-    }
-    if (config.getTerms === true) {
-      app.get('/terms-and-conditions', (req, res) =>
-        res.render('terms', i18n.translate('terms')));
-    }
-  });
-
   if (!config || !config.routes || !config.routes.length) {
     throw new Error('Must be called with a list of routes');
   }
@@ -126,6 +115,15 @@ module.exports = options => {
   serveStatic(app, config);
   settings(app, config);
   sessionStore(app, config);
+
+  if (config.getCookies === true) {
+    app.get('/cookies', (req, res) =>
+      i18n.on('ready', () => res.render('cookies', i18n.translate('cookies'))));
+  }
+  if (config.getTerms === true) {
+    app.get('/terms-and-conditions', (req, res) =>
+      i18n.on('ready', () => res.render('terms', i18n.translate('terms'))));
+  }
 
   if (config.start !== false) {
     bootstrap.start(config);
