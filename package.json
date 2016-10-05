@@ -27,21 +27,17 @@
   },
   "homepage": "https://github.com/UKHomeOffice/hof",
   "dependencies": {
-    "hmpo-form-wizard": "^4.3.0",
-    "hmpo-frontend-toolkit": "^4.2.0",
+    "hmpo-form-wizard": "5.1.1",
+    "hmpo-frontend-toolkit": "4.0.0-rev1",
     "hmpo-govuk-template": "0.0.3",
-    "hmpo-model": "^0.6.0",
-    "hmpo-template-mixins": "^4.2.0",
-    "hof-controllers": "^1.0.1",
-    "hof-middleware": "0.1.1",
-    "i18n-future": "^0.2.0"
+    "hmpo-model": "0.7.0",
+    "hmpo-template-mixins": "4.4.0-rev2",
+    "hof-controllers": "3.0.1",
+    "hof-middleware": "0.4.0",
+    "eslint-config-homeoffice": "2.0.0",
+    "i18n-future": "0.2.0"
   },
   "devDependencies": {
-    "eslint": "^0.23.0",
-    "eslint-config-homeoffice": "^0.1.4",
-    "eslint-plugin-filenames": "^0.1.1",
-    "eslint-plugin-mocha": "^0.2.2",
-    "eslint-plugin-one-variable-per-var": "0.0.3",
     "jscs": "^1.13.1",
     "pre-commit": "^1.0.10"
   },
