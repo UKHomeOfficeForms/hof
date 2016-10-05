@@ -1,5 +1,19 @@
 # HOF ChangeLog
 
+## 2016-10-5, Versions 9.0.0 (Stable) @easternbloc @joefitter
+* **hmpo-form-wizard**: Upgraded to 5.1.1
+* **hmpo-frontend-toolkit**: Upgraded to 4.0.0-rev1
+* **hmpo-govuk-template**: Upgraded to 0.0.3
+* **hmpo-model@0.7.0
+* **hmpo-template-mixins**: Upgraded to 4.4.0-rev2
+* **hof-controllers**: Upgraged to 3.0.0
+* **hof-middleware**: Upgraded to 0.4.0
+* **eslint-config-homeoffice**: Added to 2.0.0
+* **i18n-future**: Upgraded to 0.2.0
+* **hof-controllers**: Upgraded to 3.0.1
+* removed shrinkwrap - there are a number of bugs using npm 2-3
+* chore - lock down dependency versions
+
 ## 2016-06-2, Versions 8.0.0 (Stable) @joefitter
 * **hmpo-template-mixins**: Upgraded to 4.2.0
 * **hmpo-frontend-toolkit**: Upgraded to 4.2.0
