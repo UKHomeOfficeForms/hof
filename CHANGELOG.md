@@ -1,6 +1,6 @@
 # HOF ChangeLog
 
-## 2016-10-5, Versions 9.0.0 (Stable) @easternbloc @joefitter
+## 2016-10-5, Versions 10.0.0 (Stable) @easternbloc @joefitter
 * **hmpo-form-wizard**: Upgraded to 5.1.1
 * **hmpo-frontend-toolkit**: Upgraded to 4.0.0-rev1
 * **hmpo-govuk-template**: Upgraded to 0.0.3
