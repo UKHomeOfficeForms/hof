@@ -22,7 +22,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {},
       }]
-    })).should.Throw('Cannot find fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+    })).should.Throw('Cannot find fields at ' + path.resolve(__dirname, '../../test/fixtures/not_a_valid_path'))
   );
 
   it('requires the path to the route fields argument to be valid', () =>
@@ -32,7 +32,7 @@ describe('bootstrap()', () => {
         steps: {},
         fields: 'not_a_valid_path'
       }]
-    })).should.Throw('Cannot find route fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+    })).should.Throw('Cannot find route fields at ' + path.resolve(__dirname, '../../test/fixtures/not_a_valid_path'))
   );
 
   it('requires the path to the views argument to be valid', () =>
@@ -41,7 +41,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {}
       }]
-    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/fixtures/not_a_valid_path'))
   );
 
   it('requires the path to the route views argument to be valid', () =>
@@ -50,13 +50,12 @@ describe('bootstrap()', () => {
         steps: {},
         views: 'not_a_valid_path',
       }]
-    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/fixtures/not_a_valid_path'))
   );
 
   it('uses the route fields as the path', () =>
     (() => bootstrap({
       routes: [{
-        views: path.resolve(__dirname, '../apps/app_1/views'),
         steps: {},
         fields: 'fields'
       }]
@@ -66,7 +65,6 @@ describe('bootstrap()', () => {
   it('uses the name to find a path to the fields', () =>
     (() => bootstrap({
       routes: [{
-        views: path.resolve(__dirname, '../apps/app_1/views'),
         name: 'app_1',
         steps: {}
       }]
@@ -78,7 +76,6 @@ describe('bootstrap()', () => {
     it('returns the bootstrap interface object', () =>
       bootstrap({
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -89,7 +86,6 @@ describe('bootstrap()', () => {
     it('starts the service and responds successfully', () => {
       const bs = bootstrap({
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -103,8 +99,9 @@ describe('bootstrap()', () => {
 
     it('serves the correct view on request', () => {
       const bs = bootstrap({
+        file: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -114,14 +111,14 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .expect(res => res.text.should.eql('<form method="POST" action="/one" enctype="multipart/form-data"></form>\n'));
     });
 
     it('looks up a view from the route directory', () => {
       const bs = bootstrap({
-        views: path.resolve(__dirname, '../apps/common/views'),
+        views: path.resolve(__dirname, '../fixtures/apps/common/views'),
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_2/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_2/views'),
           steps: {
             '/common': {}
           }
@@ -136,9 +133,9 @@ describe('bootstrap()', () => {
 
     it('falls back to common views if view not found in route views', () => {
       const bs = bootstrap({
-        views: path.resolve(__dirname, '../apps/common/views'),
+        views: path.resolve(__dirname, '../fixtures/apps/common/views'),
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           steps: {
             '/common': {}
           }
@@ -153,9 +150,9 @@ describe('bootstrap()', () => {
 
     it('looks up from hof-template-partials if not found in any supplied views dir', () => {
       const bs = bootstrap({
-        views: path.resolve(__dirname, '../apps/common/views'),
+        views: path.resolve(__dirname, '../fixtures/apps/common/views'),
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           steps: {
             '/step': {}
           }
@@ -172,7 +169,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         routes: [{
           baseUrl: '/app_1',
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -182,13 +179,13 @@ describe('bootstrap()', () => {
         .get('/app_1/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .expect(res => res.text.should.eql('<form method="POST" action="/one" enctype="multipart/form-data"></form>\n'));
     });
 
     it('serves a view on request to an optional param', () => {
       const bs = bootstrap({
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           params: '/:action?',
           steps: {
             '/one': {}
@@ -199,14 +196,14 @@ describe('bootstrap()', () => {
         .get('/one/param')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .expect(res => res.text.should.eql('<form method="POST" action="/one" enctype="multipart/form-data"></form>\n'));
     });
 
     it('serves a view on request with an optional baseController', () => {
       const bs = bootstrap({
         baseController: require('hof').controllers.base,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -216,14 +213,13 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .expect(res => res.text.should.eql('<form method="POST" action="/one" enctype="multipart/form-data"></form>\n'));
     });
 
     it('does not start the service if start is false', () => {
       const bs = bootstrap({
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -237,7 +233,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -250,14 +246,14 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .expect(res => res.text.should.eql('<form method="POST" action="/one" enctype="multipart/form-data"></form>\n'));
     });
 
     it('merges start options with the bootstrap config', () => {
       const bs = bootstrap({
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: path.resolve(__dirname, '../fixtures/apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -273,7 +269,7 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .expect(res => res.text.should.eql('<form method="POST" action="/one" enctype="multipart/form-data"></form>\n'));
     });
 
     it('stops the service when stop is called', done => {
@@ -281,7 +277,6 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -304,7 +299,6 @@ describe('bootstrap()', () => {
     it('serves static resources from /public', () => {
       const bs = bootstrap({
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -319,7 +313,6 @@ describe('bootstrap()', () => {
     it('returns a 404 if the resource does not exist', () => {
       const bs = bootstrap({
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
@@ -334,7 +327,6 @@ describe('bootstrap()', () => {
     it('returns a 200 for successful shallow health check', () => {
       const bs = bootstrap({
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {}
         }]
       });
@@ -342,6 +334,49 @@ describe('bootstrap()', () => {
         .get('/healthz/ping')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
+    });
+
+    it('creates a post route for a step', () => {
+      const bs = bootstrap({
+        routes: [{
+          steps: {
+            '/one': {
+              csrf: false,
+              next: 'two'
+            }
+          }
+        }]
+      });
+      return request(bs.server)
+        .post('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(302)
+        .then((res) => {
+          res.redirect.should.be.true;
+          res.header.location.should.equal('two');
+        });
+    });
+
+    it('accepts file uploads', () => {
+      const bs = bootstrap({
+        routes: [{
+          steps: {
+            '/one': {
+              csrf: false,
+              next: 'two'
+            }
+          }
+        }]
+      });
+      return request(bs.server)
+        .post('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .attach('MyFile', 'test/fixtures/files/test.txt')
+        .expect(302)
+        .then((res) => {
+          res.redirect.should.be.true;
+          res.header.location.should.equal('two');
+        });
     });
 
   });

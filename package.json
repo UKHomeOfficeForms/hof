@@ -1,7 +1,7 @@
 {
   "name": "hof-bootstrap",
   "description": "A bootstrap for HOF projects",
-  "version": "5.0.1",
+  "version": "4.0.0",
   "license": "GPL-3.0",
   "main": "index.js",
   "author": "HomeOffice",
@@ -22,7 +22,7 @@
     "ci": "npm run test && npm run style && npm run lint"
   },
   "dependencies": {
-    "body-parser": "^1.15.1",
+    "busboy-body-parser": "^0.2.0",
     "churchill": "0.0.5",
     "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.1",
@@ -41,11 +41,11 @@
     "debug": "^2.2.0",
     "istanbul": "^0.4.3",
     "jscs": "^3.0.3",
-    "mocha": "^2.4.5",
+    "mocha": "^3.1.2",
     "sinomocha": "^0.2.4",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
-    "supertest": "^1.2.0",
-    "supertest-as-promised": "^3.2.0"
+    "supertest": "^2.0.1",
+    "supertest-as-promised": "^4.0.1"
   }
 }
