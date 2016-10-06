@@ -29,7 +29,7 @@
     "express": "^4.13.4",
     "express-partial-templates": "^0.2.0",
     "express-session": "^1.13.0",
-    "hof": "UKHomeOffice/hof#so-master",
+    "hof": "10.0.0",
     "hof-template-partials": "^1.0.1",
     "hogan-express-strict": "^0.5.4",
     "redis": "^2.6.0-2",
