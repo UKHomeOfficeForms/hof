@@ -331,6 +331,19 @@ describe('bootstrap()', () => {
         .expect(404);
     });
 
+    it('returns a 200 for successful shallow health check', () => {
+      const bs = bootstrap({
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {}
+        }]
+      });
+      return request(bs.server)
+        .get('/healthz/ping')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200);
+    });
+
   });
 
 });
