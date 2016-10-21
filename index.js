@@ -12,6 +12,7 @@ const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
 const logger = require('./lib/logger');
+const helmet = require('helmet');
 
 const getConfig = function getConfig() {
   const args = [].slice.call(arguments);
@@ -43,6 +44,8 @@ const applyErrorMiddlewares = (app, config, i18n) => {
 module.exports = options => {
 
   const app = express();
+
+  app.use(helmet());
 
   let config = getConfig(options);
 
