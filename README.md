@@ -23,17 +23,10 @@ bootstrap({
 ### `start` Function(options)
 
  * Creates and starts the server listening for connections.
- * `@param {Object}` options
+ * `@param {Object}` options (`port, host, protocol`)
  * `@return {Promise.<bootstrap|Error>}` a promise that returns bootstrap interface object if resolved, Error if rejected.
 
 Convenient if starting was deferred during the initial invocation of `hof-bootstrap` with the option and value `start: false` or the server has been stopped. Returns a promise which resolves to the `bootstrap` interface object.
-
-Uses the following settings;
-
-  - `port`: 8080 or `NODE_ENV.port`
-  - `host`: '0.0.0.0' or `NODE_ENV.host`
-  - `protocol`: 'http' or `NODE_ENV.protocol`
-
 
 ### `stop` Function(callback)
 
@@ -95,7 +88,29 @@ If the service consists of multiple form journeys
 - `getCookies`: Load 'cookies' view at `GET /cookies`.
 - `getTerms`: Load 'terms' view at `GET /terms-and-conditions`.
 - `sessionStore`: Provide a sessionStore to be used in place of redis. Suggest using [express-session.MemoryStore](https://github.com/expressjs/session/blob/master/session/memory.js) for development and acceptance testing.
+- `port`: Defaults to 8080.
+- `host`: Defaults to '0.0.0.0'.
+- `protocol`: Defaults to 'http'.
+- `env`: Can be used to switch contexts. Defaults to 'development'.
+- `gaTagId`: Google analytics tag.
+- `redis.host`: Defaults tp '6379'.
+- `redis.port`: Defaults '127.0.0.1'.
+- `session.ttl`: The session timeout in milliseconds. Defaults to `1800` (ms).
+- `session.secret`: The session secret. Set this to something unique.
+- `session.name`: The session name. Set this to something unique.
 
+## Environent variables
+
+- `PORT`
+- `HOST`
+- `PROTOCOL`
+- `ENV`
+- `GA_TAG`
+- `REDIS_HOST`
+- `REDIS_PORT`
+- `SESSION_TTL`
+- `SESSION_SECRET`
+- `SESSION_NAME`
 
 ## Routes
 
