@@ -2,5 +2,6 @@
 
 module.exports = {
   name: require('./name'),
-  about: require('./about')
+  about: require('./about'),
+  file: require('./file')
 };
