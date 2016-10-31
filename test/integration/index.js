@@ -117,6 +117,57 @@ describe('bootstrap()', () => {
         .expect(res => res.text.should.eql('<div>one</div>\n'));
     });
 
+    it('looks up a view from the route directory', () => {
+      const bs = bootstrap({
+        views: path.resolve(__dirname, '../apps/common/views'),
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_2/views'),
+          steps: {
+            '/common': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/common')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>from app 2</div>\n'));
+    });
+
+    it('falls back to common views if view not found in route views', () => {
+      const bs = bootstrap({
+        views: path.resolve(__dirname, '../apps/common/views'),
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/common': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/common')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>from common</div>\n'));
+    });
+
+    it('looks up from hof-template-partials if not found in any supplied views dir', () => {
+      const bs = bootstrap({
+        views: path.resolve(__dirname, '../apps/common/views'),
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/step': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/step')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.contain('<div class="content">'));
+    });
+
     it('serves a view on request to an optional baseUrl', () => {
       const bs = bootstrap({
         routes: [{
@@ -191,7 +242,9 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).start();
+      });
+
+      bs.start();
 
       return request(bs.server)
         .get('/one')
@@ -209,7 +262,9 @@ describe('bootstrap()', () => {
             '/one': {}
           }
         }]
-      }).start({
+      });
+
+      bs.start({
         port: '8001',
         host: '1.1.1.1'
       });
@@ -221,24 +276,30 @@ describe('bootstrap()', () => {
         .expect(res => res.text.should.eql('<div>one</div>\n'));
     });
 
-    it('stops the service when stop is called', () =>
+    it('stops the service when stop is called', done => {
 
-      bootstrap({
+      const bs = bootstrap({
+        start: false,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
           }
         }]
-      }).stop((server) =>
-        request(server)
-          .get('/one')
-          .end(error => {
-            error.should.be.instanceof(Error);
-            return error.code.should.equal('ECONNRESET');
-          })
-      )
-    );
+      });
+
+      bs.start({
+        port: '8002'
+      }).then(() => {
+        bs.stop().then(() => {
+          require('request')('http://localhost:8002', err => {
+            err.should.be.instanceof(Error);
+            err.code.should.equal('ECONNREFUSED');
+            done();
+          });
+        });
+      });
+    });
 
     it('serves static resources from /public', () => {
       const bs = bootstrap({
@@ -268,6 +329,19 @@ describe('bootstrap()', () => {
         .get('/public/not-here.js')
         .set('Cookie', ['myCookie=1234'])
         .expect(404);
+    });
+
+    it('returns a 200 for successful shallow health check', () => {
+      const bs = bootstrap({
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {}
+        }]
+      });
+      return request(bs.server)
+        .get('/healthz/ping')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200);
     });
 
   });
