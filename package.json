@@ -31,7 +31,7 @@
     "express-session": "^1.13.0",
     "helmet": "^2.3.0",
     "hof": "UKHomeOffice/hof#so-master",
-    "hof-template-partials": "^2.0.0",
+    "hof-template-partials": "^3.0.0",
     "hogan-express-strict": "^0.5.4",
     "redis": "^2.6.0-2",
     "winston": "^2.2.0"
