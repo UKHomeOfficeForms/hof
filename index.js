@@ -1,11 +1,12 @@
 'use strict';
 
 const express = require('express');
-const hof = require('hof');
 const churchill = require('churchill');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const middleware = require('hof-middleware');
+const i18nFuture = require('i18n-future');
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
@@ -30,12 +31,12 @@ const loadRoutes = (app, config) => {
 };
 
 const applyErrorMiddlewares = (app, config, i18n) => {
-  app.use(hof.middleware.notFound({
+  app.use(middleware.notFound({
     logger: config.logger,
     translate: i18n.translate.bind(i18n),
   }));
 
-  app.use(hof.middleware.errors({
+  app.use(middleware.errors({
     translate: i18n.translate.bind(i18n),
     debug: config.env === 'development'
   }));
@@ -49,7 +50,7 @@ module.exports = options => {
 
   let config = getConfig(options);
 
-  const i18n = hof.i18n({
+  const i18n = i18nFuture({
     path: path.resolve(config.caller, config.translations) + '/__lng__/__ns__.json'
   });
 
@@ -71,7 +72,7 @@ module.exports = options => {
 
       bootstrap.server = protocol.createServer(app);
 
-      app.use(hof.middleware.cookies());
+      app.use(middleware.cookies());
 
       loadRoutes(app, config);
       applyErrorMiddlewares(app, config, i18n);
