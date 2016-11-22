@@ -98,7 +98,7 @@ module.exports = options => {
   };
 
   // shallow health check
-  app.get('/healthz/ping', (req, res) => res.sendStatus(200));
+  app.get('/healthz/ping', require('express-healthcheck')());
 
   if (!config || !config.routes || !config.routes.length) {
     throw new Error('Must be called with a list of routes');
