@@ -26,7 +26,6 @@
     "churchill": "0.0.5",
     "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.1",
-    "eslint-config-homeoffice": "*",
     "express": "^4.13.4",
     "express-partial-templates": "^0.2.0",
     "express-session": "^1.13.0",
@@ -45,6 +44,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "debug": "^2.2.0",
+    "eslint-config-homeoffice": "^2.0.0",
     "istanbul": "^0.4.3",
     "jscs": "^3.0.3",
     "mocha": "^2.4.5",
