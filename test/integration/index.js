@@ -2,6 +2,7 @@
 
 const request = require('supertest-as-promised');
 const bootstrap = require('../../');
+const controllers = require('hof-controllers');
 const path = require('path');
 
 describe('bootstrap()', () => {
@@ -204,7 +205,7 @@ describe('bootstrap()', () => {
 
     it('serves a view on request with an optional baseController', () => {
       const bs = bootstrap({
-        baseController: require('hof').controllers.base,
+        baseController: controllers.base,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
