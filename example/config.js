@@ -1,5 +1,6 @@
 'use strict';
 
+/* eslint no-process-env: 0 */
 module.exports = {
   email: {
     caseworker: process.env.CASEWORKER_EMAIL || '',

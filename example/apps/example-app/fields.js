@@ -6,7 +6,7 @@ module.exports = {
     // a custom validator can be used by passing a named function
     // as a validator. The error-type is the name of the function
     validate: ['required', function moreThanOneWord(input) {
-      return input.split(' ').length > 1
+      return input.split(' ').length > 1;
     }],
     // if there is a single field on a step, it is a convention to show
     // it as the step title. Example here:
