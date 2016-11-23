@@ -1,0 +1,37 @@
+{
+  "name": "hof-bootstrap-example-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "NODE_ENV=development npm-run-all --parallel watch:app watch:scss watch:js watch:translations",
+    "watch:app": "nodemon .",
+    "watch:scss": "nodemon -e scss -x 'npm run sass'",
+    "watch:js": "nodemon --watch assets/js -e js -x 'npm run browserify'",
+    "watch:translations": "nodemon --watch apps/**/translations/src -x 'npm run hof-transpile'",
+    "hof-transpile": "hof-transpiler ./apps/**/translations/src -w --shared ./node_modules/hof-template-partials/translations",
+    "sass": "node-sass ./assets/scss/app.scss ./public/css/app.css --include-path ./node_modules",
+    "browserify": "browserify ./assets/js/index.js > ./public/js/bundle.js",
+    "copy:images": "cp -r ./assets/images ./public/",
+    "create:public": "mkdir -p ./public/js ./public/css ./public/images",
+    "postinstall": "npm run create:public; npm run sass; npm run browserify; npm run copy:images; npm run hof-transpile",
+    "codecept": "codeceptjs run ./node_modules/so-acceptance --steps",
+    "phantom": "phantomjs --webdriver=4444"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hof-bootstrap": "file:..",
+    "hof-frontend-toolkit": "^1.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "hof-transpiler": "^0.2.0",
+    "node-sass": "^3.13.0",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^3.1.1",
+    "phantomjs": "^2.1.7",
+    "so-acceptance": "^4.0.1"
+  }
+}

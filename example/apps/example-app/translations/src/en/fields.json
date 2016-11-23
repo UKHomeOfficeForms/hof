@@ -1,0 +1,20 @@
+{
+  "your-name": {
+    "label": "What is your full name?",
+    "summary": "Full name"
+  },
+  "email-address": {
+    "label": "What is your email address?",
+    "hint": "We will send a confirmation email to the address you provide",
+    "summary": "Email address"
+  },
+  "phone-number": {
+    "label": "What is your phone number",
+    "hint": "You can enter text in this field",
+    "summary": "Phone number"
+  },
+  "message": {
+    "label": "Why are you contacting us?",
+    "summary": "Reason for contact"
+  }
+}
