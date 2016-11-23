@@ -1,3 +1,4 @@
+example/apps/*/translations/en
 example/public
 node_modules
 coverage
