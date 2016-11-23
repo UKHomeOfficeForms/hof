@@ -102,12 +102,17 @@ describe('bootstrap()', () => {
         .expect(200);
     });
 
-    it('serves the correct view on request', () => {
+    it('accepts multiple routes', () => {
       const bs = bootstrap({
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
             '/one': {}
+          }
+        }, {
+          views: path.resolve(__dirname, '../apps/app_2/views'),
+          steps: {
+            '/two': {}
           }
         }]
       });
@@ -115,7 +120,40 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .then(() =>
+          request(bs.server)
+            .get('/two')
+            .set('Cookie', ['myCookie=1234'])
+            .expect(200)
+        );
+    });
+
+    it('serves the correct view on request', () => {
+      const bs = bootstrap({
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }, {
+          views: path.resolve(__dirname, '../apps/app_2/views'),
+          steps: {
+            '/two': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>one</div>\n'))
+        .then(() =>
+          request(bs.server)
+            .get('/two')
+            .set('Cookie', ['myCookie=1234'])
+            .expect(200)
+            .expect(res => res.text.should.eql('<div>two</div>\n'))
+        );
     });
 
     it('looks up a view from the route directory', () => {
