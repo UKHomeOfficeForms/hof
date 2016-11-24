@@ -159,7 +159,7 @@ HOF-bootstrap accepts the following options so a developer can customise element
 - `middleware`: An optional array of middleware functions to add to the application middleware pipeline.
 - `fields`: Location of the common fields relative to the root of your project. Defaults to 'fields'. Set `fields` to `false` if not present.
 - `translations`: Location of the common translations relative to the root of your project. Defaults to 'translations'.
-- `baseController`: The base controller for all routes and steps. Defaults to ]https://github.com/UKHomeOfficeForms/hof-controllers/blob/master/lib/base-controller.js](https://github.com/UKHomeOfficeForms/hof-controllers/blob/master/lib/base-controller.js).
+- `baseController`: The base controller for all routes and steps. Defaults to [HOF-controllers.base](https://github.com/UKHomeOfficeForms/hof-controllers/blob/master/lib/base-controller.js).
 - `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
 - `getCookies`: Load 'cookies' view at `GET /cookies`.
