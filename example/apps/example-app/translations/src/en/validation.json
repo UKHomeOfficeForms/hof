@@ -1,0 +1,16 @@
+{
+  "your-name": {
+    "required": "Validation error messages are located in /apps/example-app/translations/src/en/validation.json with the key: {{field-name}}.{{error-type}}",
+    "moreThanOneWord": "Input must be more than one word"
+  },
+  "email-address": {
+    "required": "Enter your email address",
+    "email": "Enter a valid email address"
+  },
+  "phone-number": {
+    "required": "Enter your phone number"
+  },
+  "message": {
+    "required": "Tell us why you are contacting us"
+  }
+}

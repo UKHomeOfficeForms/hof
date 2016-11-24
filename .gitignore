@@ -1,3 +1,5 @@
+example/apps/*/translations/en
+example/public
 node_modules
 coverage
 npm-debug.log
