@@ -18,6 +18,7 @@ HOF-bootstrap is a wrapper function for HOF. It takes the hard work out of setti
   - [Environment variables](#environment-variables)
 - [Routes](#routes)
 - [Resources](#resources)
+- [Example form](./example)
 
 ## Getting started
 
