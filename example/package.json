@@ -20,7 +20,6 @@
     "phantom": "phantomjs --webdriver=4444"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "hof-bootstrap": "file:..",
     "hof-frontend-toolkit": "^1.0.0"
