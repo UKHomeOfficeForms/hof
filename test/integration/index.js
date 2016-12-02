@@ -39,7 +39,15 @@ describe('bootstrap()', () => {
     })).should.Throw('Each route must define a set of one or more steps')
   );
 
-  it('requires the path to fields argument to be valid', () =>
+  it('uses defaults when no fields option is specified', () =>
+    (() => bootstrap({
+      routes: [{
+        steps: {}
+      }]
+    })).should.not.Throw()
+  );
+
+  it('fields option must be valid when specified', () =>
     (() => bootstrap({
       fields: 'not_a_valid_path',
       routes: [{
@@ -48,9 +56,8 @@ describe('bootstrap()', () => {
     })).should.Throw('Cannot find fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
-  it('requires the path to the route fields argument to be valid', () =>
+  it('route fields option must be valid when specified', () =>
     (() => bootstrap({
-      fields: '',
       routes: [{
         steps: {},
         fields: 'not_a_valid_path'
@@ -58,42 +65,30 @@ describe('bootstrap()', () => {
     })).should.Throw('Cannot find route fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
-  it('requires the path to the views argument to be valid', () =>
+  it('uses defaults when no views option is specified', () =>
     (() => bootstrap({
-      views: 'not_a_valid_path',
       routes: [{
         steps: {}
       }]
-    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
-  );
-
-  it('requires the path to the route views argument to be valid', () =>
-    (() => bootstrap({
-      routes: [{
-        steps: {},
-        views: 'not_a_valid_path',
-      }]
-    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
-  );
-
-  it('uses the route fields as the path', () =>
-    (() => bootstrap({
-      routes: [{
-        views: path.resolve(__dirname, '../apps/app_1/views'),
-        steps: {},
-        fields: 'fields'
-      }]
     })).should.not.Throw()
   );
 
-  it('uses the name to find a path to the fields', () =>
+  it('views option must be valid when specified', () =>
     (() => bootstrap({
+      views: 'invalid_path',
       routes: [{
-        views: path.resolve(__dirname, '../apps/app_1/views'),
-        name: 'app_1',
         steps: {}
       }]
-    })).should.not.Throw()
+    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/invalid_path'))
+  );
+
+  it('route views option must be valid when specified', () =>
+    (() => bootstrap({
+      routes: [{
+        views: 'invalid_path',
+        steps: {}
+      }]
+    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/invalid_path'))
   );
 
   describe('with valid routes and steps', () => {
