@@ -41,7 +41,7 @@
     "hogan-express-strict": "^0.5.4",
     "i18n-future": "^1.0.0",
     "redis": "^2.6.0-2",
-    "winston": "^2.2.0"
+    "winston": "^1.1.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
