@@ -171,8 +171,8 @@ HOF-bootstrap accepts the following options so a developer can customise element
 - `protocol`: Defaults to 'http'.
 - `env`: Can be used to switch contexts. Defaults to 'development'.
 - `gaTagId`: Google analytics tag.
-- `redis.host`: Defaults tp '6379'.
-- `redis.port`: Defaults '127.0.0.1'.
+- `redis.port`: Defaults to '6379'.
+- `redis.host`: Defaults '127.0.0.1'.
 - `session.ttl`: The session timeout in milliseconds. Defaults to `1800` (ms).
 - `session.secret`: The session secret. Set this to something unique.
 - `session.name`: The session name. Set this to something unique.
