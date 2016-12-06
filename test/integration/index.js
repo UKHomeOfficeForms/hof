@@ -4,6 +4,28 @@ const request = require('supertest-as-promised');
 const bootstrap = require('../../');
 const controllers = require('hof-controllers');
 const path = require('path');
+const appConfig = {
+  foo: 'bar',
+  bar: 'baz'
+};
+
+let baseControllerCalled = false;
+class CustomBaseController extends controllers.base {
+  constructor(options) {
+    baseControllerCalled = true;
+    super(options);
+  }
+}
+
+let stepControllerOptions = null;
+let stepControllerCalled = false;
+class CustomStepController extends CustomBaseController {
+  constructor(options) {
+    stepControllerCalled = true;
+    stepControllerOptions = options;
+    super(options);
+  }
+}
 
 describe('bootstrap()', () => {
 
@@ -241,9 +263,9 @@ describe('bootstrap()', () => {
         .expect(res => res.text.should.eql('<div>one</div>\n'));
     });
 
-    it('serves a view on request with an optional baseController', () => {
+    it('can instantiate a custom base controller for the app', () => {
       const bs = bootstrap({
-        baseController: controllers.base,
+        baseController: CustomBaseController,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -254,8 +276,9 @@ describe('bootstrap()', () => {
       return request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
-        .expect(200)
-        .expect(res => res.text.should.eql('<div>one</div>\n'));
+        .expect(() =>
+           baseControllerCalled.should.equal(true)
+        );
     });
 
     it('does not start the service if start is false', () => {
@@ -316,7 +339,6 @@ describe('bootstrap()', () => {
     });
 
     it('stops the service when stop is called', done => {
-
       const bs = bootstrap({
         start: false,
         routes: [{
@@ -381,6 +403,45 @@ describe('bootstrap()', () => {
         .get('/healthz/ping')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
+    });
+
+    it('can instantiate a custom controller for the route', () => {
+      const bs = bootstrap({
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {
+              controller: CustomStepController
+            }
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(() =>
+          stepControllerCalled.should.equal(true)
+        );
+    });
+
+    it('can pass the app config to a custom controller', () => {
+      const bs = bootstrap({
+        appConfig: appConfig,
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {
+              controller: CustomStepController
+            }
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(() =>
+          stepControllerOptions.appConfig.should.deep.equal(appConfig)
+        );
     });
 
   });
