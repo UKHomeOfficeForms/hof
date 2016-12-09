@@ -39,7 +39,33 @@ describe('bootstrap()', () => {
     })).should.Throw('Each route must define a set of one or more steps')
   );
 
-  it('requires the path to fields argument to be valid', () =>
+  it('a base fields option must be specified if no route fields option is defined', () =>
+    (() => bootstrap({
+      fields: 'fields',
+      routes: [{
+        steps: {}
+      }]
+    })).should.not.Throw()
+  );
+
+  it('a route fields option must be specified if no base fields option is defined', () =>
+    (() => bootstrap({
+      routes: [{
+        fields: 'apps/app_1/fields',
+        steps: {}
+      }]
+    })).should.not.Throw()
+  );
+
+  it('one of base fields or route fields must be specified as an option', () =>
+    (() => bootstrap({
+      routes: [{
+        steps: {}
+      }]
+    })).should.Throw('Set base fields or route fields or both')
+  );
+
+  it('fields option must be valid when specified', () =>
     (() => bootstrap({
       fields: 'not_a_valid_path',
       routes: [{
@@ -48,9 +74,8 @@ describe('bootstrap()', () => {
     })).should.Throw('Cannot find fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
-  it('requires the path to the route fields argument to be valid', () =>
+  it('route fields option must be valid when specified', () =>
     (() => bootstrap({
-      fields: '',
       routes: [{
         steps: {},
         fields: 'not_a_valid_path'
@@ -58,48 +83,40 @@ describe('bootstrap()', () => {
     })).should.Throw('Cannot find route fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
   );
 
-  it('requires the path to the views argument to be valid', () =>
+  it('uses defaults when no views option is specified', () =>
     (() => bootstrap({
-      views: 'not_a_valid_path',
+      fields: 'fields',
       routes: [{
         steps: {}
-      }]
-    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
-  );
-
-  it('requires the path to the route views argument to be valid', () =>
-    (() => bootstrap({
-      routes: [{
-        steps: {},
-        views: 'not_a_valid_path',
-      }]
-    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
-  );
-
-  it('uses the route fields as the path', () =>
-    (() => bootstrap({
-      routes: [{
-        views: path.resolve(__dirname, '../apps/app_1/views'),
-        steps: {},
-        fields: 'fields'
       }]
     })).should.not.Throw()
   );
 
-  it('uses the name to find a path to the fields', () =>
+  it('views option must be valid when specified', () =>
     (() => bootstrap({
+      fields: 'fields',
+      views: 'invalid_path',
       routes: [{
-        views: path.resolve(__dirname, '../apps/app_1/views'),
-        name: 'app_1',
         steps: {}
       }]
-    })).should.not.Throw()
+    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/invalid_path'))
+  );
+
+  it('route views option must be valid when specified', () =>
+    (() => bootstrap({
+      fields: 'fields',
+      routes: [{
+        views: 'invalid_path',
+        steps: {}
+      }]
+    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/invalid_path'))
   );
 
   describe('with valid routes and steps', () => {
 
     it('returns the bootstrap interface object', () =>
       bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -111,6 +128,7 @@ describe('bootstrap()', () => {
 
     it('starts the service and responds successfully', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -126,6 +144,7 @@ describe('bootstrap()', () => {
 
     it('accepts multiple routes', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -152,6 +171,7 @@ describe('bootstrap()', () => {
 
     it('serves the correct view on request', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -180,6 +200,7 @@ describe('bootstrap()', () => {
 
     it('looks up a view from the route directory', () => {
       const bs = bootstrap({
+        fields: 'fields',
         views: path.resolve(__dirname, '../apps/common/views'),
         routes: [{
           views: path.resolve(__dirname, '../apps/app_2/views'),
@@ -197,6 +218,7 @@ describe('bootstrap()', () => {
 
     it('falls back to common views if view not found in route views', () => {
       const bs = bootstrap({
+        fields: 'fields',
         views: path.resolve(__dirname, '../apps/common/views'),
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -214,6 +236,7 @@ describe('bootstrap()', () => {
 
     it('looks up from hof-template-partials if not found in any supplied views dir', () => {
       const bs = bootstrap({
+        fields: 'fields',
         views: path.resolve(__dirname, '../apps/common/views'),
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -231,6 +254,7 @@ describe('bootstrap()', () => {
 
     it('serves a view on request to an optional baseUrl', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           baseUrl: '/app_1',
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -248,6 +272,7 @@ describe('bootstrap()', () => {
 
     it('serves a view on request to an optional param', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           params: '/:action?',
@@ -265,6 +290,7 @@ describe('bootstrap()', () => {
 
     it('can instantiate a custom base controller for the app', () => {
       const bs = bootstrap({
+        fields: 'fields',
         baseController: CustomBaseController,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -283,6 +309,7 @@ describe('bootstrap()', () => {
 
     it('does not start the service if start is false', () => {
       const bs = bootstrap({
+        fields: 'fields',
         start: false,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -297,6 +324,7 @@ describe('bootstrap()', () => {
 
     it('starts the service when start is called', () => {
       const bs = bootstrap({
+        fields: 'fields',
         start: false,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -317,6 +345,7 @@ describe('bootstrap()', () => {
 
     it('merges start options with the bootstrap config', () => {
       const bs = bootstrap({
+        fields: 'fields',
         start: false,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -340,6 +369,7 @@ describe('bootstrap()', () => {
 
     it('stops the service when stop is called', done => {
       const bs = bootstrap({
+        fields: 'fields',
         start: false,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
@@ -364,6 +394,7 @@ describe('bootstrap()', () => {
 
     it('serves static resources from /public', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -379,6 +410,7 @@ describe('bootstrap()', () => {
 
     it('returns a 404 if the resource does not exist', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -394,6 +426,7 @@ describe('bootstrap()', () => {
 
     it('returns a 200 for successful shallow health check', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {}
@@ -407,6 +440,7 @@ describe('bootstrap()', () => {
 
     it('can instantiate a custom controller for the route', () => {
       const bs = bootstrap({
+        fields: 'fields',
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),
           steps: {
@@ -426,6 +460,7 @@ describe('bootstrap()', () => {
 
     it('can pass the app config to a custom controller', () => {
       const bs = bootstrap({
+        fields: 'fields',
         appConfig: appConfig,
         routes: [{
           views: path.resolve(__dirname, '../apps/app_1/views'),

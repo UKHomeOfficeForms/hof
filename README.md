@@ -156,10 +156,17 @@ HOF-bootstrap accepts the following options so a developer can customise element
 
 ### Options
 
-- `views`: Location of the base views relative to the root of your project. Defaults to 'views'. Set `views` to `false` if not present.
+- `views`: Location of the base views relative to the root of your project.
+  - Will not error if it can't find any views in the root of your project.
+  - Looks for views - optionally set in your [route options](#route-options).
+  - Always loads views from [hof-template-partials.views](https://github.com/UKHomeOfficeForms/hof-template-partials/tree/master/views).
+  - Views extend like so, where route-views are the most specific: `hot-template-partials -> your-common-views -> your-route-views`
+
+- `fields`: Location of the common fields relative to the root of your project. Defaults to `__dirname + '/fields'`.
+  - Will not error if it can't find any views in the root of your project.
+
+- `translations`: Location of the common translations relative to the root of your project. Defaults to `./translations`.
 - `middleware`: An optional array of middleware functions to add to the application middleware pipeline.
-- `fields`: Location of the common fields relative to the root of your project. Defaults to 'fields'. Set `fields` to `false` if not present.
-- `translations`: Location of the common translations relative to the root of your project. Defaults to 'translations'.
 - `baseController`: The base controller for all routes and steps. Defaults to [HOF-controllers.base](https://github.com/UKHomeOfficeForms/hof-controllers/blob/master/lib/base-controller.js).
 - `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
@@ -222,13 +229,29 @@ const myRoutes = [{
 ```
 [Read more about steps and fields](https://github.com/UKHomeOfficeForms/HOF/blob/master/documentation/index.md)
 
-#### Options
-- `name`: If provided, is used to locate views, fields and translations for a form journey.
+#### Route Options
+- `name`: Passed to the form Wizard.
 - `baseUrl`: Base url from which all steps are relative. Defaults to `/`. If provided will be used to locate views, fields and translations for a form journey.
-- `fields`: Location of the routes' fields, relative to the root of your project. Defaults to `fields`.
-- `views`: Location of the routes' views relative to the root of your project. Defaults to `views`.
+- `fields`: Location of the routes' fields, relative to the root of your project. Will take precedence over fields specified at the base level.
+- `views`: Location of the routes' views relative to the root of your project. Will take precedence over views specified at the base level and from [hof-template-partials.views](https://github.com/UKHomeOfficeForms/hof-template-partials/tree/master/views).
 
-**NOTE**: `fields` defined in a `route` determine the name of the directory or path, relative to the root, where the `fields` module is located. `fields` defined in a step, are a list of the name of each field you want to use in the step.
+**NOTE**: The `fields` defined in a `route` is the path to the folder, relative to the root, where the `fields` are is located.
+The `fields` defined in a `step`, are a list of the name of each field you want to use in the step.
+
+For example:
+```
+[{
+  fields: '../../fields',
+  steps: {
+    '/one': {
+      fields: [
+        'name_of_field_one',
+        'name_of_field_two'
+      ]
+    }
+  }
+}];
+```
 
 ## Resources
 
