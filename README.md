@@ -168,7 +168,15 @@ HOF-bootstrap accepts the following options so a developer can customise element
 - `translations`: Location of the common translations relative to the root of your project. Defaults to `./translations`.
 - `middleware`: An optional array of middleware functions to add to the application middleware pipeline.
 - `baseController`: The base controller for all routes and steps. Defaults to [HOF-controllers.base](https://github.com/UKHomeOfficeForms/hof-controllers/blob/master/lib/base-controller.js).
-- `appConfig`: Allows you to attach a configuration object to each controllers' options argument.
+- `appConfig`: Allows you to attach a configuration object to each controllers' options argument. Useful if you need to access properties of your applications config settings in other parts of your code base, e.g:
+```
+...
+constructor(options) {
+  this.emailSettings = options.appConfig.emailSettings;
+}
+...
+```
+
 - `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
 - `getCookies`: Load 'cookies' view at `GET /cookies`.
