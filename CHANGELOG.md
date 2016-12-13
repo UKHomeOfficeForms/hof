@@ -1,3 +1,13 @@
+## 2016-12-13, Version 7.0.0 (Stable), @josephchapman
+* Pass `appConfig` through to **hof-wizard**
+* Update to latest **hof-wizard** v1.1.0 so `appConfig` is passed to each `controller`
+* Make `views` use **hof-template-partials** as default
+* Remove `views` and `fields` from `defaults.js`
+* **BREAKING CHANGE**: Throw if no base `fields` or route `fields` option is specified
+  * Breaks all instances of bootstrap overriding `views` and `fields` with boolean `false`
+* Update documentation, typos
+* Update tests, specifically where optional controller provided
+
 ## 2016-07-20, Version 3.0.0 (Stable), @josephchapman
 * Use hof-middleware.deepTranslate
 * Use hof-middleware.notFound
