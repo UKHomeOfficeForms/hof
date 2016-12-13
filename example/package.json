@@ -22,6 +22,7 @@
   "author": "",
   "dependencies": {
     "hof-bootstrap": "file:..",
+    "hof-controllers": "^4.1.1",
     "hof-frontend-toolkit": "^1.0.0"
   },
   "devDependencies": {
