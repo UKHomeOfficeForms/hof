@@ -40,7 +40,7 @@ If you want to a more in depth introduction, read [Starting from scratch](#start
 const bootstrap = require('hof-bootstrap');
 const routes = require(/* path_to_routes */);
 
-boostrap({
+bootstrap({
   /* ... custom configuration ... */,
   routes: routes
 });
@@ -88,7 +88,7 @@ In the main/entry point (`index.js`):
 ```
 const bootstrap = require('hof-bootstrap');
 
-boostrap({
+bootstrap({
   routes: [{
     steps: {
       '/one': {}
@@ -101,7 +101,7 @@ boostrap({
 });
 ```
 
-The previous contrived example is all that is needed to start a service with HOF-boostrap. Although in reality, you might want to [customise more of the configuration](#options).
+The previous contrived example is all that is needed to start a service with HOF-bootstrap. Although in reality, you might want to [customise more of the configuration](#options).
 
 **Important:** This example would not be very useful because it does not define what `fields` the bootstrap function should use. See the [section on Routes](#routes) for guidance.
 
@@ -113,7 +113,7 @@ The `bootstrap` function returns the bootstrap interface object, which includes 
 ```
 const bootstrap = require('hof-bootstrap');
 
-const interface = boostrap({
+const interface = bootstrap({
   routes: [{
     steps: {
       '/one': {}
