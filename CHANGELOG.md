@@ -1,7 +1,3 @@
-## 2017-01-04, Version 7.0.1 (Stable), @josephchapman
-* Fall-back to `fields` in `apps/${name}/fields.js`
-* Update README for accurancy
-
 ## 2016-12-13, Version 7.0.0 (Stable), @josephchapman
 * Pass `appConfig` through to **hof-wizard**
 * Update to latest **hof-wizard** v1.1.0 so `appConfig` is passed to each `controller`
