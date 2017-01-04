@@ -105,16 +105,14 @@ module.exports = options => {
     server: null,
 
     start: (startConfig) => {
-      if (startConfig) {
-        config = getConfig(config, startConfig);
-      }
+      startConfig = getConfig(config, startConfig);
 
-      const protocol = config.protocol === 'http' ? http : https;
+      const protocol = startConfig.protocol === 'http' ? http : https;
 
       bootstrap.server = protocol.createServer(app);
 
       return new Promise((resolve, reject) => {
-        bootstrap.server.listen(config.port, config.host, err => {
+        bootstrap.server.listen(startConfig.port, startConfig.host, err => {
           if (err) {
             reject(new Error('Unable to connect to server'));
           }
