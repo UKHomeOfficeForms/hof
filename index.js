@@ -45,6 +45,7 @@ const applyErrorMiddlewares = (app, config, i18n) => {
 module.exports = options => {
 
   const app = express();
+  const userMiddleware = express.Router();
 
   app.use(helmet());
 
@@ -53,49 +54,6 @@ module.exports = options => {
   const i18n = i18nFuture({
     path: path.resolve(config.caller, config.translations) + '/__lng__/__ns__.json'
   });
-
-  const bootstrap = {
-
-    use() {
-      app.use.apply(app, arguments);
-      return bootstrap;
-    },
-
-    server: null,
-
-    start: (startConfig) => {
-      if (startConfig) {
-        config = getConfig(config, startConfig);
-      }
-
-      const protocol = config.protocol === 'http' ? http : https;
-
-      bootstrap.server = protocol.createServer(app);
-
-      app.use(hofMiddleware.cookies());
-
-      loadRoutes(app, config);
-      applyErrorMiddlewares(app, config, i18n);
-
-      return new Promise((resolve, reject) => {
-        bootstrap.server.listen(config.port, config.host, err => {
-          if (err) {
-            reject(new Error('Unable to connect to server'));
-          }
-          resolve(bootstrap);
-        });
-      });
-    },
-
-    stop() {
-      return new Promise((resolve, reject) => bootstrap.server.close(err => {
-        if (err) {
-          reject(new Error('Unable to stop server'));
-        }
-        resolve(bootstrap);
-      }));
-    }
-  };
 
   // shallow health check
   app.get('/healthz/ping', require('express-healthcheck')());
@@ -131,6 +89,47 @@ module.exports = options => {
     app.get('/terms-and-conditions', (req, res) =>
       i18n.on('ready', () => res.render('terms', i18n.translate('terms'))));
   }
+
+  app.use(userMiddleware);
+  app.use(hofMiddleware.cookies());
+  loadRoutes(app, config);
+  applyErrorMiddlewares(app, config, i18n);
+
+  const bootstrap = {
+
+    use() {
+      router.use.apply(router, arguments);
+      return bootstrap;
+    },
+
+    server: null,
+
+    start: (startConfig) => {
+      startConfig = getConfig(config, startConfig);
+
+      const protocol = startConfig.protocol === 'http' ? http : https;
+
+      bootstrap.server = protocol.createServer(app);
+
+      return new Promise((resolve, reject) => {
+        bootstrap.server.listen(startConfig.port, startConfig.host, err => {
+          if (err) {
+            reject(new Error('Unable to connect to server'));
+          }
+          resolve(bootstrap);
+        });
+      });
+    },
+
+    stop() {
+      return new Promise((resolve, reject) => bootstrap.server.close(err => {
+        if (err) {
+          reject(new Error('Unable to stop server'));
+        }
+        resolve(bootstrap);
+      }));
+    }
+  };
 
   if (config.start !== false) {
     bootstrap.start(config);
