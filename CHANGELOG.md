@@ -1,4 +1,11 @@
-## 2016-12-13, Version 7.0.0 (Stable), @josephchapman
+## 2017-01-05, Version 8.0.0 (Stable), @josephchapman
+* Add router in middleware stack for insertion of user middleware (#100)
+* Potential **breaking change**: Prevent overwriting initialisation config with custom start config.
+* Allow custom protocol, port and host to start method.
+* Do not allow this configuration to override the global config
+* Fix broken paths to views and translations
+
+## 2016-12-13, Version 7.0.0 (~~Stable~~), @josephchapman
 * Pass `appConfig` through to **hof-wizard**
 * Update to latest **hof-wizard** v1.1.0 so `appConfig` is passed to each `controller`
 * Make `views` use **hof-template-partials** as default
