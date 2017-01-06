@@ -1,3 +1,6 @@
+## 2017-01-06, Version 8.0.1 (Stable), @josephchapman
+* Fixes issue causing an error to be thrown when mounting middleware.
+
 ## 2017-01-05, Version 8.0.0 (Stable), @josephchapman
 * Add router in middleware stack for insertion of user middleware (#100)
 * Potential **breaking change**: Prevent overwriting initialisation config with custom start config.
