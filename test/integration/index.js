@@ -481,4 +481,29 @@ describe('bootstrap()', () => {
 
   });
 
+  describe('with user defined middleware', () => {
+    it('can mount user defined middleware with `use`', () => {
+      const bs = bootstrap({
+        start: false,
+        fields: 'fields',
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      bs.use((req, res) => {
+        res.json({respondedFromMiddleware: true});
+      });
+      bs.start();
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect((response) =>
+          response.body.respondedFromMiddleware.should.equal(true)
+        );
+    });
+  });
+
 });

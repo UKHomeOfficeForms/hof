@@ -98,7 +98,7 @@ module.exports = options => {
   const bootstrap = {
 
     use() {
-      router.use.apply(router, arguments);
+      userMiddleware.use.apply(userMiddleware, arguments);
       return bootstrap;
     },
 
