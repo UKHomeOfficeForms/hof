@@ -17,10 +17,15 @@
     "url": "https://github.com/UKHomeOffice/hof-bootstrap/issues"
   },
   "scripts": {
-    "test": "NODE_ENV=test istanbul cover _mocha",
+    "test": "npm run unit && npm run style && npm run lint",
+    "unit": "NODE_ENV=test istanbul cover _mocha",
     "style": "jscs index.js **/*.js test --config=./.jscsrc",
     "lint": "eslint .",
-    "ci": "npm run test && npm run style && npm run lint"
+    "snyk": "snyk test",
+    "snyk:dev": "snyk test --dev",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect",
+    "ci": "travis-conditions"
   },
   "dependencies": {
     "body-parser": "^1.15.1",
@@ -54,12 +59,13 @@
     "sinomocha": "^0.2.4",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
+    "snyk": "^1.23.2",
     "supertest": "^1.2.0",
-    "supertest-as-promised": "^3.2.0"
+    "supertest-as-promised": "^3.2.0",
+    "travis-conditions": "0.0.0"
   },
   "pre-commit": [
-    "lint",
-    "style",
     "test"
-  ]
+  ],
+  "snyk": true
 }
