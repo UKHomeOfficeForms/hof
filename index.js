@@ -49,6 +49,18 @@ module.exports = options => {
 
   app.use(helmet());
 
+  /* eslint-disable quotes */
+  app.use(helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'none'"],
+      styleSrc: ["'self'"],
+      imgSrc: ["'self'"],
+      fontSrc: ["'self'", "data:"],
+      scriptSrc: ["'self'", "'unsafe-inline'"]
+    }
+  }));
+  /* eslint-enable quotes */
+
   let config = getConfig(options);
 
   const i18n = i18nFuture({
