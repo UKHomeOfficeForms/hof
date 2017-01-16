@@ -1,3 +1,7 @@
+## 2017-01-16, Version 8.1.0 (Stable), @josephchapman
+* Add basic Content Security Policy (CSP) middleware
+* Throw error if session.secret is not set in production
+
 ## 2017-01-06, Version 8.0.1 (Stable), @josephchapman
 * Fixes issue causing an error to be thrown when mounting middleware.
 
