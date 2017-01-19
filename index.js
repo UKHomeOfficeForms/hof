@@ -15,9 +15,11 @@ const defaults = require('./lib/defaults');
 const logger = require('./lib/logger');
 const helmet = require('helmet');
 
+const customConfig = {};
+
 const getConfig = function getConfig() {
   const args = [].slice.call(arguments);
-  return Object.assign.apply(null, [{}, defaults].concat(args));
+  return Object.assign.apply(null, [{}, defaults, customConfig].concat(args));
 };
 
 const loadRoutes = (app, config) => {
@@ -42,7 +44,7 @@ const applyErrorMiddlewares = (app, config, i18n) => {
   }));
 };
 
-module.exports = options => {
+function bootstrap(options) {
 
   const app = express();
   const userMiddleware = express.Router();
@@ -64,7 +66,7 @@ module.exports = options => {
   let config = getConfig(options);
 
   const i18n = i18nFuture({
-    path: path.resolve(config.caller, config.translations) + '/__lng__/__ns__.json'
+    path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
   });
 
   // shallow health check
@@ -107,11 +109,11 @@ module.exports = options => {
   loadRoutes(app, config);
   applyErrorMiddlewares(app, config, i18n);
 
-  const bootstrap = {
+  const instance = {
 
     use() {
       userMiddleware.use.apply(userMiddleware, arguments);
-      return bootstrap;
+      return instance;
     },
 
     server: null,
@@ -121,32 +123,42 @@ module.exports = options => {
 
       const protocol = startConfig.protocol === 'http' ? http : https;
 
-      bootstrap.server = protocol.createServer(app);
+      instance.server = protocol.createServer(app);
 
       return new Promise((resolve, reject) => {
-        bootstrap.server.listen(startConfig.port, startConfig.host, err => {
+        instance.server.listen(startConfig.port, startConfig.host, err => {
           if (err) {
             reject(new Error('Unable to connect to server'));
           }
-          resolve(bootstrap);
+          resolve(instance);
         });
       });
     },
 
     stop() {
-      return new Promise((resolve, reject) => bootstrap.server.close(err => {
+      return new Promise((resolve, reject) => instance.server.close(err => {
         if (err) {
           reject(new Error('Unable to stop server'));
         }
-        resolve(bootstrap);
+        resolve(instance);
       }));
     }
   };
 
   if (config.start !== false) {
-    bootstrap.start(config);
+    instance.start(config);
   }
 
-  return bootstrap;
+  return instance;
 
+}
+
+bootstrap.configure = function configure(key, val) {
+  if (arguments.length === 2 && typeof key === 'string') {
+    customConfig[key] = val;
+  } else {
+    Object.assign(customConfig, key);
+  }
 };
+
+module.exports = bootstrap;

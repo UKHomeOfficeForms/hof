@@ -156,6 +156,9 @@ HOF-bootstrap accepts the following options so a developer can customise element
 
 ### Options
 
+- `root`: The path to the project root directory.
+  - App paths will be relative to this directory.
+  - Defaults to the current working directory.
 - `views`: Location of the common views relative to the root of your project.
   - Will not error if it can't find any views in the root of your project.
   - Looks for views - optionally set in your [route options](#route-options).

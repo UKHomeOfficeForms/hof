@@ -29,6 +29,10 @@ class CustomStepController extends CustomBaseController {
 
 describe('bootstrap()', () => {
 
+  before(() => {
+    bootstrap.configure('root', path.resolve(__dirname, '..'));
+  });
+
   it('must be given a list of routes', () =>
     (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
