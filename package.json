@@ -19,6 +19,7 @@
   "scripts": {
     "test": "npm run unit && npm run lint",
     "unit": "NODE_ENV=test istanbul cover _mocha",
+    "unit:nocov": "NODE_ENV=test mocha",
     "lint": "eslint .",
     "snyk": "snyk test",
     "snyk:dev": "snyk test --dev",
