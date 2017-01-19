@@ -15,6 +15,7 @@ HOF-bootstrap is a wrapper function for HOF. It takes the hard work out of setti
   - [server](#server)
 - [Custom configuration](#custom-configuration)
   - [Options](#options)
+  - [Global configuration](#global-configuration)
   - [Environment variables](#environment-variables)
 - [Routes](#routes)
 - [Resources](#resources)
@@ -171,7 +172,8 @@ HOF-bootstrap accepts the following options so a developer can customise element
 - `middleware`: An optional array of middleware functions to add to the application middleware pipeline.
 - `baseController`: The base controller for all routes and steps. Defaults to [HOF-controllers.base](https://github.com/UKHomeOfficeForms/hof-controllers/blob/master/lib/base-controller.js).
 - `appConfig`: Allows you to attach a configuration object to each controllers' options argument. Useful if you need to access properties of your applications config settings in other parts of your code base, e.g:
-```
+
+```javascript
 ...
 constructor(options) {
   this.emailSettings = options.appConfig.emailSettings;
@@ -194,6 +196,16 @@ constructor(options) {
 - `session.ttl`: The session timeout in milliseconds. Defaults to `1800` (ms).
 - `session.secret`: The session secret. Set this to something unique.
 - `session.name`: The session name. Set this to something unique.
+
+### Global configuration
+
+Any of the configuration parameters can be set globally for all bootstrap instances by calling `bootstrap.configure`. This is mostly relevant for running unit tests which will create a large number of bootstrap instances.
+
+```javascript
+const bootstrap = require('hof-bootstrap');
+// set the project root to a custom location for all bootstrap instances
+boostrap.configure('root', path.resolve(__dirname, '..'));
+```
 
 ### Environent variables
 
