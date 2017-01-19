@@ -156,7 +156,7 @@ function bootstrap(options) {
 bootstrap.configure = function configure(key, val) {
   if (arguments.length === 2 && typeof key === 'string') {
     customConfig[key] = val;
-  } else {
+  } else if (typeof key === 'object') {
     Object.assign(customConfig, key);
   }
 };
