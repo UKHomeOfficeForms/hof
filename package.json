@@ -40,7 +40,7 @@
     "hof-form-wizard": "^2.0.1",
     "hof-govuk-template": "^1.0.0",
     "hof-middleware": "^1.0.0",
-    "hof-template-mixins": "^2.0.0",
+    "hof-template-mixins": "^3.0.0",
     "hof-template-partials": "^3.1.0",
     "hogan-express-strict": "^0.5.4",
     "i18n-future": "^1.0.0",
