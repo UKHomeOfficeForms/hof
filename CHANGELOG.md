@@ -1,3 +1,6 @@
+## 2017-01-27, Version 9.0.0 (Stable), @lennym
+* Major version updates of hof-form-wizard and hof-controllers
+
 ## 2017-01-16, Version 8.1.0 (Stable), @josephchapman
 * Add basic Content Security Policy (CSP) middleware
 * Throw error if session.secret is not set in production
