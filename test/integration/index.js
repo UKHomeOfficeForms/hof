@@ -2,7 +2,7 @@
 
 const request = require('supertest-as-promised');
 const bootstrap = require('../../');
-const controllers = require('hof-controllers');
+const Controller = require('hof-form-wizard').Controller;
 const path = require('path');
 const appConfig = {
   foo: 'bar',
@@ -10,7 +10,7 @@ const appConfig = {
 };
 
 let baseControllerCalled = false;
-class CustomBaseController extends controllers.base {
+class CustomBaseController extends Controller {
   constructor(options) {
     baseControllerCalled = true;
     super(options);
