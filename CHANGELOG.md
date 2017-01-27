@@ -1,3 +1,6 @@
+## 2017-01-27, Version 9.0.1 (Stable), @lennym
+* Major version update of hof-template-mixins
+
 ## 2017-01-27, Version 9.0.0 (Stable), @lennym
 * Major version updates of hof-form-wizard and hof-controllers
 
