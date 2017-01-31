@@ -1,3 +1,6 @@
+## 2017-01-27, Version 9.1.0 (Stable), @lennym
+* Allow CSP to be disabled to enable acceptance test to run
+
 ## 2017-01-27, Version 9.0.1 (Stable), @lennym
 * Major version update of hof-template-mixins
 
