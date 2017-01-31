@@ -46,24 +46,26 @@ const applyErrorMiddlewares = (app, config, i18n) => {
 
 function bootstrap(options) {
 
+  let config = getConfig(options);
+
   const app = express();
   const userMiddleware = express.Router();
 
   app.use(helmet());
 
-  /* eslint-disable quotes */
-  app.use(helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'none'"],
-      styleSrc: ["'self'"],
-      imgSrc: ["'self'"],
-      fontSrc: ["'self'", "data:"],
-      scriptSrc: ["'self'", "'unsafe-inline'"]
-    }
-  }));
-  /* eslint-enable quotes */
-
-  let config = getConfig(options);
+  if (config.csp) {
+    /* eslint-disable quotes */
+    app.use(helmet.contentSecurityPolicy({
+      directives: {
+        defaultSrc: ["'none'"],
+        styleSrc: ["'self'"],
+        imgSrc: ["'self'"],
+        fontSrc: ["'self'", "data:"],
+        scriptSrc: ["'self'", "'unsafe-inline'"]
+      }
+    }));
+    /* eslint-enable quotes */
+  }
 
   const i18n = i18nFuture({
     path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
