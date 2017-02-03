@@ -180,6 +180,10 @@ constructor(options) {
 }
 ...
 ```
+- `csp` (We use [Helmetjs/csp](https://github.com/helmetjs/csp) middleware)
+  - `true` by default, enables Content Security Policy middleware.
+  - `false` set with custom config or with `process.env.DISABLE_CSP`, disables Content Security Policy middleware.
+  - CSP formatted object enables Content Security Policy middleware and extends default CSP directives with your own.
 
 - `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
