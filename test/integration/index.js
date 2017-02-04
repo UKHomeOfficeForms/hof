@@ -8,6 +8,7 @@ const appConfig = {
   foo: 'bar',
   bar: 'baz'
 };
+const root = path.resolve(__dirname, '../fixtures');
 
 let baseControllerCalled = false;
 class CustomBaseController extends Controller {
@@ -30,7 +31,7 @@ class CustomStepController extends CustomBaseController {
 describe('bootstrap()', () => {
 
   before(() => {
-    bootstrap.configure('root', path.resolve(__dirname, '..'));
+    bootstrap.configure('root', root);
   });
 
   it('must be given a list of routes', () =>
@@ -75,7 +76,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {},
       }]
-    })).should.Throw('Cannot find fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+    })).should.Throw(`Cannot find fields at ${root}/not_a_valid_path`)
   );
 
   it('route fields option must be valid when specified', () =>
@@ -84,7 +85,7 @@ describe('bootstrap()', () => {
         steps: {},
         fields: 'not_a_valid_path'
       }]
-    })).should.Throw('Cannot find route fields at ' + path.resolve(__dirname, '../../test/not_a_valid_path'))
+    })).should.Throw(`Cannot find route fields at ${root}/not_a_valid_path`)
   );
 
   it('uses defaults when no views option is specified', () =>
@@ -103,7 +104,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {}
       }]
-    })).should.Throw('Cannot find views at ' + path.resolve(__dirname, '../../test/invalid_path'))
+    })).should.Throw(`Cannot find views at ${root}/invalid_path`)
   );
 
   it('route views option must be valid when specified', () =>
@@ -113,7 +114,7 @@ describe('bootstrap()', () => {
         views: 'invalid_path',
         steps: {}
       }]
-    })).should.Throw('Cannot find route views at ' + path.resolve(__dirname, '../../test/invalid_path'))
+    })).should.Throw(`Cannot find route views at ${root}/invalid_path`)
   );
 
   describe('with valid routes and steps', () => {
@@ -122,7 +123,7 @@ describe('bootstrap()', () => {
       bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -134,7 +135,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -150,12 +151,12 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
         }, {
-          views: path.resolve(__dirname, '../apps/app_2/views'),
+          views: `${root}/apps/app_2/views`,
           steps: {
             '/two': {}
           }
@@ -177,12 +178,12 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
         }, {
-          views: path.resolve(__dirname, '../apps/app_2/views'),
+          views: `${root}/apps/app_2/views`,
           steps: {
             '/two': {}
           }
@@ -205,9 +206,9 @@ describe('bootstrap()', () => {
     it('looks up a view from the route directory', () => {
       const bs = bootstrap({
         fields: 'fields',
-        views: path.resolve(__dirname, '../apps/common/views'),
+        views: `${root}/apps/common/views`,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_2/views'),
+          views: `${root}/apps/app_2/views`,
           steps: {
             '/common': {}
           }
@@ -223,9 +224,9 @@ describe('bootstrap()', () => {
     it('falls back to common views if view not found in route views', () => {
       const bs = bootstrap({
         fields: 'fields',
-        views: path.resolve(__dirname, '../apps/common/views'),
+        views: `${root}/apps/common/views`,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/common': {}
           }
@@ -241,9 +242,9 @@ describe('bootstrap()', () => {
     it('looks up from hof-template-partials if not found in any supplied views dir', () => {
       const bs = bootstrap({
         fields: 'fields',
-        views: path.resolve(__dirname, '../apps/common/views'),
+        views: `${root}/apps/common/views`,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/step': {}
           }
@@ -261,7 +262,7 @@ describe('bootstrap()', () => {
         fields: 'fields',
         routes: [{
           baseUrl: '/app_1',
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -278,7 +279,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           params: '/:action?',
           steps: {
             '/one': {}
@@ -297,7 +298,7 @@ describe('bootstrap()', () => {
         fields: 'fields',
         baseController: CustomBaseController,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -316,7 +317,7 @@ describe('bootstrap()', () => {
         fields: 'fields',
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -331,7 +332,7 @@ describe('bootstrap()', () => {
         fields: 'fields',
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -352,7 +353,7 @@ describe('bootstrap()', () => {
         fields: 'fields',
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -376,7 +377,7 @@ describe('bootstrap()', () => {
         fields: 'fields',
         start: false,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -400,14 +401,14 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
         }]
       });
       return request(bs.server)
-        .get('/public/test.js')
+        .get('/public/index.js')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
     });
@@ -416,7 +417,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -432,7 +433,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {}
         }]
       });
@@ -446,7 +447,7 @@ describe('bootstrap()', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {
               controller: CustomStepController
@@ -467,7 +468,7 @@ describe('bootstrap()', () => {
         fields: 'fields',
         appConfig: appConfig,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {
               controller: CustomStepController
@@ -497,7 +498,7 @@ describe('bootstrap()', () => {
         appConfig: appConfig,
         csp: directives,
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
@@ -528,7 +529,7 @@ describe('bootstrap()', () => {
         start: false,
         fields: 'fields',
         routes: [{
-          views: path.resolve(__dirname, '../apps/app_1/views'),
+          views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
