@@ -14,6 +14,7 @@ const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
 const logger = require('./lib/logger');
 const helmet = require('helmet');
+const _ = require('lodash');
 
 const customConfig = {};
 
@@ -44,6 +45,30 @@ const applyErrorMiddlewares = (app, config, i18n) => {
   }));
 };
 
+const getContentSecurityPolicy = (csp) => {
+  let directives = {
+    /* eslint-disable quotes */
+    defaultSrc: ["'none'"],
+    styleSrc: ["'self'"],
+    imgSrc: ["'self'"],
+    fontSrc: ["'self'", "data:"],
+    scriptSrc: ["'self'", "'unsafe-inline'"]
+    /* eslint-enable quotes */
+  };
+
+  if (_.isPlainObject(csp)) {
+    _.each(csp, (value, name) => {
+      if (directives[name] && directives[name].length) {
+        // concat unique directives with existing directives
+        directives[name] = _.uniq(directives[name].concat(value));
+      } else {
+        directives[name] = _.isArray(value) ? value : [value];
+      }
+    });
+  }
+  return directives;
+};
+
 function bootstrap(options) {
 
   let config = getConfig(options);
@@ -54,17 +79,9 @@ function bootstrap(options) {
   app.use(helmet());
 
   if (config.csp) {
-    /* eslint-disable quotes */
     app.use(helmet.contentSecurityPolicy({
-      directives: {
-        defaultSrc: ["'none'"],
-        styleSrc: ["'self'"],
-        imgSrc: ["'self'"],
-        fontSrc: ["'self'", "data:"],
-        scriptSrc: ["'self'", "'unsafe-inline'"]
-      }
+      directives: getContentSecurityPolicy(config.csp)
     }));
-    /* eslint-enable quotes */
   }
 
   const i18n = i18nFuture({

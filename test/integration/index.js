@@ -483,6 +483,43 @@ describe('bootstrap()', () => {
         );
     });
 
+    it('can extend csp directives with csp config', () => {
+      const directives = {
+        /* eslint-disable quotes */
+        styleSrc: ["'self'", "'another'"],
+        imgSrc: ["'test.com/some_path'"],
+        scriptSrc: "'www.analytics.com'",
+        testSrc: "'test'"
+        /* eslint-enable quotes */
+      };
+      const bs = bootstrap({
+        fields: 'fields',
+        appConfig: appConfig,
+        csp: directives,
+        routes: [{
+          views: path.resolve(__dirname, '../apps/app_1/views'),
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect((res) => {
+          let csp = {};
+          let parts = res.headers['content-security-policy'].split('; ');
+          parts.forEach((part) => {
+            part = part.split(' ');
+            csp[part[0]] = part.slice(1);
+          });
+          csp['img-src'].should.include(directives.imgSrc[0]);
+          csp['script-src'].should.include(directives.scriptSrc);
+          csp['test-src'].should.include(directives.testSrc);
+          csp['style-src'].should.deep.equal(directives.styleSrc);
+        });
+    });
+
   });
 
   describe('with user defined middleware', () => {
