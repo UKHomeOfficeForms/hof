@@ -1,5 +1,5 @@
 node_modules
-test/public
+test/fixtures/public
 coverage
 LICENSE
 README.md
