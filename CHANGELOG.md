@@ -1,3 +1,8 @@
+## 2017-02-09, Version 9.2.0 (Stable), @josephchapman
+* CSP directives can be extended with `csp` config
+* Documentation reorganised
+* Test fixtures reorganised
+
 ## 2017-01-27, Version 9.1.0 (Stable), @lennym
 * Allow CSP to be disabled to enable acceptance test to run
 
