@@ -45,16 +45,27 @@ const applyErrorMiddlewares = (app, config, i18n) => {
   }));
 };
 
-const getContentSecurityPolicy = (csp) => {
+const getContentSecurityPolicy = config => {
+  let csp = config.csp;
   let directives = {
     /* eslint-disable quotes */
     defaultSrc: ["'none'"],
     styleSrc: ["'self'"],
     imgSrc: ["'self'"],
-    fontSrc: ["'self'", "data:"],
+    fontSrc: ["'self'", 'data:'],
     scriptSrc: ["'self'", "'unsafe-inline'"]
     /* eslint-enable quotes */
   };
+
+  let gaDirectives = {
+    scriptSrc: 'http://www.google-analytics.com/analytics.js',
+    imgSrc: 'http://www.google-analytics.com/collect'
+  };
+
+  if (config.gaTagId) {
+    directives.scriptSrc = directives.scriptSrc.concat(gaDirectives.scriptSrc);
+    directives.imgSrc = directives.imgSrc.concat(gaDirectives.imgSrc);
+  }
 
   if (_.isPlainObject(csp)) {
     _.each(csp, (value, name) => {
@@ -80,7 +91,7 @@ function bootstrap(options) {
 
   if (config.csp) {
     app.use(helmet.contentSecurityPolicy({
-      directives: getContentSecurityPolicy(config.csp)
+      directives: getContentSecurityPolicy(config)
     }));
   }
 

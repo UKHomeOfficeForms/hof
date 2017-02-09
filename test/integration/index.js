@@ -28,6 +28,16 @@ class CustomStepController extends CustomBaseController {
   }
 }
 
+function getHeaders(res, type) {
+  let headers = {};
+  let parts = res.headers[type].split('; ');
+  parts.forEach((part) => {
+    part = part.split(' ');
+    headers[part[0]] = part.slice(1);
+  });
+  return headers;
+}
+
 describe('bootstrap()', () => {
 
   before(() => {
@@ -484,7 +494,7 @@ describe('bootstrap()', () => {
         );
     });
 
-    it('can extend csp directives with csp config', () => {
+    it('can extend CSP directives with CSP config', () => {
       const directives = {
         /* eslint-disable quotes */
         styleSrc: ["'self'", "'another'"],
@@ -495,7 +505,6 @@ describe('bootstrap()', () => {
       };
       const bs = bootstrap({
         fields: 'fields',
-        appConfig: appConfig,
         csp: directives,
         routes: [{
           views: `${root}/apps/app_1/views`,
@@ -508,16 +517,57 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
-          let csp = {};
-          let parts = res.headers['content-security-policy'].split('; ');
-          parts.forEach((part) => {
-            part = part.split(' ');
-            csp[part[0]] = part.slice(1);
-          });
+          const csp = getHeaders(res, 'content-security-policy');
           csp['img-src'].should.include(directives.imgSrc[0]);
           csp['script-src'].should.include(directives.scriptSrc);
           csp['test-src'].should.include(directives.testSrc);
           csp['style-src'].should.deep.equal(directives.styleSrc);
+        });
+    });
+
+    it('CSP extends with google directives if gaTagId set', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        gaTagId: '1234-ABC',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect((res) => {
+          const csp = getHeaders(res, 'content-security-policy');
+          csp['img-src'].should.include('http://www.google-analytics.com/collect');
+          csp['script-src'].should.include('http://www.google-analytics.com/analytics.js');
+        });
+    });
+
+    it('Custom CSP, google, and default directives can coexist', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        csp: {
+          scriptSrc: ['foo'],
+          imgSrc: ['bar']
+        },
+        gaTagId: '1234-ABC',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect((res) => {
+          const csp = getHeaders(res, 'content-security-policy');
+          csp['img-src'].should.include('http://www.google-analytics.com/collect', 'bar', 'self', 'data:');
+          csp['script-src'].should.include('http://www.google-analytics.com/analytics.js', 'poo', 'self');
         });
     });
 
