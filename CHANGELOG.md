@@ -1,3 +1,6 @@
+## 2017-02-10, Version 9.3.1 (Stable), @josephchapman
+* Allow GA script to load js and images form any path
+
 ## 2017-02-10, Version 9.3.0 (Stable), @josephchapman
 * CSP directives auto-amended with google url when gaTagId set
 
