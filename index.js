@@ -58,8 +58,8 @@ const getContentSecurityPolicy = config => {
   };
 
   let gaDirectives = {
-    scriptSrc: 'http://www.google-analytics.com/analytics.js',
-    imgSrc: 'http://www.google-analytics.com/collect'
+    scriptSrc: 'www.google-analytics.com',
+    imgSrc: 'www.google-analytics.com'
   };
 
   if (config.gaTagId) {

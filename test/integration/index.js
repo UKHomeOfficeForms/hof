@@ -541,8 +541,8 @@ describe('bootstrap()', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
           const csp = getHeaders(res, 'content-security-policy');
-          csp['img-src'].should.include('http://www.google-analytics.com/collect');
-          csp['script-src'].should.include('http://www.google-analytics.com/analytics.js');
+          csp['img-src'].should.include('www.google-analytics.com');
+          csp['script-src'].should.include('www.google-analytics.com');
         });
     });
 
@@ -566,8 +566,14 @@ describe('bootstrap()', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
           const csp = getHeaders(res, 'content-security-policy');
-          csp['img-src'].should.include('http://www.google-analytics.com/collect', 'bar', 'self', 'data:');
-          csp['script-src'].should.include('http://www.google-analytics.com/analytics.js', 'poo', 'self');
+          /* eslint-disable quotes */
+          csp['img-src'].should.include('www.google-analytics.com')
+            .and.include('bar')
+            .and.include("'self'");
+          csp['script-src'].should.include('www.google-analytics.com')
+            .and.include('foo')
+            .and.include("'self'");
+          /* eslint-enable quotes */
         });
     });
 
