@@ -33,6 +33,7 @@ constructor(options) {
   - `true` by default, enables Content Security Policy middleware.
   - `false` set with custom config or with `process.env.DISABLE_CSP`, disables Content Security Policy middleware.
   - CSP formatted object enables Content Security Policy middleware and extends default CSP directives with your own.
+  - If `gaTagId` is set, the CSP directives are auto-amended to include www.google-analytics.com as a source for js and images.
 
 - `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
