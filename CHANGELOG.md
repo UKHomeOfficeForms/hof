@@ -1,3 +1,6 @@
+## 2017-02-10, Version 9.3.0 (Stable), @josephchapman
+* CSP directives auto-amended with google url when gaTagId set
+
 ## 2017-02-09, Version 9.2.0 (Stable), @josephchapman
 * CSP directives can be extended with `csp` config
 * Documentation reorganised
