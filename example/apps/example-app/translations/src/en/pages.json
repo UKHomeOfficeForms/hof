@@ -1,10 +1,4 @@
 {
-  "personal-details": {
-    "summary": "Your personal details"
-  },
-  "enquiry-details": {
-    "summary": "your enquiry details"
-  },
   "first-step": {
     "intro": "This text is located in /apps/example-app/translations/src/en/pages.json with the key \"step-name.intro\""
   },
@@ -13,7 +7,32 @@
   },
   "confirm": {
     "header": "Check your answers",
-    "intro": "Make sure the information you are submitting is correct"
+    "intro": "Make sure the information you are submitting is correct",
+    "sections": {
+      "personal-details": {
+        "header": "Your personal details"
+      },
+      "enquiry-details": {
+        "header": "your enquiry details"
+      }
+    },
+    "fields": {
+      "your-name": {
+        "label": "Full name"
+      },
+      "email-address": {
+        "label": "Email address"
+      },
+      "phone-number": {
+        "label": "Phone number"
+      },
+      "date-example": {
+        "label": "A Date"
+      },
+      "message": {
+        "label": "Reason for contact"
+      }
+    }
   },
   "confirmation": {
     "alert": "Thank you for submitting the form",

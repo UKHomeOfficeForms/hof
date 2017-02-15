@@ -1,49 +1,53 @@
 'use strict';
 
-const controllers = require('hof-controllers');
+const SummaryPageBehaviour = require('hof-behaviour-summary-page');
 
 module.exports = {
   name: 'example-app',
   params: '/:action?',
   steps: {
     '/': {
-      controller: controllers.start,
+      behaviours: require('./behaviours/clear-session'),
       next: '/first-step'
     },
     '/first-step': {
       fields: [
         'your-name'
       ],
-      next: '/second-step',
-      locals: {
-        // this is used to group sets of fields together in the
-        // check your answers page, and the email
-        section: 'personal-details'
-      }
+      next: '/second-step'
     },
     '/second-step': {
       fields: [
         'email-address',
         'phone-number'
       ],
-      next: '/third-step',
-      locals: {
-        section: 'personal-details'
-      }
+      next: '/third-step'
     },
     '/third-step': {
       fields: [
+        'date-example'
+      ],
+      next: '/fourth-step'
+    },
+    '/fourth-step': {
+      fields: [
         'message'
       ],
-      next: '/confirm',
-      locals: {
-        section: 'enquiry-details'
-      }
+      next: '/confirm'
     },
     '/confirm': {
-      controller: controllers.confirm,
-      fieldsConfig: require('./fields'),
-      emailConfig: require('../../config').email,
+      behaviours: SummaryPageBehaviour,
+      sections: {
+        'personal-details': [
+          'your-name',
+          'email-address',
+          'phone-number'
+        ],
+        'enquiry-details': [
+          'date-example',
+          'message'
+        ]
+      },
       next: '/confirmation'
     },
     '/confirmation': {

@@ -21,9 +21,11 @@
   },
   "author": "",
   "dependencies": {
+    "hof-behaviour-summary-page": "^2.0.0",
     "hof-bootstrap": "file:..",
-    "hof-controllers": "^4.1.1",
-    "hof-frontend-toolkit": "^1.0.0"
+    "hof-component-date": "^1.0.0",
+    "hof-frontend-toolkit": "^1.0.0",
+    "mixwith": "^0.1.1"
   },
   "devDependencies": {
     "browserify": "^13.1.1",

@@ -1,5 +1,7 @@
 'use strict';
 
+const dateComponent = require('hof-component-date');
+
 module.exports = {
   'your-name': {
     mixin: 'input-text',
@@ -17,6 +19,9 @@ module.exports = {
     // https://github.com/alphagov/govuk_elements/issues/320
     labelClassName: 'visuallyhidden'
   },
+  'date-example': dateComponent('date-example', {
+    validate: ['required', 'date', 'before']
+  }),
   'email-address': {
     mixin: 'input-text',
     validate: ['required', 'email']
@@ -25,7 +30,7 @@ module.exports = {
     mixin: 'input-text',
     validate: 'required'
   },
-  message: {
+  'message': {
     mixin: 'textarea',
     validate: 'required',
     labelClassName: 'visuallyhidden',

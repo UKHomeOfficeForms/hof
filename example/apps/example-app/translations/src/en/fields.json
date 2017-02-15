@@ -1,20 +1,28 @@
 {
   "your-name": {
-    "label": "What is your full name?",
-    "summary": "Full name"
+    "label": "What is your full name?"
   },
   "email-address": {
     "label": "What is your email address?",
-    "hint": "We will send a confirmation email to the address you provide",
-    "summary": "Email address"
+    "hint": "We will send a confirmation email to the address you provide"
   },
   "phone-number": {
     "label": "What is your phone number",
-    "hint": "You can enter text in this field",
-    "summary": "Phone number"
+    "hint": "You can enter text in this field"
   },
   "message": {
-    "label": "Why are you contacting us?",
-    "summary": "Reason for contact"
+    "label": "Why are you contacting us?"
+  },
+  "date-example": {
+    "legend": "Enter a date in the past"
+  },
+  "date-example-day": {
+    "label": "Day"
+  },
+  "date-example-month": {
+    "label": "Month"
+  },
+  "date-example-year": {
+    "label": "Year"
   }
 }
