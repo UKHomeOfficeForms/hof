@@ -30,7 +30,7 @@ module.exports = {
     mixin: 'input-text',
     validate: 'required'
   },
-  'message': {
+  message: {
     mixin: 'textarea',
     validate: 'required',
     labelClassName: 'visuallyhidden',
