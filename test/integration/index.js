@@ -2,7 +2,6 @@
 
 const request = require('supertest-as-promised');
 const bootstrap = require('../../');
-const Controller = require('hof-form-wizard').Controller;
 const path = require('path');
 const appConfig = {
   foo: 'bar',
@@ -10,23 +9,15 @@ const appConfig = {
 };
 const root = path.resolve(__dirname, '../fixtures');
 
-let baseControllerCalled = false;
-class CustomBaseController extends Controller {
+let behaviourOptions = null;
+let behaviourCalled = false;
+const behaviour = SuperClass => class extends SuperClass {
   constructor(options) {
-    baseControllerCalled = true;
+    behaviourCalled = true;
+    behaviourOptions = options;
     super(options);
   }
-}
-
-let stepControllerOptions = null;
-let stepControllerCalled = false;
-class CustomStepController extends CustomBaseController {
-  constructor(options) {
-    stepControllerCalled = true;
-    stepControllerOptions = options;
-    super(options);
-  }
-}
+};
 
 function getHeaders(res, type) {
   let headers = {};
@@ -303,25 +294,6 @@ describe('bootstrap()', () => {
         .expect(res => res.text.should.eql('<div>one</div>\n'));
     });
 
-    it('can instantiate a custom base controller for the app', () => {
-      const bs = bootstrap({
-        fields: 'fields',
-        baseController: CustomBaseController,
-        routes: [{
-          views: `${root}/apps/app_1/views`,
-          steps: {
-            '/one': {}
-          }
-        }]
-      });
-      return request(bs.server)
-        .get('/one')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(() =>
-           baseControllerCalled.should.equal(true)
-        );
-    });
-
     it('does not start the service if start is false', () => {
       const bs = bootstrap({
         fields: 'fields',
@@ -453,14 +425,14 @@ describe('bootstrap()', () => {
         .expect(200);
     });
 
-    it('can instantiate a custom controller for the route', () => {
+    it('can instantiate a custom behaviour for the route', () => {
       const bs = bootstrap({
         fields: 'fields',
         routes: [{
           views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {
-              controller: CustomStepController
+              behaviours: behaviour
             }
           }
         }]
@@ -469,11 +441,11 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(() =>
-          stepControllerCalled.should.equal(true)
+          behaviourCalled.should.equal(true)
         );
     });
 
-    it('can pass the app config to a custom controller', () => {
+    it('can pass the app config to a custom behaviour', () => {
       const bs = bootstrap({
         fields: 'fields',
         appConfig: appConfig,
@@ -481,7 +453,7 @@ describe('bootstrap()', () => {
           views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {
-              controller: CustomStepController
+              behaviours: behaviour
             }
           }
         }]
@@ -490,7 +462,7 @@ describe('bootstrap()', () => {
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(() =>
-          stepControllerOptions.appConfig.should.deep.equal(appConfig)
+          behaviourOptions.appConfig.should.deep.equal(appConfig)
         );
     });
 

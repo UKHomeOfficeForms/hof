@@ -12,5 +12,10 @@
   },
   "message": {
     "required": "Tell us why you are contacting us"
+  },
+  "date-example": {
+    "required": "Enter a date",
+    "date": "Enter a valid date",
+    "before": "Date cannot be in the future"
   }
 }
