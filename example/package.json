@@ -25,7 +25,7 @@
     "hof-bootstrap": "file:..",
     "hof-component-date": "^1.0.0",
     "hof-frontend-toolkit": "^1.0.0",
-    "mixwith": "^0.1.1"
+    "moment": "^2.17.1"
   },
   "devDependencies": {
     "browserify": "^13.1.1",

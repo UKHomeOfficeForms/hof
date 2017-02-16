@@ -14,15 +14,17 @@
     "label": "Why are you contacting us?"
   },
   "date-example": {
-    "legend": "Enter a date in the past"
-  },
-  "date-example-day": {
-    "label": "Day"
-  },
-  "date-example-month": {
-    "label": "Month"
-  },
-  "date-example-year": {
-    "label": "Year"
+    "legend": "Enter a date in the past",
+    "parts": {
+      "day": {
+        "label": "Day"
+      },
+      "month": {
+        "label": "Month"
+      },
+      "year": {
+        "label": "Year"
+      }
+    }
   }
 }
