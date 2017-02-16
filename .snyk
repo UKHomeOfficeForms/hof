@@ -6,3 +6,7 @@ patch:
   'npm:moment:20161019':
     - hof-controllers > moment:
         patched: '2017-01-06T18:27:36.811Z'
+      hof-form-wizard > hof-controllers > moment:
+        patched: '2017-02-13T10:18:23.081Z'
+    - hof-form-wizard > hof-controllers > moment:
+        patched: '2017-02-13T10:15:09.590Z'
