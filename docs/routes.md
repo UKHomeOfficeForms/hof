@@ -39,6 +39,7 @@ hofBootstrap(myRoute);
 - `views`: Location of the routes' `views` relative to the root of your project. Takes precedence over `views` specified at the base level and from [hof-template-partials.views](https://github.com/UKHomeOfficeForms/hof-template-partials/tree/master/views).
 - `fields`: Location of the routes' `fields`, relative to the root of your project. Takes precedence over `fields` specified at the base level (outside of the route.
   - If route `fields` is not explicitly set, will try to load them from the project using the route `name` assuming the `fields` file is located at `apps/${name}/fields`.
+- `behaviours`: Optional array of behaviours to be applied to every step in this app. These will be applied before any step behaviours.
 
 **NOTE**: The `fields` defined in a route is the path to the folder, relative to the root, where the `fields` are located.
 The `fields` defined in a `step`, is the list of each field by name, you want to load in the `step`.
