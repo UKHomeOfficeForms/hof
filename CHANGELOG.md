@@ -1,3 +1,12 @@
+## 2017-02-20, Version 10.1.0 (Stable), @lennym
+* Adds behaviours option to global config and app config to support defining common behaviours
+* Restores `baseController` option with deprecation warning
+
+## 2017-02-17, Version 10.0.0 (Stable), @joefitter
+* _BREAKING_ - `clearSession` option on steps is removed
+* _BREAKING_ - `mixin` option for fields defaults to `input-text` this means that fields that previously skipped rendering will now be rendered
+* _BREAKING_ - `baseController` option removed
+
 ## 2017-02-10, Version 9.3.1 (Stable), @josephchapman
 * Allow GA script to load js and images form any path
 
