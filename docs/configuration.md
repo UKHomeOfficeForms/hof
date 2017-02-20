@@ -19,8 +19,9 @@ The default value of any option can be overriden or extended in a developers own
   - [Route level `fields`](#route-options) will override common `fields`.
 - `translations`: Location of the common translations relative to the root of your project. Defaults to `./translations`.
 - `middleware`: An optional array of middleware functions to add to the application middleware pipeline.
-- `baseController`: The base controller for all routes and steps. Defaults to [HOF-controllers.base](https://github.com/UKHomeOfficeForms/hof-controllers/blob/master/lib/base-controller.js).
+- `behaviours`: An optional array of behaviours to be applied to the base controller for all steps. These are applied before any additional step behaviours.
 - `appConfig`: Allows you to attach a configuration object to each controllers' options argument. Useful if you need to access properties of your applications config settings in other parts of your code base, e.g:
+- `baseController[DEPRECATED]`: The base controller for all routes and steps. Defaults to [hof-form-controller](https://github.com/UKHomeOfficeForms/hof-controller).
 
 ```javascript
 ...
