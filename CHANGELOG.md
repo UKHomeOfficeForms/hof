@@ -1,3 +1,6 @@
+## 2017-02-22, Version 10.2.0 (Stable), @lennym
+* Makes `views` directory on a route not throw if undefined and default directory does not exist
+
 ## 2017-02-20, Version 10.1.0 (Stable), @lennym
 * Adds behaviours option to global config and app config to support defining common behaviours
 * Restores `baseController` option with deprecation warning
