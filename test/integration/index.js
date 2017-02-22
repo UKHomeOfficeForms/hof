@@ -118,6 +118,16 @@ describe('bootstrap()', () => {
     })).should.Throw(`Cannot find route views at ${root}/invalid_path`)
   );
 
+  it('does not throw if no route views option is specified and the default route views directory does not exist', () =>
+    (() => bootstrap({
+      fields: 'fields',
+      routes: [{
+        name: 'app_3',
+        steps: {}
+      }]
+    })).should.not.Throw()
+  );
+
   describe('with valid routes and steps', () => {
 
     it('returns the bootstrap interface object', () =>
