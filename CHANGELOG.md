@@ -1,3 +1,7 @@
+## 2017-03-02, Version 10.3.0 (Stable), @lennym
+* Fixes i18n language settings. Now offers complete multi-language support
+* Adding `--shared ./node_modules/hof-template-partials/translations` to hof-transpiler is no longer necessary. This is handled automatically within bootstrap.
+
 ## 2017-02-22, Version 10.2.0 (Stable), @lennym
 * Makes `views` directory on a route not throw if undefined and default directory does not exist
 
