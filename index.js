@@ -5,6 +5,7 @@ const churchill = require('churchill');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const mixins = require('hof-template-mixins');
 const hofMiddleware = require('hof-middleware');
 const translate = require('i18n-future').middleware;
 const router = require('./lib/router');
@@ -35,7 +36,7 @@ const loadRoutes = (app, config) => {
 
 const applyErrorMiddlewares = (app, config) => {
   app.use(hofMiddleware.notFound({
-    logger: config.logger,
+    logger: config.logger
   }));
 
   app.use(hofMiddleware.errors({
@@ -123,6 +124,7 @@ function bootstrap(options) {
     resources: require('hof-template-partials').resources(),
     path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
   }));
+  app.use(mixins());
   if (config.getCookies === true) {
     app.get('/cookies', (req, res) => {
       res.render('cookies', req.translate('cookies'));
