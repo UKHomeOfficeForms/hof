@@ -5,8 +5,9 @@ const churchill = require('churchill');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const mixins = require('hof-template-mixins');
 const hofMiddleware = require('hof-middleware');
-const i18nFuture = require('i18n-future');
+const translate = require('i18n-future').middleware;
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
@@ -33,14 +34,12 @@ const loadRoutes = (app, config) => {
   });
 };
 
-const applyErrorMiddlewares = (app, config, i18n) => {
+const applyErrorMiddlewares = (app, config) => {
   app.use(hofMiddleware.notFound({
-    logger: config.logger,
-    translate: i18n.translate.bind(i18n),
+    logger: config.logger
   }));
 
   app.use(hofMiddleware.errors({
-    translate: i18n.translate.bind(i18n),
     debug: config.env === 'development'
   }));
 };
@@ -95,10 +94,6 @@ function bootstrap(options) {
     }));
   }
 
-  const i18n = i18nFuture({
-    path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
-  });
-
   // shallow health check
   app.get('/healthz/ping', require('express-healthcheck')());
 
@@ -125,19 +120,26 @@ function bootstrap(options) {
   settings(app, config);
   sessionStore(app, config);
 
+  app.use(translate({
+    resources: require('hof-template-partials').resources(),
+    path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
+  }));
+  app.use(mixins());
   if (config.getCookies === true) {
-    app.get('/cookies', (req, res) =>
-      i18n.on('ready', () => res.render('cookies', i18n.translate('cookies'))));
+    app.get('/cookies', (req, res) => {
+      res.render('cookies', req.translate('cookies'));
+    });
   }
   if (config.getTerms === true) {
-    app.get('/terms-and-conditions', (req, res) =>
-      i18n.on('ready', () => res.render('terms', i18n.translate('terms'))));
+    app.get('/terms-and-conditions', (req, res) => {
+      res.render('terms', req.translate('terms'));
+    });
   }
 
   app.use(userMiddleware);
   app.use(hofMiddleware.cookies());
   loadRoutes(app, config);
-  applyErrorMiddlewares(app, config, i18n);
+  applyErrorMiddlewares(app, config);
 
   const instance = {
 
