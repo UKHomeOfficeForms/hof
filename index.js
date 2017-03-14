@@ -138,6 +138,7 @@ function bootstrap(options) {
 
   app.use(userMiddleware);
   app.use(hofMiddleware.cookies());
+  app.use(require('hof-middleware-markdown')());
   loadRoutes(app, config);
   applyErrorMiddlewares(app, config);
 
