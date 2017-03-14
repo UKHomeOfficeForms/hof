@@ -21,7 +21,7 @@ const customConfig = {};
 
 const getConfig = function getConfig() {
   const args = [].slice.call(arguments);
-  return Object.assign.apply(null, [{}, defaults, customConfig].concat(args));
+  return _.merge.apply(_, [{}, defaults, customConfig].concat(args));
 };
 
 const loadRoutes = (app, config) => {
