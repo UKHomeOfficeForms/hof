@@ -126,6 +126,8 @@ function bootstrap(options) {
     path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
   }));
   app.use(mixins());
+  app.use(markdown());
+
   if (config.getCookies === true) {
     app.get('/cookies', (req, res) => {
       res.render('cookies', req.translate('cookies'));
@@ -139,7 +141,6 @@ function bootstrap(options) {
 
   app.use(userMiddleware);
   app.use(hofMiddleware.cookies());
-  app.use(markdown());
   loadRoutes(app, config);
   applyErrorMiddlewares(app, config);
 
