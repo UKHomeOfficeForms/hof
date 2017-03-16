@@ -7,6 +7,7 @@ const http = require('http');
 const https = require('https');
 const mixins = require('hof-template-mixins');
 const hofMiddleware = require('hof-middleware');
+const markdown = require('hof-middleware-markdown');
 const translate = require('i18n-future').middleware;
 const router = require('./lib/router');
 const serveStatic = require('./lib/serve-static');
@@ -138,6 +139,7 @@ function bootstrap(options) {
 
   app.use(userMiddleware);
   app.use(hofMiddleware.cookies());
+  app.use(markdown());
   loadRoutes(app, config);
   applyErrorMiddlewares(app, config);
 
