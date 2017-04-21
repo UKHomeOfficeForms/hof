@@ -1,5 +1,8 @@
+## 2017-04-21, Version 11.0.0 (Stable), @lennym
+* Adds themes. Ships with `hof-theme-govuk` as default.
+
 ## 2017-03-14, Version 10.3.1 (Stable), @lennym
-* Uses `_.merge` instead of `Object.assign` to combine default config with use-provided config.
+* Uses `_.merge` instead of `Object.assign` to combine default config with user-provided config.
 
 ## 2017-03-02, Version 10.3.0 (Stable), @lennym
 * Fixes i18n language settings. Now offers complete multi-language support
