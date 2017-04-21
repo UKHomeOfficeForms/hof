@@ -1,3 +1,4 @@
+/* eslint implicit-dependencies/no-implicit: [2, {optional:true}] */
 'use strict';
 
 const express = require('express');
@@ -22,7 +23,15 @@ const customConfig = {};
 
 const getConfig = function getConfig() {
   const args = [].slice.call(arguments);
-  return _.merge.apply(_, [{}, defaults, customConfig].concat(args));
+  const config = _.merge.apply(_, [{}, defaults, customConfig].concat(args));
+
+  if (!config.theme) {
+    config.theme = require('hof-theme-govuk');
+  } else if (typeof config.theme === 'string') {
+    config.theme = require(`hof-theme-${config.theme}`);
+  }
+
+  return config;
 };
 
 const loadRoutes = (app, config) => {
@@ -122,7 +131,7 @@ function bootstrap(options) {
   sessionStore(app, config);
 
   app.use(translate({
-    resources: require('hof-template-partials').resources(),
+    resources: config.theme.translations,
     path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
   }));
   app.use(mixins());
