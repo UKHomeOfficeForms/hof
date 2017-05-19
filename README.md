@@ -11,6 +11,7 @@ HOF (Home Office Forms) is a framework designed to assist developers in creating
 ### Built with HOF
  * https://github.com/UKHomeOffice/gro
  * https://github.com/UKHomeOffice/end-tenancy
+ * [Firearms Licensing (Home Office)](https://github.com/UKHomeOffice/firearms)
  * [Contact UK Trade & Investment (UK Trade & Investment)](https://github.com/UKTradeInvestment/contact-ukti)
  * [Biometric Residence Permit (Home Office)](https://github.com/UKHomeOffice/brp_app)
  * [Report terrorist material (Home Office)](https://github.com/UKHomeOffice/rotm)
