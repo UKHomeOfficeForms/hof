@@ -1,3 +1,8 @@
+## 2017-04-21, Version 12.0.0 (Stable), @lennym
+* Renames to `hof`!
+* Includes refactor of `hof-form-controller` to move error messaging to a render-time concern.
+* Depecrates `Controller#Error` in favour of `Controller#ValidationError`
+
 ## 2017-04-21, Version 11.0.0 (Stable), @lennym
 * Adds themes. Ships with `hof-theme-govuk` as default.
 

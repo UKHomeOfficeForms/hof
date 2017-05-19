@@ -1,22 +1,17 @@
-# HOF (Home Office Forms) Bootstrap [![Build Status](https://travis-ci.org/UKHomeOfficeForms/hof-bootstrap.svg?branch=master)](https://travis-ci.org/UKHomeOfficeForms/hof-bootstrap) [![npm version](https://badge.fury.io/js/hof-bootstrap.svg)](https://badge.fury.io/js/hof-bootstrap) [![Known Vulnerabilities](https://snyk.io/test/npm/hof-bootstrap/badge.svg)](https://snyk.io/test/npm/hof-bootstrap)
+# HOF (Home Office Forms) [![Build Status](https://travis-ci.org/UKHomeOfficeForms/hof-bootstrap.svg?branch=master)](https://travis-ci.org/UKHomeOfficeForms/hof-bootstrap) [![npm version](https://badge.fury.io/js/hof.svg)](https://badge.fury.io/js/hof) [![Known Vulnerabilities](https://snyk.io/test/npm/hof/badge.svg)](https://snyk.io/test/npm/hof)
 
-
-HOF-bootstrap is a wrapper function for HOF. It takes the hard work out of setting up your HOF service by encapsulating much of the boilerplate code in a single function. The bootstrap function takes many custom settings and options, but essentially maps your steps to Express routes and (optionally) starts the Express server.
-
-- [Getting started](./docs/getting-started.md)
-- [Bootstrap Interface](./docs/interface.md)
-- [Base configuration](./docs/configuration.md)
-- [Routes, steps, fields](./docs/routes.md)
-- [Resources](#resources)
-- [Example form](./example)
+HOF (Home Office Forms) is a framework designed to assist developers in creating form-based workflows in a rapid, repeatable and secure way. It aims to reduce simple applications as much as possible to being configuration-only.
 
 ## Resources
 
 ### HOF documentation
-https://github.com/UKHomeOfficeForms/HOF/blob/master/documentation/index.md
 
-### Built with HOF-bootstrap
-- https://github.com/UKHomeOffice/gro
-- https://github.com/UKHomeOffice/rotm
-- https://github.com/UKHomeOffice/end-tenancy
-- https://github.com/UKHomeOffice/UKVI-Complaints
+[https://ukhomeofficeforms.github.io/hof-guide/](https://ukhomeofficeforms.github.io/hof-guide/)
+
+### Built with HOF
+ * https://github.com/UKHomeOffice/gro
+ * https://github.com/UKHomeOffice/end-tenancy
+ * [Contact UK Trade & Investment (UK Trade & Investment)](https://github.com/UKTradeInvestment/contact-ukti)
+ * [Biometric Residence Permit (Home Office)](https://github.com/UKHomeOffice/brp_app)
+ * [Report terrorist material (Home Office)](https://github.com/UKHomeOffice/rotm)
+ * [UKVI Complaints (Home Office)](https://github.com/UKHomeOffice/Complaints)

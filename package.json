@@ -1,5 +1,5 @@
 {
-  "name": "hof-bootstrap",
+  "name": "hof",
   "description": "A bootstrap for HOF projects",
   "version": "11.2.2",
   "license": "MIT",
@@ -38,7 +38,7 @@
     "express-partial-templates": "^0.2.0",
     "express-session": "^1.13.0",
     "helmet": "^2.3.0",
-    "hof-form-wizard": "^3.1.0",
+    "hof-form-wizard": "^4.0.0",
     "hof-middleware": "^1.1.0",
     "hof-middleware-markdown": "^1.0.0",
     "hof-template-mixins": "^4.0.0",
