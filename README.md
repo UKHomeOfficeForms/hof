@@ -1,5 +1,5 @@
 # IMPORTANT!!! This repo is deprecated
-Please refer to the [new HOF repo](https://github.com/UKHomeOfficeForms/hof)
+Please refer to the [new HOF repo](https://github.com/UKHomeOfficeForms/hof-bootstrap)
 
 This repo is kept just for historical purposes.
 
