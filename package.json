@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "Home Office Forms (HOF) single package that bundles up a collection of packages used to create forms at the Home Office in node.js.",
   "main": "index.js",
   "engines": {
@@ -42,10 +42,6 @@
     "jscs": "^1.13.1",
     "pre-commit": "^1.0.10"
   },
-  "pre-commit": [
-    "lint",
-    "style"
-  ],
   "browser": {
     "hmpo-form-wizard": false,
     "hmpo-govuk-template": false,
