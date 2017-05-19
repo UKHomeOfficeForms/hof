@@ -39,6 +39,7 @@
     "express-session": "^1.13.0",
     "helmet": "^2.3.0",
     "hof-form-wizard": "^3.1.0",
+    "hof-logger": "^1.0.2",
     "hof-middleware": "^1.1.0",
     "hof-middleware-markdown": "^1.0.0",
     "hof-template-mixins": "^4.0.0",

@@ -17,7 +17,7 @@ const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
-const logger = require('./lib/logger');
+const logger = require('hof-logger');
 const helmet = require('helmet');
 const _ = require('lodash');
 
@@ -119,7 +119,7 @@ function bootstrap(options) {
     }
   });
 
-  if (config.env !== 'test' && config.env !== 'ci') {
+  if (config.env === 'production') {
     config.logger = logger(config);
     app.use(churchill(config.logger));
   }
