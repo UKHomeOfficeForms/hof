@@ -1,6 +1,8 @@
 /* eslint implicit-dependencies/no-implicit: [2, {optional:true}] */
 'use strict';
 
+require('deprecate')('`hof-bootstrap` will be renamed to `hof` from version 12.');
+
 const express = require('express');
 const churchill = require('churchill');
 const path = require('path');
