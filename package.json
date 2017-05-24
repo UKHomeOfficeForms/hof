@@ -11,10 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/UKHomeOffice/hof-bootstrap.git"
+    "url": "https://github.com/UKHomeOfficeForms/hof.git"
   },
   "bugs": {
-    "url": "https://github.com/UKHomeOffice/hof-bootstrap/issues"
+    "url": "https://github.com/UKHomeOfficeForms/hof/issues"
   },
   "scripts": {
     "test": "npm run unit && npm run lint",
