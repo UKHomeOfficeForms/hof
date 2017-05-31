@@ -46,6 +46,7 @@ constructor(options) {
 - `protocol`: Defaults to 'http'.
 - `env`: Can be used to switch contexts. Defaults to 'development'.
 - `gaTagId`: Google analytics tag.
+- `loglevel`: Defaults to `info`. Logger is bound to the request object, accessible on every request.
 - `redis.port`: Defaults to '6379'.
 - `redis.host`: Defaults '127.0.0.1'.
 - `session.ttl`: The session timeout in milliseconds. Defaults to `1800` (ms).
@@ -69,6 +70,7 @@ boostrap.configure('root', path.resolve(__dirname, '..'));
 - `PROTOCOL`
 - `ENV`
 - `GA_TAG`
+- `LOG_LEVEL`
 - `REDIS_HOST`
 - `REDIS_PORT`
 - `SESSION_TTL`
