@@ -117,10 +117,8 @@ function bootstrap(options) {
     }
   });
 
-  if (config.env !== 'test' && config.env !== 'ci') {
-    config.logger = logger(config);
-    app.use(churchill(config.logger));
-  }
+  config.logger = logger(config);
+  app.use(churchill(config.logger));
 
   if (config.middleware) {
     config.middleware.forEach(middleware => app.use(middleware));

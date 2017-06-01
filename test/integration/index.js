@@ -1,7 +1,9 @@
 'use strict';
 
 const request = require('supertest-as-promised');
+
 const bootstrap = require('../../');
+
 const path = require('path');
 const appConfig = {
   foo: 'bar',
