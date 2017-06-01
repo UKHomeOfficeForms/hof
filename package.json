@@ -46,7 +46,7 @@
     "i18n-future": "^1.0.0",
     "lodash": "^4.17.4",
     "redis": "^2.6.0-2",
-    "winston": "^1.1.2"
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
