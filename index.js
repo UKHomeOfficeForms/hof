@@ -50,6 +50,7 @@ const applyErrorMiddlewares = (app, config) => {
   }));
 
   app.use(hofMiddleware.errors({
+    logger: config.logger,
     debug: config.env === 'development'
   }));
 };
