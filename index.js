@@ -31,6 +31,8 @@ const getConfig = function getConfig() {
     config.theme = require(`hof-theme-${config.theme}`);
   }
 
+  config.markdown = config.markdown || {};
+
   return config;
 };
 
@@ -134,7 +136,7 @@ function bootstrap(options) {
     path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
   }));
   app.use(mixins());
-  app.use(markdown());
+  app.use(markdown(config.markdown));
 
   if (config.getCookies === true) {
     app.get('/cookies', (req, res) => {
