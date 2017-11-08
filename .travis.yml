@@ -1,16 +1,16 @@
 language: node_js
 node_js:
-  - "6"
-  - "4"
-
+  - '4'
+  - '6'
+  - '7'
+  - '8'
+  - '9'
 services:
   - redis-server
-
 before_install:
-  - if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
+  - 'if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi'
   - npm cache clean
-
 script: npm run ci
 conditions:
-  branch:master: npm test && npm run snyk-protect
+  'branch:master': npm test && npm run snyk-protect
   default: npm test
