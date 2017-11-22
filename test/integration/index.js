@@ -41,10 +41,10 @@ describe('bootstrap()', () => {
     (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
 
-  it('routes must each have a list of one or more steps', () =>
+  it('routes must each have a set of one or more steps, or one or more pages', () =>
     (() => bootstrap({
       routes: [{}]
-    })).should.Throw('Each route must define a set of one or more steps')
+    })).should.Throw('Each app must have steps and/or pages')
   );
 
   it('a base fields option must be specified if no route fields option is defined', () =>
@@ -587,6 +587,59 @@ describe('bootstrap()', () => {
           response.body.respondedFromMiddleware.should.equal(true)
         );
     });
+  });
+
+  describe('static pages', () => {
+
+    it('can be part of an app with steps', () => {
+      const bs = bootstrap({
+        start: false,
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          },
+          pages: {
+            '/a-static-page': 'a-page',
+            '/b-static-page': 'a-page'
+          },
+        }]
+      });
+      bs.start();
+      return request(bs.server)
+        .get('/a-static-page')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => {
+          res.text.should.equal('<p>a page</p>\n');
+          return request(bs.server)
+            .get('/b-static-page')
+            .set('Cookie', ['myCookie=1234'])
+            .expect(200)
+            .expect('<p>a page</p>\n');
+        });
+    });
+
+    it('can be a separate app without steps', () => {
+      const bs = bootstrap({
+        start: false,
+        fields: 'fields',
+        routes: [{
+          views: `${root}/views`,
+          pages: {
+            '/a-static-page': 'test'
+          },
+        }]
+      });
+      bs.start();
+      return request(bs.server)
+        .get('/a-static-page')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect('<div>test</div>\n');
+    });
+
   });
 
 });
