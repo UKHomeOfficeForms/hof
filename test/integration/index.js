@@ -511,6 +511,7 @@ describe('bootstrap()', () => {
 
     it('CSP extends with google directives if gaTagId set', () => {
       const bs = bootstrap({
+        csp: {},
         fields: 'fields',
         gaTagId: '1234-ABC',
         routes: [{
