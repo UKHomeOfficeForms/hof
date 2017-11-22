@@ -18,6 +18,7 @@ const defaults = require('./lib/defaults');
 const logger = require('./lib/logger');
 const helmet = require('helmet');
 const _ = require('lodash');
+const deprecate = require('deprecate');
 
 const customConfig = {};
 
@@ -115,8 +116,8 @@ function bootstrap(options) {
   }
 
   config.routes.forEach(route => {
-    if (!route.steps) {
-      throw new Error('Each route must define a set of one or more steps');
+    if (!route.steps && !route.pages) {
+      throw new Error('Each app must have steps and/or pages');
     }
   });
 
@@ -139,11 +140,19 @@ function bootstrap(options) {
   app.use(markdown(config.markdown));
 
   if (config.getCookies === true) {
+    deprecate(
+      '`getCookies` option is deprecated and may be removed in future versions.',
+      'Use `pages` to define static cookies page.'
+    );
     app.get('/cookies', (req, res) => {
       res.render('cookies', req.translate('cookies'));
     });
   }
   if (config.getTerms === true) {
+    deprecate(
+      '`getTerms` option is deprecated and may be removed in future versions.',
+      'Use `pages` to define static terms and conditions page.'
+    );
     app.get('/terms-and-conditions', (req, res) => {
       res.render('terms', req.translate('terms'));
     });

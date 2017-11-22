@@ -61,7 +61,7 @@
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
     "snyk": "^1.23.2",
-    "supertest": "^1.2.0",
+    "supertest": "^3.0.0",
     "supertest-as-promised": "^3.2.0",
     "travis-conditions": "0.0.0"
   },
