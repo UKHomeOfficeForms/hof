@@ -37,6 +37,11 @@ describe('bootstrap()', () => {
     bootstrap.configure('root', root);
   });
 
+  beforeEach(() => {
+    behaviourOptions = null;
+    behaviourCalled = false;
+  });
+
   it('must be given a list of routes', () =>
     (() => bootstrap()).should.Throw('Must be called with a list of routes')
   );
@@ -438,7 +443,7 @@ describe('bootstrap()', () => {
     });
 
     it('can instantiate a custom behaviour for the route', () => {
-      const bs = bootstrap({
+      bootstrap({
         fields: 'fields',
         routes: [{
           views: `${root}/apps/app_1/views`,
@@ -449,16 +454,11 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
-        .get('/one')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(() =>
-          behaviourCalled.should.equal(true)
-        );
+      behaviourCalled.should.equal(true);
     });
 
-    it('can pass the app config to a custom behaviour', () => {
-      const bs = bootstrap({
+    it('can pass the app config to controllers', () => {
+      bootstrap({
         fields: 'fields',
         appConfig: appConfig,
         routes: [{
@@ -470,12 +470,24 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
-        .get('/one')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(() =>
-          behaviourOptions.appConfig.should.deep.equal(appConfig)
-        );
+      behaviourOptions.appConfig.should.deep.equal(appConfig);
+    });
+
+    it('can pass the confirm step to controllers', () => {
+      bootstrap({
+        fields: 'fields',
+        appConfig: appConfig,
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          confirmStep: '/summary',
+          steps: {
+            '/one': {
+              behaviours: behaviour
+            }
+          }
+        }]
+      });
+      behaviourOptions.confirmStep.should.equal('/summary');
     });
 
     it('can extend CSP directives with CSP config', () => {
