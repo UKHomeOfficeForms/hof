@@ -566,6 +566,25 @@ describe('bootstrap()', () => {
         });
     });
 
+    it('does not try to add a `disabled` directive', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect((res) => {
+          const csp = getHeaders(res, 'content-security-policy');
+          csp.should.not.have.property('disabled');
+        });
+    });
+
     it('CSP extends with google directives if gaTagId set', () => {
       const bs = bootstrap({
         csp: {},
