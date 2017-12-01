@@ -80,8 +80,11 @@ const getContentSecurityPolicy = config => {
     directives.imgSrc = directives.imgSrc.concat(gaDirectives.imgSrc);
   }
 
-  if (_.isPlainObject(csp) && !csp.disabled) {
+  if (csp && !csp.disabled) {
     _.each(csp, (value, name) => {
+      if (name === 'disabled') {
+        return;
+      }
       if (directives[name] && directives[name].length) {
         // concat unique directives with existing directives
         directives[name] = _.uniq(directives[name].concat(value));
