@@ -80,7 +80,7 @@ const getContentSecurityPolicy = config => {
     directives.imgSrc = directives.imgSrc.concat(gaDirectives.imgSrc);
   }
 
-  if (_.isPlainObject(csp)) {
+  if (_.isPlainObject(csp) && !csp.disabled) {
     _.each(csp, (value, name) => {
       if (directives[name] && directives[name].length) {
         // concat unique directives with existing directives
@@ -102,7 +102,7 @@ function bootstrap(options) {
 
   app.use(helmet());
 
-  if (config.csp) {
+  if (config.csp !== false && !config.csp.disabled) {
     app.use(helmet.contentSecurityPolicy({
       directives: getContentSecurityPolicy(config)
     }));

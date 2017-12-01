@@ -23,6 +23,9 @@ const behaviour = SuperClass => class extends SuperClass {
 
 function getHeaders(res, type) {
   let headers = {};
+  if (!res.headers[type]) {
+    return null;
+  }
   let parts = res.headers[type].split('; ');
   parts.forEach((part) => {
     part = part.split(' ');
@@ -518,6 +521,48 @@ describe('bootstrap()', () => {
           csp['script-src'].should.include(directives.scriptSrc);
           csp['test-src'].should.include(directives.testSrc);
           csp['style-src'].should.deep.equal(directives.styleSrc);
+        });
+    });
+
+    it('can disable CSP directives with csp.disabled', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        csp: {
+          disabled: true
+        },
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect((res) => {
+          const csp = getHeaders(res, 'content-security-policy');
+          expect(csp).to.be.null;
+        });
+    });
+
+    it('can disable CSP directives with csp === false', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        csp: false,
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect((res) => {
+          const csp = getHeaders(res, 'content-security-policy');
+          expect(csp).to.be.null;
         });
     });
 
