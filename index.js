@@ -11,6 +11,7 @@ const hofMiddleware = require('hof-middleware');
 const markdown = require('hof-middleware-markdown');
 const translate = require('i18n-future').middleware;
 const router = require('./lib/router');
+const health = require('./lib/health');
 const serveStatic = require('./lib/serve-static');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
@@ -111,9 +112,6 @@ function bootstrap(options) {
     }));
   }
 
-  // shallow health check
-  app.get('/healthz/ping', require('express-healthcheck')());
-
   if (!config || !config.routes || !config.routes.length) {
     throw new Error('Must be called with a list of routes');
   }
@@ -133,7 +131,8 @@ function bootstrap(options) {
 
   serveStatic(app, config);
   settings(app, config);
-  sessionStore(app, config);
+  let sessions = sessionStore(app, config);
+  app.use('/healthz', health(sessions));
 
   app.use(translate({
     resources: config.theme.translations,

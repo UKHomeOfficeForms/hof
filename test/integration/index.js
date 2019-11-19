@@ -445,6 +445,20 @@ describe('bootstrap()', () => {
         .expect(200);
     });
 
+    it('returns a 200 for successful deeper health check', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {}
+        }]
+      });
+      return request(bs.server)
+        .get('/healthz/readiness')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200);
+    });
+
     it('can instantiate a custom behaviour for the route', () => {
       bootstrap({
         fields: 'fields',
