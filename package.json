@@ -21,10 +21,6 @@
     "unit": "LOG_LEVEL=error istanbul cover _mocha",
     "unit:nocov": "LOG_LEVEL=error mocha",
     "lint": "eslint .",
-    "snyk": "snyk test",
-    "snyk:dev": "snyk test --dev",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect",
     "ci": "travis-conditions"
   },
   "dependencies": {
@@ -60,7 +56,6 @@
     "sinomocha": "^0.2.4",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
-    "snyk": "^1.23.2",
     "supertest": "^3.0.0",
     "supertest-as-promised": "^3.2.0",
     "travis-conditions": "0.0.0"
@@ -70,6 +65,5 @@
   },
   "pre-commit": [
     "test"
-  ],
-  "snyk": true
+  ]
 }
