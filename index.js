@@ -23,6 +23,8 @@ const deprecate = require('deprecate');
 
 const customConfig = {};
 
+let instance;
+
 const getConfig = function getConfig() {
   const args = [].slice.call(arguments);
   const config = _.merge.apply(_, [{}, defaults, customConfig].concat(args));
@@ -165,7 +167,8 @@ function bootstrap(options) {
   loadRoutes(app, config);
   applyErrorMiddlewares(app, config);
 
-  const instance = {
+  instance = {
+
 
     use() {
       userMiddleware.use.apply(userMiddleware, arguments);
@@ -173,6 +176,7 @@ function bootstrap(options) {
     },
 
     server: null,
+    startPromise: null,
 
     start: (startConfig) => {
       startConfig = getConfig(config, startConfig);
@@ -181,7 +185,7 @@ function bootstrap(options) {
 
       instance.server = protocol.createServer(app);
 
-      return new Promise((resolve, reject) => {
+      instance.startPromise = new Promise((resolve, reject) => {
         instance.server.listen(startConfig.port, startConfig.host, err => {
           if (err) {
             reject(new Error('Unable to connect to server'));
@@ -189,15 +193,21 @@ function bootstrap(options) {
           resolve(instance);
         });
       });
+      return instance.startPromise;
     },
 
     stop() {
-      return new Promise((resolve, reject) => instance.server.close(err => {
-        if (err) {
-          reject(new Error('Unable to stop server'));
-        }
-        resolve(instance);
-      }));
+      if(!instance.startPromise) {
+            throw Error("Not started");
+      }
+      return instance.startPromise.then(() => {
+        return new Promise((resolve, reject) => instance.server.close(err => {
+            if (err) {
+                reject(new Error('Unable to stop server due to '+err));
+            }
+            resolve(instance);
+        }));
+      });
     }
   };
 
@@ -216,5 +226,9 @@ bootstrap.configure = function configure(key, val) {
     Object.assign(customConfig, key);
   }
 };
+
+bootstrap.stop = function() {
+    instance.stop();
+}
 
 module.exports = bootstrap;

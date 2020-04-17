@@ -18,6 +18,10 @@ describe('Behaviours', () => {
     bootstrap.configure('root', path.resolve(__dirname, '../fixtures'));
   });
 
+  afterEach(() => {
+    bootstrap.stop();
+  });
+
   describe('route-level behaviours', () => {
 
     it('applies behaviours to all steps in specified route', () => {

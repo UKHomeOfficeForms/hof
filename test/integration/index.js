@@ -34,6 +34,8 @@ function getHeaders(res, type) {
   return headers;
 }
 
+let instance;
+
 describe('bootstrap()', () => {
 
   before(() => {
@@ -61,7 +63,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {}
       }]
-    })).should.not.Throw()
+    }).stop()).should.not.Throw()
   );
 
   it('a route fields option must be specified if no base fields option is defined', () =>
@@ -70,7 +72,7 @@ describe('bootstrap()', () => {
         fields: 'apps/app_1/fields',
         steps: {}
       }]
-    })).should.not.Throw()
+    }).stop()).should.not.Throw()
   );
 
   it('one of base fields or route fields must be specified as an option', () =>
@@ -105,7 +107,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {}
       }]
-    })).should.not.Throw()
+    }).stop()).should.not.Throw()
   );
 
   it('views option must be valid when specified', () =>
@@ -135,7 +137,7 @@ describe('bootstrap()', () => {
         name: 'app_3',
         steps: {}
       }]
-    })).should.not.Throw()
+    }).stop()).should.not.Throw()
   );
 
   describe('with valid routes and steps', () => {
@@ -143,13 +145,14 @@ describe('bootstrap()', () => {
     it('returns the bootstrap interface object', () =>
       bootstrap({
         fields: 'fields',
+        start: false,
         routes: [{
           views: `${root}/apps/app_1/views`,
           steps: {
             '/one': {}
           }
         }]
-      }).should.have.all.keys('server', 'stop', 'start', 'use')
+      }).should.have.all.keys('server', 'stop', 'start', 'use', 'startPromise')
     );
 
     it('starts the service and responds successfully', () => {
@@ -162,10 +165,11 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
+       bs.stop();
     });
 
     it('accepts multiple routes', () => {
@@ -183,7 +187,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -192,7 +196,9 @@ describe('bootstrap()', () => {
             .get('/two')
             .set('Cookie', ['myCookie=1234'])
             .expect(200)
+            .then(bs.stop())
         );
+
     });
 
     it('serves the correct view on request', () => {
@@ -210,7 +216,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -221,7 +227,9 @@ describe('bootstrap()', () => {
             .set('Cookie', ['myCookie=1234'])
             .expect(200)
             .expect(res => res.text.should.eql('<div>two</div>\n'))
+            .then(bs.stop())
         );
+
     });
 
     it('looks up a view from the route directory', () => {
@@ -235,11 +243,12 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/common')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(res => res.text.should.eql('<div>from app 2</div>\n'));
+      bs.stop();
     });
 
     it('falls back to common views if view not found in route views', () => {
@@ -253,11 +262,12 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/common')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(res => res.text.should.eql('<div>from common</div>\n'));
+      bs.stop();
     });
 
     it('looks up from hof-template-partials if not found in any supplied views dir', () => {
@@ -271,11 +281,12 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/step')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(res => res.text.should.contain('<div class="content">'));
+      bs.stop();
     });
 
     it('serves a view on request to an optional baseUrl', () => {
@@ -289,11 +300,12 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/app_1/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(res => res.text.should.eql('<div>one</div>\n'));
+      bs.stop();
     });
 
     it('serves a view on request to an optional param', () => {
@@ -307,11 +319,12 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one/param')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(res => res.text.should.eql('<div>one</div>\n'));
+      bs.stop();
     });
 
     it('does not start the service if start is false', () => {
@@ -343,11 +356,12 @@ describe('bootstrap()', () => {
 
       bs.start();
 
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(res => res.text.should.eql('<div>one</div>\n'));
+       bs.stop();
     });
 
     it('merges start options with the bootstrap config', () => {
@@ -367,11 +381,12 @@ describe('bootstrap()', () => {
         host: '1.1.1.1'
       });
 
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(res => res.text.should.eql('<div>one</div>\n'));
+      bs.stop();
     });
 
     it('stops the service when stop is called', done => {
@@ -409,10 +424,11 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/public/index.js')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
+      bs.stop();
     });
 
     it('returns a 404 if the resource does not exist', () => {
@@ -425,10 +441,11 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/public/not-here.js')
         .set('Cookie', ['myCookie=1234'])
         .expect(404);
+      bs.stop();
     });
 
     it('returns a 200 for successful shallow health check', () => {
@@ -439,10 +456,11 @@ describe('bootstrap()', () => {
           steps: {}
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/healthz/ping')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
+      bs.stop();
     });
 
     it('returns a 200 for successful deeper health check', () => {
@@ -453,10 +471,11 @@ describe('bootstrap()', () => {
           steps: {}
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/healthz/readiness')
         .set('Cookie', ['myCookie=1234'])
         .expect(200);
+      bs.stop();
     });
 
     it('can instantiate a custom behaviour for the route', () => {
@@ -470,7 +489,7 @@ describe('bootstrap()', () => {
             }
           }
         }]
-      });
+      }).stop();
       behaviourCalled.should.equal(true);
     });
 
@@ -486,7 +505,7 @@ describe('bootstrap()', () => {
             }
           }
         }]
-      });
+      }).stop();
       behaviourOptions.appConfig.should.deep.equal(appConfig);
     });
 
@@ -503,7 +522,7 @@ describe('bootstrap()', () => {
             }
           }
         }]
-      });
+      }).stop();
       behaviourOptions.confirmStep.should.equal('/summary');
     });
 
@@ -526,7 +545,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
@@ -536,6 +555,7 @@ describe('bootstrap()', () => {
           csp['test-src'].should.include(directives.testSrc);
           csp['style-src'].should.deep.equal(directives.styleSrc);
         });
+      bs.stop();
     });
 
     it('can disable CSP directives with csp.disabled', () => {
@@ -551,13 +571,14 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
           const csp = getHeaders(res, 'content-security-policy');
           expect(csp).to.be.null;
         });
+      bs.stop();
     });
 
     it('can disable CSP directives with csp === false', () => {
@@ -571,13 +592,14 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
           const csp = getHeaders(res, 'content-security-policy');
           expect(csp).to.be.null;
         });
+      bs.stop();
     });
 
     it('does not try to add a `disabled` directive', () => {
@@ -590,13 +612,14 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
           const csp = getHeaders(res, 'content-security-policy');
           csp.should.not.have.property('disabled');
         });
+      bs.stop();
     });
 
     it('CSP extends with google directives if gaTagId set', () => {
@@ -611,7 +634,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
@@ -619,6 +642,7 @@ describe('bootstrap()', () => {
           csp['img-src'].should.include('www.google-analytics.com');
           csp['script-src'].should.include('www.google-analytics.com');
         });
+      bs.stop();
     });
 
     it('Custom CSP, google, and default directives can coexist', () => {
@@ -636,7 +660,7 @@ describe('bootstrap()', () => {
           }
         }]
       });
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((res) => {
@@ -650,6 +674,7 @@ describe('bootstrap()', () => {
             .and.include("'self'");
           /* eslint-enable quotes */
         });
+      bs.stop();
     });
 
   });
@@ -670,12 +695,13 @@ describe('bootstrap()', () => {
         res.json({respondedFromMiddleware: true});
       });
       bs.start();
-      return request(bs.server)
+      request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
         .expect((response) =>
           response.body.respondedFromMiddleware.should.equal(true)
         );
+      bs.stop();
     });
   });
 
@@ -697,7 +723,7 @@ describe('bootstrap()', () => {
         }]
       });
       bs.start();
-      return request(bs.server)
+      request(bs.server)
         .get('/a-static-page')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
@@ -709,6 +735,7 @@ describe('bootstrap()', () => {
             .expect(200)
             .expect('<p>a page</p>\n');
         });
+      bs.stop();
     });
 
     it('can be a separate app without steps', () => {
@@ -723,11 +750,12 @@ describe('bootstrap()', () => {
         }]
       });
       bs.start();
-      return request(bs.server)
+      request(bs.server)
         .get('/a-static-page')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect('<div>test</div>\n');
+      bs.stop();
     });
 
   });
