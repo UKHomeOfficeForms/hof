@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "14.1.0",
+  "version": "15.0.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -37,7 +37,7 @@
     "hof-form-wizard": "^5.1.0",
     "hof-middleware": "^2.0.0",
     "hof-middleware-markdown": "^2.0.0",
-    "hof-template-mixins": "^4.2.2",
+    "hof-template-mixins": "^5.2.1",
     "hogan-express-strict": "^0.5.4",
     "i18n-future": "^1.0.0",
     "lodash": "^4.17.4",
