@@ -1,4 +1,4 @@
-## 2020-04-29, Version 15.0.0 (Stable), @andrewmoody
+## 2020-04-29, Version 15.0.0 (Stable), @andymoody
 * Update version of hof-template-mixins to 5.2.1
 * Now supports hints on options for checkbox and radio groups
 * Includes a breaking change to older-style 'grey-label' option groups
