@@ -1,3 +1,8 @@
+## 2020-04-29, Version 15.0.0 (Stable), @andrewmoody
+* Update version of hof-template-mixins to 5.2.1
+* Now supports hints on options for checkbox and radio groups
+* Includes a breaking change to older-style 'grey-label' option groups
+
 ## 2017-04-21, Version 12.0.0 (Stable), @lennym
 * Renames to `hof`!
 * Includes refactor of `hof-form-controller` to move error messaging to a render-time concern.
