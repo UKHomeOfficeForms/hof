@@ -260,6 +260,44 @@ describe('bootstrap()', () => {
         .expect(res => res.text.should.eql('<div>from common</div>\n'));
     });
 
+    it('can support multiple sources for common views', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        views: [`${root}/apps/common/views`, `${root}/apps/common2/views`],
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/common': {
+                template: 'common2'
+            }
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/common')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>from common2</div>\n'));
+    });
+
+    it('earlier common view folder should have priority over later ones', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        views: [`${root}/apps/common/views`, `${root}/apps/common2/views`],
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/common': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/common')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(res => res.text.should.eql('<div>from common</div>\n'));
+    });
+
     it('looks up from hof-template-partials if not found in any supplied views dir', () => {
       const bs = bootstrap({
         fields: 'fields',
