@@ -33,7 +33,7 @@
     "express-healthcheck": "^0.1.0",
     "express-partial-templates": "^0.2.0",
     "express-session": "^1.13.0",
-    "helmet": "^2.3.0",
+    "helmet": "^3.22.0",
     "hof-form-wizard": "^5.1.1",
     "hof-middleware": "^2.0.0",
     "hof-middleware-markdown": "^2.0.0",
