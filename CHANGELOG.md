@@ -1,3 +1,13 @@
+## 2020-06-02, Version 16.0.0 (Stable), @andymoody
+* Update version of helmet to 3.22.0
+* Update version of i18n-future to 2.0.0
+
+## 2020-06-01, Version 15.1.1
+* Update hof-form-wizard to 5.1.1
+
+## 2020-05-16, Version 15.1.0
+* Add support for configuring multiple views folders at the root level 
+
 ## 2020-04-29, Version 15.0.0 (Stable), @andymoody
 * Update version of hof-template-mixins to 5.2.1
 * Now supports hints on options for checkbox and radio groups

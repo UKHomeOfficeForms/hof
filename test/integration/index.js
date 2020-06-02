@@ -550,8 +550,7 @@ describe('bootstrap()', () => {
         /* eslint-disable quotes */
         styleSrc: ["'self'", "'another'"],
         imgSrc: ["'test.com/some_path'"],
-        scriptSrc: "'www.analytics.com'",
-        testSrc: "'test'"
+        scriptSrc: "'www.analytics.com'"
         /* eslint-enable quotes */
       };
       const bs = bootstrap({
@@ -571,7 +570,6 @@ describe('bootstrap()', () => {
           const csp = getHeaders(res, 'content-security-policy');
           csp['img-src'].should.include(directives.imgSrc[0]);
           csp['script-src'].should.include(directives.scriptSrc);
-          csp['test-src'].should.include(directives.testSrc);
           csp['style-src'].should.deep.equal(directives.styleSrc);
         });
     });
