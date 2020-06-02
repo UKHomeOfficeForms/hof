@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "15.1.1",
+  "version": "16.0.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -39,7 +39,7 @@
     "hof-middleware-markdown": "^2.0.0",
     "hof-template-mixins": "^5.2.1",
     "hogan-express-strict": "^0.5.4",
-    "i18n-future": "^1.0.0",
+    "i18n-future": "^2.0.0",
     "lodash": "^4.17.4",
     "redis": "^2.6.0-2",
     "winston": "^2.3.1"
