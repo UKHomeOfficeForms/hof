@@ -2,6 +2,9 @@
 
 const request = require('supertest-as-promised');
 
+const testTag = 'Test-GA-Tag';
+process.env.GA_TAG = testTag;
+
 const bootstrap = require('../../');
 
 const path = require('path');
@@ -749,6 +752,7 @@ describe('bootstrap()', () => {
 
     it('can be a separate app without steps', () => {
       const bs = bootstrap({
+        gaTagId: false,
         start: false,
         fields: 'fields',
         routes: [{
@@ -764,6 +768,108 @@ describe('bootstrap()', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect('<div>test</div>\n');
+    });
+
+  });
+
+  describe('with ga-tag', () => {
+    let locals;
+    let bs;
+
+    before(() => {
+      bs = bootstrap({
+        port: 8888,
+        fields: 'fields',
+        routes: [
+          {
+            views: `${root}/apps/app_1/views`,
+            steps: {
+              '/feedback': {}
+            }
+          },
+          {
+            views: `${root}/apps/app_1/views`,
+            baseUrl: '/accept',
+            steps: {
+              '/': {},
+              '/confirm/person/confirmation': {}
+            }
+          },
+          {
+            views: `${root}/apps/app_1/views`,
+            baseUrl: '/apply',
+            steps: {
+              '/index-start': {},
+              '/confirm-end/submit-end': {}
+            }
+          }
+        ]
+      });
+
+      bs.use((req, res) => {
+        locals = res.locals;
+        res.json({});
+      });
+    });
+
+    it('adds ga-id and ga-page based on root uri', () => {
+      return request(bs.server)
+        .get('/feedback')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('feedback');
+        });
+    });
+
+    it('adds ga-id and ga-page based on baseUrl only', () => {
+      return request(bs.server)
+        .get('/accept')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('accept');
+        });
+    });
+
+    it('adds ga-page based on baseUrl and uri with camelcasing', () => {
+      return request(bs.server)
+        .get('/accept/confirm/person/confirmation')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('acceptConfirmPersonConfirmation');
+        });
+    });
+
+    it('adds ga-page with camelcasing and handles hyphens', () => {
+      return request(bs.server)
+        .get('/apply/index-start')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('applyIndexStart');
+        });
+    });
+
+    it('adds ga-page with camelcasing and handles hyphens with uris', () => {
+      return request(bs.server)
+        .get('/apply/confirm-end/submit-end')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('applyConfirmEndSubmitEnd');
+        });
     });
 
   });
