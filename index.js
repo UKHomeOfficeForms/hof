@@ -13,6 +13,7 @@ const translate = require('i18n-future').middleware;
 const router = require('./lib/router');
 const health = require('./lib/health');
 const serveStatic = require('./lib/serve-static');
+const gaTagSetup = require('./lib/ga-tag');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./lib/defaults');
@@ -98,7 +99,6 @@ const getContentSecurityPolicy = config => {
 };
 
 function bootstrap(options) {
-
   let config = getConfig(options);
 
   const app = express();
@@ -131,6 +131,8 @@ function bootstrap(options) {
 
   serveStatic(app, config);
   settings(app, config);
+  gaTagSetup(app, config);
+
   let sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
 
@@ -166,7 +168,6 @@ function bootstrap(options) {
   applyErrorMiddlewares(app, config);
 
   const instance = {
-
     use() {
       userMiddleware.use.apply(userMiddleware, arguments);
       return instance;
@@ -206,7 +207,6 @@ function bootstrap(options) {
   }
 
   return instance;
-
 }
 
 bootstrap.configure = function configure(key, val) {
