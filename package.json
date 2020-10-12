@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "16.0.0",
+  "version": "17.0.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -61,7 +61,7 @@
     "travis-conditions": "0.0.0"
   },
   "optionalDependencies": {
-    "hof-theme-govuk": ">=2"
+    "hof-theme-govuk": "^5.0.0"
   },
   "pre-commit": [
     "test"
