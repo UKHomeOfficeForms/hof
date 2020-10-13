@@ -1,16 +1,15 @@
 language: node_js
 node_js:
-  - '6'
-  - '7'
-  - '8'
-  - '9'
   - '10'
   - '11'
+  - '12'
+  - '13'
+  - '14'
 services:
   - redis-server
 before_install:
-  - 'if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi'
-  - npm cache clean
+  - 'if [[ `npm -v` != 6* ]]; then npm i -g npm@6; fi'
+  - npm cache verify
 script: npm run ci
 conditions:
   'branch:master': npm test
