@@ -2,7 +2,7 @@
 'use strict';
 
 const express = require('express');
-const churchill = require('churchill');
+const morgan = require('morgan');
 const path = require('path');
 const http = require('http');
 const https = require('https');
@@ -122,12 +122,21 @@ function bootstrap(options) {
     }
   });
 
-  config.logger = logger(config);
-  app.use(churchill(config.logger));
-
   if (config.middleware) {
     config.middleware.forEach(middleware => app.use(middleware));
   }
+
+  config.logger = logger(config);
+
+  morgan.token('id', req => _.get(req, 'session.id', 'N/A'));
+
+  app.use(morgan('sessionId=:id ' + morgan.combined, {
+    stream: config.logger.stream,
+    skip: (req, res) => {
+      return config.loglevel !== 'debug' &&
+        (res.statusCode >= 300 || !_.get(req, 'session.id'));
+    }
+  }));
 
   serveStatic(app, config);
   settings(app, config);
@@ -135,6 +144,12 @@ function bootstrap(options) {
 
   let sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
+
+  app.use((req, res, next) => {
+    const id = _.get(req, 'session.id', 'N/A');
+    req.log = config.logger.logSession(id);
+    next();
+  });
 
   app.use(translate({
     resources: config.theme.translations,
@@ -187,6 +202,7 @@ function bootstrap(options) {
           if (err) {
             reject(new Error('Unable to connect to server'));
           }
+          config.logger.log('info', `${config.appName} started!`);
           resolve(instance);
         });
       });
@@ -197,6 +213,7 @@ function bootstrap(options) {
         if (err) {
           reject(new Error('Unable to stop server'));
         }
+        config.logger.log('info', `${config.appName} stopped!`);
         resolve(instance);
       }));
     }
