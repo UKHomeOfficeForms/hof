@@ -134,7 +134,10 @@ function bootstrap(options) {
     stream: config.logger.stream,
     skip: (req, res) => {
       return config.loglevel !== 'debug' &&
-        (res.statusCode >= 300 || !_.get(req, 'session.id'));
+        (
+          res.statusCode >= 300 || !_.get(req, 'session.id') ||
+          config.ignoreMiddlewareLogs.some(v => req.path.includes(v))
+        );
     }
   }));
 
