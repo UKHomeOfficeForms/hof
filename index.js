@@ -136,7 +136,7 @@ function bootstrap(options) {
       return config.loglevel !== 'debug' &&
         (
           res.statusCode >= 300 || !_.get(req, 'session.id') ||
-          config.ignoreMiddlewareLogs.some(v => req.path.includes(v))
+          config.ignoreMiddlewareLogs.some(v => req.originalUrl.includes(v))
         );
     }
   }));
