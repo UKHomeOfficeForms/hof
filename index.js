@@ -73,13 +73,15 @@ const getContentSecurityPolicy = config => {
   };
 
   let gaDirectives = {
-    scriptSrc: 'www.google-analytics.com',
-    imgSrc: 'www.google-analytics.com'
+    scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
+    imgSrc: 'www.google-analytics.com',
+    connectSrc: ['www.google-analytics.com']
   };
 
   if (config.gaTagId) {
     directives.scriptSrc = directives.scriptSrc.concat(gaDirectives.scriptSrc);
     directives.imgSrc = directives.imgSrc.concat(gaDirectives.imgSrc);
+    directives.connectSrc = gaDirectives.connectSrc;
   }
 
   if (csp && !csp.disabled) {
