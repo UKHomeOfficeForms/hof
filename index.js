@@ -100,6 +100,23 @@ const getContentSecurityPolicy = config => {
   return directives;
 };
 
+/**
+ * Creates a new HOF application
+ *
+ * @param options {object} Configuration options for the HOF application
+ * @param options.behaviours {object | Array<object>} The HOF behaviour(s) to invoke for all sub-applications
+ * @param options.translations {string} The translations path for the application
+ * @param options.routes {Array<object>} The sub-applications for this app: for example; require('./apps/example-app')
+ * @param options.views {Array<string>} The view template paths for the application
+ * @param options.middleware {Array<function>} An array of Express middleware functions to use
+ * @param options.theme {string} Optional HOF theme - defaults to govuk
+ * @param options.markdown {object} Optional markdown options
+ *     @see {@link https://github.com/UKHomeOfficeForms/hof-middleware-markdown}
+ * @param options.getTerms {boolean} Optional boolean - whether to mount the /terms endpoint
+ * @param options.getCookies {boolean} Optional boolean - whether to mount the /cookies endpoint
+ *
+ * @returns {object} A new HOF application using the configuration supplied in options
+ */
 function bootstrap(options) {
   let config = getConfig(options);
 
