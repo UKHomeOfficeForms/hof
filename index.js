@@ -1,6 +1,7 @@
 /* eslint implicit-dependencies/no-implicit: [2, {optional:true}] */
 'use strict';
 
+const crypto = require('crypto');
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
@@ -60,17 +61,19 @@ const applyErrorMiddlewares = (app, config) => {
   }));
 };
 
-const getContentSecurityPolicy = config => {
+const getContentSecurityPolicy = (config, res) => {
   let csp = config.csp;
+
+  /* eslint-disable quotes */
   let directives = {
-    /* eslint-disable quotes */
     defaultSrc: ["'none'"],
     styleSrc: ["'self'"],
     imgSrc: ["'self'"],
     fontSrc: ["'self'", 'data:'],
-    scriptSrc: ["'self'", "'unsafe-inline'"]
-    /* eslint-enable quotes */
+    scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
+    'frame-ancestors': ["'none'"]
   };
+  /* eslint-enable quotes */
 
   let gaDirectives = {
     scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
@@ -125,11 +128,20 @@ function bootstrap(options) {
 
   app.use(helmet());
 
+  app.use((req, res, next) => {
+    res.locals.nonce = crypto.randomBytes(16).toString('hex');
+    next();
+  });
+
   if (config.csp !== false && !config.csp.disabled) {
-    app.use(helmet.contentSecurityPolicy({
-      directives: getContentSecurityPolicy(config)
-    }));
+    app.use((req, res, next) => {
+      helmet.contentSecurityPolicy({
+        directives: getContentSecurityPolicy(config, res)
+      })(req, res, next);
+    });
   }
+
+  app.use(helmet.noSniff());
 
   if (!config || !config.routes || !config.routes.length) {
     throw new Error('Must be called with a list of routes');

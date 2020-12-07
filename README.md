@@ -8,6 +8,18 @@ HOF (Home Office Forms) is a framework designed to assist developers in creating
 
 [https://ukhomeofficeforms.github.io/hof-guide/](https://ukhomeofficeforms.github.io/hof-guide/)
 
+## Content Security Policy
+### Inline JavaScript from 18.0.0
+From version 18.0.0, unsafe-inline has been removed from the content security policy by default. This means scripts
+must either be referenced using the src attribute, ```<script src='...'></script>``` or with a nonce value attribute. A nonce
+value is generated for every request. You can add this to your own templates' inline scripts as needed:
+
+```
+<script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
+...
+</script>
+```
+
 ### Built with HOF
  * https://github.com/UKHomeOffice/gro
  * https://github.com/UKHomeOffice/end-tenancy

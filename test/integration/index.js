@@ -271,7 +271,7 @@ describe('bootstrap()', () => {
           views: `${root}/apps/app_1/views`,
           steps: {
             '/common': {
-                template: 'common2'
+              template: 'common2'
             }
           }
         }]
@@ -688,10 +688,54 @@ describe('bootstrap()', () => {
             .and.include('foo')
             .and.include("'self'");
           /* eslint-enable quotes */
+          csp['frame-ancestors'].should.eql(['\'none\'']);
         });
     });
 
+    it('should set frame-ancestors to none', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        csp: {
+          scriptSrc: ['foo'],
+          imgSrc: ['bar']
+        },
+        gaTagId: '1234-ABC',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+
+      return request(bs.server)
+        .get('/one')
+        .expect((res) => {
+          const csp = getHeaders(res, 'content-security-policy');
+          csp['frame-ancestors'].should.eql(['\'none\'']);
+        });
+    });
+
+    it('should set x-content-type-options to nosniff', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+
+      return request(bs.server)
+        .get('/one')
+        .expect((res) => {
+          const contentTypeOpts = res.headers['x-content-type-options'];
+          contentTypeOpts.should.eql('nosniff');
+        });
+    });
   });
+
 
   describe('with user defined middleware', () => {
     it('can mount user defined middleware with `use`', () => {
@@ -706,7 +750,7 @@ describe('bootstrap()', () => {
         }]
       });
       bs.use((req, res) => {
-        res.json({respondedFromMiddleware: true});
+        res.json({ respondedFromMiddleware: true });
       });
       bs.start();
       return request(bs.server)
@@ -772,7 +816,7 @@ describe('bootstrap()', () => {
 
   });
 
-  describe('with ga-tag', () => {
+  describe('with locals', () => {
     let locals;
     let bs;
 
@@ -812,66 +856,90 @@ describe('bootstrap()', () => {
       });
     });
 
-    it('adds ga-id and ga-page based on root uri', () => {
-      return request(bs.server)
-        .get('/feedback')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(200)
-        .expect(() => {
-          locals.gaTagId.should.equal(testTag);
-          locals['ga-id'].should.equal(testTag);
-          locals['ga-page'].should.equal('feedback');
-        });
+    describe('with ga-tag', () => {
+      it('adds ga-id and ga-page based on root uri', () => {
+        return request(bs.server)
+          .get('/feedback')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gaTagId.should.equal(testTag);
+            locals['ga-id'].should.equal(testTag);
+            locals['ga-page'].should.equal('feedback');
+          });
+      });
+
+      it('adds ga-id and ga-page based on baseUrl only', () => {
+        return request(bs.server)
+          .get('/accept')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gaTagId.should.equal(testTag);
+            locals['ga-id'].should.equal(testTag);
+            locals['ga-page'].should.equal('accept');
+          });
+      });
+
+      it('adds ga-page based on baseUrl and uri with camelcasing', () => {
+        return request(bs.server)
+          .get('/accept/confirm/person/confirmation')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gaTagId.should.equal(testTag);
+            locals['ga-id'].should.equal(testTag);
+            locals['ga-page'].should.equal('acceptConfirmPersonConfirmation');
+          });
+      });
+
+      it('adds ga-page with camelcasing and handles hyphens', () => {
+        return request(bs.server)
+          .get('/apply/index-start')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gaTagId.should.equal(testTag);
+            locals['ga-id'].should.equal(testTag);
+            locals['ga-page'].should.equal('applyIndexStart');
+          });
+      });
+
+      it('adds ga-page with camelcasing and handles hyphens with uris', () => {
+        return request(bs.server)
+          .get('/apply/confirm-end/submit-end')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gaTagId.should.equal(testTag);
+            locals['ga-id'].should.equal(testTag);
+            locals['ga-page'].should.equal('applyConfirmEndSubmitEnd');
+          });
+      });
     });
 
-    it('adds ga-id and ga-page based on baseUrl only', () => {
-      return request(bs.server)
-        .get('/accept')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(200)
-        .expect(() => {
-          locals.gaTagId.should.equal(testTag);
-          locals['ga-id'].should.equal(testTag);
-          locals['ga-page'].should.equal('accept');
-        });
-    });
+    describe('with nonce values', () => {
 
-    it('adds ga-page based on baseUrl and uri with camelcasing', () => {
-      return request(bs.server)
-        .get('/accept/confirm/person/confirmation')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(200)
-        .expect(() => {
-          locals.gaTagId.should.equal(testTag);
-          locals['ga-id'].should.equal(testTag);
-          locals['ga-page'].should.equal('acceptConfirmPersonConfirmation');
-        });
-    });
+      it('adds a 16 figure hex nonce value to locals', () => {
+        return request(bs.server)
+          .get('/feedback')
+          .expect(200)
+          .expect(() => {
+            const localValue = locals.nonce;
+            localValue.should.match(/[0-9a-fA-F]{16}/);
+          });
+      });
 
-    it('adds ga-page with camelcasing and handles hyphens', () => {
-      return request(bs.server)
-        .get('/apply/index-start')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(200)
-        .expect(() => {
-          locals.gaTagId.should.equal(testTag);
-          locals['ga-id'].should.equal(testTag);
-          locals['ga-page'].should.equal('applyIndexStart');
-        });
+      it('adds the nonce value from the locals to the content security policy header script-src', () => {
+        return request(bs.server)
+          .get('/feedback')
+          .expect(200)
+          .expect((res) => {
+            const localsNonceValue = locals.nonce;
+            const cspScrptSrc = getHeaders(res, 'content-security-policy')['script-src'];
+            cspScrptSrc.should.contain(`'nonce-${localsNonceValue}'`);
+          });
+      });
     });
-
-    it('adds ga-page with camelcasing and handles hyphens with uris', () => {
-      return request(bs.server)
-        .get('/apply/confirm-end/submit-end')
-        .set('Cookie', ['myCookie=1234'])
-        .expect(200)
-        .expect(() => {
-          locals.gaTagId.should.equal(testTag);
-          locals['ga-id'].should.equal(testTag);
-          locals['ga-page'].should.equal('applyConfirmEndSubmitEnd');
-        });
-    });
-
   });
-
 });
