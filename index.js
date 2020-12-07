@@ -117,6 +117,7 @@ const getContentSecurityPolicy = (config, res) => {
  *     @see {@link https://github.com/UKHomeOfficeForms/hof-middleware-markdown}
  * @param options.getTerms {boolean} Optional boolean - whether to mount the /terms endpoint
  * @param options.getCookies {boolean} Optional boolean - whether to mount the /cookies endpoint
+ * @param options.noCache {boolean} Optional boolean - whether to disable caching
  *
  * @returns {object} A new HOF application using the configuration supplied in options
  */
@@ -142,6 +143,14 @@ function bootstrap(options) {
   }
 
   app.use(helmet.noSniff());
+
+  if (config.noCache && config.noCache !== 'false') {
+    app.use((req, res, next) => {
+      res.setHeader('cache-control', ['no-store', 'no-cache', 'must-revalidate', 'proxy-revalidate']);
+      res.setHeader('pragma', 'no-cache');
+      next();
+    });
+  }
 
   if (!config || !config.routes || !config.routes.length) {
     throw new Error('Must be called with a list of routes');
