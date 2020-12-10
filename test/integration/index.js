@@ -734,6 +734,68 @@ describe('bootstrap()', () => {
           contentTypeOpts.should.eql('nosniff');
         });
     });
+
+    it('should not disable caching if noCache is not set', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+
+      return request(bs.server)
+        .get('/one')
+        .expect((res) => {
+          expect(res.headers['cache-control']).to.be.undefined;
+          expect(res.headers.pragma).to.be.undefined;
+        });
+    });
+
+    it('should not disable caching if noCache is false', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }],
+        noCache: 'false'
+      });
+
+      return request(bs.server)
+        .get('/one')
+        .expect((res) => {
+          expect(res.headers['cache-control']).to.be.undefined;
+          expect(res.headers.pragma).to.be.undefined;
+        });
+    });
+
+    it('should disable caching if noCache is true', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }],
+        noCache: true
+      });
+
+      return request(bs.server)
+        .get('/one')
+        .expect((res) => {
+          const cacheControl = res.headers['cache-control'];
+          cacheControl.should.eql('no-store, no-cache, must-revalidate, proxy-revalidate');
+
+          const pragma = res.headers.pragma;
+          pragma.should.eql('no-cache');
+        });
+    });
   });
 
 
@@ -816,7 +878,7 @@ describe('bootstrap()', () => {
 
   });
 
-  describe('with locals', () => {
+  describe('with locals and cookies', () => {
     let locals;
     let bs;
 
@@ -940,6 +1002,34 @@ describe('bootstrap()', () => {
             cspScrptSrc.should.contain(`'nonce-${localsNonceValue}'`);
           });
       });
+
+     it('set-cookie header is sent', () => {
+       return request(bs.server)
+         .get('/feedback')
+         .expect(200)
+         .expect((res) => {
+           res.headers['set-cookie'].length.should.be.greaterThan(0);
+         });
+      });
+    });
+
+    it('set-cookie header is HttpOnly', () => {
+      return request(bs.server)
+        .get('/feedback')
+        .expect(200)
+        .expect((res) => {
+          res.headers['set-cookie'][0].should.contain('HttpOnly');
+        });
+    });
+
+    it('set-cookie header has SameSite attribute set to strict', () => {
+      return request(bs.server)
+        .get('/feedback')
+        .expect(200)
+        .expect((res) => {
+          res.headers['set-cookie'][0].should.contain('SameSite=Strict');
+        });
     });
   });
+
 });
