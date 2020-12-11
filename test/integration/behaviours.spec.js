@@ -7,8 +7,10 @@ describe('Behaviours', () => {
 
   let wizard;
   let bootstrap;
+  let bs;
 
   beforeEach(() => {
+    bs = null;
     wizard = sinon.stub().returns(() => {});
     bootstrap = proxyquire('../../', {
       './lib/router': proxyquire('../../lib/router', {
@@ -18,10 +20,16 @@ describe('Behaviours', () => {
     bootstrap.configure('root', path.resolve(__dirname, '../fixtures'));
   });
 
+  afterEach(() => {
+    if (bs) {
+      bs.stop();
+    }
+  });
+
   describe('route-level behaviours', () => {
 
     it('applies behaviours to all steps in specified route', () => {
-      bootstrap({
+      bs = bootstrap({
         fields: 'fields',
         routes: [
           {
@@ -60,7 +68,7 @@ describe('Behaviours', () => {
   describe('global behaviours', () => {
 
     it('applies behaviours to all steps in all routes', () => {
-      bootstrap({
+      bs = bootstrap({
         fields: 'fields',
         behaviours: ['behaviour-one'],
         routes: [
@@ -99,7 +107,7 @@ describe('Behaviours', () => {
   describe('global and route-level behaviours', () => {
 
     it('applies global behaviours before route-level behaviours', () => {
-      bootstrap({
+      bs = bootstrap({
         fields: 'fields',
         behaviours: ['behaviour-one'],
         routes: [
