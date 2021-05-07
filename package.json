@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "18.2.0",
+  "version": "18.2.1",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -34,9 +34,9 @@
     "express-session": "^1.13.0",
     "helmet": "^3.22.0",
     "hof-form-wizard": "^5.1.1",
-    "hof-middleware": "^2.2.1",
+    "hof-middleware": "^2.2.3",
     "hof-middleware-markdown": "^2.0.0",
-    "hof-template-mixins": "^5.2.1",
+    "hof-template-mixins": "^5.3.2",
     "hogan-express-strict": "^0.5.4",
     "i18n-future": "^2.0.0",
     "lodash": "^4.17.4",
@@ -66,7 +66,7 @@
     "exit": "true"
   },
   "optionalDependencies": {
-    "hof-theme-govuk": "^5.1.1"
+    "hof-theme-govuk": "^5.2.3"
   },
   "pre-commit": [
     "test"
