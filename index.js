@@ -7,8 +7,8 @@ const path = require('path');
 const http = require('http');
 const https = require('https');
 const mixins = require('hof-template-mixins');
-const hofMiddleware = require('hof-middleware');
-const markdown = require('hof-middleware-markdown');
+const hofMiddleware = require('./middleware');
+const markdown = require('./lib/markdown');
 const translate = require('i18n-future').middleware;
 const router = require('./lib/router');
 const health = require('./lib/health');
@@ -113,7 +113,6 @@ const getContentSecurityPolicy = (config, res) => {
  * @param options.middleware {Array<function>} An array of Express middleware functions to use
  * @param options.theme {string} Optional HOF theme - defaults to govuk
  * @param options.markdown {object} Optional markdown options
- *     @see {@link https://github.com/UKHomeOfficeForms/hof-middleware-markdown}
  * @param options.getTerms {boolean} Optional boolean - whether to mount the /terms endpoint
  * @param options.getCookies {boolean} Optional boolean - whether to mount the /cookies endpoint
  * @param options.noCache {boolean} Optional boolean - whether to disable caching
