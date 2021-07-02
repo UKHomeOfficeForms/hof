@@ -42,9 +42,7 @@ describe('bootstrap()', () => {
     }
   });
 
-  it('must be given a list of routes', () => {
-      return (() => bs = bootstrap()).should.Throw('Must be called with a list of routes');
-    }
+  it('is given a list of routes', () => (() => bs = bootstrap()).should.Throw('Must be called with a list of routes')
   );
 
   it('routes must each have a set of one or more steps, or one or more pages', () =>
@@ -83,7 +81,7 @@ describe('bootstrap()', () => {
     (() => bootstrap({
       fields: 'not_a_valid_path',
       routes: [{
-        steps: {},
+        steps: {}
       }]
     })).should.Throw(`Cannot find fields at ${root}/not_a_valid_path`)
   );
@@ -137,20 +135,19 @@ describe('bootstrap()', () => {
   );
 
   describe('with valid routes and steps', () => {
-
     it('returns the bootstrap interface object', () => {
-        bs = bootstrap({
-          fields: 'fields',
-          routes: [{
-            views: `${root}/apps/app_1/views`,
-            steps: {
-              '/one': {}
-            }
-          }]
-        });
+      bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
 
-        return bs.should.have.all.keys('server', 'stop', 'start', 'use');
-      }
+      return bs.should.have.all.keys('server', 'stop', 'start', 'use');
+    }
     );
 
     it('can instantiate a custom behaviour for the route', () => {

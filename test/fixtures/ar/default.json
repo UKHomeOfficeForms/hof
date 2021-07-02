@@ -1,0 +1,14 @@
+{
+  "app": {
+    "title": "Electronic Visa Waiver"
+  },
+  "buttons": {
+    "continue": "استمر"
+  },
+  "errorlist": {
+    "title": {
+      "single": "راجع إجاباتك:",
+      "multiple": "راجع إجاباتك:"
+    }
+  }
+}

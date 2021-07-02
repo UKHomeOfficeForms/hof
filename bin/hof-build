@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+'use strict';
+
+/* eslint-disable no-process-exit */
+const options = require('minimist')(process.argv.slice(2));
+require('../')(options)
+  .catch(e => {
+    console.error(e.stack);
+    process.exit(1);
+  });

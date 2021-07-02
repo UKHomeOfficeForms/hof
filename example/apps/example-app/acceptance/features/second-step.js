@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 'use strict';
 
 const steps = require('../../');
@@ -21,7 +22,7 @@ Scenario('The correct fields are on the page', (
   ]);
 });
 
-Scenario('I see the name I entered on the first step', function *(
+Scenario('I see the name I entered on the first step', function* (
   I,
   firstPage
 ) {

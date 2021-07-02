@@ -1,4 +1,3 @@
-/* eslint implicit-dependencies/no-implicit: [2, {optional:true}] */
 'use strict';
 
 const crypto = require('crypto');
@@ -17,7 +16,7 @@ const serveStatic = require('./lib/serve-static');
 const gaTagSetup = require('./lib/ga-tag');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
-const defaults = require('./lib/defaults');
+const defaults = require('./config/hof-defaults');
 const logger = require('./lib/logger');
 const helmet = require('helmet');
 const _ = require('lodash');
@@ -25,7 +24,7 @@ const deprecate = require('deprecate');
 
 const customConfig = {};
 
-const getConfig = function getConfig() {
+const getConfig = function () {
   const args = [].slice.call(arguments);
   const config = _.merge.apply(_, [{}, defaults, customConfig].concat(args));
 
@@ -62,10 +61,10 @@ const applyErrorMiddlewares = (app, config) => {
 };
 
 const getContentSecurityPolicy = (config, res) => {
-  let csp = config.csp;
+  const csp = config.csp;
 
   /* eslint-disable quotes */
-  let directives = {
+  const directives = {
     defaultSrc: ["'none'"],
     styleSrc: ["'self'"],
     imgSrc: ["'self'"],
@@ -75,7 +74,7 @@ const getContentSecurityPolicy = (config, res) => {
   };
   /* eslint-enable quotes */
 
-  let gaDirectives = {
+  const gaDirectives = {
     scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
     imgSrc: 'www.google-analytics.com',
     connectSrc: ['www.google-analytics.com']
@@ -122,7 +121,7 @@ const getContentSecurityPolicy = (config, res) => {
  * @returns {object} A new HOF application using the configuration supplied in options
  */
 function bootstrap(options) {
-  let config = getConfig(options);
+  const config = getConfig(options);
 
   const app = express();
   const userMiddleware = express.Router();
@@ -172,20 +171,18 @@ function bootstrap(options) {
 
   app.use(morgan('sessionId=:id ' + morgan.combined, {
     stream: config.logger.stream,
-    skip: (req, res) => {
-      return config.loglevel !== 'debug' &&
+    skip: (req, res) => config.loglevel !== 'debug' &&
         (
           res.statusCode >= 300 || !_.get(req, 'session.id') ||
           config.ignoreMiddlewareLogs.some(v => req.originalUrl.includes(v))
-        );
-    }
+        )
   }));
 
   serveStatic(app, config);
   settings(app, config);
   gaTagSetup(app, config);
 
-  let sessions = sessionStore(app, config);
+  const sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
 
   app.use((req, res, next) => {
@@ -233,7 +230,8 @@ function bootstrap(options) {
 
     server: null,
 
-    start: (startConfig) => {
+    start: sConfig => {
+      let startConfig = sConfig;
       startConfig = getConfig(config, startConfig);
 
       const protocol = startConfig.protocol === 'http' ? http : https;
@@ -269,7 +267,7 @@ function bootstrap(options) {
   return instance;
 }
 
-bootstrap.configure = function configure(key, val) {
+bootstrap.configure = function (key, val) {
   if (arguments.length === 2 && typeof key === 'string') {
     customConfig[key] = val;
   } else if (typeof key === 'object') {
@@ -278,3 +276,5 @@ bootstrap.configure = function configure(key, val) {
 };
 
 module.exports = bootstrap;
+module.exports.build = require('./build/');
+module.exports.transpiler = require('./transpiler/');
