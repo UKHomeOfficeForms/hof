@@ -1,7 +1,6 @@
 'use strict';
 
 const spawn = require('../../lib/spawn');
-const witch = require('witch');
 
 module.exports = config => {
   if (!config.translate) {
@@ -16,6 +15,6 @@ module.exports = config => {
     });
   }
 
-  return spawn(witch('hof-transpiler'), args);
+  return spawn('node_modules/hof/bin/hof-transpiler', args);
 };
 module.exports.task = 'compile translations';

@@ -3,7 +3,7 @@
 
 /* eslint-disable no-process-exit */
 const options = require('minimist')(process.argv.slice(2));
-require('../')(options)
+require('../build/')(options)
   .catch(e => {
     console.error(e.stack);
     process.exit(1);

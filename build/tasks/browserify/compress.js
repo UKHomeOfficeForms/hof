@@ -2,8 +2,8 @@
 
 const duplexify = require('duplexify');
 const spawn = require('child_process').spawn;
-const witch = require('witch');
-const bin = witch('uglify-js', 'uglifyjs');
+const which = require('../../../lib/which');
+const bin = which('uglify-js', 'uglifyjs');
 
 const args = ['--comments', '/copyright|licen(c|s)e/i', '--'];
 
