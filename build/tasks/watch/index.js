@@ -2,8 +2,8 @@
 
 const build = require('../build');
 const chokidar = require('chokidar');
-const throttle = require('lodash.throttle');
-const uniq = require('lodash.uniq');
+const throttle = require('lodash').throttle;
+const uniq = require('lodash').uniq;
 const cp = require('child_process');
 const path = require('path');
 const match = require('minimatch');
