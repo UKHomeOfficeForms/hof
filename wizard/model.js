@@ -1,6 +1,6 @@
 'use strict';
 
-const Model = require('hof-model');
+const Model = require('../model');
 
 module.exports = class SessionModel extends Model {
   constructor(props, options) {

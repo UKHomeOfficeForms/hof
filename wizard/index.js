@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 const _ = require('lodash');
 const deprecate = require('deprecate');
-const FormController = require('hof-form-controller');
+const FormController = require('../controller');
 const mix = require('mixwith').mix;
 
 const IncludedBehaviours = require('./behaviours');

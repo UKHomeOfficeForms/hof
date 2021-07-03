@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseController = require('hof-form-controller');
+const BaseController = require('../../../controller');
 const mix = require('mixwith').mix;
 const Complete = require('../../../wizard/behaviours').complete;
 const APPLICATION_COMPLETE = require('../../../wizard/util/constants').APPLICATION_COMPLETE;

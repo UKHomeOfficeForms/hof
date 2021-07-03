@@ -2,7 +2,7 @@
 
 const checkProgress = require('../../../wizard/middleware/check-progress');
 const Model = require('../../../wizard/model');
-const Controller = require('hof-form-controller');
+const Controller = require('../../../controller');
 const helpers = require('../../../wizard/util/helpers');
 
 const request = require('../helpers/request');
@@ -165,8 +165,8 @@ describe('middleware/check-session', () => {
         controller.emit('complete', req, res);
       });
 
-      it('no steps are removed', () => {
-        req.sessionModel.get('steps').should.be.eql(sessionSteps);
+      it('no steps are removed but 1st step pushed to end of sequence', () => {
+        req.sessionModel.get('steps').should.be.eql(['/step2', '/step3', '/fork1', '/step4', '/step1']);
       });
 
       it('doesn\'t invalidate any fields', () => {

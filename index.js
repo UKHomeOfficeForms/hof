@@ -277,3 +277,7 @@ bootstrap.configure = function (key, val) {
 module.exports = bootstrap;
 module.exports.build = require('./build/');
 module.exports.transpiler = require('./transpiler/');
+module.exports.middleware = require('./middleware');
+module.exports.controller = require('./controller');
+module.exports.model = require('./model');
+module.exports.wizard = require('./wizard');

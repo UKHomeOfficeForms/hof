@@ -137,7 +137,7 @@ describe('Form Wizard', () => {
 
     it('creates a session model', done => {
       wizard(req, res, err => {
-        req.sessionModel.should.be.an.instanceOf(require('hof-model'));
+        req.sessionModel.should.be.an.instanceOf(require('../../model'));
         done(err);
       });
     });
