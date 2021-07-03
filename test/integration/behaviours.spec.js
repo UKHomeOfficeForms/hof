@@ -13,7 +13,7 @@ describe('Behaviours', () => {
     wizard = sinon.stub().returns(() => {});
     bootstrap = proxyquire('../../', {
       './lib/router': proxyquire('../../lib/router', {
-        'hof-form-wizard': wizard
+        '../wizard': wizard
       })
     });
     bootstrap.configure('root', path.resolve(__dirname, '../fixtures'));
