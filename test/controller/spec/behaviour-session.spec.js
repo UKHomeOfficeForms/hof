@@ -42,9 +42,9 @@ describe('Sessions Behaviour', () => {
   });
 
   describe('Error', () => {
-    it('is an instance of Wizard.Error', () => {
-      const err = new sessions.Error('key', { type: 'required' });
-      err.should.be.an.instanceOf(Controller.Error);
+    it('is an instance of Controller.ValidationError', () => {
+      const err = new sessions.ValidationError('key', { type: 'required' });
+      err.should.be.an.instanceOf(Controller.ValidationError);
     });
   });
 

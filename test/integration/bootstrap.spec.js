@@ -15,13 +15,13 @@ const root = path.resolve(__dirname, '../fixtures');
 
 let behaviourOptions = null;
 let behaviourCalled = false;
-const behaviour = SuperClass => class extends SuperClass {
+const behaviour = SuperClass => (class extends SuperClass {
   constructor(options) {
     behaviourCalled = true;
     behaviourOptions = options;
     super(options);
   }
-};
+});
 
 describe('bootstrap()', () => {
   let bs;

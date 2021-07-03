@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "19.0.0-beta-v11",
+  "version": "19.0.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -44,7 +44,7 @@
     "deprecate": "^1.0.0",
     "dotenv": "^4.0.0",
     "duplexify": "^3.5.0",
-    "express": "^4.13.4",
+    "express": "^4.17.1",
     "express-healthcheck": "^0.1.0",
     "express-partial-templates": "^0.2.0",
     "express-session": "^1.13.0",

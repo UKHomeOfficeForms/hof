@@ -2,7 +2,7 @@
 
 const reqres = require('reqres');
 const mix = require('mixwith').mix;
-const Form = require('../../../controller');
+const Form = require('../../../controller').BaseController;
 
 const sandbox = require('mocha-sandbox');
 
@@ -30,13 +30,13 @@ describe('Hooks', () => {
     req = reqres.req();
     res = reqres.res();
     methodNames.forEach(method => {
-      // make render and successHanlder terminate as normal
+      // make render and successHandler terminate as normal
       if (method === 'render') {
-        sinon.stub(Form.prototype, method, (q, s) => {
+        sinon.stub(Form.prototype, method).callsFake((q, s) => {
           s.render();
         });
       } else if (method === 'successHandler') {
-        sinon.stub(Form.prototype, method, (q, s) => {
+        sinon.stub(Form.prototype, method).callsFake((q, s) => {
           s.redirect();
         });
       } else {
@@ -66,7 +66,7 @@ describe('Hooks', () => {
       }
     };
     Form.prototype._getErrors.restore();
-    sinon.stub(Form.prototype, '_getErrors', (r) => {
+    sinon.stub(Form.prototype, '_getErrors').callsFake((r) => {
       expect(r.params.foo).to.be.equal('bar');
       done();
     });

@@ -715,7 +715,7 @@ describe('controller', () => {
         req.form = {};
         res = response();
         sinon.stub(controller, 'getErrors').returns(errors);
-        sinon.stub(controller, 'getErrorMessage', e => `error for ${e.key}`);
+        sinon.stub(controller, 'getErrorMessage').callsFake(e => `error for ${e.key}`);
       });
 
       afterEach(() => {
