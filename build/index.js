@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const merge = require('lodash.merge');
+const merge = require('lodash').merge;
 const config = require('../config/builder-defaults');
 
 module.exports = options => {
