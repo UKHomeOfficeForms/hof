@@ -65,5 +65,4 @@ describe('Referenced Fields', () => {
     model.set('parent', 'new value 2');
     listener.should.have.been.calledTwice;
   });
-
 });

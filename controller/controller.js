@@ -42,7 +42,8 @@ module.exports = class Controller extends BaseController {
 
     const confirmStep = normaliseUrl(this.confirmStep);
 
-    const completed = step => {
+    const completed = s => {
+      let step = s;
       if (req.baseUrl !== '/') {
         const re = new RegExp('^' + req.baseUrl);
         step = step.replace(re, '');
@@ -53,12 +54,10 @@ module.exports = class Controller extends BaseController {
 
     // If a form condition is met, its target supercedes the next property
     next = _.reduce(forks, (result, value) => {
-      const evalCondition = condition => {
-        return _.isFunction(condition) ?
-          condition(req, res) :
-          condition.value === (req.form.values[condition.field] ||
+      const evalCondition = condition => _.isFunction(condition) ?
+        condition(req, res) :
+        condition.value === (req.form.values[condition.field] ||
           (req.form.historicalValues && req.form.historicalValues[condition.field]));
-      };
 
       if (evalCondition(value.condition)) {
         if (value.continueOnEdit) {
@@ -133,7 +132,7 @@ module.exports = class Controller extends BaseController {
       `pages.${route}.header`,
       `fields.${fieldName}.label`,
       `fields.${fieldName}.legend`
-   ], locals);
+    ], locals);
   }
 
   getIntro(route, lookup, locals) {

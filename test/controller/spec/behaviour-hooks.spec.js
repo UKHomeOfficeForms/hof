@@ -18,7 +18,6 @@ const methodNames = [
 ];
 
 describe('Hooks', () => {
-
   let req;
   let res;
 
@@ -66,7 +65,7 @@ describe('Hooks', () => {
       }
     };
     Form.prototype._getErrors.restore();
-    sinon.stub(Form.prototype, '_getErrors').callsFake((r) => {
+    sinon.stub(Form.prototype, '_getErrors').callsFake(r => {
       expect(r.params.foo).to.be.equal('bar');
       done();
     });
@@ -75,8 +74,7 @@ describe('Hooks', () => {
   });
 
   describe('get pipeline', () => {
-
-    it('calls getErrors lifecycle hooks', (done) => {
+    it('calls getErrors lifecycle hooks', done => {
       const fields = {
         field: {
           hooks: {
@@ -100,7 +98,7 @@ describe('Hooks', () => {
       }, done));
     });
 
-    it('calls getValues lifecycle hooks', (done) => {
+    it('calls getValues lifecycle hooks', done => {
       const fields = {
         field: {
           hooks: {
@@ -124,7 +122,7 @@ describe('Hooks', () => {
       }, done));
     });
 
-    it('calls locals lifecycle hooks', (done) => {
+    it('calls locals lifecycle hooks', done => {
       const fields = {
         field: {
           hooks: {
@@ -148,7 +146,7 @@ describe('Hooks', () => {
       }, done));
     });
 
-    it('calls render "pre" lifecycle hooks only because render terminates', (done) => {
+    it('calls render "pre" lifecycle hooks only because render terminates', done => {
       const fields = {
         field: {
           hooks: {
@@ -170,12 +168,10 @@ describe('Hooks', () => {
         expect(fields.field.hooks['pre-render']).to.have.been.calledBefore(Form.prototype.render);
       }, done));
     });
-
   });
 
   describe('post pipeline', () => {
-
-    it('calls process lifecycle hooks', (done) => {
+    it('calls process lifecycle hooks', done => {
       const fields = {
         field: {
           hooks: {
@@ -199,7 +195,7 @@ describe('Hooks', () => {
       }, done));
     });
 
-    it('calls validate lifecycle hooks', (done) => {
+    it('calls validate lifecycle hooks', done => {
       const fields = {
         field: {
           hooks: {
@@ -223,7 +219,7 @@ describe('Hooks', () => {
       }, done));
     });
 
-    it('calls saveValues lifecycle hooks', (done) => {
+    it('calls saveValues lifecycle hooks', done => {
       const fields = {
         field: {
           hooks: {
@@ -247,7 +243,7 @@ describe('Hooks', () => {
       }, done));
     });
 
-    it('calls successHandler "pre" lifecycle hooks only because successHandler terminates', (done) => {
+    it('calls successHandler "pre" lifecycle hooks only because successHandler terminates', done => {
       const fields = {
         field: {
           hooks: {
@@ -269,12 +265,10 @@ describe('Hooks', () => {
         expect(fields.field.hooks['pre-successHandler']).to.have.been.calledBefore(Form.prototype.successHandler);
       }, done));
     });
-
   });
 
   describe('error handling', () => {
-
-    it('stops execution pipeline if a hook fails', (done) => {
+    it('stops execution pipeline if a hook fails', done => {
       const error = new Error('test error');
       const fields = {
         field: {
@@ -284,14 +278,12 @@ describe('Hooks', () => {
         }
       };
       const controller = new Controller({fields});
-      controller.get(req, res, sandbox((err) => {
+      controller.get(req, res, sandbox(err => {
         expect(fields.field.hooks['pre-getErrors']).to.have.been.calledOnce;
         expect(fields.field.hooks['pre-getErrors']).to.have.been.calledWith(req, res);
         expect(Form.prototype._getErrors).not.to.have.been.called;
         expect(err).to.equal(error);
       }, done));
     });
-
   });
-
 });

@@ -15,7 +15,7 @@ describe('Sessions Behaviour', () => {
 
   beforeEach(done => {
     req = request({
-        sessionModel: new Model()
+      sessionModel: new Model()
     });
     res = response();
     next = sinon.stub();

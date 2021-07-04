@@ -13,8 +13,8 @@ module.exports = (route, controller, steps, begin) => {
     return field && field.invalidates && field.invalidates.length;
   });
 
-  const getAllPossibleSteps = (stepName, scopedSteps, steps) => {
-    let allSteps = steps || [stepName];
+  const getAllPossibleSteps = (stepName, scopedSteps, stps) => {
+    let allSteps = stps || [stepName];
     let step = scopedSteps[stepName];
     const forksReducer = (arr, fork) => getAllPossibleSteps(fork, scopedSteps, allSteps);
     // don't loop over steps that have already been added

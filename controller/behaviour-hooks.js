@@ -36,7 +36,7 @@ module.exports = SuperClass => {
     'successHandler'
   ].forEach(method => {
     /* eslint-disable func-names */
-    Behaviour.prototype[method] = function(req, res, next) {
+    Behaviour.prototype[method] = function (req, res, next) {
       /* eslint-enable func-names */
       const methodName = method.replace(/^_/, '');
       Router({ mergeParams: true }).use([

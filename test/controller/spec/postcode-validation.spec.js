@@ -8,7 +8,6 @@ const isCoverageTest = require.cache[require.resolve('nyc')];
 const describeUnlessCoverage = isCoverageTest ? describe.skip : describe;
 
 describe('Postcode validation', () => {
-
   it('correctly validates empty string', () => {
     Validators.postcode('').should.be.ok;
   });
@@ -20,7 +19,6 @@ describe('Postcode validation', () => {
   });
 
   describeUnlessCoverage('Full postcode test - loads full UK postcode database, may take some time', () => {
-
     let testData;
 
     const test = pc => {
@@ -54,5 +52,4 @@ describe('Postcode validation', () => {
       });
     });
   });
-
 });

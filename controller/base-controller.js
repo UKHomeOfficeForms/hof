@@ -151,13 +151,13 @@ module.exports = class BaseController extends EventEmitter {
     callback();
   }
 
-  validateField(key, req, validator, formatter) {
-    formatter = formatter || dataFormatter(
+  validateField(key, req, vld, fmtr) {
+    const formatter = fmtr || dataFormatter(
       req.form.options.fields,
       req.form.options.defaultFormatters,
       req.form.options.formatters
     );
-    validator = validator || dataValidator(req.form.options.fields);
+    const validator = vld || dataValidator(req.form.options.fields);
     const emptyValue = formatter(key, '');
     return validator(key, req.form.values[key], req.form.values, emptyValue);
   }
@@ -215,8 +215,8 @@ module.exports = class BaseController extends EventEmitter {
   _getForkTarget(req, res) {
     function evalCondition(condition) {
       return _.isFunction(condition) ?
-      condition(req, res) :
-      condition.value === (req.form.values[condition.field] ||
+        condition(req, res) :
+        condition.value === (req.form.values[condition.field] ||
                            (req.form.historicalValues && req.form.historicalValues[condition.field]));
     }
 

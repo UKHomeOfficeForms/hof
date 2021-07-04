@@ -3,7 +3,6 @@
 const ErrorClass = require('../../../controller/validation-error');
 
 describe('Error', () => {
-
   it('sets its key property to the key passed', () => {
     const err = new ErrorClass('field', { type: 'type' });
     err.key.should.equal('field');
@@ -23,5 +22,4 @@ describe('Error', () => {
     const err = new ErrorClass('field', { type: 'maxlength', arguments: [10] });
     err.arguments.should.eql([10]);
   });
-
 });

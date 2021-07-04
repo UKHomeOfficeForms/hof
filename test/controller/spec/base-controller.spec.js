@@ -9,7 +9,6 @@ const _ = require('lodash');
 const EventEmitter = require('events').EventEmitter;
 
 describe('Form Controller', () => {
-
   beforeEach(() => {
     sinon.spy(EventEmitter.prototype, 'emit');
   });
@@ -76,7 +75,6 @@ describe('Form Controller', () => {
     });
 
     describe('returned function', () => {
-
       it('calls form.get in response to get requests', () => {
         req.method = 'GET';
         handler = form.requestHandler();
@@ -142,13 +140,10 @@ describe('Form Controller', () => {
           done();
         });
       });
-
     });
-
   });
 
   describe('configure', () => {
-
     let form;
     let req;
     let res;
@@ -210,11 +205,9 @@ describe('Form Controller', () => {
       req.form.options.fields.field.should.equal('mutated');
       form.options.fields.field.should.equal('name');
     });
-
   });
 
   describe('get', () => {
-
     let form;
     let req;
     let res;
@@ -316,11 +309,9 @@ describe('Form Controller', () => {
       form.get(req, res, cb);
       values.should.eql({ values: [1] });
     });
-
   });
 
   describe('post', () => {
-
     let form;
     let req;
     let res;
@@ -334,7 +325,9 @@ describe('Form Controller', () => {
         fields: {
           field: { formatter: 'uppercase', validate: 'required' },
           email: { validate: ['required', 'email'] },
-          name: { validate: ['required', { type: 'minlength', arguments: [10] }, { type: 'maxlength', arguments: 20 }] },
+          name: {
+            validate: ['required', { type: 'minlength', arguments: [10] }, { type: 'maxlength', arguments: 20 }]
+          },
           place: { validate: 'required' },
           bool: { formatter: 'boolean' },
           options: { options: ['one', { value: 'two' }, 'three'] }
@@ -525,7 +518,6 @@ describe('Form Controller', () => {
     });
 
     describe('valid inputs', () => {
-
       it('calls form.saveValues', () => {
         form.post(req, res, cb);
         form.saveValues.should.have.been.calledWith(req, res);
@@ -543,11 +535,9 @@ describe('Form Controller', () => {
         form.post(req, res, cb);
         cb.should.have.been.calledWith({ error: true });
       });
-
     });
 
     describe('invalid inputs', () => {
-
       it('calls callback with validation errors matching failed validation type', () => {
         validators.email.returns(false);
         req.body.email = 'foo';
@@ -602,11 +592,9 @@ describe('Form Controller', () => {
           done();
         });
       });
-
     });
 
     describe('invalid form-level validation', () => {
-
       beforeEach(() => {
         Form.prototype.validate.yields({ field: 'invalid' });
       });
@@ -615,13 +603,10 @@ describe('Form Controller', () => {
         form.post(req, res, cb);
         cb.should.have.been.calledWith({ field: 'invalid' });
       });
-
     });
-
   });
 
   describe('render', () => {
-
     let form;
     let req;
     let res;
@@ -649,7 +634,6 @@ describe('Form Controller', () => {
     });
 
     it('throws an error if no template provided', () => {
-      const err = new Error('A template must be provided');
       req.form.options.template = undefined;
       form.render(req, res, cb);
       cb.should.have.been.calledOnce;
@@ -658,7 +642,6 @@ describe('Form Controller', () => {
       expect(errArg).to.be.instanceof(Error);
       expect(errArg.message).to.equal('A template must be provided');
     });
-
   });
 
   describe('getNextStep', () => {
@@ -707,9 +690,7 @@ describe('Form Controller', () => {
         req.baseUrl = '/base';
         form.getNextStep(req, res).should.be.equal('/base/fork');
       });
-
     });
-
   });
 
   describe('getForkTarget', () => {
@@ -730,7 +711,7 @@ describe('Form Controller', () => {
     it('calls _getForkTarget with req and res', () => {
       form.getForkTarget(req, res);
       Form.prototype._getForkTarget.should.have.been.calledOnce
-      .and.calledWithExactly(req, res);
+        .and.calledWithExactly(req, res);
     });
   });
 
@@ -818,9 +799,7 @@ describe('Form Controller', () => {
     it('returns the fork target if the condition function is met', () => {
       req.form.options.forks = [{
         target: '/target-page',
-        condition: () => {
-          return true;
-        }
+        condition: () => true
       }];
       form._getForkTarget(req, {}).should.contain('/target-page');
     });
@@ -828,17 +807,13 @@ describe('Form Controller', () => {
     it('returns the original next target if the condition function is not met', () => {
       req.form.options.forks = [{
         target: '/target-page',
-        condition: () => {
-          return false;
-        }
+        condition: () => false
       }];
       form._getForkTarget(req, {}).should.equal('/next-page');
     });
 
     describe('with more than one fork', () => {
-
       describe('when the fields are the same', () => {
-
         beforeEach(() => {
           req.form.values = {
             'example-radio': 'condition-met'
@@ -861,11 +836,9 @@ describe('Form Controller', () => {
         it('retuns the last forks\' target if each condition is met', () => {
           form._getForkTarget(req, {}).should.contain('/target-page-2');
         });
-
       });
 
       describe('when the fields are different', () => {
-
         beforeEach(() => {
           req.form.options.forks = [{
             target: '/target-page',
@@ -889,11 +862,8 @@ describe('Form Controller', () => {
           };
           form._getForkTarget(req, {}).should.contain('/target-page-2');
         });
-
       });
-
     });
-
   });
 
   describe('successHandler', () => {
@@ -923,11 +893,9 @@ describe('Form Controller', () => {
       form.emit.withArgs('complete').should.have.been.calledOn(form);
       form.emit.should.have.been.calledWithExactly('complete', req, res);
     });
-
   });
 
   describe('errorHandler', () => {
-
     let form;
     let req;
     let res;
@@ -990,13 +958,10 @@ describe('Form Controller', () => {
       cb.should.have.been.calledOnce;
       cb.should.have.been.calledWith(err);
     });
-
   });
 
   describe('_validate', () => {
-
     describe('sharing of errors defined with validator groups', () => {
-
       let form;
       let req;
       let res;
@@ -1009,17 +974,17 @@ describe('Form Controller', () => {
           fields: {
             'is-thing-a': {
               validate: [
-                { 'type': 'required', 'group': 'is-thing' }
+                { type: 'required', group: 'is-thing' }
               ]
             },
             'is-thing-b': {
               validate: [
-                { 'type': 'required', 'group': 'is-thing' }
+                { type: 'required', group: 'is-thing' }
               ]
             },
             'is-thing-c': {
               validate: [
-                { 'type': 'required' }
+                { type: 'required' }
               ]
             }
           }
@@ -1040,18 +1005,16 @@ describe('Form Controller', () => {
         form._configure(req, res, done);
       });
 
-      it('should *only* place errors against a single error key if the validator that created them belongs to a group', () => {
+      it('should *only* place errors against a single key if creating validator belongs to a group', () => {
         form._validate(req, res, cb);
         cb.should.be.calledWith(sinon.match({
-          'is-thing': new FormError('is-thing', { 'type': 'required' }),
-          'is-thing-c': new FormError('is-thing-c', { 'type': 'required' })
+          'is-thing': new FormError('is-thing', { type: 'required' }),
+          'is-thing-c': new FormError('is-thing-c', { type: 'required' })
         }));
       });
-
     });
 
     describe('dependent fields', () => {
-
       let form;
       let req;
       let res;
@@ -1240,9 +1203,6 @@ describe('Form Controller', () => {
         form._validate(req, res, cb);
         cb.should.have.been.calledWith();
       });
-
     });
-
   });
-
 });

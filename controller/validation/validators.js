@@ -34,7 +34,7 @@ module.exports = Validators = {
   },
 
   notUrl(value) {
-      return value === '' || !(Validators.url(value));
+    return value === '' || !(Validators.url(value));
   },
 
   email(value) {
@@ -55,8 +55,7 @@ module.exports = Validators = {
   },
 
   minlength(value, length) {
-    length = length || 0;
-    return Validators.string(value) && (value === '' || value.length >= length);
+    return Validators.string(value) && (value === '' || value.length >= (length || 0));
   },
 
   maxlength(value, length) {
@@ -75,9 +74,9 @@ module.exports = Validators = {
     return Validators.regex(value, /^\d*$/);
   },
 
-  equal(value) {
+  equal(v) {
     const values = [].slice.call(arguments, 1);
-    value = _.castArray(value);
+    const value = _.castArray(v);
     return values.length && _.every(value, item =>
       item === '' || values.indexOf(item) > -1
     );
@@ -94,8 +93,7 @@ module.exports = Validators = {
    * Non-GB phone numbers will require country code to validate.
    */
   internationalPhoneNumber(value) {
-    let phoneNumber;
-    phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, 'GB') || '';
+    const phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, 'GB') || '';
     return value === '' || (phoneNumber && phoneNumber.isValid());
   },
 

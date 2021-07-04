@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 'use strict';
 
 const Validators = require('../../../controller').validators;
@@ -24,7 +25,6 @@ describe('Validators', () => {
   });
 
   describe('required', () => {
-
     describe('invalid values', () => {
       const inputs = [
         undefined,
@@ -54,7 +54,6 @@ describe('Validators', () => {
   });
 
   describe('url', () => {
-
     describe('invalid values', () => {
       const inputs = [
         true,
@@ -86,7 +85,6 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('notUrl', () => {
@@ -127,7 +125,6 @@ describe('Validators', () => {
   });
 
   describe('email', () => {
-
     describe('invalid values', () => {
       const inputs = [
         10,
@@ -165,11 +162,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('minlength', () => {
-
     describe('invalid values', () => {
       const inputs = [
         [undefined, 1],
@@ -196,11 +191,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('maxlength', () => {
-
     describe('invalid values', () => {
       const inputs = [
         [undefined, 1],
@@ -228,11 +221,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('exactlength', () => {
-
     describe('invalid values', () => {
       const inputs = [
         [undefined, 9],
@@ -257,11 +248,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('equal', () => {
-
     describe('invalid values', () => {
       const inputs = [
         ['1', 1],
@@ -293,11 +282,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('phonenumber', () => {
-
     describe('invalid values', () => {
       const inputs = [
         123,
@@ -334,7 +321,7 @@ describe('Validators', () => {
   });
 
   describe('internationalPhoneNumber', () => {
-    describe('invalid values', function() {
+    describe('invalid values', function () {
       const inputs = [
         '123',
         'abc',
@@ -351,7 +338,7 @@ describe('Validators', () => {
       });
     });
 
-    describe('valid values', function() {
+    describe('valid values', function () {
       const inputs = [
         '',
         '02079460000',
@@ -375,7 +362,6 @@ describe('Validators', () => {
   });
 
   describe('ukmobilephone', () => {
-
     describe('invalid values', () => {
       const inputs = [
         '+447812123456',
@@ -410,11 +396,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('date', () => {
-
     describe('invalid values', () => {
       const inputs = [
         'abc',
@@ -442,11 +426,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('date-year', () => {
-
     describe('invalid values', () => {
       const inputs = [
         '',
@@ -478,11 +460,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('date-month', () => {
-
     describe('invalid values', () => {
       const inputs = [
         '',
@@ -512,7 +492,6 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('date-day', () => {
@@ -546,11 +525,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('before', () => {
-
     // note date is set to 2014-11-05T15:09:00Z in all tests
 
     describe('invalid values', () => {
@@ -593,11 +570,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('after', () => {
-
     // note date is set to 2014-11-05T15:09:00Z in all tests
 
     describe('invalid values', () => {
@@ -636,11 +611,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('alphanum', () => {
-
     describe('invalid values', () => {
       const inputs = [
         null,
@@ -667,11 +640,9 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('numeric', () => {
-
     describe('invalid values', () => {
       const inputs = [
         null,
@@ -698,7 +669,6 @@ describe('Validators', () => {
         });
       });
     });
-
   });
 
   describe('min', () => {
@@ -855,7 +825,7 @@ describe('Validators', () => {
           }]
         },
         'field-2': {
-          validate: [function() {
+          validate: [function () {
             return true;
           }]
         },

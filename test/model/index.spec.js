@@ -1,3 +1,4 @@
+/* eslint-disable node/no-deprecated-api */
 'use strict';
 
 const url = require('url');
@@ -12,15 +13,13 @@ describe('Model', () => {
   let fail;
   let invalid;
 
-  const sandbox = (assertions, done) => {
-    return function testAssertions() {
-      try {
-        assertions.apply(this, arguments);
-        done();
-      } catch (err) {
-        done(err);
-      }
-    };
+  const sandbox = (assertions, done) => function () {
+    try {
+      assertions.apply(this, arguments);
+      done();
+    } catch (err) {
+      done(err);
+    }
   };
 
   beforeEach(() => {
@@ -71,22 +70,20 @@ describe('Model', () => {
   });
 
   describe('constructor', () => {
-
     it('sets attributes passed to self silently', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       class EventedModel extends Model {
         constructor(attrs, options) {
           super(attrs, options);
           this.on('change', listener);
         }
       }
-      var eventedModel = new EventedModel({
+      const eventedModel = new EventedModel({
         prop: 'value'
       });
       listener.should.not.have.been.called;
       eventedModel.get('prop').should.equal('value');
     });
-
   });
 
   describe('request', () => {
@@ -107,12 +104,11 @@ describe('Model', () => {
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
 
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('POST');
         options.uri.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
-
     });
 
     it('sends an http POST request to requested url with data passed as argument', done => {
@@ -121,7 +117,7 @@ describe('Model', () => {
       model.request(settings, bodyData, sandbox(() => {
         model._request.should.have.been.calledOnce;
 
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('POST');
         options.uri.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
@@ -147,7 +143,7 @@ describe('Model', () => {
 
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('GET');
         options.uri.should.equal('http://example.com:3002/foo/bar');
         expect(options.body).to.not.be.ok;
@@ -159,7 +155,7 @@ describe('Model', () => {
 
       model.request(settings, bodyData, sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('POST');
         options.uri.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
@@ -171,7 +167,7 @@ describe('Model', () => {
 
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('POST');
         options.uri.should.equal('http://example.com:3002/foo/bar');
         expect(options.body).to.not.be.ok;
@@ -184,7 +180,7 @@ describe('Model', () => {
 
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.timeout.should.equal(100);
       }, done));
     });
@@ -195,7 +191,7 @@ describe('Model', () => {
 
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.timeout.should.equal(100);
       }, done));
     });
@@ -203,11 +199,9 @@ describe('Model', () => {
     it('returns a promise if no callback is provided', () => {
       model.request(settings).should.be.a('promise');
     });
-
   });
 
   describe('save', () => {
-
     beforeEach(() => {
       model.set('name', 'Test name');
       model.url = () => 'http://example.com:3002/foo/bar';
@@ -218,7 +212,7 @@ describe('Model', () => {
 
       model.save(sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('POST');
         options.uri.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
@@ -231,11 +225,11 @@ describe('Model', () => {
 
       model.save(sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('POST');
         options.uri.should.equal('https://secure-example.com/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
-     }, done));
+      }, done));
     });
 
     it('sends an http PUT request if method option is "PUT"', done => {
@@ -243,7 +237,7 @@ describe('Model', () => {
 
       model.save({ method: 'PUT' }, sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('PUT');
         options.uri.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
@@ -256,7 +250,7 @@ describe('Model', () => {
 
       model.save(sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.headers['Content-Type'].should.equal('application/json');
         options.headers['Content-Length'].should.equal(38);
       }, done));
@@ -298,7 +292,7 @@ describe('Model', () => {
     it('does not parse response on error', done => {
       model._request.yieldsAsync(null, fail);
       sinon.stub(model, 'parse');
-      model.save(sandbox((err) => {
+      model.save(sandbox(err => {
         model.parse.should.not.have.been.called;
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
       }, done));
@@ -341,7 +335,7 @@ describe('Model', () => {
     });
 
     it('can handle a parsed URL object', done => {
-      var urlStub = {
+      const urlStub = {
         protocol: 'http:',
         port: '1234',
         hostname: 'proxy-example.com',
@@ -367,8 +361,8 @@ describe('Model', () => {
     });
 
     it('allows optional headers', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
-      var options = {
+      const endPoint = url.parse('http://proxy-example.com:1234');
+      const options = {
         headers: {
           'User-Agent': 'Example'
         }
@@ -382,7 +376,7 @@ describe('Model', () => {
     });
 
     it('allows custom headers', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
+      const endPoint = url.parse('http://proxy-example.com:1234');
       endPoint.headers = {
         Host: url.parse('http://example.com/').host
       };
@@ -395,13 +389,13 @@ describe('Model', () => {
     });
 
     it('allows optional headers on the instance', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
-      var options = {
+      const endPoint = url.parse('http://proxy-example.com:1234');
+      const options = {
         headers: {
           'User-Agent': 'Example'
         }
       };
-      var instance = new Model({}, options);
+      const instance = new Model({}, options);
       instance.url = sinon.stub().returns(endPoint);
       instance._request = sinon.stub().yieldsAsync(success);
       instance.save(sandbox(() => {
@@ -423,8 +417,8 @@ describe('Model', () => {
       }, done));
     });
 
-    it('emits a "sync" event', (done) => {
-      var sync = sinon.stub();
+    it('emits a "sync" event', done => {
+      const sync = sinon.stub();
       model.on('sync', sync);
       model._request.yieldsAsync(null, success);
       model.save(sandbox(() => {
@@ -504,11 +498,10 @@ describe('Model', () => {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
       });
     });
-
   });
 
   describe('fetch', () => {
-    var callback;
+    let callback;
 
     beforeEach(() => {
       callback = sinon.stub();
@@ -520,7 +513,7 @@ describe('Model', () => {
 
       model.fetch(sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('GET');
         options.uri.should.equal('http://example.com:3002/foo/bar');
       }, done));
@@ -587,7 +580,7 @@ describe('Model', () => {
     });
 
     it('can handle a parsed URL object', done => {
-      var urlStub = {
+      const urlStub = {
         protocol: 'http:',
         port: '1234',
         hostname: 'proxy-example.com',
@@ -602,8 +595,8 @@ describe('Model', () => {
     });
 
     it('allows optional headers', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
-      var options = {
+      const endPoint = url.parse('http://proxy-example.com:1234');
+      const options = {
         headers: {
           'User-Agent': 'Example'
         }
@@ -616,7 +609,7 @@ describe('Model', () => {
     });
 
     it('allows custom headers', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
+      const endPoint = url.parse('http://proxy-example.com:1234');
       endPoint.headers = {
         Host: url.parse('http://example.com/').host
       };
@@ -628,13 +621,13 @@ describe('Model', () => {
     });
 
     it('allows optional headers on the instance', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
-      var options = {
+      const endPoint = url.parse('http://proxy-example.com:1234');
+      const options = {
         headers: {
           'User-Agent': 'Example'
         }
       };
-      var instance = new Model({}, options);
+      const instance = new Model({}, options);
       instance.url = sinon.stub().returns(endPoint);
       instance._request = sinon.stub().yieldsAsync(success);
       instance.fetch(sandbox(() => {
@@ -666,7 +659,7 @@ describe('Model', () => {
     });
 
     it('emits a "sync" event', () => {
-      var sync = sinon.stub();
+      const sync = sinon.stub();
       model.on('sync', sync);
       model.fetch(() => {});
       sync.should.have.been.calledOnce;
@@ -761,8 +754,7 @@ describe('Model', () => {
   });
 
   describe('delete', () => {
-
-    var callback;
+    let callback;
 
     beforeEach(() => {
       callback = sinon.stub();
@@ -774,7 +766,7 @@ describe('Model', () => {
 
       model.delete(sandbox(() => {
         model._request.should.have.been.calledOnce;
-        var options = model._request.args[0][0];
+        const options = model._request.args[0][0];
         options.method.should.equal('DELETE');
         options.uri.should.equal('http://example.com:3002/foo/bar');
       }, done));
@@ -841,7 +833,7 @@ describe('Model', () => {
     });
 
     it('can handle a parsed URL object', done => {
-      var urlStub = {
+      const urlStub = {
         protocol: 'http:',
         port: '1234',
         hostname: 'proxy-example.com',
@@ -856,8 +848,8 @@ describe('Model', () => {
     });
 
     it('allows optional headers', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
-      var options = {
+      const endPoint = url.parse('http://proxy-example.com:1234');
+      const options = {
         headers: {
           'User-Agent': 'Example'
         }
@@ -870,7 +862,7 @@ describe('Model', () => {
     });
 
     it('allows custom headers', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
+      const endPoint = url.parse('http://proxy-example.com:1234');
       endPoint.headers = {
         Host: url.parse('http://example.com/').host
       };
@@ -882,13 +874,13 @@ describe('Model', () => {
     });
 
     it('allows optional headers on the instance', done => {
-      var endPoint = url.parse('http://proxy-example.com:1234');
-      var options = {
+      const endPoint = url.parse('http://proxy-example.com:1234');
+      const options = {
         headers: {
           'User-Agent': 'Example'
         }
       };
-      var instance = new Model({}, options);
+      const instance = new Model({}, options);
       instance.url = sinon.stub().returns(endPoint);
       instance._request = sinon.stub().yieldsAsync(success);
       instance.delete(sandbox(() => {
@@ -908,7 +900,7 @@ describe('Model', () => {
     });
 
     it('emits a "sync" event', () => {
-      var sync = sinon.stub();
+      const sync = sinon.stub();
       model.on('sync', sync);
       model.delete(() => {});
       sync.should.have.been.calledOnce;
@@ -990,7 +982,6 @@ describe('Model', () => {
   });
 
   describe('parseResponse', () => {
-
     beforeEach(() => {
       sinon.stub(model, 'parse').returns({ parsed: 'true' });
       sinon.stub(model, 'parseError').returns({ error: 'true' });
@@ -1014,11 +1005,9 @@ describe('Model', () => {
         done();
       });
     });
-
   });
 
   describe('prepare', () => {
-
     beforeEach(() => {
       sinon.stub(model, 'toJSON').returns({ name: 'Test name' });
     });
@@ -1027,15 +1016,12 @@ describe('Model', () => {
       model.toJSON.restore();
     });
 
-    it('resolves with json', () => {
-      return model.prepare().then(data => {
-        data.should.eql({ name: 'Test name' });
-      });
-    });
+    it('resolves with json', () => model.prepare().then(data => {
+      data.should.eql({ name: 'Test name' });
+    }));
   });
 
   describe('get', () => {
-
     beforeEach(() => {
       model.attributes = {
         name: 'Test name'
@@ -1055,7 +1041,6 @@ describe('Model', () => {
   });
 
   describe('set', () => {
-
     beforeEach(() => {
       model.attributes = {
         name: 'Test name'
@@ -1077,7 +1062,7 @@ describe('Model', () => {
     });
 
     it('emits a change event with the changed attributes', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('change', listener);
       model.set({
         foo: 'bar',
@@ -1091,7 +1076,7 @@ describe('Model', () => {
     });
 
     it('does not pass unchanged attributes to listener', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.set({
         foo: 'bar',
         bar: 'baz'
@@ -1107,7 +1092,7 @@ describe('Model', () => {
     });
 
     it('emits property specific change events', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('change:prop', listener);
       model.set('prop', 'value');
       listener.should.have.been.calledOnce;
@@ -1122,19 +1107,17 @@ describe('Model', () => {
     });
 
     it('does not emit events if silent option is set to true', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('change', listener);
       model.on('change:prop', listener);
       model.set('prop', 'value', { silent: true });
       listener.should.not.have.been.called;
-      model.set({ 'prop': 'value' }, { silent: true });
+      model.set({ prop: 'value' }, { silent: true });
       listener.should.not.have.been.called;
     });
-
   });
 
   describe('unset', () => {
-
     beforeEach(() => {
       model.set({
         a: 1,
@@ -1159,7 +1142,7 @@ describe('Model', () => {
     });
 
     it('emits a change event', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('change', listener);
       model.unset('a');
       listener.should.have.been.calledOnce;
@@ -1167,7 +1150,7 @@ describe('Model', () => {
     });
 
     it('emits property-specific change events', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('change:a', listener);
       model.unset('a');
       listener.should.have.been.calledOnce;
@@ -1175,26 +1158,24 @@ describe('Model', () => {
     });
 
     it('emits no events if passed silent: true', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('change', listener);
       model.on('change:a', listener);
       model.unset('a', { silent: true });
       listener.should.not.have.been.called;
     });
-
   });
 
   describe('increment', () => {
-
     it('throws if no property is defined', () => {
-      var fn = () => {
+      const fn = () => {
         model.increment();
       };
       fn.should.throw();
     });
 
     it('throws if property is not a string', () => {
-      var fn = () => {
+      const fn = () => {
         model.increment({});
       };
       fn.should.throw();
@@ -1216,11 +1197,9 @@ describe('Model', () => {
       model.increment('value');
       model.get('value').should.equal(1);
     });
-
   });
 
   describe('reset', () => {
-
     beforeEach(() => {
       model.set({
         name: 'John',
@@ -1236,15 +1215,15 @@ describe('Model', () => {
     });
 
     it('emits reset event', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('reset', listener);
       model.reset();
       listener.should.have.been.calledOnce;
     });
 
     it('emits property change events', () => {
-      var listener1 = sinon.stub();
-      var listener2 = sinon.stub();
+      const listener1 = sinon.stub();
+      const listener2 = sinon.stub();
       model.on('change:name', listener1);
       model.on('change:age', listener2);
       model.reset();
@@ -1255,18 +1234,16 @@ describe('Model', () => {
     });
 
     it('emits no events if called with silent: true', () => {
-      var listener = sinon.stub();
+      const listener = sinon.stub();
       model.on('reset', listener);
       model.on('change:name', listener);
       model.on('change:age', listener);
       model.reset({ silent: true });
       listener.should.not.have.been.called;
     });
-
   });
 
   describe('toJSON', () => {
-
     beforeEach(() => {
       model.attributes = {
         name: 'Test name'
@@ -1281,7 +1258,6 @@ describe('Model', () => {
   });
 
   describe('url', () => {
-
     it('returns options.url by default', () => {
       model.url({ url: 'http://example.com/' }).should.equal('http://example.com/');
     });
@@ -1293,7 +1269,7 @@ describe('Model', () => {
     });
 
     it('extends url passed with options', () => {
-      var output = model.url({
+      const output = model.url({
         url: 'http://example.com',
         query: {
           foo: 'bar'
@@ -1302,24 +1278,18 @@ describe('Model', () => {
       });
       output.should.equal('http://example.com:3000/?foo=bar');
     });
-
   });
 
   describe('parse', () => {
-
     it('returns data passed', () => {
       model.parse({ data: 1 }).should.eql({ data: 1 });
     });
-
   });
 
   describe('parseError', () => {
-
     it('returns data passed extednded with the status code', () => {
       model.parseError(500, { data: 1 }).should.eql({ status: 500, data: 1 });
       model.parseError(400, { data: 'message' }).should.eql({ status: 400, data: 'message' });
     });
-
   });
-
 });

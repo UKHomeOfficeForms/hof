@@ -2,7 +2,8 @@
 
 const _ = require('lodash');
 
-function format(f, value, formatters) {
+function format(f, val, formatters) {
+  let value = val;
   if (typeof f === 'string' && formatters[f]) {
     return formatters[f](value);
   } else if (typeof f === 'function') {
@@ -15,9 +16,9 @@ function format(f, value, formatters) {
   return value;
 }
 
-module.exports = (fields, _default, formatters) => (key, value) => {
-  formatters = formatters || require('./formatters');
-  value = _.castArray(value);
+module.exports = (fields, _default, f) => (key, v) => {
+  const formatters = f || require('./formatters');
+  let value = _.castArray(v);
   if (_default && !(fields[key] && fields[key]['ignore-defaults'])) {
     value = value.map(item => format(_default, item, formatters));
   }

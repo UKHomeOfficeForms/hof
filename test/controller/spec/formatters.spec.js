@@ -22,7 +22,6 @@ function testStringFormatter(name, values) {
 }
 
 describe('Formatters', () => {
-
   describe('boolean', () => {
     it('formats inputs correctly', () => {
       Formatters.boolean(true).should.equal(true);
@@ -37,26 +36,26 @@ describe('Formatters', () => {
   });
 
   testStringFormatter('trim', {
-    'nospace': 'nospace',
+    nospace: 'nospace',
     '  lspace': 'lspace',
     'rspace  ': 'rspace',
     ' mid space ': 'mid space'
   });
 
   testStringFormatter('uppercase', {
-    'lowercase': 'LOWERCASE',
-    'UPPERCASE': 'UPPERCASE',
-    'MixedCase': 'MIXEDCASE'
+    lowercase: 'LOWERCASE',
+    UPPERCASE: 'UPPERCASE',
+    MixedCase: 'MIXEDCASE'
   });
 
   testStringFormatter('lowercase', {
-    'lowercase': 'lowercase',
-    'UPPERCASE': 'uppercase',
-    'MixedCase': 'mixedcase'
+    lowercase: 'lowercase',
+    UPPERCASE: 'uppercase',
+    MixedCase: 'mixedcase'
   });
 
   testStringFormatter('removespaces', {
-    'nospace': 'nospace',
+    nospace: 'nospace',
     '  lspace': 'lspace',
     'rspace  ': 'rspace',
     ' mid space ': 'midspace',
@@ -64,7 +63,7 @@ describe('Formatters', () => {
   });
 
   testStringFormatter('singlespaces', {
-    'nospace': 'nospace',
+    nospace: 'nospace',
     '  lspace': ' lspace',
     'rspace  ': 'rspace ',
     ' mid space ': ' mid space ',
@@ -72,26 +71,26 @@ describe('Formatters', () => {
   });
 
   testStringFormatter('hyphens', {
-    'nohyphen': 'nohyphen',
+    nohyphen: 'nohyphen',
     'hyphen–one': 'hyphen-one',
     'hyphen—two': 'hyphen-two',
     '-—–—-multiple-—–—-hyphens-—–—-': '-multiple-hyphens-'
   });
 
   testStringFormatter('removeroundbrackets', {
-    'nobrackets': 'nobrackets',
+    nobrackets: 'nobrackets',
     '(brackets)': 'brackets'
   });
 
   testStringFormatter('removehyphens', {
-    'nohyphen': 'nohyphen',
+    nohyphen: 'nohyphen',
     'hyphen–one': 'hyphenone',
     'hyphen—two': 'hyphentwo',
     '-—–—-multiple-—–—-hyphens-—–—-': 'multiplehyphens'
   });
 
   testStringFormatter('removeslashes', {
-    'noslashes': 'noslashes',
+    noslashes: 'noslashes',
     '/forward/slashes': 'forwardslashes',
     '\\back\\slashes': 'backslashes'
   });
@@ -111,5 +110,4 @@ describe('Formatters', () => {
       Formatters.base64decode('YWJjMTIz').should.equal('abc123');
     });
   });
-
 });

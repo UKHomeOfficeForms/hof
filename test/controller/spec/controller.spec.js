@@ -6,10 +6,9 @@ const request = require('reqres').req;
 const proxyquire = require('proxyquire');
 const ErrorClass = require('../../../controller/validation-error');
 
-let BaseController = require('../../../controller/base-controller');
+const BaseController = require('../../../controller/base-controller');
 
 describe('controller', () => {
-
   let Controller;
   let controller;
 
@@ -32,7 +31,6 @@ describe('controller', () => {
   });
 
   describe('methods', () => {
-
     beforeEach(() => {
       sinon.stub(BaseController.prototype, 'getNextStep');
     });
@@ -80,7 +78,6 @@ describe('controller', () => {
         controller.get(req, res, _.noop);
         controller.options.template.should.be.equal('default-template');
       });
-
     });
 
     describe('.getBackLink()', () => {
@@ -139,11 +136,10 @@ describe('controller', () => {
     });
 
     describe('.locals()', () => {
-
       let req;
       let res;
 
-      beforeEach((done) => {
+      beforeEach(done => {
         req = {
           form: {
             errors: {}
@@ -219,7 +215,10 @@ describe('controller', () => {
         it('should have added a fields array to return object', () => {
           locals.should.have.property('fields').and.be.an('array');
           locals.fields[0].should.be.eql(Object.assign({}, req.form.options.fields['a-field'], { key: 'a-field' }));
-          locals.fields[1].should.be.eql(Object.assign({}, req.form.options.fields['another-field'], { key: 'another-field' }));
+          locals.fields[1].should.be.eql(Object.assign({},
+            req.form.options.fields['another-field'],
+            { key: 'another-field' }
+          ));
         });
       });
 
@@ -243,7 +242,7 @@ describe('controller', () => {
               }
             },
             locals: {
-              test: 'bar',
+              test: 'bar'
             },
             route: '/baz'
           };
@@ -260,7 +259,7 @@ describe('controller', () => {
       let res;
       let getStub;
 
-      beforeEach((done) => {
+      beforeEach(done => {
         getStub = sinon.stub();
         getStub.returns(['/']);
         req = request();
@@ -271,8 +270,8 @@ describe('controller', () => {
         };
         controller = new Controller({template: 'foo'});
         BaseController.prototype.getNextStep.returns('/');
-        BaseController.prototype.getValues = function(myReq, myRes, callback) {
-            callback();
+        BaseController.prototype.getValues = function (myReq, myRes, callback) {
+          callback();
         };
         controller._configure(req, res, done);
       });
@@ -323,7 +322,6 @@ describe('controller', () => {
         });
 
         describe('when the condition config is met', () => {
-
           it('the next step is the fork target', () => {
             req.form.values['example-radio'] = 'superman';
             req.form.options.forks = [{
@@ -407,7 +405,6 @@ describe('controller', () => {
         });
 
         describe('when the condition is => not met', () => {
-
           it('the next step is the origin next target', () => {
             req.form.values['example-radio'] = 'superman';
             req.form.options.forks = [{
@@ -526,13 +523,10 @@ describe('controller', () => {
             controller.getNextStep(req).should.contain('/next-page');
           });
         });
-
       });
 
       describe('with more than one fork', () => {
-
         describe('when the fields are the same', () => {
-
           beforeEach(() => {
             req.form.values = {
               'example-radio': 'superman'
@@ -557,11 +551,9 @@ describe('controller', () => {
               controller.getNextStep(req, {}).should.contain('/batman-page');
             });
           });
-
         });
 
         describe('when the fields are different', () => {
-
           beforeEach(() => {
             req.form.options.forks = [{
               target: '/superman-page',
@@ -601,10 +593,8 @@ describe('controller', () => {
               controller.getNextStep(req, {}).should.contain('/superman-page');
             });
           });
-
         });
       });
-
     });
 
     describe('.getErrorStep()', () => {
@@ -612,7 +602,7 @@ describe('controller', () => {
       const res = {};
       const err = {};
 
-      beforeEach((done) => {
+      beforeEach(done => {
         sinon.stub(BaseController.prototype, 'getErrorStep').returns('/');
         req.params = {};
         controller = new Controller({template: 'foo'});
@@ -635,7 +625,6 @@ describe('controller', () => {
           controller.getErrorStep(err, req).should.not.match(/\/edit$/);
         });
       });
-
     });
 
     describe('getTitle()', () => {
@@ -687,13 +676,11 @@ describe('controller', () => {
     });
 
     describe('getErrors', () => {
-
       let req;
       let res;
       let errors;
 
       beforeEach(() => {
-
         errors = {
           key1: {
             key: 'key1',
@@ -723,14 +710,14 @@ describe('controller', () => {
         controller.getErrorMessage.restore();
       });
 
-      it('sets response from `getErrors` onto req.form.errors', (done) => {
+      it('sets response from `getErrors` onto req.form.errors', done => {
         controller._getErrors(req, res, () => {
           req.form.errors.should.have.keys('key1', 'key2', 'key3');
           done();
         });
       });
 
-      it('adds a message property onto each error', (done) => {
+      it('adds a message property onto each error', done => {
         controller._getErrors(req, res, () => {
           req.form.errors.should.have.keys('key1', 'key2', 'key3');
 
@@ -748,7 +735,6 @@ describe('controller', () => {
           done();
         });
       });
-
     });
 
     describe('getErrorLength', () => {
@@ -785,11 +771,9 @@ describe('controller', () => {
       it('returns undefined if no errors are present', () => {
         expect(controller.getErrorLength(req, res)).to.equal(undefined);
       });
-
     });
 
     describe('getErrorMessage', () => {
-
       let req;
       let res;
 
@@ -844,7 +828,8 @@ describe('controller', () => {
       });
 
       it('populates minlength messages with the minimum length', () => {
-        req.translate.withArgs('validation.key.minlength').returns('This must be no more than {{minlength}} characters');
+        const message = 'This must be no more than {{minlength}} characters';
+        req.translate.withArgs('validation.key.minlength').returns(message);
         const error = new ErrorClass('key', { type: 'minlength', arguments: [10] });
         controller.getErrorMessage(error, req, res).should.equal('This must be no more than 10 characters');
       });
@@ -879,9 +864,6 @@ describe('controller', () => {
         const error = new ErrorClass('key', { type: 'required' });
         controller.getErrorMessage(error, req, res).should.equal('This must be a value');
       });
-
     });
-
   });
-
 });

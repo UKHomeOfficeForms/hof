@@ -5,7 +5,8 @@ const debug = require('debug')('hmpo:validation');
 
 const validators = require('./validators');
 
-function applyValidator(validator, value, key) {
+function applyValidator(vlt, value, key) {
+  const validator = typeof vlt === 'string' ? { type: vlt } : vlt;
 
   function doValidate() {
     debug('Applying %s validator with value "%s"', validator.type, value);
@@ -28,14 +29,9 @@ function applyValidator(validator, value, key) {
     return undefined;
   }
 
-  if (typeof validator === 'string') {
-    validator = {
-      type: validator
-    };
-  }
   if (validators[validator.type]) {
     return doValidate();
-  } else if (typeof validator === 'function') {
+  } else if (typeof validator  === 'function') {
     if (validator.name) {
       return customValidate();
     }
@@ -46,7 +42,6 @@ function applyValidator(validator, value, key) {
 }
 
 function validate(fields) {
-
   _.each(fields, (field, key) => {
     if (typeof fields[key].validate === 'string') {
       fields[key].validate = [fields[key].validate];
@@ -66,7 +61,6 @@ function validate(fields) {
   // eslint-disable-next-line consistent-return
   return (key, value, values, emptyValue) => {
     debug(`Validating field: "${key}" with value: "${value}"`);
-    emptyValue = emptyValue === undefined ? '' : emptyValue;
 
     function shouldValidate() {
       let dependent = fields[key].dependent;
@@ -80,8 +74,8 @@ function validate(fields) {
       if (!dependent
         || (dependent && !fields[dependent.field])
         || (dependent && (Array.isArray(values[dependent.field])
-        ? values[dependent.field].indexOf(dependent.value) > -1
-        : values[dependent.field] === dependent.value))
+          ? values[dependent.field].indexOf(dependent.value) > -1
+          : values[dependent.field] === dependent.value))
       ) {
         return true;
       }
@@ -95,7 +89,7 @@ function validate(fields) {
           err || applyValidator(validator, value, key)
         , null);
       }
-      values[key] = emptyValue;
+      values[key] = emptyValue === undefined ? '' : emptyValue;
       debug('Skipping validation for field %s', key);
     }
   };

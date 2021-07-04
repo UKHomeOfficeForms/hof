@@ -1,3 +1,4 @@
+/* eslint-disable node/no-deprecated-api, no-param-reassign */
 'use strict';
 
 const _ = require('lodash');
@@ -7,11 +8,12 @@ const EventEmitter = require('events').EventEmitter;
 
 const REFERENCE = /^\$ref:/;
 
-function timeDiff(from, to, digits) {
+function timeDiff(from, to, d) {
+  let digits = d;
   if (digits === undefined) {
     digits = 3;
   }
-  let ms = (to[0] - from[0]) * 1e3 + (to[1] - from[1]) * 1e-6;
+  const ms = (to[0] - from[0]) * 1e3 + (to[1] - from[1]) * 1e-6;
   return +ms.toFixed(digits);
 }
 
@@ -75,7 +77,7 @@ module.exports = class Model extends EventEmitter {
   }
 
   requestConfig(options) {
-    var reqConf = this.url(options);
+    let reqConf = this.url(options);
     if (typeof reqConf === 'string') {
       reqConf = url.parse(reqConf);
     }
@@ -98,10 +100,10 @@ module.exports = class Model extends EventEmitter {
     settings = _.omit(settings, urlKeys, 'data', 'url');
     this.emit('sync', originalSettings);
 
-    const promise = Promise.resolve().then(() => this.auth()).then((authData) => {
+    const promise = Promise.resolve().then(() => this.auth()).then(authData => {
       settings.auth = authData;
       if (typeof settings.auth === 'string') {
-        let auth = settings.auth.split(':');
+        const auth = settings.auth.split(':');
         settings.auth = {
           user: auth.shift(),
           pass: auth.join(':'),
@@ -109,56 +111,53 @@ module.exports = class Model extends EventEmitter {
         };
       }
     })
-    .then(() => {
-      const startTime = process.hrtime();
-      let timeoutTimer;
+      .then(() => {
+        const startTime = process.hrtime();
+        let timeoutTimer;
 
-      return new Promise((resolve, reject) => {
-
-        const _callback = (err, data, statusCode) => {
-          if (timeoutTimer) {
-            clearTimeout(timeoutTimer);
-            timeoutTimer = null;
-          }
-
-          const endTime = process.hrtime();
-          const responseTime = timeDiff(startTime, endTime);
-
-          if (err) {
-            this.emit('fail', err, data, originalSettings, statusCode, responseTime);
-          } else {
-            this.emit('success', data, originalSettings, statusCode, responseTime);
-          }
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        };
-
-        this._request(settings, (err, response) => {
-
-          if (err) {
-            if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
-              err.message = 'Connection timed out';
-              err.status = 504;
+        return new Promise((resolve, reject) => {
+          const _callback = (err, data, statusCode) => {
+            if (timeoutTimer) {
+              clearTimeout(timeoutTimer);
+              timeoutTimer = null;
             }
-            err.status = err.status || (response && response.statusCode) || 503;
-            return _callback(err, null, err.status);
-          }
-          return this.handleResponse(response, (error, data, status) => {
-            if (error) {
-              error.headers = response.headers;
+
+            const endTime = process.hrtime();
+            const responseTime = timeDiff(startTime, endTime);
+
+            if (err) {
+              this.emit('fail', err, data, originalSettings, statusCode, responseTime);
+            } else {
+              this.emit('success', data, originalSettings, statusCode, responseTime);
             }
-            _callback(error, data, status);
+            if (err) {
+              reject(err);
+            } else {
+              resolve(data);
+            }
+          };
+
+          this._request(settings, (err, response) => {
+            if (err) {
+              if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
+                err.message = 'Connection timed out';
+                err.status = 504;
+              }
+              err.status = err.status || (response && response.statusCode) || 503;
+              return _callback(err, null, err.status);
+            }
+            return this.handleResponse(response, (error, data, status) => {
+              if (error) {
+                error.headers = response.headers;
+              }
+              _callback(error, data, status);
+            });
           });
         });
       });
 
-    });
-
     if (typeof callback === 'function') {
-      return promise.then((data) => callback(null, data), callback);
+      return promise.then(data => callback(null, data), callback);
     }
     return promise;
   }
@@ -227,9 +226,7 @@ module.exports = class Model extends EventEmitter {
     options = options || {};
 
     const old = this.toJSON();
-    const changed = _.pickBy(attrs, (attr, attrKey) => {
-      return attr !== old[attrKey] || attr !== this.attributes[attrKey];
-    });
+    const changed = _.pickBy(attrs, (attr, attrKey) => attr !== old[attrKey] || attr !== this.attributes[attrKey]);
 
     Object.assign(this.attributes, attrs);
 

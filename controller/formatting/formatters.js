@@ -52,7 +52,7 @@ module.exports = {
   },
 
   base64decode(value) {
-    return new Buffer(value, 'base64').toString();
+    return Buffer.from(value, 'base64').toString();
   }
 
 };
