@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "19.0.0-beta-v16",
+  "version": "19.0.0-beta-v19",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -80,7 +80,6 @@
     "concat-stream": "^1.4.7",
     "cookie-parser": "^1.4.3",
     "csv": "^5.3.2",
-    "debug": "^2.2.0",
     "eslint": "^7.29.0",
     "eslint-config-hof": "^1.0.4",
     "express-partial-templates": "^0.2.0",
