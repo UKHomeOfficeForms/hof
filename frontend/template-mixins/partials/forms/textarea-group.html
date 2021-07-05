@@ -1,0 +1,23 @@
+<div id="{{id}}-group" class="form-group{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} validation-error{{/error}}">
+    <label for="{{id}}" class="{{labelClassName}}">
+        {{{label}}}
+        {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="form-hint">{{hint}}</span>{{/hint}}
+        {{#error}}<span id="{{id}}-error" class="error-message">{{error.message}}</span>{{/error}}
+    </label>
+    {{#renderChild}}{{/renderChild}}
+    <textarea
+        name="{{id}}"
+        id="{{id}}"
+        class="form-control{{#className}} {{className}}{{/className}} {{#maxlength}}maxlength{{/maxlength}}{{#error}} invalid-input{{/error}}"
+        aria-required="{{required}}"
+        {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
+        {{#attributes}}
+            {{attribute}}="{{value}}"
+        {{/attributes}}
+        {{^error}}{{#hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint {{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
+        {{^error}}{{#hintId}}{{^maxlength}} aria-describedby="{{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
+        {{^error}}{{^hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint"{{/maxlength}}{{/hintId}}{{/error}}
+        {{#error}} aria-invalid="true" aria-describedby="{{id}}-error"{{/error}}
+    >{{value}}</textarea>
+    {{#maxlength}}<span id="{{id}}-maxlength-hint" class="maxlength-hint form-hint" aria-live="polite">You can enter up to {{maxlength}} characters</span>{{/maxlength}}
+</div>

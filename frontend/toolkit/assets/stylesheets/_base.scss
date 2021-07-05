@@ -1,0 +1,17 @@
+html {
+    background: $grey-3;
+}
+body {
+    background: $white;
+}
+.main-content {
+    img {
+        max-width: 100%;
+    }
+    .svg {
+        width: 100%;
+    }
+}
+.hmpo {
+    white-space: nowrap;
+}

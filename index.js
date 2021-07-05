@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const path = require('path');
 const http = require('http');
 const https = require('https');
-const mixins = require('hof-template-mixins');
+const mixins = require('./frontend').mixins;
 const hofMiddleware = require('./middleware');
 const markdown = require('./lib/markdown');
 const translate = require('i18n-future').middleware;
@@ -29,9 +29,9 @@ const getConfig = function () {
   const config = _.merge.apply(_, [{}, defaults, customConfig].concat(args));
 
   if (!config.theme) {
-    config.theme = require('hof-theme-govuk');
+    config.theme = require('./frontend').theme;
   } else if (typeof config.theme === 'string') {
-    config.theme = require(`hof-theme-${config.theme}`);
+    config.theme = require('./frontend')[config.theme];
   }
 
   config.markdown = config.markdown || {};
@@ -283,3 +283,4 @@ module.exports.model = require('./model');
 module.exports.wizard = require('./wizard');
 module.exports.components = require('./components');
 module.exports.utils = require('./utilities');
+module.exports.frontend = require('./frontend');

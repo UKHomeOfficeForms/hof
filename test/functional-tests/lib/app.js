@@ -2,11 +2,11 @@
 
 const express = require('express');
 const session = require('express-session');
-const mixins = require('hof-template-mixins');
+const mixins = require('../../../frontend').mixins;
 const hogan = require('hogan-express-strict');
 const bodyParser = require('body-parser');
 const partials = require('express-partial-templates');
-const template = require('hof-govuk-template');
+const template = require('../../../frontend').govUKTemplate;
 const cookieParser = require('cookie-parser');
 const mockPostcode = require('./mock-postcode');
 
@@ -14,7 +14,7 @@ const Wizard = require('../../../wizard');
 
 module.exports = config => {
   const app = express();
-  app.set('views', require('hof-template-partials').views);
+  app.set('views', require('../../../frontend').partials.views);
   app.set('view engine', 'html');
   app.engine('html', hogan);
   template.setup(app);

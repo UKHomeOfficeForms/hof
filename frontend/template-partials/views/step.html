@@ -1,0 +1,14 @@
+{{<partials-page}}
+  {{$page-content}}
+    {{#beforeFields}}
+      {{beforeFields}}
+    {{/beforeFields}}
+    {{#fields}}
+      {{#renderField}}{{/renderField}}
+    {{/fields}}
+    {{#afterFields}}
+      {{afterFields}}
+    {{/afterFields}}
+    {{#input-submit}}continue{{/input-submit}}
+  {{/page-content}}
+{{/partials-page}}

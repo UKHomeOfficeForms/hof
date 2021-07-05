@@ -1,0 +1,28 @@
+{
+  "header": "Telerau ac amodau",
+  "how-we-use": "Sut rydym yn defnyddio eich gwybodaeth",
+  "data-link": {
+    "before": "Mae’r data rydych yn ei ddarparu yn cael ei ddefnyddio yn unol â ",
+    "href": "https://www.gov.uk/government/organisations/home-office/about/personal-information-charter",
+    "link": "siarter gwybodaeth y Swyddfa Gartref",
+    "after": ". Mae hyn yn cynnwys gwybodaeth am yr ymgeisydd ac unrhyw berson sy’n noddi eu cais. Y Swyddfa Gartref yw’r rheolydd data, sy’n golygu ei fod yn penderfynu sut y caiff y wybodaeth hon ei defnyddio a’i storio. Bydd y wybodaeth yn cael ei chadw’n gyfrinachol a’i thrin yn unol â Deddf Diogelu Data 1998."
+  },
+  "used-for": "Bydd y wybodaeth yn cael ei ddefnyddio i:",
+  "used-for-list": {
+    "items": [
+      "wneud penderfyniad ar gais",
+      "atal a chanfod troseddau"
+    ]
+  },
+  "your-info": "Gall eich gwybodaeth gael ei throsglwyddo i drydydd partïon, adrannau’r llywodraeth, awdurdodau lleol, llywodraethau tramor a chyrff cyhoeddus at ddibenion:",
+  "your-info-list": {
+    "items": [
+      "cadarnhau bod y wybodaeth a roddwyd gennych yn gywir,",
+      "atal a chanfod troseddau, gan gynnwys twyll a gwyngalchu arian",
+      "caniatáu i drydydd parti, adran o’r llywodraeth, awdurdod lleol neu gorff cyhoeddus gynnal eu hyfforddiant staff"
+    ]
+  },
+  "info-gathered": "Mae’r Swyddfa Gartref yn cadw’r hawl i gasglu gwybodaeth sy’n ymwneud â defnyddio’r safle. Mae unrhyw wybodaeth a gesglir ar gyfer defnydd mewnol yn bennaf, er enghraifft, i wella gwasanaeth cwsmeriaid.",
+  "countries": "Cyfeiriadau at wledydd a chenhedloedd",
+  "countries-text": "Gellir rhestru gwlad neu diriogaeth fel cenedligrwydd neu wlad oherwydd bod ganddi awdurdod i roi pasbort."
+}

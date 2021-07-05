@@ -1,0 +1,27 @@
+.bold {
+    font-weight: bold;
+}
+.uppercase {
+    text-transform: uppercase;
+}
+
+h1 {
+    @extend .heading-large;
+}
+h2 {
+    @extend .heading-medium;
+}
+h3 {
+    @extend .heading-small;
+}
+strong {
+    font-weight: bold;
+}
+
+.new-window {
+    padding-right: 17px;
+    background: file-url("passports/new-window-link.png") right center no-repeat;
+    &:hover {
+        background-image: file-url("passports/new-window-link-blue.png");
+    }
+}

@@ -1,0 +1,53 @@
+{{<govuk-template}}
+  {{$head}}
+    {{> partials-head}}
+  {{/head}}
+  {{$pageTitle}}
+    {{#errorlist.length}}{{#t}}errorlist.prefix{{/t}}{{/errorlist.length}}{{$header}}{{/header}} &ndash; GOV.UK
+  {{/pageTitle}}
+  {{$headerClass}}with-proposition{{/headerClass}}
+  {{$insideHeader}}{{/insideHeader}}
+  {{$main}}
+    <main class="main" role="main">
+      <div class="phase-banner">
+        <p>
+          <strong class="phase-tag">{{#t}}journey.phase{{/t}}</strong>
+          <span>This is a new service – your <a href="{{feedbackUrl}}{{^feedbackUrl}}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{{/feedbackUrl}}">feedback</a> will help us to improve it.</span>
+        </p>
+      </div>
+      <span id="step">
+        {{> partials-back}} <span>{{$step}}{{/step}}</span>
+      </span>
+      <div class="grid-row" id="content">
+        {{> partials-maincontent-left}}
+      </div>
+      {{> partials-continue}}
+      <script type="text/javascript" src="{{assetPath}}/js/bundle.js"></script>
+    </main>
+  {{/main}}
+  {{$cookieMessage}}
+    {{#gaTagId}}
+      {{> partials-cookie-banner}}
+    {{/gaTagId}}
+    {{^gaTagId}}
+      <p class="no-ga-tag">
+        {{#t}}cookies.banner.message{{/t}}
+        <a href="/cookies">{{#t}}cookies.banner.link{{/t}}</a>
+      </p>
+    {{/gaTagId}}
+  {{/cookieMessage}}
+  {{$footerSupportLinks}}
+    <ul>
+      {{#footerSupportLinks}}
+        <li><a href="{{path}}">{{#t}}{{property}}{{/t}}</a></li>
+      {{/footerSupportLinks}}
+      {{^footerSupportLinks}}
+        <li><a href="/cookies">{{#t}}base.cookies{{/t}}</a></li>
+        <li><a href="/terms-and-conditions">{{#t}}base.terms{{/t}}</a></li>
+      {{/footerSupportLinks}}
+    </ul>
+  {{/footerSupportLinks}}
+  {{$bodyEnd}}
+    {{> partials-gatag}}
+  {{/bodyEnd}}
+{{/govuk-template}}

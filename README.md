@@ -1251,3 +1251,334 @@ const options = countries({
 ```
 
 You can then define a single translation for country names to be used for all country list instances.
+
+# FRONTEND
+## Template Mixins
+
+A middleware that exposes a series of Mustache mixins on `res.locals` to ease usage of forms, translations, and some other things.
+
+## Installation
+
+```javascript
+npm install [--save] hof-template-mixins;
+```
+
+## Usage
+
+```javascript
+var express = require('express');
+
+var i18n = require('i18n-future');
+var mixins = require('hof').frontend.mixins;
+
+app.set('view engine', 'html');
+app.set('views', path.join(__dirname, '/views'));
+
+app.use(i18n.middleware());
+app.use(mixins());
+
+app.use(function (req, res) {
+    // NOTE: res.locals.partials has been set.
+    res.render('example-template');
+});
+```
+
+If rendering as part of a hof controller's middleware chain then the field configuration will automatically be set to `res.locals.options.fields` by the controller, and will be loaded from here by the mixins.
+
+Alternatively, if not using hof controllers, you can explicitly set field configuration with instantiating the middleware by passing a `fields` option. This should not be used for dynamic field configuration.
+
+## Translation
+
+By default any function set to `req.translate` will be used for translation if it exists. For example, that generated using [i18n-future](https://npmjs.com/package/i18n-future) middleware.
+
+## Options
+
+### viewsDirectory
+
+Allows you override the directory that the module checks for partials in - Default: the root of this project
+
+### viewEngine
+
+Allows you to alter the file extension of the templates - Default: 'html'
+
+### sharedTranslationsKey
+
+Prefixes keys for translation - Default: ''
+
+### translate
+
+Defines a custom translation method - Default: `req.translate`
+
+### fields
+
+Allows for manually setting static field configuration - Default: null
+
+## Mustache mixins available
+
+```
+t
+time
+selected
+lowercase
+uppercase
+hyphenate
+date
+currency
+select
+input-text
+input-date
+input-text-compound
+input-text-code
+input-number
+input-phone
+radio-group
+checkbox
+checkbox-compound
+checkbox-required
+checkbox-group
+input-submit
+textarea
+qs
+renderField
+```
+
+### qs
+This mixin takes a `key=value` query string and returns a query string with the extra params appended. If the key is already present in the query string, the value passed to the mixin is used
+
+```html
+<a href="{{#qs}}key=value{{/qs}}">Click to append query</a>
+```
+
+### renderField
+
+The renderField mixin can be called in your template to render all fields. This will lookup the field.mixin in res.locals and call it passing the field key.
+
+```html
+{{#fields}}
+  {{#renderField}}{{/renderField}}
+{{/fields}}
+```
+
+fields.js
+```js
+module.exports = {
+    'my-field': {
+        mixin: 'input-text'
+    }
+}
+```
+
+If mixin is omitted `input-text` will be used
+
+To disable auto-rendering of a field, set `disableRender: true` in the field config. This is required when using the `child` element rendering functionality to prevent the field being rendered multiple times.
+
+
+### Render a single field ###
+
+To render a specific fields in your templates use the mixin name (matching those above) and field name like so...
+
+```html
+{{#input-text}}myTextField{{/input-text}}
+
+{{#select}}mySelectMenu{{/select}}
+
+{{#radio-group}}myRadioGroup{{/radio-group}}
+```
+
+## Options
+
+- `className`: A string or array of string class names.
+- `label`: The intended value of the HTML `label` attribute.
+- `type`: The value of the HTML input `type` attribute.
+- `required`: Value applied to `aria-required` HTML attribute.
+- `hint`: This adds context to the label, which it is a part of, for input text, radio groups and textarea. It is used within the input by aria-describedby for screen readers.
+- `maxlength`: Applicable to text-based fields and mapped to the `maxlength` HTML attribute.
+- `options`: Applicable to HTML `select` and `radio` controls and used to generate the items of either HTML element.
+- `selected`: Applicable to `select`, `checkbox`, and `radio` controls. Will render the selected HTML option/element selected or checked.
+- `legend`: Applicable to `radio` button controls, which are wrapped in a HTML `fieldset` with a `legend` element.
+- `legendClassName`: Applied as a class name to HTML `legend` attribute.
+- `toggle`: Can be used to toggle the display of the HTML element with a matching `id`. See [hof-frontend-toolkit](https://github.com/UKHomeOfficeForms/hof-frontend-toolkit/blob/master/assets/javascript/progressive-reveal.js) for details.
+- `attributes`: A hash of key/value pairs applicable to a HTML `textarea` field. Each key/value is assigned as an attribute of the `textarea`. For example `spellcheck="true"`.
+- `child`: Render a child partial beneath each option in an `optionGroup`. Accepts a custom mustache template string, a custom partial in the format `partials/{your-partial-name}`, `'html'` which is used to specify the html for the field has already been prerendered, such as in [hof-component-date](https://github.com/UKHomeOfficeForms/hof-component-date) or a template mixin key which will be rendered within a panel element partial.
+
+
+# HOF-template-partials
+
+Home Office Forms template partials is a collection of mustache partials commonly used in HOF applications.  It also contains a collection of i18n translations used within the template partials. All contents are designed to be extended in your individual applications.
+
+## Usage
+
+### Template partials
+
+#### Standalone
+
+Template partials can be used by adding the route to the views directory to your express application views setting. You will need to be using the HTML view engine with Hogan and Mustache.
+
+```js
+var app = require('express')();
+
+app.set('view engine', 'html');
+app.set('views', [
+  // your application shared views
+  path.resolve(__dirname, './path/to/views'),
+  // the module exports paths to views and translations directories
+  require('hof').frontend.partials.views
+]);
+```
+
+The views are now available when calling `res.render('view-name')` from express.
+
+#### HOF Application
+
+When used in a hof application in conjunction with [express-partial-templates](https://github.com/UKHomeOffice/express-partial-templates) the contents of the views directory are added to `res.locals.partials`. These are added right to left so conflicting views are resolved from the left-most directory.
+
+```js
+var app = require('express')();
+
+app.set('view engine', 'html');
+app.set('views', [
+  path.resolve(__dirname, './path/to/views'),
+  require('hof').frontend.partials.views
+]);
+app.use(require('express-partial-templates')(app));
+
+app.use(function (req, res, next) {
+  // res.locals.partials contains all views from the views dir in this repo
+  // which are extended by any local views in ./path/to/views
+  next();
+});
+```
+
+### Translations
+
+The provided translations are designed to be used in conjunction with a translations library such as [i18n-future](https://github.com/lennym/i18n-future).
+
+The exported `resources` method will return a compiled object containing the translations, which can be passed to an `i18n` instance as a pre-compiled resource.
+
+```js
+const translate = require('i18n-future').middleware({
+  resources: require('hof').frontend.partials.resources()
+});
+app.use(translate);
+```
+
+By default the namespace for this translation is `default`. A custom namespace can be specified by passing it as an argument to the `resources` function.
+
+```js
+const translate = require('i18n-future').middleware({
+  resources: require('hof').frontend.partials.resources('hof-common'),
+  fallbackNamespace: 'hof-common'
+});
+app.use(translate);
+```
+### Cookie Banner
+
+The cookie banner has a placeholder named serviceName that you can set within the locals of your hof application so that the appropriate value is displayed.
+
+```js
+res.locals.serviceName = <yourServiceName>
+```
+
+
+# HOF FRONTEND THEME
+
+## Usage
+
+If you are using `hof-build` to build assets then you can add the following to your applications sass file.
+
+```
+@import "$$theme";
+```
+
+Otherwise add:
+
+```
+@import "hof/frontend/theme/styles/govuk";
+```
+
+## Configuration
+
+By default the compiled sass will attempt to load referenced images from `/public/images`. To override this, add the following to the top of your sass file (noting trailing slash):
+
+```
+$path: "/path/to/your/images/";
+```
+
+# HOF FRONTEND GOVUK-TEMPLATE
+
+Compiles govuk mustache template into a more usable format and provide middleware for use in apps.
+
+Existing [govuk mustache template](https://www.npmjs.com/package/govuk_template_mustache) has simple mustache placeholders for content sections, which necessitates a two step compile process where sections are compiled individually and then again into the parent template.
+
+Compiling the template to replace these placeholders with variables allows for templates to implement the govuk template as a parent partial.
+
+## Example
+
+```
+{{< govuk-template}}
+
+    {{$main}}
+        <h1>Page Content</h1>
+    {{/main}}
+
+{{/ govuk-template}}
+```
+
+## Usage
+
+When used as part of an express app, a middleware is returned which will add a static fileserver (using [serve-static](https://www.npmjs.com/package/serve-static)) to serve the template assets without needing to copy them to any other location.
+
+It will also add the template as a mustache partial with a name of "govuk-template".
+
+### To configure express middleware
+```
+app.use(require('hof').frontend.govUKTemplate([options]);
+```
+
+### To use the mustache partial
+```
+{{< govuk-template}}
+    {{$pageTitle}}An example page{{/pageTitle}}
+    {{$main}}
+        <h1>Page Content</h1>
+    {{/main}}
+{{/ govuk-template}}
+```
+
+## Options
+
+A number of options can be passed with the app into the setup method:
+
+* `path` - Sets the base path for the location of static assets - Default: `/govuk-assets`
+
+Other options are passed onto the [serve-static](https://www.npmjs.com/package/serve-static) configuration, and more details can be found in [the serve-static documentation](https://www.npmjs.com/package/serve-static)
+
+# Nonce values
+Version 18.0.0 and above of HOF provides and requires a nonce value for all inline javascript, as unsafe-inline is disabled.
+Older versions (pre 18.0.0) will work with the hof-govuk-template templates as expected as the nonce value fields will only be added
+if a nonce value is provided by the version of HOF.
+
+## Example
+
+There is an example implmentation in '/example'. To run:
+
+```
+cd example
+npm install
+npm start
+```
+
+# HOF FRONTEND TOOLKIT
+Set of common UI patterns/styles for HOF projects
+
+## Images
+Copy `assets/images/hmpo` to your image directory. Images are loaded by using the `file-url` function provided by [GOV.UK frontend toolkit](https://github.com/alphagov/govuk_frontend_toolkit). The `file-url` function uses the `$path` variable which is set before the toolkit's modules are loaded.
+
+## Vendor JavaScript
+Additional vendor JavaScript files are included. These are:
+
+* details.polyfill.js
+* indexof.polyfill.js
+* safari-cachebuster.js
+
+Copy `assets/javascript/vendor` into your javascript directory (ie `hmpo/vendor`) and compile them with your JavaScript.

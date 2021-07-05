@@ -1,0 +1,11 @@
+<div id="{{key}}-group" class="form-group{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} validation-error{{/error}}">
+    {{#error}}<p class="error-message" aria-hidden="true">{{error.message}}</p>{{/error}}
+    <div class="multiple-choice">
+        <input type="checkbox" id="{{key}}" name="{{key}}" value="true" aria-required="{{required}}"{{#error}} aria-invalid="true"{{/error}}{{^error}}{{#toggle}} data-toggle="{{toggle}}"{{/toggle}}{{#selected}} checked="checked"{{/selected}}{{/error}}>
+        <label for="{{key}}" class="{{#className}}{{className}} {{/className}}{{#invalid}}invalid-input{{/invalid}}">
+            {{{label}}}
+            {{#error}}<span class="visuallyhidden">{{error.message}}</span>{{/error}}
+        </label>
+    </div>
+    {{#renderChild}}{{/renderChild}}
+</div>

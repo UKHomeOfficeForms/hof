@@ -1,0 +1,51 @@
+.validation-summary {
+    padding-left: $gutter-half - $validation-bdr-size-lg;
+    padding-right: $gutter-half;
+    border-width: $validation-bdr-size-lg;
+
+    &:focus {
+        outline: $focus-outline;
+    }
+
+    h2 {
+        margin: 0.3em 0;
+    }
+    ul {
+        margin: 0;
+        li {
+            margin: 0;
+            padding: 3px 0;
+        }
+    }
+    a {
+        @include bold-19;
+    }
+}
+
+.validation-error {
+    box-sizing: border-box;
+    padding-left: $gutter-half - $validation-bdr-size;
+    border-left: $validation-bdr-size-lg solid $error-colour;
+
+    &:focus {
+        outline: $focus-outline;
+    }
+
+    .form-control {
+        margin-bottom: $validation-bdr-size;
+    }
+}
+
+.error-message {
+    display: block;
+    @include media(tablet) {
+        margin-bottom: 0.5em;
+    }
+    @include bold-19;
+    color: $error-colour;
+}
+
+.invalid-input,
+.validation-error .date-input {
+    border: $validation-bdr-size solid $error-colour;
+}

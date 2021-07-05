@@ -1,0 +1,22 @@
+{{<layout}}
+  {{$journeyHeader}}
+    {{#t}}journey.header{{/t}}
+  {{/journeyHeader}}
+
+  {{$validationSummary}}
+    {{> partials-validation-summary}}
+  {{/validationSummary}}
+
+  {{$propositionHeader}}
+    {{> partials-navigation}}
+  {{/propositionHeader}}
+
+  {{$header}}{{{title}}}{{/header}}
+  {{$content}}
+    {{<partials-form}}
+      {{$form}}
+        {{$page-content}}{{/page-content}}
+      {{/form}}
+    {{/partials-form}}
+  {{/content}}
+{{/layout}}

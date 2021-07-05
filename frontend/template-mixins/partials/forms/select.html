@@ -1,0 +1,12 @@
+<div id="{{id}}-group" class="form-group{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} validation-error{{/error}}">
+    <label for="{{id}}" class="{{labelClassName}}">
+        {{{label}}}
+        {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="form-hint">{{hint}}</span>{{/hint}}
+        {{#error}}<span class="error-message">{{error.message}}</span>{{/error}}
+    </label>
+    <select id="{{id}}" class="form-control{{#className}} {{className}}{{/className}}{{#error}} invalid-input{{/error}}" name="{{id}}" aria-required="{{required}}">
+    {{#options}}
+        <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+    {{/options}}
+    </select>
+</div>
