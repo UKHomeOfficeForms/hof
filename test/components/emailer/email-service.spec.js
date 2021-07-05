@@ -21,7 +21,6 @@ describe('Email Service', () => {
   });
 
   describe('constructor', () => {
-
     it('creates an Emailer instance', () => {
       emailer = new EmailService();
       emailer.emailer.should.be.an.instanceOf(Emailer);
@@ -36,11 +35,9 @@ describe('Email Service', () => {
       Emailer.should.have.been.calledWithNew;
       Emailer.should.have.been.calledWithExactly(opts);
     });
-
   });
 
   describe('send', () => {
-
     beforeEach(() => {
       Emailer.returns({
         send: sinon.stub().returns(Promise.resolve())
@@ -132,7 +129,5 @@ describe('Email Service', () => {
           e.should.equal(err);
         });
     });
-
   });
-
 });

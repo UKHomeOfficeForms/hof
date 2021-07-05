@@ -3,12 +3,10 @@
 const proxyquire = require('proxyquire');
 
 describe('transports/ses', () => {
-
   let nodemailerSesTransport;
   let sesTransport;
 
   beforeEach(() => {
-
     nodemailerSesTransport = sinon.stub();
 
     sesTransport = proxyquire('../../../../components/emailer/transports/ses', {
@@ -29,9 +27,7 @@ describe('transports/ses', () => {
   });
 
   it('throws if either accessKeyId or secretAccessKey are not passed', () => {
-    const make = opts => {
-      return () => sesTransport(opts);
-    };
+    const make = opts => () => sesTransport(opts);
     make({}).should.throw();
     make({ accessKeyId: 'abc123' }).should.throw();
     make({ secretAccessKey: 'abc123' }).should.throw();
@@ -107,5 +103,4 @@ describe('transports/ses', () => {
       maxConnections: 0
     }));
   });
-
 });

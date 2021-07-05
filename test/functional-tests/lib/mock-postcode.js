@@ -1,5 +1,3 @@
-/* eslint implicit-dependencies/no-implicit: [2, {dev:true}] */
-
 'use strict';
 const router = require('express').Router();
 

@@ -3,12 +3,10 @@
 const proxyquire = require('proxyquire');
 
 describe('transports/stub', () => {
-
   let nodemailerStubTransport;
   let stubTransport;
 
   beforeEach(() => {
-
     nodemailerStubTransport = sinon.stub();
 
     stubTransport = proxyquire('../../../../components/emailer/transports/stub', {
@@ -23,5 +21,4 @@ describe('transports/stub', () => {
     nodemailerStubTransport.should.have.been.calledWithExactly();
     result.should.equal(result);
   });
-
 });

@@ -68,7 +68,7 @@ describe('tests', () => {
         assert.ok(!url.includes('/confirm'));
       }));
 
-    it('can go back to confirm page after editing first step', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
+    it('goes back to confirm page after editing first step', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
       .getUrl()
       .then(url => {
         assert.ok(url.includes('confirm'));
@@ -362,7 +362,7 @@ describe('tests', () => {
           .then(url => {
             expect(url).to.equal(`http://localhost:${port}/address-backlink-two`);
             expect(url).to.not.include('one');
-          })
+          });
       });
 
       it('goes back to postcode step when clicking backlink from the manual step', () => {
@@ -386,7 +386,7 @@ describe('tests', () => {
           .then(url => {
             expect(url).to.equal(`http://localhost:${port}/address-backlink-two`);
             expect(url).to.not.include('one');
-          })
+          });
       });
 
       it('goes back to postcode step when clicking backlink from the address step (i.e. failed lookup)', () => {

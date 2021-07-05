@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use strict';
 
 module.exports = (tasks, config) => tasks.reduce((promise, task) => {

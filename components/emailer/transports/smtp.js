@@ -2,8 +2,7 @@
 
 const smtp = require('nodemailer-smtp-transport');
 
-module.exports = (options) => {
-
+module.exports = options => {
   if (!options.host) {
     throw new Error('Required option `host` not found');
   }
@@ -24,5 +23,4 @@ module.exports = (options) => {
   }
 
   return smtp(opts);
-
 };

@@ -32,7 +32,6 @@ describe('Emailer', () => {
   });
 
   describe('constructor', () => {
-
     it('creates an instance of smtp transport by default', () => {
       emailer = new Emailer({
         from: 'test@example.com',
@@ -85,9 +84,7 @@ describe('Emailer', () => {
     });
 
     it('throws if both of `from` and `replyTo` are not defined and transport is not `stub`', () => {
-      const make = (opts) => {
-        return () => new Emailer(opts);
-      };
+      const make = opts => () => new Emailer(opts);
       make().should.throw();
       make({ from: 'test@example.com' }).should.not.throw();
       make({ replyTo: 'test@example.com' }).should.not.throw();

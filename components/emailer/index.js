@@ -6,7 +6,6 @@ const fs = require('fs');
 const debug = require('debug')('hof:behaviour:emailer');
 
 module.exports = config => {
-
   const emailer = new EmailService(config);
   config.parse = config.parse || (data => data);
 
@@ -18,15 +17,12 @@ module.exports = config => {
   }
 
   return superclass => class EmailBehaviour extends superclass {
-
     successHandler(req, res, callback) {
       Promise.resolve()
         .then(() => {
           debug(`Loading email template from ${config.template}`);
           return new Promise((resolve, reject) => {
-            fs.readFile(config.template, (err, template) => {
-              return err ? reject(err) : resolve(template.toString('utf8'));
-            });
+            fs.readFile(config.template, (err, template) => err ? reject(err) : resolve(template.toString('utf8')));
           });
         })
         .then(template => {
@@ -64,7 +60,6 @@ module.exports = config => {
           super.successHandler(req, res, callback);
         }, callback);
     }
-
   };
 };
 

@@ -50,7 +50,10 @@ Object.defineProperty(Data, 'country', {
   get: () => pick(countries)
 });
 
-Data.number = (min, max) => {
+Data.number = (mn, mx) => {
+  let min = mn;
+  let max = mx;
+
   if (min && max === undefined) {
     max = min;
     min = 0;

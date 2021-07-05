@@ -5,7 +5,6 @@ const sinon = require('sinon');
 const chai = require('chai');
 const expect = chai.expect;
 const sandbox = require('mocha-sandbox');
-const request = hof_request();
 
 chai.use(require('sinon-chai'));
 
@@ -15,17 +14,14 @@ const fs = require('fs');
 const Emailer = Behaviour.EmailService;
 
 // helper to avoid having to define full options every time
-const options = (opts) => {
-  return Object.assign({
-    transport: 'stub',
-    recipient: 'test@example.com',
-    subject: 'confirmation email',
-    template: '/path/to/to/my/email/template.html'
-  }, opts);
-};
+const options = opts => Object.assign({
+  transport: 'stub',
+  recipient: 'test@example.com',
+  subject: 'confirmation email',
+  template: '/path/to/to/my/email/template.html'
+}, opts);
 
 describe('Emailer Behaviour', () => {
-
   beforeEach(() => {
     sinon.stub(fs, 'readFile').withArgs('/path/to/to/my/email/template.html').yieldsAsync(null, 'hello {{name}}');
     sinon.stub(Emailer.prototype, 'send').returns(Promise.resolve());
@@ -41,10 +37,7 @@ describe('Emailer Behaviour', () => {
   });
 
   describe('initialisation', () => {
-
-    const make = (opts) => {
-      return Behaviour(options(opts))(class {});
-    };
+    const make = opts => Behaviour(options(opts))(class {});
 
     it('returns a mixin', () => {
       const opts = options({ recipient: 'test@example.com' });
@@ -60,11 +53,9 @@ describe('Emailer Behaviour', () => {
     it('errors if no template is set', () => {
       expect(() => make({ template: null })).to.throw();
     });
-
   });
 
   describe('successHandler', () => {
-
     class Base {
       successHandler() {}
     }
@@ -248,7 +239,5 @@ describe('Emailer Behaviour', () => {
         expect(e).to.equal(err);
       }, done));
     });
-
   });
-
 });

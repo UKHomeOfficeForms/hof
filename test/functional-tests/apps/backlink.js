@@ -16,7 +16,7 @@ module.exports = config => ({
         validate: {
           allowedCountries: ['England']
         }
-      }),
+      })
     }
   }
 });

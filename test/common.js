@@ -25,7 +25,7 @@ global.hof_request = options => {
   req.translate = key => key;
   req.log = () => {};
   return req;
-};;
+};
 
 process.setMaxListeners(0);
 process.stdout.setMaxListeners(0);

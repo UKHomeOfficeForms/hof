@@ -1,5 +1,5 @@
+/* eslint-disable max-len, no-console */
 'use strict';
-/* eslint no-console:0*/
 
 const fs = require('fs');
 const path = require('path');
@@ -15,19 +15,16 @@ const mkdir = dir => new Promise((resolve, reject) => {
   mkdirp(dir, err => err ? reject(err) : resolve());
 });
 
-const cidToBase64 = (html, attachments) => {
+const cidToBase64 = (h, attachments) => {
+  let html = h;
   const list = attachments.reduce((p, attachment) => {
     const mimeType = mimes[path.extname(attachment.path)];
     return p
-      .then(map => {
-        return new Promise((resolve, reject) => fs.readFile(attachment.path, (err, buffer) => {
-          return err ? reject(err) : resolve(buffer.toString('base64'));
-        }))
+      .then(map => new Promise((resolve, reject) => fs.readFile(attachment.path, (err, buffer) => err ? reject(err) : resolve(buffer.toString('base64'))))
         .then(data => {
           map[attachment.cid] = `"data:${mimeType};base64,${data}"`;
           return map;
-        });
-      });
+        }));
   }, Promise.resolve({}));
 
   return list.then(files => {
@@ -53,14 +50,10 @@ module.exports = options => {
         const outfile = path.resolve(dir, `${messageId}.html`);
 
         return mkdir(dir)
-          .then(() => {
-            return cidToBase64(html, mail.data.attachments);
-          })
-          .then(inlined => {
-            return new Promise((resolve, reject) => {
-              fs.writeFile(outfile, inlined, e => e ? reject(e) : resolve(inlined));
-            });
-          })
+          .then(() => cidToBase64(html, mail.data.attachments))
+          .then(inlined => new Promise((resolve, reject) => {
+            fs.writeFile(outfile, inlined, e => e ? reject(e) : resolve(inlined));
+          }))
           .then(() => {
             if (options.log) {
               console.log('Email sent:');
@@ -76,7 +69,6 @@ module.exports = options => {
             callback();
           })
           .catch(callback);
-
       });
     }
   };

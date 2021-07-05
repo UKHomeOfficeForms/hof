@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return, node/no-deprecated-api */
 'use strict';
 
 const url = require('url');
@@ -8,9 +9,8 @@ const debug = require('debug')('hof:util:autofill');
 
 const MAX_LOOPS = 3;
 
-module.exports = (browser) => (target, input, options) => {
-
-  options = options || {};
+module.exports = browser => (target, input, opts) => {
+  const options = opts || {};
   options.maxLoops = options.maxLoops || MAX_LOOPS;
 
   const getValue = Inputs(input);
@@ -66,38 +66,36 @@ module.exports = (browser) => (target, input, options) => {
   function completeCheckbox(element, name) {
     const value = getValue(name, 'checkbox');
     return browser.elementIdAttribute(element, 'value')
-      .then(val => {
-        return browser.elementIdAttribute(element, 'checked')
-          .then((checked) => {
-            if (value === null) {
-              if (!checked.value) {
-                debug(`Leaving checkbox: ${name} blank`);
-                return;
-              }
-              debug(`Unchecking checkbox: ${name}`);
-              return browser.elementIdClick(element);
+      .then(val => browser.elementIdAttribute(element, 'checked')
+        .then(checked => {
+          if (value === null) {
+            if (!checked.value) {
+              debug(`Leaving checkbox: ${name} blank`);
+              return;
             }
-            if (!value && !checked.value) {
-              debug(`Checking checkbox: ${name} with value: ${val.value}`);
-              return browser.elementIdClick(element);
-            } else if (value && value.indexOf(val.value) > -1 && !checked.value) {
-              debug(`Checking checkbox: ${name} with value: ${val.value}`);
-              return browser.elementIdClick(element);
-            } else if (value && value.indexOf(val.value) === -1 && checked.value) {
-              debug(`Unchecking checkbox: ${name} with value: ${val.value}`);
-              return browser.elementIdClick(element);
-            }
-            debug(`Ignoring checkbox: ${name} with value: ${val.value} - looking for ${value}`);
-          });
-      });
+            debug(`Unchecking checkbox: ${name}`);
+            return browser.elementIdClick(element);
+          }
+          if (!value && !checked.value) {
+            debug(`Checking checkbox: ${name} with value: ${val.value}`);
+            return browser.elementIdClick(element);
+          } else if (value && value.indexOf(val.value) > -1 && !checked.value) {
+            debug(`Checking checkbox: ${name} with value: ${val.value}`);
+            return browser.elementIdClick(element);
+          } else if (value && value.indexOf(val.value) === -1 && checked.value) {
+            debug(`Unchecking checkbox: ${name} with value: ${val.value}`);
+            return browser.elementIdClick(element);
+          }
+          debug(`Ignoring checkbox: ${name} with value: ${val.value} - looking for ${value}`);
+        }));
   }
 
   function completeSelectElement(element, name) {
     const value = getValue(name, 'select');
     if (!value) {
       return browser.elementIdElements(element, 'option')
-        .then((opts) => {
-          const index = 1 + Math.floor(Math.random() * (opts.value.length - 1));
+        .then(o => {
+          const index = 1 + Math.floor(Math.random() * (o.value.length - 1));
           debug(`Selecting option: ${index} from select box: ${name}`);
           return browser.selectByIndex(`select[name="${name}"]`, index);
         });
@@ -111,44 +109,32 @@ module.exports = (browser) => (target, input, options) => {
       .elements('input')
       .then(fields => {
         debug(`Found ${fields.value.length} <input> elements`);
-        return Promise.map(fields.value, field => {
-          return browser.elementIdAttribute(field.ELEMENT, 'type')
-            .then(type => {
-              return browser.elementIdAttribute(field.ELEMENT, 'name')
-                .then(name => {
-                  if (type.value === 'radio') {
-                    return completeRadio(field.ELEMENT, name.value);
-                  } else if (type.value === 'checkbox') {
-                    return completeCheckbox(field.ELEMENT, name.value);
-                  } else if (type.value === 'file') {
-                    return completeFileField(field.ELEMENT, name.value);
-                  } else if (type.value === 'text') {
-                    return completeTextField(field.ELEMENT, name.value);
-                  }
-                  debug(`Ignoring field of type ${type.value}`);
-                });
-            });
-        }, {concurrency: 1});
+        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'type')
+          .then(type => browser.elementIdAttribute(field.ELEMENT, 'name')
+            .then(name => {
+              if (type.value === 'radio') {
+                return completeRadio(field.ELEMENT, name.value);
+              } else if (type.value === 'checkbox') {
+                return completeCheckbox(field.ELEMENT, name.value);
+              } else if (type.value === 'file') {
+                return completeFileField(field.ELEMENT, name.value);
+              } else if (type.value === 'text') {
+                return completeTextField(field.ELEMENT, name.value);
+              }
+              debug(`Ignoring field of type ${type.value}`);
+            })), {concurrency: 1});
       })
       .elements('select')
       .then(fields => {
         debug(`Found ${fields.value.length} <select> elements`);
-        return Promise.map(fields.value, field => {
-          return browser.elementIdAttribute(field.ELEMENT, 'name')
-            .then(name => {
-              return completeSelectElement(field.ELEMENT, name.value);
-            });
-        });
+        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'name')
+          .then(name => completeSelectElement(field.ELEMENT, name.value)));
       })
       .elements('textarea')
       .then(fields => {
         debug(`Found ${fields.value.length} <textarea> elements`);
-        return Promise.map(fields.value, field => {
-          return browser.elementIdAttribute(field.ELEMENT, 'name')
-            .then(name => {
-              return completeTextField(field.ELEMENT, name.value);
-            });
-        });
+        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'name')
+          .then(name => completeTextField(field.ELEMENT, name.value)));
       })
       .then(() => {
         if (options.screenshots) {
@@ -160,49 +146,44 @@ module.exports = (browser) => (target, input, options) => {
         debug('Submitting form');
         return browser.$('input[type="submit"]').click();
       })
-      .then(() => {
-        return browser.getUrl()
-          .then(u => {
-            u = url.parse(u);
-            debug(`New page is: ${u.path}`);
-            if (u.path !== path) {
-              debug(`Checking current path ${u.path} against last path ${last}`);
-              if (last === u.path) {
-                count++;
-                debug(`Stuck on path ${u.path} for ${count} iterations`);
-                if (count === options.maxLoops) {
-                  if (options.screenshots) {
-                    const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.debug.png');
-                    return browser.saveScreenshot(screenshot)
-                      .then(() => {
-                        throw new Error(`Progress stuck at ${u.path} - screenshot saved to ${screenshot}`);
-                      });
-                  }
-                  throw new Error(`Progress stuck at ${u.path}`);
+      .then(() => browser.getUrl()
+        .then(p => {
+          const u = url.parse(p);
+          debug(`New page is: ${u.path}`);
+          if (u.path !== path) {
+            debug(`Checking current path ${u.path} against last path ${last}`);
+            if (last === u.path) {
+              count++;
+              debug(`Stuck on path ${u.path} for ${count} iterations`);
+              if (count === options.maxLoops) {
+                if (options.screenshots) {
+                  const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.debug.png');
+                  return browser.saveScreenshot(screenshot)
+                    .then(() => {
+                      throw new Error(`Progress stuck at ${u.path} - screenshot saved to ${screenshot}`);
+                    });
                 }
-              } else {
-                count = 0;
+                throw new Error(`Progress stuck at ${u.path}`);
               }
-              last = u.path;
-              return completeStep(path);
+            } else {
+              count = 0;
             }
-            debug(`Arrived at ${path}. Done.`);
-          });
-      })
-      .catch(e => {
-        return browser.getText('#content')
-          .then(text => {
-            debug('PAGE CONTENT >>>>>>');
-            debug(text);
-            debug('END PAGE CONTENT >>>>>>');
-          })
-          .catch(() => null)
-          .then(() => {
-            throw e;
-          });
-      });
+            last = u.path;
+            return completeStep(path);
+          }
+          debug(`Arrived at ${path}. Done.`);
+        }))
+      .catch(e => browser.getText('#content')
+        .then(text => {
+          debug('PAGE CONTENT >>>>>>');
+          debug(text);
+          debug('END PAGE CONTENT >>>>>>');
+        })
+        .catch(() => null)
+        .then(() => {
+          throw e;
+        }));
   }
 
   return completeStep(target);
-
 };

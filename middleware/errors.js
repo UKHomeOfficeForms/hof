@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use strict';
 
 const errorTitle = code => `${code}_ERROR`;
@@ -45,10 +46,7 @@ module.exports = options => {
   const logger = opts.logger;
   const debug = opts.debug;
 
-  /* eslint no-unused-vars:0 */
   return (err, req, res, next) => {
-    /* eslint no-unused-vars:1 */
-
     const translate = opts.translate || req.translate;
     const content = getContent(err, translate);
     const locals = {

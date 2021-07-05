@@ -7,9 +7,8 @@ const transports = require('./transports');
 const debug = require('debug')('hof:emailer');
 
 module.exports = class Emailer {
-
-  constructor(options) {
-    options = options || {};
+  constructor(opts) {
+    const options = opts || {};
     this.options = options;
 
     options.transport = options.transport || 'smtp';
@@ -48,9 +47,7 @@ module.exports = class Emailer {
           path: path.resolve(__dirname, './assets/images/spacer.gif'),
           cid: 'spacer_image'
         }]
-      }, (err, result) => {
-        return err ? reject(err) : resolve(result);
-      });
+      }, (err, result) => err ? reject(err) : resolve(result));
     });
   }
 };

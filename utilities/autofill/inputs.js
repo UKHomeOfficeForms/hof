@@ -1,14 +1,15 @@
+/* eslint-disable consistent-return */
 'use strict';
 /* eslint complexity: 0 */
 
 const Data = require('../test-data');
 
-module.exports = input => {
-  input = input || {};
+module.exports = i => {
+  const input = i || {};
   input.default = input.default || 'abc';
 
-  const getDefault = (name, type) => {
-    type = type || 'text';
+  const getDefault = (name, t) => {
+    const type = t || 'text';
     if (name.indexOf('name') > -1) {
       if (name.indexOf('last') > -1 || name.indexOf('surname') > -1) {
         return Data.lastname;

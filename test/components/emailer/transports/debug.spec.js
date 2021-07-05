@@ -5,7 +5,6 @@ const fs = require('fs');
 const cp = require('child_process');
 
 describe('transports/debug', () => {
-
   let message;
 
   beforeEach(() => {
@@ -65,5 +64,4 @@ describe('transports/debug', () => {
       cp.execSync.should.have.been.calledWith(sinon.match(/^open (.+)abc123.html$/));
     }, done));
   });
-
 });

@@ -39,15 +39,13 @@ const conditionalTranslate = (key, translate) => {
   return result;
 };
 
-const getLegendClassName = field => {
-  return field && field.legend && field.legend.className || '';
-};
+const getLegendClassName = field => field && field.legend && field.legend.className || '';
 
-module.exports = (key, options) => {
+module.exports = (key, opts) => {
   if (!key) {
     throw new Error('Key must be passed to date component');
   }
-  options = options || {};
+  const options = opts || {};
   const template = options.template ?
     path.resolve(__dirname, options.template) :
     TEMPLATE;

@@ -7,7 +7,6 @@ const hocountries = require('homeoffice-countries').allCountries;
 const expect  = require('chai').expect;
 
 describe('Countries', () => {
-
   it('exports a function', () => {
     expect(countries).to.be.a('function');
   });
@@ -40,5 +39,4 @@ describe('Countries', () => {
   it('filters the countries if passed a `filter` function', () => {
     expect(countries({ filter: c => c !== 'Afghanistan' })[0].label).to.equal('Aland Islands');
   });
-
 });

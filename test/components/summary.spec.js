@@ -6,7 +6,7 @@ const Base = require('../../controller');
 const Model = require('../../model');
 const Behaviour = require('../../components').summary;
 
-const sumValues = (values) => values.reduce((a, b) => a + b, 0);
+const sumValues = values => values.reduce((a, b) => a + b, 0);
 
 class Controller extends mix(Base).with(Behaviour) {}
 
@@ -15,10 +15,10 @@ describe('Summary Page Behaviour', () => {
   let req;
   let res;
 
-  beforeEach((done) => {
+  beforeEach(done => {
     res = response();
     req = reqres.req(Object.assign({
-      translate: sinon.spy((a) => Array.isArray(a) ? a[0] : a),
+      translate: sinon.spy(a => Array.isArray(a) ? a[0] : a),
       sessionModel: new Model()
     }));
 
@@ -45,7 +45,6 @@ describe('Summary Page Behaviour', () => {
   });
 
   describe('locals', () => {
-
     beforeEach(() => {
       sinon.stub(Base.prototype, 'locals').returns({super: true});
     });
@@ -112,30 +111,30 @@ describe('Summary Page Behaviour', () => {
       expect(result.rows[0].fields).not.to.include('field-three');
 
       expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-one.label',
-                                                            'fields.field-one.summary',
-                                                            'fields.field-one.label',
-                                                            'fields.field-one.legend'
-                                                           ]);
+        'fields.field-one.summary',
+        'fields.field-one.label',
+        'fields.field-one.legend'
+      ]);
       expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-one.changeLinkDescription',
-                                                            'fields.field-one.changeLinkDescription',
-                                                            'pages.confirm.fields.field-one.label',
-                                                            'fields.field-one.summary',
-                                                            'fields.field-one.label',
-                                                            'fields.field-one.legend'
-                                                           ]);
+        'fields.field-one.changeLinkDescription',
+        'pages.confirm.fields.field-one.label',
+        'fields.field-one.summary',
+        'fields.field-one.label',
+        'fields.field-one.legend'
+      ]);
 
       expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-two.label',
-                                                            'fields.field-two.summary',
-                                                            'fields.field-two.label',
-                                                            'fields.field-two.legend'
-                                                           ]);
+        'fields.field-two.summary',
+        'fields.field-two.label',
+        'fields.field-two.legend'
+      ]);
       expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-two.changeLinkDescription',
-                                                            'fields.field-two.changeLinkDescription',
-                                                            'pages.confirm.fields.field-two.label',
-                                                            'fields.field-two.summary',
-                                                            'fields.field-two.label',
-                                                            'fields.field-two.legend'
-                                                           ]);
+        'fields.field-two.changeLinkDescription',
+        'pages.confirm.fields.field-two.label',
+        'fields.field-two.summary',
+        'fields.field-two.label',
+        'fields.field-two.legend'
+      ]);
     });
 
     it('ignores fields with no value set', () => {
@@ -422,24 +421,20 @@ describe('Summary Page Behaviour', () => {
       req.form.options.sections = {
         'section-one': ['field-one']
       };
-      controller.getFieldData = () => {
-        return [
-          {
-            label: 'one',
-            value: 1
-          },
-          {
-            label: 'two',
-            value: 2
-          }
-        ];
-      };
+      controller.getFieldData = () => [
+        {
+          label: 'one',
+          value: 1
+        },
+        {
+          label: 'two',
+          value: 2
+        }
+      ];
       const result = controller.locals(req, res);
       expect(result.rows[0].fields.length).to.equal(2);
       expect(result.rows[0].fields[0].label).to.equal('one');
       expect(result.rows[0].fields[1].label).to.equal('two');
     });
-
   });
-
 });

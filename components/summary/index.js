@@ -4,15 +4,15 @@
 const _ = require('lodash');
 
 const getValue = (value, field, translate) => {
-if (Array.isArray(value)) {
-  return value.map((item) => getValue(item, field, translate));
-}
-const key = `fields.${field}.options.${value}.label`;
-let result = translate(key);
-if (result === key) {
-  result = value;
-}
-return result;
+  if (Array.isArray(value)) {
+    return value.map(item => getValue(item, field, translate));
+  }
+  const key = `fields.${field}.options.${value}.label`;
+  let result = translate(key);
+  if (result === key) {
+    result = value;
+  }
+  return result;
 };
 
 module.exports = SuperClass => class extends SuperClass {
@@ -54,9 +54,7 @@ module.exports = SuperClass => class extends SuperClass {
   }
 
   getStepForField(key, steps) {
-    return Object.keys(steps).filter(step => {
-      return steps[step].fields && steps[step].fields.indexOf(key) > -1;
-    })[0];
+    return Object.keys(steps).filter(step => steps[step].fields && steps[step].fields.indexOf(key) > -1)[0];
   }
 
   getFieldData(key, req) {

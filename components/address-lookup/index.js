@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 'use strict';
 
 const path = require('path');
@@ -74,7 +75,6 @@ module.exports = config => {
   const validate = config.validate;
 
   return superclass => class extends superclass {
-
     configure(req, res, callback) {
       this.model = new Model(_.merge({}, apiSettings, { validate }));
       req.query.step = req.query.step || 'postcode';
@@ -112,8 +112,8 @@ module.exports = config => {
         ]);
       } else if (req.query.step === 'lookup') {
         const addresses = req.sessionModel.get(`${addressKey}-addresses`);
-        const formattedlist = _.map(_.map(addresses, 'formatted_address'), address => {
-          address = address.split('\n').join(', ');
+        const formattedlist = _.map(_.map(addresses, 'formatted_address'), ads => {
+          const address = ads.split('\n').join(', ');
           return {
             value: address,
             label: address
@@ -217,10 +217,9 @@ module.exports = config => {
         const key = `${addressKey}-postcode`;
         const postcode = encodeURIComponent(req.form.values[key]);
         this.model.validate(postcode)
-          .then(() => {
-            return super.validate(req, res, callback);
-          })
-          .catch(err => {
+          .then(() => super.validate(req, res, callback))
+          .catch(e => {
+            let err = e;
             // this code is set by the model for a validation error
             if (err.status === 418) {
               err = {

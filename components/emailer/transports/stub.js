@@ -2,6 +2,4 @@
 
 const stub = require('nodemailer-stub-transport');
 
-module.exports = () => {
-  return stub();
-};
+module.exports = () => stub();

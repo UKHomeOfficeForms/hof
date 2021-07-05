@@ -2,8 +2,7 @@
 
 const ses = require('nodemailer-ses-transport');
 
-module.exports = (options) => {
-
+module.exports = options => {
   if (!options.accessKeyId) {
     throw new Error('Required option `accessKeyId` not found.');
   }
@@ -34,5 +33,4 @@ module.exports = (options) => {
     opts.maxConnections = options.maxConnections;
   }
   return ses(opts);
-
 };

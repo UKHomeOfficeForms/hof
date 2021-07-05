@@ -3,12 +3,10 @@
 const proxyquire = require('proxyquire');
 
 describe('transports/smtp', () => {
-
   let nodemailerSmtpTransport;
   let smtpTransport;
 
   beforeEach(() => {
-
     nodemailerSmtpTransport = sinon.stub();
 
     smtpTransport = proxyquire('../../../../components/emailer/transports/smtp', {
@@ -29,9 +27,7 @@ describe('transports/smtp', () => {
   });
 
   it('throws if either host or port are not passed', () => {
-    const make = opts => {
-      return () => smtpTransport(opts);
-    };
+    const make = opts => () => smtpTransport(opts);
     make({}).should.throw();
     make({ host: 'my.smtp.host' }).should.throw();
     make({ port: 25 }).should.throw();
@@ -124,5 +120,4 @@ describe('transports/smtp', () => {
       }
     }));
   });
-
 });

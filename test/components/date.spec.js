@@ -176,7 +176,8 @@ describe('Date Component', () => {
 
       it('calls res.render with template & key.', () => {
         date.hooks['pre-render'](req, res, next);
-        expect(res.render).to.have.been.calledWith(path.resolve(__dirname, '../../components/date/templates/date.html'), sinon.match({key: 'date-field'}));
+        const pathName = path.resolve(__dirname, '../../components/date/templates/date.html');
+        expect(res.render).to.have.been.calledWith(pathName, sinon.match({key: 'date-field'}));
       });
 
       it('passes error to the template if present', () => {

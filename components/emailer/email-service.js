@@ -8,31 +8,30 @@ const debug = require('debug')('hof:emailer');
 const Emailer = require('./emailer');
 
 module.exports = class EmailService {
-
-  constructor(options) {
-    options = options || {};
+  constructor(opts) {
+    const options = opts || {};
     this.layout = options.layout === undefined ? path.resolve(__dirname, './views/layout.html') : options.layout;
     this.emailer = new Emailer(options);
   }
 
-  send(recipient, body, subject) {
+  send(r, b, s) {
+    let body = b;
+    let subject = s;
+    let recipient = r;
+
     if (arguments.length === 1 && recipient.recipient) {
       body = recipient.body;
       subject = recipient.subject;
       recipient = recipient.recipient;
     }
     return this.render(recipient, body, subject)
-      .then(content => {
-        return this.emailer.send(recipient, subject, content);
-      });
+      .then(content => this.emailer.send(recipient, subject, content));
   }
 
   render(recipient, body, subject) {
     if (this.layout) {
       return this.template()
-        .then(template => {
-          return template.render({ recipient, body, subject });
-        });
+        .then(template => template.render({ recipient, body, subject }));
     }
     return Promise.resolve(body);
   }
@@ -49,5 +48,4 @@ module.exports = class EmailService {
       });
     });
   }
-
 };
