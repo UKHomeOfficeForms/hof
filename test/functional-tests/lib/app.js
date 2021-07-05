@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const partials = require('express-partial-templates');
 const template = require('hof-govuk-template');
 const cookieParser = require('cookie-parser');
+const mockPostcode = require('./mock-postcode');
 
 const Wizard = require('../../../wizard');
 
@@ -27,5 +28,6 @@ module.exports = config => {
   app.use(partials(app));
   app.use(mixins());
   app.use(Wizard(config.steps, config.fields, config.options));
+  app.use(mockPostcode);
   return app;
 };

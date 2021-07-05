@@ -2,6 +2,7 @@
 
 const webdriverio = require('webdriverio');
 const options = {
+  deprecationWarnings: false,
   desiredCapabilities: {
     browserName: 'chrome'
   }
@@ -10,6 +11,6 @@ const options = {
 const client = webdriverio
   .remote(options);
 
-client.addCommand('goto', require('hof-util-autofill')(client));
+client.addCommand('goto', require('../../../utilities').autofill(client));
 
 module.exports = () => client.init();

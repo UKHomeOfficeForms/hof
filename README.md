@@ -830,3 +830,424 @@ Using the translation key `fields.field-name.label` will return different values
 * If the value of `dependent-field` is `"value-1"` and the value of `dependent-field-2` is `"value-2"`, the label returned will be `"Label 2"`.
 * If the value of `dependent-field` is `"value-2"` the label returned will be `"Label 3"` regardless of the value of `dependent-field-2`
 * The default label `"Fallback label"` will be used if value of `dependent-field` is neither of the given options, or it is `undefined`. It will also be used if the value of `dependent-field` is `"value-1"` and the value of `dependent-field-2` is neither of the given options or it is undefined.
+
+# HOF Components
+
+## Date Component
+
+A component for handling the rendering and processing of 3-input date fields used in HOF Applications.
+
+## Usage
+
+In your fields config:
+```js
+const dateComponent = require('hof').components.date;
+
+module.exports = {
+  'date-field': dateComponent('date-field', {
+    validate: ['required', 'before']
+  })
+}
+```
+
+The above example will create a new date component with the key `'date-field'` and will apply the validators `required` and `before` (before today).
+
+## Configuration
+
+The following optional configuration options are supported:
+
+* `validate {String|Array}` - validators to use on the processed date field
+* `template` - an absolute path to an alternate template.
+* `dayOptional {Boolean}` - day defaults to `01` if omitted. Defaults to `false`
+* `monthOptional {Boolean}` - month defaults to `01` if omitted. If true then also forces `dayOptional` to be true. Defaults to `false`
+
+## Labels
+
+The three intermedate fields have fallback labels of Day, Month and Year, however custom labels can be used by including the translation at the following path:
+
+fields.json
+```json
+{
+  "field-name": {
+    "parts": {
+      "day": {
+        "label": "Custom Day Label"
+      },
+      "month": {
+        "label": "Custom Month Label"
+      },
+      "year": {
+        "label": "Custom Year Label"
+      }
+    }
+  }
+}
+```
+
+# Summary Page Component
+
+HOF behaviour for showing summary pages
+
+The behaviour mixin will create a set of "locals" data which is compatible with [the `confirm` view from `hof-template-partials`](https://github.com/UKHomeOfficeForms/hof-template-partials/blob/master/views/confirm.html).
+
+## Usage
+
+If no sections config is passed, then the mixin will create a section for each step that has fields, and a row within each section for each field on that step.
+
+```js
+'/confirm': {
+  behaviours: require('hof').components.summary,
+  ...
+}
+```
+
+
+Alternatively, sections can be defined manually as follows:
+
+```js
+'/confirm': {
+  behaviours: require('hof').components.summary,
+  sections: {
+    'museum-details': [
+      'name',
+      {
+        field: 'exhibit-addresses',
+        parse: (value) => value.map(a => a.address),
+        step: '/exhibit-add-another-address'
+      }
+    ],
+    'contact': [
+      'contact-name',
+      'contact-email',
+      'contact-phone',
+      {
+        field: 'contact-address',
+        step: '/contact-address'
+      }
+    ]
+  },
+  ...
+}
+```
+
+## Configuration
+
+The `sections` configuration should be a map of arrays, where the entries in the array are the fields that should be shown within that section.
+
+### Field configuration
+
+Fields can be defined as simple strings of the field key, in which case all default configuration will be used.
+
+Alternatively, a field can be passed as an object with a `field` property defining the field key, and any additional properties as follows:
+
+* `step` - `String` defines the step which the user is returned to to edit the field value. By default this is the first step in the form's steps configuration which contains the field.
+* `parse` - `Function` can parse the value for the field from the session into a value for display.
+* `derivation` - `Object` allows for a new derived field based on a combination of other fields in the form. Note that
+  if both `derivation` and `parse` are specified then parse will be applied to the result of derivation. E.G.
+  ```javascript
+     derivation: {
+       fromFields: ['field-one', 'field-two'],
+       combiner: (values) => values.map(it => Number(it)).reduce((a, b) => a + b, 0)
+     }
+  ```
+
+## Translations
+
+The content for section headings and field labels will be loaded from translation files based on the keys.
+
+### Section headings
+
+Translations for section headings are looked for in the following order:
+
+* `pages.confirm.sections.${key}.header`
+* `pages.${key}.header`
+
+### Field labels
+
+Translations for field labels are looked for in the following order:
+
+* `pages.confirm.fields.${key}.label`
+* `fields.${key}.label`
+* `fields.${key}.legend`
+
+# Emailer Component
+HOF behaviour to send emails
+
+## Usage
+
+```js
+const EmailBehaviour = require('hof').components.emailer;
+
+// configure email behaviour
+const emailer = EmailBehaviour({
+  transport: 'ses',
+  transportOptions: {
+    accessKeyId: '...',
+    secretAccessKey: '...'
+  },
+  template: path.resolve(__dirname, './views/emails/confirm.html'),
+  from: 'confirmation@homeoffice.gov.uk',
+  recipient: 'customer-email',
+  subject: 'Application Successful'
+});
+
+// in steps config
+steps: {
+  ...
+  '/confirm': {
+    behaviours: ['complete', emailer],
+    next: '/confirmation',
+    ...
+  },
+  ...
+}
+```
+
+## Options
+
+In addition to the options passed to `hof-emailer`, the following options can be used:
+
+* `recipient` - _Required_ - defines the address to which email will be sent. This can be set either as a key to retrieve an email address from the session, or explicitly to an email address.
+* `template` - _Required_ - defines the mustache template used to render the email content.
+* `subject` - defines the subject line of the email.
+* `parse` - parses the session model into an object used to populate the template.
+
+`recipient` and `subject` options can also be defined as functions, which will be passed a copy of the session model and a translation function as arguments, and should return a string value.
+
+```js
+// use a translated value for the email subject line
+const emailer = EmailBehaviour({
+  // ...
+  subject: (model, translate) => translate('email.success.subject')
+});
+```
+
+# HOF Emailer
+
+An emailer service for HOF applications.
+
+## Installation
+
+```bash
+$ npm install hof-emailer --save
+```
+
+## Usage
+
+```js
+// first create an emailer instance
+const Emailer = require('hof').components.email.emailer;
+const emailer = new Emailer({
+  from: 'sender@example.com',
+  transport: 'smtp',
+  transportOptions: {
+    host: 'my.smtp.host',
+    port: 25
+  }
+});
+
+// then you can use your emailer to send emails
+const to = 'recipient@example.com';
+const body = 'This is the email body';
+const subject = 'Important email!'
+emailer.send(to, body, subject)
+  .then(() => {
+    console.log(`Email sent to ${to}!`);
+  });
+```
+
+## Options
+
+- `from`: <String>: Address to send emails from. Required.
+- `transport`: <String>: Select what mechanism to use to send emails. Defaults: 'smtp'.
+- `transportOptions`: <Object>: Set the options for the chosen transport, as defined below. Required.
+- `layout`: <String>: Optional path to use a custom layout for email content.
+
+## Transports
+
+The following transport options are available:
+
+### `smtp`
+
+[nodemailer-smtp-transport](https://github.com/andris9/nodemailer-smtp-transport)
+
+#### Options
+
+- `host` <String>: Address of the mailserver. Required.
+- `port` <String|Number>: Port of the mailserver. Required.
+- `ignoreTLS` <Boolean>: Defaults to false.
+- `secure` <Boolean>: Defaults to true.
+- `auth.user` <String>: Mailserver authorisation username.
+- `auth.pass` <String>: Mailserver authorisation password.
+
+### `ses`
+[nodemailer-ses-transport](https://github.com/andris9/nodemailer-ses-transport)
+
+#### Options
+
+- `accessKeyId` <String>: AWS accessKeyId. Required.
+- `secretAccessKey` <String>: AWS accessKeyId. Required.
+- `sessionToken` <String>
+- `region` <String>. Defaults to 'eu-west-1'.
+- `httpOptions` <String>
+- `rateLimit` <String>
+- `maxConnections` <String>
+
+### `debug`
+
+A development option to write the html content of the email to a file for inspection.
+
+`transport: 'debug'`
+
+#### debug options
+
+- `dir` <String>: The location to save html to. Default: `./.emails`. This directory will be created if it does not exist.
+- `open` <Boolean>: If set to true, will automatically open the created html file in a browser.
+
+#### debug example
+
+```
+transport: 'debug'
+transportOptions: {
+  dir: './emails',
+  open: true
+}
+```
+### `stub`
+
+Disables sending email. No options are required.
+
+# UTILITIES
+
+# Autofill Utility
+A webdriverio plugin to automate filling a form
+
+## Usage
+
+First, add the command to your webdriverio client:
+
+```js
+const webdriver = require('webdriverio');
+const client = webdriver.remote(options);
+
+client.addCommand('goto', require('hof-util-autofill')(client));
+```
+
+The command can be given any name you like, here we've called it `goto`.
+
+Then you can use the command as normal as part of your webdriver command chain.
+
+```js
+it('completes a form to a certain step automatically', () => {
+  return browser.goto('/confirm')
+    .getUrl()
+    .then((url) => {
+      assert.ok(url.indexOf('/confirm') > -1);
+    });
+});
+
+it('uses any data passed as a second argument to fill out the form', () => {
+  const inputs = { 'first-name': 'David', 'last-name': 'Hasselhoff' };
+  return browser.goto('/confirm', inputs)
+    .$('span.full-name')
+    .getText()
+    .then(name => {
+      assert.equal(name, 'David HasselHoff');
+    });
+});
+
+it('saves screenshots of errors to specified screenshot location', () => {
+  const inputs = {};
+  return browser.goto('/confirm', inputs, { screenshots: '/path/to/output/dir' });
+});
+
+it('tries a pre-specified number of times to get past stuck loops', () => {
+  const inputs = {};
+  return browser.goto('/confirm', inputs, { maxLoops: 1 });
+});
+```
+
+## Options
+
+Options are passed as a third argument to the exposed method. The following options are available:
+
+* `maxLoops` - determines how many times a step will retry if it resolves back to itself on submission before failing. Default: `3`
+* `screenshots` - specifies a location to save screenshots of the page when it gets stuck. If not specified then no screenshots are saved.
+
+# Test-Data Utility
+Generator for test fixtures
+
+## Usage
+
+The library contains a number of generators for values of certain types. Values are generators on accessing the type property.
+
+### Example:
+
+```js
+const TestData = require('hof').utils.testData;
+
+console.log(TestData.name);
+// "David Fletcher"
+
+console.log(TestData.name);
+// "Irene O'Grady"
+```
+
+## Available generators
+
+* `firstname`
+* `lastname`
+* `name`
+* `email`
+* `phone`
+* `streetname`
+* `streetsuffix`
+* `address` - `${number(1,100)} ${streetname} ${streetsuffix}`
+* `postcode`
+* `country` - a random country from [homeoffice-countries](npmjs.com/homeoffice-countries)
+
+## Functions
+
+* `number(min, max)` - returns an integer between `min` and `max`
+* `number(max)` - returns an integer between 0 and `max`
+* `number()` - returns an integer between 0 and 100
+
+# Countries Utility
+
+A utility to parse `homeoffice-countries` into a usable format for hof select elements
+
+By default hof select elements expect a list of options as an objet with `value` and `label` properties. If passed an array of strings as options it will attempt to translate the strings with some field-specific keys attached.
+
+## Usage
+
+In field configuration:
+
+```js
+{
+  country: {
+    mixin: 'select',
+    validate: 'required',
+    options: require('hof').utils.countries()
+  }
+}
+```
+
+## Options
+
+If needed, the following options can be passed into the countries function:
+
+* `filter` - `Function` - applies a filter to the list of country names before mapping them
+* `parse` - `Function` - applies a transform to the country name before setting the label
+
+## i18n
+
+If you wish to translate the countries into outher languages, you may want the labels to be in the form of translation keys. In this case you can use a `parse` option to convert the country names into a translation key:
+
+```js
+const countries = require('hof').utils.countries;
+const options = countries({
+  parse: country => `countries.${country.toLowerCase().split(' ').join('-')}`
+});
+```
+
+You can then define a single translation for country names to be used for all country list instances.
