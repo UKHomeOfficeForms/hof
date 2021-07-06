@@ -1,9 +1,8 @@
-var characterCount = require('../../../../frontend/toolkit/assets/javascript/character-count'),
-  util = require('../lib/util'),
-  $ = require('jquery');
+var characterCount = require('../../../../frontend/toolkit/assets/javascript/character-count');
+var util = require('../lib/util');
+var $ = require('jquery');
 
 describe('character-count', function () {
-
   beforeEach(function () {
     $('#test-container').append($('<form />'));
   });
@@ -13,7 +12,6 @@ describe('character-count', function () {
   });
 
   describe('initialisation', function () {
-
     beforeEach(function () {
       $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="50"></textarea><span id="test-maxlength-hint" class="form-hint">50 maximum characters</span></div>'));
     });
@@ -27,11 +25,9 @@ describe('character-count', function () {
       characterCount();
       $('#test').should.not.have.property('maxlength');
     });
-
   });
 
   describe('update on input', function () {
-
     beforeEach(function () {
       // textarea with 10 maximum characters
       $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><span id="test-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
@@ -71,11 +67,9 @@ describe('character-count', function () {
       $('#test-maxlength-hint').hasClass('form-hint').should.be.true;
       $('#test-maxlength-hint').hasClass('error-messsage').should.be.false;
     });
-
   });
 
-  describe('high character counts', function() {
-
+  describe('high character counts', function () {
     beforeEach(function () {
       $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="2000"></textarea><span id="test-maxlength-hint" class="form-hint">2000 maximum characters</span></div>'));
       characterCount();
@@ -84,11 +78,9 @@ describe('character-count', function () {
     it('should insert commas when character count is 1000 or more, so screen readers do not read the number as a year', function () {
       $('#test-maxlength-hint').text().should.have.string('You have 2,000 characters remaining');
     });
-
   });
 
   describe('update on timer for assistive technologies', function () {
-
     beforeEach(function () {
       $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><span id="test-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
       characterCount();
@@ -110,11 +102,9 @@ describe('character-count', function () {
         done();
       }, 1100);
     });
-
   });
 
   describe('multiple textareas', function () {
-
     beforeEach(function () {
       $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><span id="test-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
       $('form').append($('<div id="test2-group"><textarea name="test2" id="test2" class="maxlength" maxlength="10"></textarea><span id="test2-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
@@ -136,7 +126,5 @@ describe('character-count', function () {
       $('#test-maxlength-hint').text().should.have.string('You have 1 character remaining');
       $('#test2-maxlength-hint').text().should.have.string('You have 4 characters remaining');
     });
-
   });
-
 });

@@ -6,8 +6,7 @@ const moment = require('moment');
 
 const renderer = require('./render');
 
-module.exports = (options) => (req, res, next) => {
-
+module.exports = options => (req, res, next) => {
   const hoganRender = renderer(res);
 
   const t = function (key) {
@@ -100,5 +99,4 @@ module.exports = (options) => (req, res, next) => {
   };
 
   next();
-
 };

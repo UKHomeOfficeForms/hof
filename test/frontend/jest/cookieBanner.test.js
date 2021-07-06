@@ -7,7 +7,6 @@ const path = require('path');
 const cookieSettings = require('../../../frontend/theme/client-js/cookieSettings');
 
 describe('ga-tag', () => {
-
   let GOVUK;
   let focusMock;
 
@@ -24,7 +23,6 @@ describe('ga-tag', () => {
   });
 
   describe('cookie banner', () => {
-
     let bannerContainer;
 
     beforeEach(() => {
@@ -52,7 +50,7 @@ describe('ga-tag', () => {
     test('it should hide fallback content if JS is enabled', () => {
       cookieSettings.initialiseCookieBanner();
       const fallbackContent = document.getElementsByClassName('js-disabled');
-      for (let element of fallbackContent) {
+      for (const element of fallbackContent) {
         expect(element.style.display).toEqual('none');
       }
     });
@@ -60,23 +58,22 @@ describe('ga-tag', () => {
     test('it should show interactive content if JS is enabled', () => {
       cookieSettings.initialiseCookieBanner();
       const interactiveContent = document.getElementsByClassName('js-enabled');
-      for (let element of interactiveContent) {
+      for (const element of interactiveContent) {
         expect(element.style.display).toEqual('block');
       }
     });
 
     describe('cookie banner buttons', () => {
-
       test('it should set usage true on clicking `yes` button', () => {
         cookieSettings.initialiseCookieBanner();
-        let expected = '{"essential":true,"usage":true}';
+        const expected = '{"essential":true,"usage":true}';
         document.getElementById('accept-cookies-button').click();
         expect(GOVUK.cookie).toHaveBeenNthCalledWith(2, 'cookie_preferences', expected, { days: 30 });
       });
 
       test('it should set usage false on clicking `no` button', () => {
         cookieSettings.initialiseCookieBanner();
-        let expected = '{"essential":true,"usage":false}';
+        const expected = '{"essential":true,"usage":false}';
         document.getElementById('reject-cookies-button').click();
         expect(GOVUK.cookie).toHaveBeenNthCalledWith(2, 'cookie_preferences', expected, { days: 30 });
       });
@@ -100,35 +97,32 @@ describe('ga-tag', () => {
         document.getElementById('hide-cookie-banner').click();
         expect(document.getElementById('cookie-banner').style.display).toEqual('none');
       });
-
     });
-
   });
 
   describe('cookie page', () => {
-
     let cookieSettingsContainer;
 
     beforeEach(() => {
       cookieSettingsContainer = document.createElement('div');
       cookieSettingsContainer.id = 'cookie-settings';
 
-      let jsEnabled = document.createElement('div');
+      const jsEnabled = document.createElement('div');
       jsEnabled.classList.add('js-enabled');
 
-      let radioButtons = document.createElement('div');
+      const radioButtons = document.createElement('div');
       jsEnabled.appendChild(radioButtons);
       radioButtons.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-settings-radio.html'), 'utf8');
 
-      let submitButton = document.createElement('div');
+      const submitButton = document.createElement('div');
       jsEnabled.appendChild(submitButton);
       submitButton.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-settings-button.html'), 'utf8');
 
-      let cookieNotification = document.createElement('div');
+      const cookieNotification = document.createElement('div');
       jsEnabled.appendChild(cookieNotification);
       cookieNotification.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-notification.html'), 'utf8');
 
-      let jsDisabled = document.createElement('div');
+      const jsDisabled = document.createElement('div');
       jsDisabled.classList.add('js-disabled');
 
       document.body.appendChild(cookieSettingsContainer);
@@ -143,7 +137,7 @@ describe('ga-tag', () => {
     test('it should hide fallback content if JS is enabled', () => {
       cookieSettings.initialiseCookiePage();
       const fallbackContent = document.getElementsByClassName('js-disabled');
-      for (let element of fallbackContent) {
+      for (const element of fallbackContent) {
         expect(element.style.display).toEqual('none');
       }
     });
@@ -151,13 +145,12 @@ describe('ga-tag', () => {
     test('it should show interactive content if JS is enabled', () => {
       cookieSettings.initialiseCookiePage();
       const interactiveContent = document.getElementsByClassName('js-enabled');
-      for (let element of interactiveContent) {
+      for (const element of interactiveContent) {
         expect(element.style.display).toEqual('block');
       }
     });
 
     describe('cookie page form controls', () => {
-
       test('it should set first radio button checked if usage is true', () => {
         GOVUK.cookie.mockReturnValueOnce('{"usage": true}');
         cookieSettings.initialiseCookiePage();
@@ -188,7 +181,7 @@ describe('ga-tag', () => {
 
       test('it should set usage true on submit with first radio button checked', () => {
         cookieSettings.initialiseCookiePage();
-        let expected = '{"essential":true,"usage":true}';
+        const expected = '{"essential":true,"usage":true}';
         document.getElementById('radio-1').click();
         document.getElementById('save-cookie-settings').click();
         expect(GOVUK.cookie).toHaveBeenNthCalledWith(2, 'cookie_preferences', expected, { days: 30 });
@@ -196,7 +189,7 @@ describe('ga-tag', () => {
 
       test('it should set usage false on submit with second radio button checked', () => {
         cookieSettings.initialiseCookiePage();
-        let expected = '{"essential":true,"usage":false}';
+        const expected = '{"essential":true,"usage":false}';
         document.getElementById('radio-2').click();
         document.getElementById('save-cookie-settings').click();
         expect(GOVUK.cookie).toHaveBeenNthCalledWith(2, 'cookie_preferences', expected, { days: 30 });
@@ -219,7 +212,7 @@ describe('ga-tag', () => {
       });
 
       test('it should hide the cookie banner on submit', () => {
-        let testBanner = document.createElement('div');
+        const testBanner = document.createElement('div');
         testBanner.id = 'cookie-banner';
         document.body.appendChild(testBanner);
 
@@ -227,9 +220,6 @@ describe('ga-tag', () => {
         document.getElementById('save-cookie-settings').click();
         expect(document.getElementById('cookie-banner').style.display).toEqual('none');
       });
-
     });
-
   });
-
 });

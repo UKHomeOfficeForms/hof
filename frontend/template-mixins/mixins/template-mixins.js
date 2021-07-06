@@ -27,7 +27,6 @@ const PARTIALS = [
 //   - sharedTranslationsKey: used to find translations relatively within
 //     the translations.json. Useful for field and button labels.
 module.exports = function (options) {
-
   const compiled = {};
   const templateCache = {};
 
@@ -60,7 +59,6 @@ module.exports = function (options) {
   }
 
   return function (req, res, next) {
-
     const roots = [].concat(req.app.get('views')).concat(options.viewsDirectory);
     const View = req.app.get('view');
 
@@ -132,13 +130,11 @@ module.exports = function (options) {
       } else if (child === 'html' || res.locals[child]) {
         if (res.locals.partials['partials-mixins-panel']) {
           return readTemplate(res.locals.partials['partials-mixins-panel']);
-        } else {
-          const panelPath = path.join(options.viewsDirectory, PANELMIXIN);
-          return readTemplate(panelPath);
         }
-      } else {
-        return child;
+        const panelPath = path.join(options.viewsDirectory, PANELMIXIN);
+        return readTemplate(panelPath);
       }
+      return child;
     }
 
     function isRequired(field) {
@@ -185,7 +181,7 @@ module.exports = function (options) {
       };
     }
 
-// eslint-disable-next-line complexity
+    // eslint-disable-next-line complexity
     function inputText(key, extension) {
       extension = extension || {};
 
@@ -283,7 +279,7 @@ module.exports = function (options) {
       };
     }
 
-// eslint-disable-next-line complexity
+    // eslint-disable-next-line complexity
     function checkbox(key, opts) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
@@ -483,13 +479,11 @@ module.exports = function (options) {
         const mixin = this.mixin || 'input-text';
         if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
           return res.locals[mixin]().call(Object.assign({}, res.locals), this.key);
-        } else {
-          throw new Error('Mixin: "' + mixin + '" not found');
         }
+        throw new Error('Mixin: "' + mixin + '" not found');
       };
     };
 
     next();
   };
-
 };

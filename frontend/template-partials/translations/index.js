@@ -18,11 +18,9 @@ const resources = langs.reduce((map, lang) => {
   return map;
 }, {});
 
-module.exports = (namespace) => {
+module.exports = namespace => {
   if (typeof namespace === 'string') {
-    return _.mapValues(resources, lang => {
-      return { [namespace]: lang.default };
-    });
+    return _.mapValues(resources, lang => ({ [namespace]: lang.default }));
   }
   return resources;
 };

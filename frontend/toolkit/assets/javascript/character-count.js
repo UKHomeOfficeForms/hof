@@ -2,7 +2,7 @@
 
 var helpers = require('./helpers');
 
-CharacterCount.prototype.updateCount = function() {
+CharacterCount.prototype.updateCount = function () {
   var currentLength = this.$textarea.value.length;
   var characterNoun = ' characters';
   var remainderSuffix = ' remaining';
@@ -54,7 +54,7 @@ CharacterCount.prototype.handleBlur = function () {
   clearInterval(this.lengthChecker);
 };
 
-CharacterCount.prototype.init = function() {
+CharacterCount.prototype.init = function () {
   // Updates hint to js-enabled message
   this.updateCount();
 

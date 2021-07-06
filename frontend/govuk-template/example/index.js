@@ -12,7 +12,7 @@ app.set('views', path.resolve(__dirname, 'views'));
 
 app.use(template());
 app.get('*', (req, res) => {
-    res.render('index');
+  res.render('index');
 });
 
 app.listen(3000);

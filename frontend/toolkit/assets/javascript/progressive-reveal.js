@@ -3,10 +3,10 @@
 var each = require('lodash').forEach;
 var groupBy = require('lodash').groupBy;
 
-var helpers = require('./helpers'),
-  inputs, groups,
-  toggleAttr = 'data-toggle',
-  hiddenClass = 'js-hidden';
+var helpers = require('./helpers');
+var inputs; var groups;
+var toggleAttr = 'data-toggle';
+var hiddenClass = 'js-hidden';
 
 function inputClicked(e, target) {
   target = target || helpers.target(e);
@@ -51,8 +51,8 @@ function setupReveal(input) {
 }
 
 function progressiveReveal() {
-  var forms = document.getElementsByTagName('form'),
-    input;
+  var forms = document.getElementsByTagName('form');
+  var input;
 
   if (forms.length > 0) {
     inputs = document.querySelectorAll('input,textarea');

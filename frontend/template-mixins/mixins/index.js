@@ -8,7 +8,6 @@ const mixins = require('./template-mixins');
 const helpers = require('./helpers');
 
 module.exports = (options, deprecated) => {
-
   if (arguments.length === 2) {
     deprecate([
       'hof-template-mixins: Passing field config to mixins is deprecated',
@@ -34,5 +33,4 @@ module.exports = (options, deprecated) => {
   router.use(helpers(options));
 
   return router;
-
 };

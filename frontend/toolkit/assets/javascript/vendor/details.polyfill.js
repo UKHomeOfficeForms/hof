@@ -11,7 +11,7 @@
 
   var NATIVE_DETAILS = typeof document.createElement('details').open === 'boolean';
 
-  // Add event construct for modern browsers or IE
+  // Add event varruct for modern browsers or IE
   // which fires the callback with a pre-converted target reference
   function addEvent(node, type, callback) {
     if (node.addEventListener) {
@@ -65,7 +65,6 @@
 
   // Initialisation function
   function addDetailsPolyfill(list) {
-
     // If this has already happened, just return
     // else set the flag so it doesn't happen again
     if (started) {
@@ -80,7 +79,7 @@
     }
 
     // else iterate through them to apply their initial state
-    var n = list.length, i = 0;
+    var n = list.length; var i = 0;
     for (i; i < n; i++) {
       var details = list[i];
 
@@ -129,7 +128,6 @@
       // If this is not a native implementation, create an arrow
       // inside the summary
       if (!NATIVE_DETAILS) {
-
         var twisty = document.createElement('i');
 
         if (openAttr === true) {
@@ -142,14 +140,12 @@
 
         details.__summary.__twisty = details.__summary.insertBefore(twisty, details.__summary.firstChild);
         details.__summary.__twisty.setAttribute('aria-hidden', 'true');
-
       }
     }
 
     // Define a statechange function that updates aria-expanded and style.display
     // Also update the arrow position
     function statechange(summary) {
-
       var expanded = summary.__details.__summary.getAttribute('aria-expanded') === 'true';
       var hidden = summary.__details.__content.getAttribute('aria-hidden') === 'true';
 
@@ -176,7 +172,7 @@
     }
 
     // Bind a click event to handle summary elements
-    addClickEvent(document, function(e, summary) {
+    addClickEvent(document, function (e, summary) {
       if (!(summary = getAncestor(summary, 'summary'))) {
         return true;
       }
@@ -189,5 +185,4 @@
   // but if it's not supported then the second one will fire
   addEvent(document, 'DOMContentLoaded', addDetailsPolyfill);
   addEvent(window, 'load', addDetailsPolyfill);
-
 })();
