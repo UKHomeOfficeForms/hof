@@ -4,7 +4,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const cookieSettings = require('../../frontend/theme/client-js/cookieSettings');
+const cookieSettings = require('../../../frontend/theme/client-js/cookieSettings');
 
 describe('ga-tag', () => {
 
@@ -30,7 +30,7 @@ describe('ga-tag', () => {
     beforeEach(() => {
       bannerContainer = document.createElement('div');
       bannerContainer.id = 'global-cookie-message';
-      bannerContainer.innerHTML = fs.readFileSync(path.join(__dirname, '../../frontend/template-partials/views/partials/cookie-banner.html'), 'utf8');
+      bannerContainer.innerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-banner.html'), 'utf8');
       document.body.appendChild(bannerContainer);
     });
 
@@ -118,15 +118,15 @@ describe('ga-tag', () => {
 
       let radioButtons = document.createElement('div');
       jsEnabled.appendChild(radioButtons);
-      radioButtons.outerHTML = fs.readFileSync(path.join(__dirname, '../../frontend/template-partials/views/partials/cookie-settings-radio.html'), 'utf8');
+      radioButtons.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-settings-radio.html'), 'utf8');
 
       let submitButton = document.createElement('div');
       jsEnabled.appendChild(submitButton);
-      submitButton.outerHTML = fs.readFileSync(path.join(__dirname, '../../frontend/template-partials/views/partials/cookie-settings-button.html'), 'utf8');
+      submitButton.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-settings-button.html'), 'utf8');
 
       let cookieNotification = document.createElement('div');
       jsEnabled.appendChild(cookieNotification);
-      cookieNotification.outerHTML = fs.readFileSync(path.join(__dirname, '../../frontend/template-partials/views/partials/cookie-notification.html'), 'utf8');
+      cookieNotification.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-notification.html'), 'utf8');
 
       let jsDisabled = document.createElement('div');
       jsDisabled.classList.add('js-disabled');

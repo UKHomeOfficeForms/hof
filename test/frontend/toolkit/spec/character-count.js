@@ -1,4 +1,4 @@
-var characterCount = require('../../../../frontend').toolkit.characterCount,
+var characterCount = require('../../../../frontend/toolkit/assets/javascript/character-count'),
   util = require('../lib/util'),
   $ = require('jquery');
 
@@ -90,26 +90,25 @@ describe('character-count', function () {
   describe('update on timer for assistive technologies', function () {
 
     beforeEach(function () {
-      this.clock = sinon.useFakeTimers();
       $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><span id="test-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
       characterCount();
     });
 
-    afterEach(function () {
-      this.clock.restore();
-    });
-
-    it('should update the hint message even when the value is directly edited without an input event', function () {
+    it('should update the hint message even when the value is directly edited without an input event', function (done) {
       $('#test').val('nineChars');
       $('#test').focus();
-      this.clock.tick(1100);
-      $('#test-maxlength-hint').text().should.have.string('You have 1 character remaining');
+      setTimeout(function () {
+        $('#test-maxlength-hint').text().should.have.string('You have 1 character remaining');
+        done();
+      }, 1100);
     });
 
     it('should not update the hint message if the value is the same length and there have been no input events', function () {
       $('#test').focus();
-      this.clock.tick(1100);
-      $('#test-maxlength-hint').text().should.have.string('You have 10 characters remaining');
+      setTimeout(function () {
+        $('#test-maxlength-hint').text().should.have.string('You have 10 characters remaining');
+        done();
+      }, 1100);
     });
 
   });

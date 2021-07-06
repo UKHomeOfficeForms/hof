@@ -1,4 +1,4 @@
-var formFocus = require('../../../../frontend').toolkit.formFocus,
+var formFocus = require('../../../../frontend/toolkit/assets/javascript/form-focus'),
     util = require('../lib/util'),
     $ = require('jquery');
 

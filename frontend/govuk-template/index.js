@@ -7,9 +7,8 @@ const build_template_layout = require('./build');
 
 const basedir = path.dirname(require.resolve('govuk_template_mustache/package.json'));
 
-module.exports = options => {
+const setup = (options, router) => {
   build_template_layout();
-  const router = new Router();
   options = options || {};
   options.path = options.path || '/govuk-assets';
 
@@ -22,4 +21,9 @@ module.exports = options => {
   });
 
   return router;
+};
+
+module.exports = (options, app) => {
+  const router = app || new Router();
+  return setup(options, router);
 };

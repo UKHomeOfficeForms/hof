@@ -7,17 +7,16 @@ const assert = require('assert');
 describe('tests', () => {
   let browser;
   let app;
-  let port;
+  let port = 8080;
+
+  beforeEach(() => {
+    browser = Browser().url(`http://localhost:${port}`);
+    return browser;
+  });
+
+  afterEach(() => browser.end());
 
   describe('#Looping-Behaviour', () => {
-    port = 8080;
-
-    beforeEach(() => {
-      browser = Browser().url(`http://localhost:${port}`);
-      return browser;
-    });
-
-    afterEach(() => browser.end());
 
     before(() => {
       app = App(require('./apps/default')).listen();
@@ -28,68 +27,78 @@ describe('tests', () => {
       app.close();
     });
 
-    it('can return to a looping step to edit', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('/confirm'));
-      })
-      .url(`http://localhost:${port}/two/edit`)
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('/two/edit'));
-      }));
+    it('can return to a looping step to edit', () => {
+      return browser.goto('/confirm', { loop: 'no', fork: 'no' })
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('/confirm'));
+        })
+        .url(`http://localhost:${port}/two/edit`)
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('/two/edit'));
+        })
+    });
 
-    it('prevents accessing a looping step once the loop has been started', () => browser.goto('/two')
-      .$('input[name="loop"][value="yes"]').click()
-      .submitForm('form')
-      .submitForm('form')
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('/one-a'));
-      })
-      .url(`http://localhost:${port}/two`)
-      .getUrl()
-      .then(url => {
-        assert.ok(!url.includes('/two'));
-        assert.ok(url.includes('/one'));
-      }));
+    it('prevents accessing a looping step once the loop has been started', () => {
+      return browser.goto('/two')
+        .$('input[name="loop"][value="yes"]').click()
+        .submitForm('form')
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('/one-a'));
+        })
+        .url(`http://localhost:${port}/two`)
+        .getUrl()
+        .then(url => {
+          assert.ok(!url.includes('/two'));
+          assert.ok(url.includes('/one'));
+        })
+    });
 
-    it('cannot go back to confirm page after editing a fork', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('confirm'));
-      })
-      .url(`http://localhost:${port}/three/edit`)
-      .$('input[name="fork"][value="yes"]').click()
-      .submitForm('form')
-      .url(`http://localhost:${port}/confirm`)
-      .getUrl()
-      .then(url => {
-        assert.ok(!url.includes('/confirm'));
-      }));
+    it('cannot go back to confirm page after editing a fork', () => {
+      return browser.goto('/confirm', { loop: 'no', fork: 'no' })
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('confirm'));
+        })
+        .url(`http://localhost:${port}/three/edit`)
+        .$('input[name="fork"][value="yes"]').click()
+        .submitForm('form')
+        .url(`http://localhost:${port}/confirm`)
+        .getUrl()
+        .then(url => {
+          assert.ok(!url.includes('/confirm'));
+        })
+    });
 
-    it('goes back to confirm page after editing first step', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('confirm'));
-      })
-      .url(`http://localhost:${port}/one/edit`)
-      .submitForm('form')
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('/confirm'));
-      }));
+    it('goes back to confirm page after editing first step', () => {
+      return browser.goto('/confirm', { loop: 'no', fork: 'no' })
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('confirm'));
+        })
+        .url(`http://localhost:${port}/one/edit`)
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('/confirm'));
+        })
+    });
 
-    it('does not autocomplete confirm page', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('confirm'));
-      })
-      .url(`http://localhost:${port}/confirmation`)
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('/confirm'));
-      }));
+    it('does not autocomplete confirm page', () => {
+      return browser.goto('/confirm', { loop: 'no', fork: 'no' })
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('confirm'));
+        })
+        .url(`http://localhost:${port}/confirmation`)
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('/confirm'));
+        })
+    });
 
     describe('with loop preceding confirm page', () => {
       before(() => {
@@ -101,14 +110,16 @@ describe('tests', () => {
         app.close();
       });
 
-      it('allows returning to the confirmation page from a loop page in an edit journey', () => browser.goto('/confirm')
-        .url(`http://localhost:${port}/two/edit`)
-        .$('input[name="loop"][value="no"]').click()
-        .submitForm('form')
-        .getUrl()
-        .then(url => {
-          assert.ok(url.includes('/confirm'));
-        }));
+      it('allows returning to the confirmation page from a loop page in an edit journey', () => {
+        return browser.goto('/confirm')
+          .url(`http://localhost:${port}/two/edit`)
+          .$('input[name="loop"][value="no"]').click()
+          .submitForm('form')
+          .getUrl()
+          .then(url => {
+            assert.ok(url.includes('/confirm'));
+          })
+      });
     });
 
     describe('with looping step before and after the loop', () => {
@@ -121,13 +132,15 @@ describe('tests', () => {
         app.close();
       });
 
-      it('allows accessing the loop through first looping step', () => browser.url(`http://localhost:${port}/loop`)
-        .$('input[name="loop"][value="yes"]').click()
-        .submitForm('form')
-        .getUrl()
-        .then(url => {
-          assert.ok(url.includes('/two'));
-        }));
+      it('allows accessing the loop through first looping step', () => {
+        return browser.url(`http://localhost:${port}/loop`)
+          .$('input[name="loop"][value="yes"]').click()
+          .submitForm('form')
+          .getUrl()
+          .then(url => {
+            assert.ok(url.includes('/two'));
+          })
+      });
     });
 
     describe('configurable confirm step url', () => {
@@ -140,18 +153,19 @@ describe('tests', () => {
         app.close();
       });
 
-      it('allows accessing the loop through first looping step', () => browser.goto('/summary')
-        .url(`http://localhost:${port}/two/edit`)
-        .submitForm('form')
-        .getUrl()
-        .then(url => {
-          assert.ok(url.includes('/summary'));
-        }));
+      it('allows accessing the loop through first looping step', () => {
+        return browser.goto('/summary')
+          .url(`http://localhost:${port}/two/edit`)
+          .submitForm('form')
+          .getUrl()
+          .then(url => {
+            assert.ok(url.includes('/summary'));
+          })
+      });
     });
   });
 
   describe('#Address-Lookup', () => {
-    port = 8081;
 
     describe('default address lookup behaviour', () => {
       before(() => {
@@ -164,7 +178,7 @@ describe('tests', () => {
       });
 
       it('redirects to the address substep on a failed lookup', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('input')
           .setValue('BN25 1XY')
           .submitForm('form')
@@ -175,7 +189,7 @@ describe('tests', () => {
       });
 
       it('redirects to the lookup step on a successful lookup', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('input')
           .setValue('CR0 2EU')
           .submitForm('form')
@@ -186,7 +200,7 @@ describe('tests', () => {
       });
 
       it('fails on an invalid postcode', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('input')
           .setValue('INVALID')
           .submitForm('form')
@@ -197,7 +211,7 @@ describe('tests', () => {
       });
 
       it('fails on a non-English postcode', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('input')
           .setValue('CH5 1AB')
           .submitForm('form')
@@ -208,7 +222,7 @@ describe('tests', () => {
       });
 
       it('redirects to next step when an address is selected', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('input')
           .setValue('CR0 2EU')
           .submitForm('form')
@@ -221,7 +235,7 @@ describe('tests', () => {
       });
 
       it('redirects back to postcode step if change link is clicked', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('input')
           .setValue('CR0 2EU')
           .submitForm('form')
@@ -238,7 +252,7 @@ describe('tests', () => {
       });
 
       it('redirects to manual step if cant-find link is clicked', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('input')
           .setValue('CR0 2EU')
           .submitForm('form')
@@ -255,7 +269,7 @@ describe('tests', () => {
       });
 
       it('allows user through to next step if no postcode is entered', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .submitForm('form')
           .getUrl()
           .then(url => {
@@ -264,7 +278,7 @@ describe('tests', () => {
       });
 
       it('persists address on manual entry step when returning from later step (bugfix)', () => {
-        browser.url('/address-default-one')
+        return browser.url('/address-default-one')
           .$('a[href*="step=manual"]')
           .click()
           .$('textarea')
@@ -288,12 +302,11 @@ describe('tests', () => {
         app.close();
       });
 
-      it('throws a validaton error if no postcode is entered', () => {
-        browser.url('/address-required-one')
+      it('throws a validation error if no postcode is entered', () => {
+        return browser.url('/address-required-one')
           .submitForm('form')
           .getUrl()
           .then(url => {
-            assert.ok(url.includes('step=postcode'));
             assert.ok(url.includes('/address-required-one'));
           });
       });
@@ -310,7 +323,7 @@ describe('tests', () => {
       });
 
       it('goes back to postcode step when clicking backlink from the lookup step', () => {
-        browser.url('/address-backlink-one')
+        return browser.url('/address-backlink-one')
           .submitForm('form')
           .getUrl()
           .then(url => {
@@ -335,7 +348,7 @@ describe('tests', () => {
       });
 
       it('goes back to postcode step when clicking backlink from `cant find the address in the list`', () => {
-        browser.url('/address-backlink-one')
+        return browser.url('/address-backlink-one')
           .submitForm('form')
           .getUrl()
           .then(url => {
@@ -366,7 +379,7 @@ describe('tests', () => {
       });
 
       it('goes back to postcode step when clicking backlink from the manual step', () => {
-        browser.url('/address-backlink-one')
+        return browser.url('/address-backlink-one')
           .submitForm('form')
           .getUrl()
           .then(url => {
@@ -390,7 +403,7 @@ describe('tests', () => {
       });
 
       it('goes back to postcode step when clicking backlink from the address step (i.e. failed lookup)', () => {
-        browser.url('/address-backlink-one')
+        return browser.url('/address-backlink-one')
           .submitForm('form')
           .getUrl()
           .then(url => {

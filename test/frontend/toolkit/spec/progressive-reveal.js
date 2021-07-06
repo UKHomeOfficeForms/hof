@@ -1,4 +1,4 @@
-var progressiveReveal = require('../../../../frontend').toolkit.progressiveReveal;
+var progressiveReveal = require('../../../../frontend/toolkit/assets/javascript/progressive-reveal');
 
 var $ = require('jquery');
 

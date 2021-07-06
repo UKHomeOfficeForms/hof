@@ -17,7 +17,7 @@ module.exports = config => {
   app.set('views', require('../../../frontend').partials.views);
   app.set('view engine', 'html');
   app.engine('html', hogan);
-  template.setup(app);
+  template({}, app);
   app.use((req, res, next) => {
     req.translate = a => a;
     next();

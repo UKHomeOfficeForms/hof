@@ -1,4 +1,4 @@
-var validation = require('../../../../frontend').toolkit.validation,
+var validation = require('../../../../frontend/toolkit/assets/javascript/validation'),
     $ = require('jquery'),
     util = require('../lib/util');
 

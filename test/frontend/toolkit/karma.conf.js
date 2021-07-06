@@ -3,7 +3,7 @@ module.exports = function (config) {
         browsers: [
             'PhantomJS'
         ],
-        frameworks: ['mocha', 'chai', 'sinon-chai', 'browserify'],
+        frameworks: ['mocha', 'chai', 'browserify'],
         preprocessors: {
             './spec/index.js': ['browserify']
         },

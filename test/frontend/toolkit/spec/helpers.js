@@ -1,4 +1,4 @@
-var helpers = require('../../../../frontend').toolkit.helpers;
+var helpers = require('../../../../frontend/toolkit/assets/javascript/helpers');
 
 describe('Helpers', function () {
 
@@ -85,8 +85,12 @@ describe('Helpers', function () {
     describe('once', function () {
 
         it('stops callback being applied to the same element more than once', function () {
-
-            var callback = sinon.stub();
+            var callNumber = 0;
+            var callArg = null;
+            var callback = function (arg) {
+              callNumber++;
+              callArg = arg;
+            };
             var elem = {};
             var fn = function () {
                 helpers.once(elem, 'callback-name', callback);
@@ -94,13 +98,23 @@ describe('Helpers', function () {
             fn();
             fn();
             fn();
-            callback.should.have.been.calledOnce;
-            callback.should.have.been.calledWithExactly(elem);
+            expect(callNumber).to.eql(1);
+            expect(callArg).to.eql(elem);
         });
 
         it('allows differently named callbacks to be applied on the same element', function () {
-            var callback1 = sinon.stub();
-            var callback2 = sinon.stub();
+            var callNumber1 = 0;
+            var callArg1 = null;
+            var callback1 = function (arg) {
+              callNumber1++;
+              callArg1 = arg;
+            };
+            var callNumber2 = 0;
+            var callArg2 = null;
+            var callback2 = function (arg) {
+              callNumber2++;
+              callArg2 = arg;
+            };
             var elem = {};
             var fn1 = function () {
                 helpers.once(elem, 'callback-1', callback1);
@@ -112,10 +126,10 @@ describe('Helpers', function () {
             fn2();
             fn1();
             fn2();
-            callback1.should.have.been.calledOnce;
-            callback1.should.have.been.calledWithExactly(elem);
-            callback2.should.have.been.calledOnce;
-            callback2.should.have.been.calledWithExactly(elem);
+            expect(callNumber1).to.eql(1);
+            expect(callArg1).to.eql(elem);
+            expect(callNumber2).to.eql(1);
+            expect(callArg2).to.eql(elem);
         });
     });
     describe('viewportWidth', function () {

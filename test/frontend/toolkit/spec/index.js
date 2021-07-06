@@ -10,10 +10,10 @@ describe('hmpo', function () {
         $('#test-container').empty();
     });
 
-    require('./spec.helpers');
-    require('./spec.form-focus');
-    require('./spec.progressive-reveal');
-    require('./spec.validation');
-    require('./spec.character-count');
+    require('./helpers');
+    require('./form-focus');
+    require('./progressive-reveal');
+    require('./validation');
+    require('./character-count');
 
 });
