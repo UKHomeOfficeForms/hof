@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var, no-param-reassign, vars-on-top, no-extend-native */
 'use strict';
 
 var each = require('lodash').forEach;

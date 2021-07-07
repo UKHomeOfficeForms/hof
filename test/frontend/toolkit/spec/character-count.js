@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var */
 var characterCount = require('../../../../frontend/toolkit/assets/javascript/character-count');
 var util = require('../lib/util');
 var $ = require('jquery');

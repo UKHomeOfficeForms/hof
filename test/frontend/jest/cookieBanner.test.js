@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var */
 'use strict';
 
 /* eslint-env jest, browser */

@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 'use strict';
 
 var toolkit = require('../../toolkit');

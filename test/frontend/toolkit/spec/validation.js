@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var */
 var validation = require('../../../../frontend/toolkit/assets/javascript/validation');
 var $ = require('jquery');
 var util = require('../lib/util');

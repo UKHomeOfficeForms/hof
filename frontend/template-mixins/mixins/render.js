@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 'use strict';
 
 const Hogan = require('hogan.js');

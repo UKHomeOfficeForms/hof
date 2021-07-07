@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var, no-cond-assign, no-param-reassign, vars-on-top */
 // <details> polyfill
 // http://caniuse.com/#feat=details
 

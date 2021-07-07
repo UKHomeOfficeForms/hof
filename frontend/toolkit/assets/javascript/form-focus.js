@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var, no-param-reassign, vars-on-top */
 /**
  * This module adds the yellow focus border to:
  *   * labels with class block-label that are the parent element of radio buttons

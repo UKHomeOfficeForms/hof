@@ -1,9 +1,10 @@
+/* eslint-disable max-len, no-var, no-cond-assign, no-param-reassign, vars-on-top, no-extend-native */
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function (searchElement, fromIndex) {
     var k;
 
-    if (this == null) {
+    if (this === null) {
       throw new TypeError('"this" is null or not defined');
     }
 
@@ -28,8 +29,6 @@ if (!Array.prototype.indexOf) {
     k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
 
     while (k < len) {
-      var kValue;
-
       if (k in O && O[k] === searchElement) {
         return k;
       }

@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var */
 var $ = require('jquery');
 
 describe('hmpo', function () {

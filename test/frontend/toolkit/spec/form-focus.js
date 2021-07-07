@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var */
 var formFocus = require('../../../../frontend/toolkit/assets/javascript/form-focus');
 var util = require('../lib/util');
 var $ = require('jquery');

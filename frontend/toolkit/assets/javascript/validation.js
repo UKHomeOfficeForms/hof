@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var, no-shadow, vars-on-top */
 var each = require('lodash').forEach;
 
 var helpers = require('./helpers');

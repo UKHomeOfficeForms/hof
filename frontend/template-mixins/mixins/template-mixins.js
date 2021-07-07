@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign, max-len, consistent-return */
 'use strict';
 
 const fs = require('fs');

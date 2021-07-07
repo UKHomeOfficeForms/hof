@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var, vars-on-top, no-undef */
 'use strict';
 
 // TODO: update package.json(s)

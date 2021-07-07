@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 'use strict';
 
 const path = require('path');

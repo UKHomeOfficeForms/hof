@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var */
 var helpers = require('../../../../frontend/toolkit/assets/javascript/helpers');
 
 describe('Helpers', function () {

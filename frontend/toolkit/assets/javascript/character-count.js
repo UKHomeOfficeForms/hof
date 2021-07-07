@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-var, no-use-before-define, no-param-reassign, vars-on-top, radix */
 'use strict';
 
 var helpers = require('./helpers');
