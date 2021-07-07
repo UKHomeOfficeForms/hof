@@ -1,8 +1,8 @@
-/* eslint-disable */ 
+/* eslint-disable */
 'use strict';
 
 const moment = require('moment');
-const SummaryPageBehaviour = require('hof-behaviour-summary-page');
+const SummaryPageBehaviour = require('hof').components.summary;
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';

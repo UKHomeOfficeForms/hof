@@ -1,4 +1,7 @@
-# HOF (Home Office Forms) [![NPM_Publish Actions Status](https://github.com/UKHomeOfficeForms/hof/workflows/Auto_Publish/badge.svg)](https://github.com/UKHomeOfficeForms/hof-build/actions) [![npm version](https://badge.fury.io/js/hof.svg)](https://badge.fury.io/js/hof) [![Known Vulnerabilities](https://snyk.io/test/npm/hof/badge.svg)](https://snyk.io/test/npm/hof)
+# HOF (Home Office Forms)
+[![NPM_Publish Actions Status](https://github.com/UKHomeOfficeForms/hof/workflows/Automate_Publish/badge.svg)](https://github.com/UKHomeOfficeForms/hof/actions)
+[![npm version](https://badge.fury.io/js/hof.svg)](https://badge.fury.io/js/hof) 
+[![Known Vulnerabilities](https://snyk.io/test/npm/hof/badge.svg)](https://snyk.io/test/npm/hof)
 
 HOF (Home Office Forms) is a framework designed to assist developers in creating form-based workflows in a rapid, repeatable and secure way. It aims to reduce simple applications as much as possible to being configuration-only.
 
