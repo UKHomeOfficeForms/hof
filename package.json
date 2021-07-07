@@ -21,7 +21,7 @@
     "url": "https://github.com/UKHomeOfficeForms/hof/issues"
   },
   "scripts": {
-    "test": "npm run unit && npm run test:cookie-banner && npm run test:functional && npm run test:client && npm run test:lint",
+    "test": "yarn run unit && yarn run test:cookie-banner && yarn run test:functional && yarn run test:client && yarn run test:lint",
     "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha",
     "test:lint": "eslint . --config ./node_modules/eslint-config-hof/default.js",
@@ -126,5 +126,8 @@
     "recursive": "true",
     "timeout": "6000",
     "exit": "true"
+  },
+  "resolutions": {
+    "underscore": "^1.12.1"
   }
 }
