@@ -24,7 +24,7 @@
     "hof-behaviour-summary-page": "^2.0.0",
     "hof-bootstrap": "file:..",
     "hof-component-date": "^1.0.0",
-    "hof-frontend-toolkit": "^1.0.0",
+    "hof-frontend-toolkit": "^2.1.1",
     "moment": "^2.17.1"
   },
   "devDependencies": {
