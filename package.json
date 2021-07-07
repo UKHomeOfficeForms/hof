@@ -21,7 +21,7 @@
     "url": "https://github.com/UKHomeOfficeForms/hof/issues"
   },
   "scripts": {
-    "install": "echo 'use yarn or npm ci'",
+    "install": "echo '<<<<< USE `yarn add|update|remove` OR `npm ci` for a fresh install >>>>>' && killall npm",
     "test": "npm run unit && npm run test:cookie-banner && npm run test:functional && npm run test:client && npm run test:lint",
     "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha",
@@ -104,13 +104,12 @@
     "karma-cli": "^2.0.0",
     "karma-mocha": "^2.0.1",
     "karma-phantomjs-launcher": "^1.0.4",
-    "mocha": "^9.0.1",
+    "mocha": "^8.4.0",
     "mocha-sandbox": "^1.0.0",
     "node-mocks-http": "^1.6.2",
     "npm-run-all": "^3.1.1",
     "nyc": "^15.1.0",
     "postcode": "0.2.2",
-    "pre-commit": "^1.1.3",
     "proxyquire": "^1.7.11",
     "release-it": "^14.10.0",
     "reqres": "^3.0.1",
@@ -128,8 +127,5 @@
     "recursive": "true",
     "timeout": "6000",
     "exit": "true"
-  },
-  "pre-commit": [
-    "test"
-  ]
+  }
 }
