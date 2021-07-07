@@ -1,0 +1,7 @@
+{
+  "prefix": "Error: ",
+  "title": {
+    "single": "There is a problem",
+    "multiple": "There is a problem"
+  }
+}

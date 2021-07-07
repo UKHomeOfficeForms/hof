@@ -1,0 +1,38 @@
+<div id="{{id}}-group" class="form-group{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{^date}}{{#error}} validation-error{{/error}}{{/date}}">
+    <label for="{{id}}" class="{{labelClassName}}">
+        <span class="label-text">{{{label}}}</span>
+        {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="form-hint">{{hint}}</span>{{/hint}}
+        {{^date}}{{#error}}<span class="error-message">{{error.message}}</span>{{/error}}{{/date}}
+    </label>
+    {{#renderChild}}{{/renderChild}}
+    <div class="govuk-input__wrapper">
+        {{#attributes}}
+            {{#prefix}}
+                <div class="govuk-input__prefix" aria-hidden="true">{{prefix}}</div>
+            {{/prefix}}
+        {{/attributes}}
+        <input
+            type="{{type}}"
+            name="{{id}}"
+            id="{{id}}"
+            class="form-control{{#className}} {{className}}{{/className}}{{#error}} invalid-input{{/error}}"
+            aria-required="{{required}}"
+            {{#value}} value="{{value}}"{{/value}}
+            {{#min}} min="{{min}}"{{/min}}
+            {{#max}} max="{{max}}"{{/max}}
+            {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
+            {{#pattern}} pattern="{{pattern}}"{{/pattern}}
+            {{#hintId}} aria-describedby="{{hintId}}"{{/hintId}}
+            {{#error}} aria-invalid="true"{{/error}}
+            {{#autocomplete}} autocomplete="{{autocomplete}}"{{/autocomplete}}
+            {{#attributes}}
+                {{attribute}}="{{value}}"
+            {{/attributes}}
+        >
+        {{#attributes}}
+            {{#suffix}}
+                <div class="govuk-input__prefix" aria-hidden="true">{{suffix}}</div>
+            {{/suffix}}
+        {{/attributes}}
+    </div>
+</div>

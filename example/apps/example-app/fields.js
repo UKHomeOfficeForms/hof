@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 'use strict';
 
 const dateComponent = require('hof-component-date');

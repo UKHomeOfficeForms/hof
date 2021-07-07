@@ -1,9 +1,10 @@
+/* eslint-disable */
 'use strict';
 
-var toolkit = require('hof-frontend-toolkit');
-var helpers = toolkit.helpers;
-var progressiveReveal = toolkit.progressiveReveal;
-var formFocus = toolkit.formFocus;
+const toolkit = require('hof/frontend/toolkit');
+const helpers = toolkit.helpers;
+const progressiveReveal = toolkit.progressiveReveal;
+const formFocus = toolkit.formFocus;
 toolkit.detailsSummary();
 
 helpers.documentReady(progressiveReveal);

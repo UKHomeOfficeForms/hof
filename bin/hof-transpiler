@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+'use strict';
+
+const args = require('minimist')(process.argv.slice(2));
+const compile = require('../transpiler/lib/compile');
+
+const options = {};
+
+options.sources = args._;
+options.shared = args.shared || args.s || [];
+
+compile(options);

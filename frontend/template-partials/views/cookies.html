@@ -1,0 +1,92 @@
+{{<layout}}
+
+  {{$propositionHeader}}{{/propositionHeader}}
+
+  {{$validationSummary}}
+    {{#gaTagId}}
+      {{> partials-cookie-notification}}
+    {{/gaTagId}}
+  {{/validationSummary}}
+
+  {{$header}}
+    {{header}}
+  {{/header}}
+
+  {{$content}}
+    <p>{{intro}}</p>
+    {{^gaTagId}}
+      {{#intro-list}}
+        {{> partials-bullet-list}}
+      {{/intro-list}}
+      {{#indent-intro}}
+        {{> partials-panel-indent}}
+      {{/indent-intro}}
+      <h2>{{intro-cookie}}</h2>
+      <p>{{intro-cookie-message}}</p>
+      {{#intro-cookie-table}}
+        {{> partials-table}}
+      {{/intro-cookie-table}}
+      <h2>{{session-cookies}}</h2>
+      <p>{{session-cookies-content}}</p>
+      {{#session-cookies-table}}
+        {{> partials-table}}
+      {{/session-cookies-table}}
+    {{/gaTagId}}
+
+    {{#gaTagId}}
+      <div id="cookie-settings">
+        {{#intro-list-ga-tag}}
+          {{> partials-bullet-list}}
+        {{/intro-list-ga-tag}}
+        {{#indent-intro}}
+          {{> partials-panel-indent}}
+        {{/indent-intro}}
+        <h2>{{intro-cookie}}</h2>
+        <p>{{intro-cookie-message}}</p>
+        {{#intro-cookie-table}}
+          {{> partials-table}}
+        {{/intro-cookie-table}}
+        <div class="js-enabled">
+          <h2>{{session-cookies}}</h2>
+          <p>{{session-cookies-content}}</p>
+          {{#session-cookies-table}}
+            {{> partials-table}}
+          {{/session-cookies-table}}
+          <form>
+            <div class="form-group">
+              <fieldset>
+                <legend>
+                  <h2>{{measuring-use}}</h2>
+                </legend>
+                {{#google-analytics}}
+                  <p>{{.}}</p>
+                {{/google-analytics}}
+                {{#google-analytics-list}}
+                  {{> partials-bullet-list}}
+                {{/google-analytics-list}}
+                <p>{{no-identify}}</p>
+                {{#analytics-table}}
+                  {{> partials-table}}
+                {{/analytics-table}}
+                {{#indent-ga}}
+                  {{> partials-panel-indent}}
+                {{/indent-ga}}
+                {{> partials-cookie-settings-radio}}
+              </fieldset>
+            </div>
+            {{> partials-cookie-settings-button}}
+          </form>
+        </div>
+        <div class="js-disabled">
+          <h2>Cookie settings</h2>
+          <p>We use JavaScript to set most of our cookies. Unfortunately JavaScript is not running on your browser, so you cannot change your settings. You can try:</p>
+          <ul class="list-bullet">
+            <li>reloading the page</li>
+            <li>turning on JavaScript in your browser</li>
+          </ul>
+        </div>
+      </div>
+    {{/gaTagId}}
+
+  {{/content}}
+{{/layout}}

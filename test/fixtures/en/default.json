@@ -1,0 +1,19 @@
+{
+  "errorlist": {
+    "title": {
+      "triple": "Check your answers:",
+      "single": "Check your answers:",
+      "multiple": "Check your answers:"
+    }
+  },
+  "app": {
+    "title": "Electronic Visa Waiver"
+  },
+  "buttons": {
+    "continue": "Continue",
+    "send": "Send",
+    "change": "Edit",
+    "close": "Close",
+    "Confirm": "Confirm details"
+  }
+}

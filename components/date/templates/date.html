@@ -1,0 +1,17 @@
+<fieldset id="{{key}}-group" class="{{#className}}{{className}}{{/className}} {{#error}}validation-error{{/error}}">
+  <legend>
+    {{#error}}
+      <span id="{{key}}-error" class="error-message">{{error.message}}</span>
+    {{/error}}
+    <span{{#legendClassName}} class="{{legendClassName}}"{{/legendClassName}}>{{legend}}</span>
+    {{#hint}}
+      <span id="{{key}}-hint" class="form-hint">{{hint}}</span>
+    {{/hint}}
+  </legend>
+
+  <input type="hidden" name="{{key}}" />
+
+  <div class="form-group form-date">
+    {{#input-date}}{{key}}{{/input-date}}
+  </div>
+</fieldset>

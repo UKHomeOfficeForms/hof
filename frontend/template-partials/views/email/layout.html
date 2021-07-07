@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="utf-8" http-equiv="encoding" />
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>{{#t}}email.information.subject{{/t}}</title>
+  </head>
+
+  <body style="font-family: Helvetica, Arial, sans-serif;font-size: 16px;margin: 0;color:#0b0c0c">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td width="100%" height="53px" bgcolor="#0b0c0c">
+          <table width="580" cellpadding="0" cellspacing="0" border="0" align="center">
+            <tr>
+              <td width="100%" bgcolor="#0b0c0c" valign="middle">
+                <img width="152" height="31" src="cid:govuk_logotype_email" alt="GOV.UK" border="0" />
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
+      <tr>
+        <td width="100%">
+          <table width="580" cellpadding="0" cellspacing="0" border="0" align="center">
+            <tr>
+              <td width="100%" class="header" style="padding-top: 10px;" colspan="2">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
+                  <tr>
+                    <td width="6" style="border-left: 2px solid #009390;"><img src="cid:spacer_image" alt="" width="6px" height="26px" style="display: block;" /></td>
+                    <td width="26" height="26"><img src="cid:ho_crest_27px" alt="Home Office Logo" style="width: 26px; height: 26px; display:block;" /></td>
+                    <td width="7"><img src="cid:spacer_image" alt="" width="7px" height="26px" style="display: block;" /></td>
+                    <td style="font-family: Helvetica, Arial, sans-serif;">
+                      <h2 class="organisation-logo" style="font-size: 18px; line-height: 20px; font-weight: 300; margin: 0"><span>UK Home Office</span></h2>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td width="75%" style="font-family: Helvetica, Arial, sans-serif;">
+                <p style="font-weight: 700;font-size: 16px;line-height: 1 ;margin: 10px 0 10px 0;">&nbsp;</p>
+              </td>
+              <td width="25%">&nbsp;</td>
+            </tr>
+            <tr>
+              <td width="75%" style="font-family: Helvetica, Arial, sans-serif;">
+                <p style="font-size: 19px; font-weight: bold; color: #000; line-height: 1.32; margin: 0 0 10px 0;">{{#t}}email.information.subject{{/t}}</p>
+                <p style="font-size: 16px; font-weight: normal; color: #000; line-height: 1.32; margin: 0 0 10px 0;">{{#t}}email.content.{{recipient}}-intro{{/t}}</p>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="margin: 0 0 20px 0;">
+                  {{$email-content}}{{/email-content}}
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="25%">&nbsp;</td>
+      </tr>
+    </table>
+  </body>
+</html>

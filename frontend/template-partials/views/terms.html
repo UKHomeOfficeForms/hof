@@ -1,0 +1,26 @@
+{{<layout}}
+
+  {{$propositionHeader}}{{/propositionHeader}}
+
+  {{$header}}
+    {{header}}
+  {{/header}}
+
+  {{$content}}
+    <h2>{{how-we-use}}</h2>
+    {{#data-link}}
+      {{> partials-external-link}}
+    {{/data-link}}
+    <p>{{used-for}}</p>
+    {{#used-for-list}}
+      {{> partials-bullet-list}}
+    {{/used-for-list}}
+    <p>{{your-info}}</p>
+    {{#your-info-list}}
+      {{> partials-bullet-list}}
+    {{/your-info-list}}
+    <p>{{info-gathered}}</p>
+    <h2>{{countries}}</h2>
+    <p>{{countries-text}}</p>
+  {{/content}}
+{{/layout}}

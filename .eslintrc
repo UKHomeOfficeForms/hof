@@ -1,5 +1,0 @@
-extends:
-- "homeoffice/config/default"
-
-env:
-  es6: true

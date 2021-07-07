@@ -12,13 +12,13 @@ const root = path.resolve(__dirname, '../fixtures');
 
 
 function getHeaders(res, type) {
-  let headers = {};
+  const headers = {};
   if (!res.headers[type]) {
     return null;
   }
-  let parts = res.headers[type].split('; ');
-  parts.forEach((part) => {
-    part = part.split(' ');
+  const parts = res.headers[type].split('; ');
+  parts.forEach(p => {
+    const part = p.split(' ');
     headers[part[0]] = part.slice(1);
   });
   return headers;
@@ -396,7 +396,7 @@ describe('hof server', () => {
       return request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
-        .expect((res) => {
+        .expect(res => {
           const csp = getHeaders(res, 'content-security-policy');
           csp['img-src'].should.include(directives.imgSrc[0]);
           csp['script-src'].should.include(directives.scriptSrc);
@@ -420,7 +420,7 @@ describe('hof server', () => {
       return request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
-        .expect((res) => {
+        .expect(res => {
           const csp = getHeaders(res, 'content-security-policy');
           expect(csp).to.be.null;
         });
@@ -440,7 +440,7 @@ describe('hof server', () => {
       return request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
-        .expect((res) => {
+        .expect(res => {
           const csp = getHeaders(res, 'content-security-policy');
           expect(csp).to.be.null;
         });
@@ -459,7 +459,7 @@ describe('hof server', () => {
       return request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
-        .expect((res) => {
+        .expect(res => {
           const csp = getHeaders(res, 'content-security-policy');
           csp.should.not.have.property('disabled');
         });
@@ -480,7 +480,7 @@ describe('hof server', () => {
       return request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
-        .expect((res) => {
+        .expect(res => {
           const csp = getHeaders(res, 'content-security-policy');
           csp['img-src'].should.include('www.google-analytics.com');
           csp['script-src'].should.include('www.google-analytics.com');
@@ -505,7 +505,7 @@ describe('hof server', () => {
       return request(bs.server)
         .get('/one')
         .set('Cookie', ['myCookie=1234'])
-        .expect((res) => {
+        .expect(res => {
           const csp = getHeaders(res, 'content-security-policy');
           /* eslint-disable quotes */
           csp['img-src'].should.include('www.google-analytics.com')
@@ -537,7 +537,7 @@ describe('hof server', () => {
 
       return request(bs.server)
         .get('/one')
-        .expect((res) => {
+        .expect(res => {
           const csp = getHeaders(res, 'content-security-policy');
           csp['frame-ancestors'].should.eql(['\'none\'']);
         });
@@ -556,7 +556,7 @@ describe('hof server', () => {
 
       return request(bs.server)
         .get('/one')
-        .expect((res) => {
+        .expect(res => {
           const contentTypeOpts = res.headers['x-content-type-options'];
           contentTypeOpts.should.eql('nosniff');
         });
@@ -575,7 +575,7 @@ describe('hof server', () => {
 
       return request(bs.server)
         .get('/one')
-        .expect((res) => {
+        .expect(res => {
           expect(res.headers['cache-control']).to.be.undefined;
           expect(res.headers.pragma).to.be.undefined;
         });
@@ -595,7 +595,7 @@ describe('hof server', () => {
 
       return request(bs.server)
         .get('/one')
-        .expect((res) => {
+        .expect(res => {
           expect(res.headers['cache-control']).to.be.undefined;
           expect(res.headers.pragma).to.be.undefined;
         });
@@ -615,7 +615,7 @@ describe('hof server', () => {
 
       return request(bs.server)
         .get('/one')
-        .expect((res) => {
+        .expect(res => {
           const cacheControl = res.headers['cache-control'];
           cacheControl.should.eql('no-store, no-cache, must-revalidate, proxy-revalidate');
 
@@ -643,7 +643,7 @@ describe('hof server', () => {
         return request(bs.server)
           .get('/one')
           .set('Cookie', ['myCookie=1234'])
-          .expect((response) =>
+          .expect(response =>
             response.body.respondedFromMiddleware.should.equal(true)
           );
       });
@@ -651,7 +651,6 @@ describe('hof server', () => {
   });
 
   describe('static pages', () => {
-
     it('can be part of an app with steps', () => {
       const bs = bootstrap({
         start: false,
@@ -664,7 +663,7 @@ describe('hof server', () => {
           pages: {
             '/a-static-page': 'a-page',
             '/b-static-page': 'a-page'
-          },
+          }
         }]
       });
       bs.start();
@@ -691,7 +690,7 @@ describe('hof server', () => {
           views: `${root}/views`,
           pages: {
             '/a-static-page': 'test'
-          },
+          }
         }]
       });
       bs.start();
@@ -701,7 +700,6 @@ describe('hof server', () => {
         .expect(200)
         .expect('<div>test</div>\n');
     });
-
   });
 
   describe('with locals and cookies', () => {
@@ -745,116 +743,95 @@ describe('hof server', () => {
     });
 
     describe('with ga-tag', () => {
-      it('adds ga-id and ga-page based on root uri', () => {
-        return request(bs.server)
-          .get('/feedback')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(() => {
-            locals.gaTagId.should.equal(testTag);
-            locals['ga-id'].should.equal(testTag);
-            locals['ga-page'].should.equal('feedback');
-          });
-      });
+      it('adds ga-id and ga-page based on root uri', () => request(bs.server)
+        .get('/feedback')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('feedback');
+        }));
 
-      it('adds ga-id and ga-page based on baseUrl only', () => {
-        return request(bs.server)
-          .get('/accept')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(() => {
-            locals.gaTagId.should.equal(testTag);
-            locals['ga-id'].should.equal(testTag);
-            locals['ga-page'].should.equal('accept');
-          });
-      });
+      it('adds ga-id and ga-page based on baseUrl only', () => request(bs.server)
+        .get('/accept')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('accept');
+        }));
 
-      it('adds ga-page based on baseUrl and uri with camelcasing', () => {
-        return request(bs.server)
-          .get('/accept/confirm/person/confirmation')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(() => {
-            locals.gaTagId.should.equal(testTag);
-            locals['ga-id'].should.equal(testTag);
-            locals['ga-page'].should.equal('acceptConfirmPersonConfirmation');
-          });
-      });
+      it('adds ga-page based on baseUrl and uri with camelcasing', () => request(bs.server)
+        .get('/accept/confirm/person/confirmation')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('acceptConfirmPersonConfirmation');
+        }));
 
-      it('adds ga-page with camelcasing and handles hyphens', () => {
-        return request(bs.server)
-          .get('/apply/index-start')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(() => {
-            locals.gaTagId.should.equal(testTag);
-            locals['ga-id'].should.equal(testTag);
-            locals['ga-page'].should.equal('applyIndexStart');
-          });
-      });
+      it('adds ga-page with camelcasing and handles hyphens', () => request(bs.server)
+        .get('/apply/index-start')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('applyIndexStart');
+        }));
 
-      it('adds ga-page with camelcasing and handles hyphens with uris', () => {
-        return request(bs.server)
-          .get('/apply/confirm-end/submit-end')
-          .set('Cookie', ['myCookie=1234'])
-          .expect(200)
-          .expect(() => {
-            locals.gaTagId.should.equal(testTag);
-            locals['ga-id'].should.equal(testTag);
-            locals['ga-page'].should.equal('applyConfirmEndSubmitEnd');
-          });
-      });
+      it('adds ga-page with camelcasing and handles hyphens with uris', () => request(bs.server)
+        .get('/apply/confirm-end/submit-end')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(() => {
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
+          locals['ga-page'].should.equal('applyConfirmEndSubmitEnd');
+        }));
     });
 
     describe('with nonce values', () => {
-
-      it('adds a 16 figure hex nonce value to locals', () => {
-        return request(bs.server)
-          .get('/feedback')
-          .expect(200)
-          .expect(() => {
-            const localValue = locals.nonce;
-            localValue.should.match(/[0-9a-fA-F]{16}/);
-          });
-      });
-
-      it('adds the nonce value from the locals to the content security policy header script-src', () => {
-        return request(bs.server)
-          .get('/feedback')
-          .expect(200)
-          .expect((res) => {
-            const localsNonceValue = locals.nonce;
-            const cspScrptSrc = getHeaders(res, 'content-security-policy')['script-src'];
-            cspScrptSrc.should.contain(`'nonce-${localsNonceValue}'`);
-          });
-      });
-
-      it('set-cookie header is sent', () => {
-        return request(bs.server)
-          .get('/feedback')
-          .expect(200)
-          .expect((res) => {
-            res.headers['set-cookie'].length.should.be.greaterThan(0);
-          });
-      });
-    });
-
-    it('set-cookie header is HttpOnly', () => {
-      return request(bs.server)
+      it('adds a 16 figure hex nonce value to locals', () => request(bs.server)
         .get('/feedback')
         .expect(200)
-        .expect((res) => {
-          res.headers['set-cookie'][0].should.contain('HttpOnly');
-        });
-    });
+        .expect(() => {
+          const localValue = locals.nonce;
+          localValue.should.match(/[0-9a-fA-F]{16}/);
+        }));
 
-    it('set-cookie header has SameSite attribute set to strict', () => {
-      return request(bs.server)
+      it('adds the nonce value from the locals to the CSP header script-src', () => request(bs.server)
         .get('/feedback')
         .expect(200)
-        .expect((res) => {
-          res.headers['set-cookie'][0].should.contain('SameSite=Strict');
-        });
+        .expect(res => {
+          const localsNonceValue = locals.nonce;
+          const cspScrptSrc = getHeaders(res, 'content-security-policy')['script-src'];
+          cspScrptSrc.should.contain(`'nonce-${localsNonceValue}'`);
+        }));
+
+      it('set-cookie header is sent', () => request(bs.server)
+        .get('/feedback')
+        .expect(200)
+        .expect(res => {
+          res.headers['set-cookie'].length.should.be.greaterThan(0);
+        }));
     });
+
+    it('set-cookie header is HttpOnly', () => request(bs.server)
+      .get('/feedback')
+      .expect(200)
+      .expect(res => {
+        res.headers['set-cookie'][0].should.contain('HttpOnly');
+      }));
+
+    it('set-cookie header has SameSite attribute set to strict', () => request(bs.server)
+      .get('/feedback')
+      .expect(200)
+      .expect(res => {
+        res.headers['set-cookie'][0].should.contain('SameSite=Strict');
+      }));
   });
 });

@@ -1,0 +1,118 @@
+#global-header-bar {
+    @extend %site-width-container;
+    .inner-block {
+        padding: 0;
+    }
+}
+
+.main {
+    @extend %site-width-container;
+    padding-bottom: $gutter;
+    @include media(desktop) {
+        padding-bottom: $gutter*3;
+    }
+}
+
+.grid-row {
+    @extend %grid-row;
+    position: relative;
+}
+
+.column-full {
+    @include grid-column(1);
+}
+
+.column-one-third {
+    @include grid-column(1/3, $full-width: desktop);
+}
+
+.column-half {
+    @include grid-column(1/2, $full-width: desktop);
+}
+
+.column-two-thirds {
+    @include grid-column(2/3, $full-width: desktop);
+}
+
+.column-right {
+    @include media(desktop) {
+        float: right;
+    }
+}
+
+header {
+    @extend %contain-floats;
+}
+
+.sidebar {
+    border-top: 10px solid $mainstream-brand;
+}
+
+// layout for ie < 9
+$ie8-column-one-third: ( $site-width + $gutter ) / 3;
+$ie8-column-half: ( $site-width + $gutter ) / 2;
+$ie8-column-two-thirds: $ie8-column-one-third * 2;
+
+@mixin ie8-grid-column {
+    float: left;
+    padding: 0 $gutter-half;
+    box-sizing: content-box;
+}
+@mixin ie8-column-two-thirds {
+    @include ie8-grid-column;
+    width: $ie8-column-two-thirds - $gutter;
+}
+@mixin ie8-column-half {
+    @include ie8-grid-column;
+    width: $ie8-column-half - $gutter;
+}
+@mixin ie8-column-one-third {
+    @include ie8-grid-column;
+    width: $ie8-column-one-third - $gutter;
+}
+
+.lte-ie8 {
+    #global-header-bar, #global-breadcrumb {
+        width: $site-width;
+        max-width: inherit;
+        margin: 0 auto;
+        .inner-block {
+            margin: 0;
+            padding: 0;
+        }
+    }
+    #content {
+        width: $site-width;
+        max-width: inherit;
+        margin: 0 auto;
+        padding-bottom: 3*$gutter;
+    }
+    .grid-row {
+        width: $site-width + $gutter;
+    }
+    .column-two-thirds {
+        @include ie8-column-two-thirds;
+        .grid-row {
+            width: $ie8-column-two-thirds;
+        }
+        .column-two-thirds {
+            width: $ie8-column-two-thirds / 3 * 2 - $gutter;
+        }
+        .column-one-third {
+            width: $ie8-column-two-thirds / 3 - $gutter;
+        }
+    }
+    .column-half {
+        @include ie8-column-half;
+    }
+    .column-one-third {
+        @include ie8-column-one-third;
+    }
+    .column-right {
+        float: right;
+    }
+    .phase-banner, #back {
+        width: $site-width;
+        margin: 0 auto;
+    }
+}

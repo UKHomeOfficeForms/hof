@@ -1,0 +1,36 @@
+// App styles
+
+// set the default image directory
+$path: "/public/images/" !default;
+
+// GOV.UK front end toolkit
+// Sass variables, mixins and functions
+// https://github.com/alphagov/govuk_frontend_toolkit/tree/master/stylesheets
+@import "govuk_frontend_toolkit";
+
+// GOV.UK elements
+// https://github.com/alphagov/govuk_elements/blob/master/packages/govuk-elements-sass/public/sass/_elements.scss
+@import "govuk-elements-sass/public/sass/elements";
+
+// Custom
+@import "base";
+@import "layout";
+@import "typography";
+@import "variables";
+@import "helpers";
+@import "cookie-banner";
+@import "cookie-settings";
+
+// Modules
+@import "modules/validation";
+@import "modules/progressive-reveal";
+@import "modules/buttons";
+@import "modules/lists";
+@import "modules/alerts";
+@import "modules/character-count";
+
+// Pages
+@import "modules/confirm-page";
+
+// Deprecated panel style from gov.uk elements version 2.0
+@import "panel-indent";

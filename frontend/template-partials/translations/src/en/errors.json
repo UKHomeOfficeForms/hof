@@ -1,0 +1,18 @@
+{
+  "default": {
+    "title": "Sorry, something went wrong",
+    "message": "A server exception occurred. Please try again."
+  },
+  "session": {
+    "title": "Sorry, you'll have to start again",
+    "message": "You haven't entered any details for 30 minutes, so we have cleared your information to keep it secure."
+  },
+  "404": {
+    "title": "Page not found",
+    "description": "This page does not exist"
+  },
+  "cookies-required": {
+    "title": "Cookies are required to use this service",
+    "message": "Cookies are required in order to use this service.<br /><br /> Please <a href=\"http://www.aboutcookies.org/how-to-control-cookies/\" rel=\"external\">enable cookies</a> and try again. Find out <a href=\"/cookies\">how to we use cookies</a>."
+  }
+}

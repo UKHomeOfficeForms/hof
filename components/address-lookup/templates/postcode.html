@@ -1,0 +1,9 @@
+{{<partials-page}}
+  {{$page-content}}
+    {{#fields}}
+      {{#renderField}}{{/renderField}}
+    {{/fields}}
+    <p><span class="link"><a href="{{#qs}}step=manual{{/qs}}">{{enterManually}}</a></span></p>
+    {{#input-submit}}find-address{{/input-submit}}
+  {{/page-content}}
+{{/partials-page}}

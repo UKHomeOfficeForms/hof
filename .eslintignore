@@ -1,8 +1,0 @@
-node_modules
-test/fixtures/public
-coverage
-LICENSE
-README.md
-CONTRIBUTING.md
-example/apps/**/acceptance/**/*.js
-example/public

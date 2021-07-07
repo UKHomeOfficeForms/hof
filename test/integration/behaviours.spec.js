@@ -4,7 +4,6 @@ const proxyquire = require('proxyquire');
 const path = require('path');
 
 describe('Behaviours', () => {
-
   let wizard;
   let bootstrap;
   let bs;
@@ -14,7 +13,7 @@ describe('Behaviours', () => {
     wizard = sinon.stub().returns(() => {});
     bootstrap = proxyquire('../../', {
       './lib/router': proxyquire('../../lib/router', {
-        'hof-form-wizard': wizard,
+        '../wizard': wizard
       })
     });
     bootstrap.configure('root', path.resolve(__dirname, '../fixtures'));
@@ -27,7 +26,6 @@ describe('Behaviours', () => {
   });
 
   describe('route-level behaviours', () => {
-
     it('applies behaviours to all steps in specified route', () => {
       bs = bootstrap({
         fields: 'fields',
@@ -62,11 +60,9 @@ describe('Behaviours', () => {
       argsTwo['/one'].should.not.have.property('behaviours');
       argsTwo['/two'].behaviours.should.eql(['behaviour-two']);
     });
-
   });
 
   describe('global behaviours', () => {
-
     it('applies behaviours to all steps in all routes', () => {
       bs = bootstrap({
         fields: 'fields',
@@ -101,11 +97,9 @@ describe('Behaviours', () => {
       argsTwo['/one'].behaviours.should.eql(['behaviour-one']);
       argsTwo['/two'].behaviours.should.eql(['behaviour-one', 'behaviour-two']);
     });
-
   });
 
   describe('global and route-level behaviours', () => {
-
     it('applies global behaviours before route-level behaviours', () => {
       bs = bootstrap({
         fields: 'fields',
@@ -141,7 +135,5 @@ describe('Behaviours', () => {
       argsTwo['/one'].behaviours.should.eql(['behaviour-one']);
       argsTwo['/two'].behaviours.should.eql(['behaviour-one', 'behaviour-three']);
     });
-
   });
-
 });

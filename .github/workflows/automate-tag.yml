@@ -1,0 +1,78 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
+name: Automate_Tag
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+        redis-version: [4, 5, 6]
+    steps:
+      - uses: actions/checkout@v2.2.0
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.2.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
+      - uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: install --frozen-lockfile
+      - run: npm test
+
+  auto-tag-patch:
+    needs: test
+    runs-on: ubuntu-latest
+    if: |
+      startsWith(github.ref, 'refs/heads/master') &&
+      !contains(github.event.head_commit.message, '[MAJOR]') &&
+      !contains(github.event.head_commit.message, '[MINOR]')
+    steps:
+      - uses: actions/checkout@v2.2.0
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+          registry-url: https://registry.npmjs.org/
+      - run: |
+          git config --local user.email "$(git log --format='%ae' HEAD^!)"
+          git config --local user.name "$(git log --format='%an' HEAD^!)"
+          npm version patch
+
+  auto-tag-minor:
+    needs: test
+    runs-on: ubuntu-latest
+    if: |
+      startsWith(github.ref, 'refs/heads/master') &&
+      !contains(github.event.head_commit.message, '[MAJOR]') &&
+      contains(github.event.head_commit.message, '[MINOR]')
+    steps:
+      - uses: actions/checkout@v2.2.0
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+          registry-url: https://registry.npmjs.org/
+      - run: |
+          git config --local user.email "$(git log --format='%ae' HEAD^!)"
+          git config --local user.name "$(git log --format='%an' HEAD^!)"
+          npm version minor
+
+  auto-tag-major:
+    needs: test
+    runs-on: ubuntu-latest
+    if: |
+      startsWith(github.ref, 'refs/heads/master') &&
+      contains(github.event.head_commit.message, '[MAJOR]') &&
+      !contains(github.event.head_commit.message, '[MINOR]')
+    steps:
+      - uses: actions/checkout@v2.2.0
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+          registry-url: https://registry.npmjs.org/
+      - run: |
+          git config --local user.email "$(git log --format='%ae' HEAD^!)"
+          git config --local user.name "$(git log --format='%an' HEAD^!)"
+          npm version major

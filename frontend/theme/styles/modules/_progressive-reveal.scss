@@ -1,0 +1,17 @@
+.reveal {
+    float: left;
+    width: 100%;
+    .panel-indent {
+        margin-top: $gutter-half / 2;
+        margin-bottom: $gutter-half;
+    }
+}
+
+fieldset + .reveal {
+    margin-top: -$gutter-half;
+    margin-bottom: $gutter-half;
+    @include media(tablet) {
+        margin-top: -$gutter;
+        margin-bottom: $gutter;
+    }
+}

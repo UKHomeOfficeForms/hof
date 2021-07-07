@@ -1,0 +1,28 @@
+{
+  "header": "Terms and conditions",
+  "how-we-use": "How we use your information",
+  "data-link": {
+    "before": "The data you provide is used in accordance with the ",
+    "href": "https://www.gov.uk/government/organisations/home-office/about/personal-information-charter",
+    "link": "Home Office's personal information charter",
+    "after": ". This includes information about the applicant and any person sponsoring their application. The Home Office is the data controller, which means that it decides how this information will be used and stored. The information will be held in confidence and handled in accordance with the Data Protection Act 1998."
+  },
+  "used-for": "The information will be used to help:",
+  "used-for-list": {
+    "items": [
+      "make a decision on an application",
+      "prevent and detect crime"
+    ]
+  },
+  "your-info": "Your information may be passed on to third parties, government departments, local authorities, foreign governments and public bodies for the purpose of:",
+  "your-info-list": {
+    "items": [
+      "confirming that the information you have provided is accurate",
+      "preventing and detecting crime, including fraud and money laundering",
+      "allowing a third party, government department, local authority or public body to carry out their work staff training"
+    ]
+  },
+  "info-gathered": "The Home Office reserves the right to gather information relating to site usage. Any information gathered is mainly for internal use, for example, to improve customer service.",
+  "countries": "References to countries and nationalities",
+  "countries-text": "A country or territory may be listed as a nationality or country because it has a passport-issuing authority."
+}

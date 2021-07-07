@@ -1,0 +1,22 @@
+{{<partials-page}}
+  {{$page-content}}
+    {{#postcode}}
+      <p>
+        <label>{{postcodeEntered}}</label>
+        <strong><span class="postcode">{{postcode}}</span></strong>
+        <strong><span class="link"><a class="change-postcode" href="{{#qs}}step=postcode{{/qs}}">{{editLink}}</a></span></strong>
+      </p>
+    {{/postcode}}
+    {{#postcodeError}}
+      <div class="alert-info">
+        <span class="info-message">
+          {{postcodeError}}
+        </span>
+      </div>
+    {{/postcodeError}}
+    {{#fields}}
+      {{#renderField}}{{/renderField}}
+    {{/fields}}
+    {{#input-submit}}continue{{/input-submit}}
+  {{/page-content}}
+{{/partials-page}}
