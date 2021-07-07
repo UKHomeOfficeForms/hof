@@ -24,7 +24,7 @@ jobs:
       - run: npm ci
       - run: |
           npm_tag="v$(npm dist-tags | cut -d' ' -f 2)"
-          git_tag="$(git describe --abbrev=0)"
+          git_tag="$(git describe --tags | cut -d'-' -f 1)"
           if [ "$npm_tag" != "$git_tag" ] ; then npm publish; fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_bot_token }}

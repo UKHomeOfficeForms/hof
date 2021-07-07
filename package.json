@@ -21,6 +21,7 @@
     "url": "https://github.com/UKHomeOfficeForms/hof/issues"
   },
   "scripts": {
+    "install": "echo 'use yarn or npm ci'",
     "test": "npm run unit && npm run test:cookie-banner && npm run test:functional && npm run test:client && npm run test:lint",
     "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha",
