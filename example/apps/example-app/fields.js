@@ -1,7 +1,7 @@
-/* eslint-disable */ 
+/* eslint-disable */
 'use strict';
 
-const dateComponent = require('hof-component-date');
+const dateComponent = require('hof').components.date;
 
 module.exports = {
   'your-name': {
