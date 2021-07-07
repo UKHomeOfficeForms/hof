@@ -18,11 +18,12 @@ jobs:
         with:
           node-version: 10
           registry-url: https://registry.npmjs.org/
-      - uses: borales/actions-yarn@v2.3.0
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
-      - run: yarn install --frozen-lockfile
+      - uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: install --frozen-lockfile
       - run: |
           npm_tag="v$(npm dist-tags | cut -d' ' -f 2)"
           git_tag="$(git describe --tags | cut -d'-' -f 1)"
