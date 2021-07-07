@@ -21,7 +21,8 @@
     "url": "https://github.com/UKHomeOfficeForms/hof/issues"
   },
   "scripts": {
-    "test": "yarn run unit && yarn run test:cookie-banner && yarn run test:functional && yarn run test:client && yarn run test:lint",
+    "preinstall": "npx npm-force-resolutions",
+    "test": "npm run unit && npm run test:cookie-banner && npm run test:functional && npm run test:client && npm run test:lint",
     "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha",
     "test:lint": "eslint . --config ./node_modules/eslint-config-hof/default.js",
@@ -73,6 +74,7 @@
     "nodemailer-ses-transport": "^1.5.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemailer-stub-transport": "^1.1.0",
+    "npm-force-resolutions": "0.0.10",
     "redis": "^3.1.2",
     "request": "^2.79.0",
     "rimraf": "^3.0.2",
@@ -128,6 +130,6 @@
     "exit": "true"
   },
   "resolutions": {
-    "nodemailer-smtp-transport/smtp-connection/httpntlm/underscore": "^1.12.1"
+    "underscore": "^1.12.1"
   }
 }
