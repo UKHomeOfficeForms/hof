@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 'use strict';
 
-var toolkit = require('../../toolkit');
+var toolkit = require('../../../toolkit');
 var helpers = toolkit.helpers;
 var progressiveReveal = toolkit.progressiveReveal;
 var formFocus = toolkit.formFocus;
