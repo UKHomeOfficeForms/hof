@@ -29,9 +29,9 @@ const getConfig = function () {
   const config = _.merge.apply(_, [{}, defaults, customConfig].concat(args));
 
   if (!config.theme) {
-    config.theme = require('./frontend').theme;
+    config.theme = require('./frontend').themes.govUK;
   } else if (typeof config.theme === 'string') {
-    config.theme = require('./frontend')[config.theme];
+    config.theme = require('./frontend').themes[config.theme];
   }
 
   config.markdown = config.markdown || {};

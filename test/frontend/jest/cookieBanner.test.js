@@ -5,7 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const cookieSettings = require('../../../frontend/theme/client-js/cookieSettings');
+const cookieSettings = require('../../../frontend/themes/gov-uk/client-js/cookieSettings');
 
 describe('ga-tag', () => {
   let GOVUK;
