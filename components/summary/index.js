@@ -1,17 +1,8 @@
 
 'use strict';
 
-const getValue = (value, field, translate) => {
-  if (Array.isArray(value)) {
-    return value.map(item => getValue(item, field, translate));
-  }
-  const key = `fields.${field}.options.${value}.label`;
-  let result = translate(key);
-  if (result === key) {
-    result = value;
-  }
-  return result;
-};
+const concat = (x, y) => x.concat(y);
+const flatMap = (f, xs) => xs.map(f).reduce(concat, []);
 
 module.exports = SuperClass => class extends SuperClass {
   getRowsForSummarySections(req) {
@@ -51,12 +42,12 @@ module.exports = SuperClass => class extends SuperClass {
         return fieldData;
       }).filter(f => f.value);
 
-    populatedFields = populatedFields.flatMap(populatedField => {
+    populatedFields = flatMap(populatedField => {
       if (populatedField.value && populatedField.value.aggregatedValues) {
         return this.expandAggregatedFields(populatedField, req);
       }
       return populatedField;
-    });
+    }, populatedFields);
 
     return populatedFields;
   }
@@ -84,8 +75,8 @@ module.exports = SuperClass => class extends SuperClass {
   }
 
   expandAggregatedFields(obj, req) {
-    return obj.value.aggregatedValues.flatMap((element, index) => {
-      const fields = element.fields.flatMap(inner => {
+    return flatMap((element, index) => {
+      const fields = flatMap(inner => {
         const changeField = inner.changeField || inner.field;
         const changeLink = `${req.baseUrl}${obj.step}/edit/${index}/${changeField}?returnToSummary=true`;
 
@@ -96,14 +87,14 @@ module.exports = SuperClass => class extends SuperClass {
           changeLink,
           index
         });
-      });
+      }, element.fields);
 
       if (obj.addElementSeparators && index < obj.value.aggregatedValues.length - 1) {
         fields.push({ label: '', value: 'separator', changeLink: '', isSeparator: true });
       }
 
       return fields;
-    });
+    }, obj.value.aggregatedValues);
   }
 
   getStepForField(key, steps) {

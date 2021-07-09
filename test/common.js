@@ -5,7 +5,10 @@ const Model = require('../model');
 
 process.env.NODE_ENV = 'test';
 
-global.chai = require('chai').use(require('sinon-chai'));
+global.chai = require('chai')
+  .use(require('sinon-chai'))
+  .use(require('chai-as-promised'))
+  .use(require('chai-subset'));
 global.should = chai.should();
 global.expect = chai.expect;
 global.sinon = require('sinon');
