@@ -1,12 +1,8 @@
-<h2 class="heading-small">{{section}}</h2>
-<table class="table-details">
-  <tbody>
+<div>
+  <h2 class="section-header">{{section}}</h2>
+</div>
+<dl>
     {{#fields}}
-      <tr{{#className}} class="{{className}}"{{/className}}>
-        <td>{{label}}</td>
-        <td data-value="{{value}}">{{value}}</td>
-        <td><a href="{{baseUrl}}{{step}}/edit#{{field}}" class="button" id="{{field}}-change">{{#t}}buttons.change{{/t}}</a></td>
-      </tr>
+    {{^omitFromSummary}}{{> partials-summary-table-row}}{{/omitFromSummary}}
     {{/fields}}
-  </tbody>
-</table>
+</dl>

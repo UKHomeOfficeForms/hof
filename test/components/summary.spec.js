@@ -1,440 +1,352 @@
 
-'use strict';
-
-const mix = require('mixwith').mix;
-const Base = require('../../controller');
+const SummaryBehaviour = require('../../components').summary;
+const mockTranslations = require('./translations/en/default');
 const Model = require('../../model');
-const Behaviour = require('../../components').summary;
+const moment = require('moment');
+const _ = require('lodash');
+const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
 
-const sumValues = values => values.reduce((a, b) => a + b, 0);
+describe('summary behaviour', () => {
+  class Base {
+  }
 
-class Controller extends mix(Base).with(Behaviour) {}
-
-describe('Summary Page Behaviour', () => {
-  let controller;
+  let behaviour;
+  let Behaviour;
   let req;
   let res;
+  let lastResult;
+  let superLocalsStub;
+  let translateMock;
 
-  beforeEach(done => {
+  beforeEach(() => {
+    req = hof_request();
     res = response();
-    req = reqres.req(Object.assign({
-      translate: sinon.spy(a => Array.isArray(a) ? a[0] : a),
-      sessionModel: new Model()
-    }));
 
-    controller = new Controller({
-      route: '/foo',
-      steps: {
-        '/': {
-
-        },
-        '/one': {
-          fields: ['field-one']
-        },
-        '/two': {
-          fields: ['field-two']
-        },
-        '/done': {}
-      }
-    });
-    controller._configure(req, res, done);
-  });
-
-  it('extends hof-controllers.base class', () => {
-    expect(controller).to.be.an.instanceOf(Base);
-  });
-
-  describe('locals', () => {
-    beforeEach(() => {
-      sinon.stub(Base.prototype, 'locals').returns({super: true});
-    });
-    afterEach(() => {
-      Base.prototype.locals.restore();
-    });
-
-    it('includes locals set by the base class', () => {
-      const result = controller.locals(req, res);
-      expect(result.super).to.equal(true);
-      expect(Base.prototype.locals).to.have.been.calledWithExactly(req, res);
-    });
-
-    it('sets rows property to an array', () => {
-      const result = controller.locals(req, res);
-      expect(result).to.have.property('rows');
-      expect(result.rows).to.be.an('array');
-    });
-
-    it('maps the sections from settings onto rows with headers translated from the section key', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one'],
-        'section-two': ['field-two']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows.length).to.equal(2);
-      expect(result.rows[0]).to.have.a.property('section');
-      expect(req.translate).to.have.been.calledWithExactly([
-        'pages.confirm.sections.section-one.header',
-        'pages.section-one.header'
-      ]);
-      expect(result.rows[1]).to.have.a.property('section');
-      expect(req.translate).to.have.been.calledWithExactly([
-        'pages.confirm.sections.section-two.header',
-        'pages.section-two.header'
-      ]);
-    });
-
-    it('maps the section fields onto a fields array for each section', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one', 'field-two', 'field-three']
-      };
-
-      const result = controller.locals(req, res);
-      expect(result.rows[0]).to.have.a.property('fields');
-      expect(result.rows[0].fields).to.be.an('array');
-      expect(result.rows[0].fields.length).to.equal(2);
-      expect(result.rows[0].fields[0].field).to.equal('field-one');
-      expect(result.rows[0].fields[0].label).to.equal('pages.confirm.fields.field-one.label');
-      expect(result.rows[0].fields[0].changeLinkDescription)
-        .to.equal('pages.confirm.fields.field-one.changeLinkDescription');
-      expect(result.rows[0].fields[1].field).to.equal('field-two');
-      expect(result.rows[0].fields[1].label).to.equal('pages.confirm.fields.field-two.label');
-      expect(result.rows[0].fields[1].changeLinkDescription)
-        .to.equal('pages.confirm.fields.field-two.changeLinkDescription');
-      expect(result.rows[0].fields).not.to.include('field-three');
-
-      expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-one.label',
-        'fields.field-one.summary',
-        'fields.field-one.label',
-        'fields.field-one.legend'
-      ]);
-      expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-one.changeLinkDescription',
-        'fields.field-one.changeLinkDescription',
-        'pages.confirm.fields.field-one.label',
-        'fields.field-one.summary',
-        'fields.field-one.label',
-        'fields.field-one.legend'
-      ]);
-
-      expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-two.label',
-        'fields.field-two.summary',
-        'fields.field-two.label',
-        'fields.field-two.legend'
-      ]);
-      expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.fields.field-two.changeLinkDescription',
-        'fields.field-two.changeLinkDescription',
-        'pages.confirm.fields.field-two.label',
-        'fields.field-two.summary',
-        'fields.field-two.label',
-        'fields.field-two.legend'
-      ]);
-    });
-
-    it('ignores fields with no value set', () => {
-      req.sessionModel.set({
-        'field-one': 1
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one', 'field-two']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields.length).to.equal(1);
-      expect(result.rows[0].fields[0].field).to.equal('field-one');
-      expect(result.rows[0].fields[0].value).to.equal(1);
-    });
-
-    it('includes zero valued fields', () => {
-      req.sessionModel.set({
-        'field-one': 0
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one', 'field-two']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields.length).to.equal(1);
-      expect(result.rows[0].fields[0].field).to.equal('field-one');
-      expect(result.rows[0].fields[0].value).to.equal(0);
-    });
-
-    it('uses a nullValue for empty fields if defined', () => {
-      req.sessionModel.set({
-        'field-one': 1
-      });
-      req.form.options.nullValue = '-';
-      req.form.options.sections = {
-        'section-one': ['field-one', 'field-two']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields.length).to.equal(2);
-      expect(result.rows[0].fields[0].value).to.equal(1);
-      expect(result.rows[0].fields[1].value).to.equal('-');
-    });
-
-    it('does not apply `nullValue` option to zero valued fields', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 0
-      });
-      req.form.options.nullValue = '-';
-      req.form.options.sections = {
-        'section-one': ['field-one', 'field-two']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields.length).to.equal(2);
-      expect(result.rows[0].fields[0].value).to.equal(1);
-      expect(result.rows[0].fields[1].value).to.equal(0);
-    });
-
-    it('Should translate each entry in an array of values before returning the result', () => {
-      req.sessionModel.set({
-        'field-one': ['badgers', 'monkeys']
-      });
-      req.translate = sinon.stub();
-      req.translate.withArgs('fields.field-one.options.badgers.label').returns('Some badgers');
-      req.translate.withArgs('fields.field-one.options.monkeys.label').returns('A plethora of monkeys');
-
-      req.form.options.nullValue = '-';
-      req.form.options.sections = {
-        'section-one': ['field-one']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields.length).to.equal(1);
-      expect(result.rows[0].fields[0].value).to.deep.equal(['Some badgers', 'A plethora of monkeys']);
-    });
-
-    it('calculates the step for each field based on steps config', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2,
-        'field-three': 3
-      });
-      req.form.options.nullValue = '-';
-      req.form.options.sections = {
-        'section-one': ['field-one', 'field-two', 'field-three']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields[0].step).to.equal('/one');
-      expect(result.rows[0].fields[1].step).to.equal('/two');
-      expect(result.rows[0].fields[2].step).to.equal(undefined);
-    });
-
-    it('fields can be passed as an object with a field property', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one', {field: 'field-two'}]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields.length).to.equal(2);
-      expect(result.rows[0].fields[0].value).to.equal(1);
-      expect(result.rows[0].fields[1].value).to.equal(2);
-    });
-
-    it('overrides step property with passed value if defined', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2,
-        'field-three': 3
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one', 'field-two', {field: 'field-three', step: '/two'}]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields[2].step).to.equal('/two');
-    });
-
-    it('will return a derived field if derivation is specified', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      req.form.options.sections = {
-        'section-one': [
-          {
-            field: 'badger',
-            derivation: {
-              fromFields: ['field-one', 'field-two'],
-              combiner: sumValues
+    translateMock = sinon.stub();
+    translateMock.callsFake(itemNames => {
+      if (Array.isArray(itemNames)) {
+        for (const index in itemNames) {
+          if (itemNames.hasOwnProperty(index)) {
+            const item = _.get(mockTranslations, itemNames[index]);
+            if (item) {
+              return item;
             }
           }
-        ]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields[0].value).to.equal(3);
-      expect(req.translate).to.have.been.calledWithExactly([
-        'pages.confirm.fields.badger.label',
-        'fields.badger.summary',
-        'fields.badger.label',
-        'fields.badger.legend'
-      ]);
-    });
-
-    it('will return derived field skipping any fields which do not have values', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-three': 2
-      });
-      req.form.options.sections = {
-        'section-one': [
-          {
-            field: 'badger',
-            derivation: {
-              fromFields: ['field-one', 'field-two', 'field-three'],
-              combiner: sumValues
-            }
-          }
-        ]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields[0].value).to.equal(3);
-    });
-
-    it('will not return a derived field if no source fields have values', () => {
-      req.form.options.sections = {
-        'section-one': [
-          {
-            field: 'badger',
-            derivation: {
-              fromFields: ['field-one', 'field-two'],
-              combiner: sumValues
-            }
-          }
-        ]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows.length).to.equal(0);
-    });
-
-    it('will not return a derived field if the combiner is not a function', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      req.form.options.sections = {
-        'section-one': [
-          {
-            field: 'badger',
-            derivation: {
-              fromFields: ['field-one', 'field-two'],
-              combiner: ''
-            }
-          }
-        ]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows.length).to.equal(0);
-    });
-
-    it('will not return a derived field if no source fields are specified', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-three': 2
-      });
-      req.form.options.sections = {
-        'section-one': [
-          {
-            field: 'badger',
-            derivation: {
-              combiner: sumValues
-            }
-          }
-        ]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows.length).to.equal(0);
-    });
-
-    it('will apply parse function to a derived field if both are specified', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      req.form.options.sections = {
-        'section-one': [
-          {
-            field: 'badger',
-            derivation: {
-              fromFields: ['field-one', 'field-two'],
-              combiner: sumValues
-            },
-            parse: v => v + 1
-          }
-        ]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields[0].value).to.equal(4);
-    });
-
-    it('parses the value of a field if a parse function is passed', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one', {field: 'field-two', parse: v => v + 1}]
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields[1].value).to.equal(3);
-    });
-
-    it('ignore sections with no fields', () => {
-      req.sessionModel.set({
-        'field-one': 1
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one'],
-        'section-two': ['field-two']
-      };
-      const result = controller.locals(req, res);
-      expect(result.rows.length).to.equal(1);
-    });
-
-    it('uses steps configuration for sections if no section config is defined', () => {
-      req.sessionModel.set({
-        'field-one': 1,
-        'field-two': 2
-      });
-      delete req.form.options.sections;
-      const result = controller.locals(req, res);
-      expect(result.rows.length).to.equal(2);
-      expect(result.rows[0].fields.length).to.equal(1);
-      expect(result.rows[0].fields[0].field).to.equal('field-one');
-      expect(result.rows[1].fields.length).to.equal(1);
-      expect(result.rows[1].fields[0].field).to.equal('field-two');
-      expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.sections.one.header', 'pages.one.header']);
-      expect(req.translate).to.have.been.calledWithExactly(['pages.confirm.sections.two.header', 'pages.two.header']);
-    });
-
-    it('flattens fields if a custom implementation of `getFieldData` returns array for a field', () => {
-      req.sessionModel.set({
-        'field-one': 1
-      });
-      req.form.options.sections = {
-        'section-one': ['field-one']
-      };
-      controller.getFieldData = () => [
-        {
-          label: 'one',
-          value: 1
-        },
-        {
-          label: 'two',
-          value: 2
         }
-      ];
-      const result = controller.locals(req, res);
-      expect(result.rows[0].fields.length).to.equal(2);
-      expect(result.rows[0].fields[0].label).to.equal('one');
-      expect(result.rows[0].fields[1].label).to.equal('two');
+        return itemNames[0];
+      }
+      return _.get(mockTranslations, itemNames, itemNames);
+    });
+    req.translate = translateMock;
+
+    superLocalsStub = sinon.stub();
+    superLocalsStub.returns({ superlocals: 'superlocals' });
+    Base.prototype.locals = superLocalsStub;
+
+    req.sessionModel = new Model({});
+    req.baseUrl = 'test';
+
+    req.form.options = {
+      fieldsConfig: {
+        hasOtherNames: { mixin: 'radio-group' }
+      },
+      sections: {
+        'pdf-applicant-details': [
+          'brpNumber',
+          {
+            field: 'dateOfBirth',
+            parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
+          }
+        ],
+        'has-other-names': [
+          {
+            step: '/has-other-names',
+            field: 'hasOtherNames',
+            omitFromPdf: true
+          }
+        ],
+        'other-names': [
+          {
+            step: '/other-names',
+            field: 'otherNames',
+            dependsOn: 'hasOtherNames',
+            addElementSeparators: true
+          }
+        ]
+      },
+      steps: {
+        '/pdf-applicant-details':
+          { fields: ['brpNumber', 'dateOfBirth'] },
+        '/has-other-names':
+          { fields: ['hasOtherNames'] },
+        '/other-names':
+          { fields: ['otherNames'] }
+      }
+    };
+
+    // applicant details
+    req.sessionModel.set('brpNumber', '12345678');
+    req.sessionModel.set('dateOfBirth', '1980-01-01');
+    // other names radio button
+    req.sessionModel.set('hasOtherNames', 'yes');
+    // other names values
+    req.sessionModel.set('otherNames', {
+      aggregatedValues: [
+        { itemTitle: 'Jane', fields: [{ field: 'firstName', value: 'Jane' }, { field: 'surname', value: 'Smith' }] },
+        { itemTitle: 'Steve', fields: [{ field: 'firstName', value: 'Steve' }, { field: 'surname', value: 'Adams' }] }
+      ]
+    });
+
+
+    Behaviour = SummaryBehaviour(Base);
+    behaviour = new Behaviour(req.form.options);
+  });
+
+  describe('#getRowsForSummarySections', () => {
+    beforeEach(() => {
+      lastResult = behaviour.getRowsForSummarySections(req, res);
+    });
+
+    it('should trigger parser functions provided in sections.js', () => {
+      lastResult.should.containSubset([
+        {
+          section: 'Applicant’s details',
+          fields: [
+            {
+              value: '1st January 1980'
+            }
+          ]
+        }
+      ]);
+    });
+
+    it('should supply translated changeLinkDescriptions', () => {
+      lastResult.should.containSubset([
+        {
+          fields: [
+            {
+              changeLinkDescription: 'Your date of birth'
+            }
+          ]
+        },
+        {
+          fields: [
+            {
+              changeLinkDescription: 'A first name'
+            }
+          ]
+        },
+        {
+          fields: [
+            {
+              changeLinkDescription: 'A surname'
+            }
+          ]
+        }
+      ]);
+    }
+    );
+
+    it('should translate the value for a radio button group', () => {
+      lastResult.should.containSubset([{ fields: [{ value: 'Yes' }] }]);
+    });
+
+    it('should output the correct value for a yes/no radio button group', () => {
+      lastResult.should.containSubset(
+        [{
+          fields: [
+            {
+              field: 'hasOtherNames',
+              label: 'Have you been known by any other names?',
+              step: '/has-other-names',
+              value: 'Yes'
+            }
+          ],
+          section: 'Have you been known by any other names?'
+        }]
+      );
+    });
+
+    it('expands aggregated fields into individual entries for summary display', () => {
+      lastResult.should.containSubset(
+        [{
+          section: 'Does the applicant have other names?',
+          fields: [
+            {
+              label: 'First name',
+              value: 'Jane',
+              changeLink: 'test/other-names/edit/0/firstName?returnToSummary=true'
+            },
+            {
+              label: 'Surname',
+              value: 'Smith',
+              changeLink: 'test/other-names/edit/0/surname?returnToSummary=true'
+            },
+            {
+              label: 'First name',
+              value: 'Steve',
+              changeLink: 'test/other-names/edit/1/firstName?returnToSummary=true'
+            }
+          ]
+        }]
+      );
+    });
+
+    it('should add separators when specified', () => {
+      lastResult.should.containSubset([
+        {
+          fields: [
+            {
+              label: '',
+              value: 'separator',
+              changeLink: '',
+              isSeparator: true
+            }
+          ]
+        }
+      ]);
+    });
+  });
+
+  describe('#getStepForField', () => {
+    it('returns the correct step', () => {
+      behaviour.getStepForField('hasOtherNames', req.form.options.steps)
+        .should.be.eql('/has-other-names');
+    });
+  });
+
+  describe('#expandAggregatedFields', () => {
+    it('returns expanded fields', () => {
+      const inputObj =
+        {
+          changeLinkDescription: 'Other name',
+          label: 'Full name',
+          value: {
+            aggregatedValues: [
+              {
+                itemTitle: 'John',
+                fields: [
+                  {
+                    field: 'otherName',
+                    value: 'John'
+                  }
+                ],
+                index: 0
+              },
+              {
+                itemTitle: 'Jane',
+                fields: [
+                  {
+                    field: 'otherName',
+                    value: 'Jane'
+                  }
+                ],
+                index: 1
+              }
+            ]
+          },
+          step: '/other-names',
+          field: 'otherNames'
+        };
+
+      behaviour.expandAggregatedFields(inputObj, req)
+        .should.be.eql([
+          {
+            changeLinkDescription: 'Your other name',
+            label: 'Other name',
+            value: 'John',
+            changeLink: 'test/other-names/edit/0/otherName?returnToSummary=true',
+            field: 'otherName',
+            index: 0
+          },
+          {
+            changeLinkDescription: 'Your other name',
+            label: 'Other name',
+            value: 'Jane',
+            changeLink: 'test/other-names/edit/1/otherName?returnToSummary=true',
+            field: 'otherName',
+            index: 1
+          }
+        ]);
+    });
+  });
+
+  describe('#runCombinerForDerivedField', () => {
+    it('should execute the combiner and return the result', () => {
+      req.sessionModel.set('outgoingTypes', [
+        'food_toiletries_cleaning_supplies',
+        'mobile_phone'
+      ]);
+
+      req.sessionModel.set('foodToiletriesAndCleaningSuppliesAmount', '10');
+      req.sessionModel.set('mobilePhoneAmount', '20');
+
+      const sumValues = values => values.map(it => Number(it)).reduce((a, b) => a + b, 0);
+      const fieldSpec = {
+        field: 'totalIncome',
+        derivation: {
+          fromFields: [
+            'foodToiletriesAndCleaningSuppliesAmount',
+            'mobilePhoneAmount'
+          ],
+          combiner: sumValues
+        }
+      };
+
+      behaviour.runCombinerForDerivedField(fieldSpec, req).should.eql(30);
+    });
+  });
+
+  describe('#getFieldData', () => {
+    it('should return the correct result for simple fields', () => {
+      behaviour.getFieldData('brpNumber', req).should.eql({
+        changeLinkDescription: 'Your Biometric residence permit (BRP) number',
+        label: 'Biometric residence permit (BRP) number',
+        value: '12345678',
+        step: '/pdf-applicant-details',
+        field: 'brpNumber'
+      });
+    });
+
+    it('should return the correct result for aggregated fields', () => {
+      behaviour.getFieldData('otherNames', req).should.eql(
+        {
+          changeLinkDescription: 'Your other names',
+          field: 'otherNames',
+          label: 'Other names',
+          step: '/other-names',
+          value: {
+            aggregatedValues: [
+              {
+                fields: [
+                  {
+                    field: 'firstName',
+                    value: 'Jane'
+                  },
+                  {
+                    field: 'surname',
+                    value: 'Smith'
+                  }
+                ],
+                itemTitle: 'Jane'
+              },
+              {
+                fields: [
+                  {
+                    field: 'firstName',
+                    value: 'Steve'
+                  },
+                  {
+                    field: 'surname',
+                    value: 'Adams'
+                  }
+                ],
+                itemTitle: 'Steve'
+              }
+            ]
+          }
+        }
+      );
     });
   });
 });

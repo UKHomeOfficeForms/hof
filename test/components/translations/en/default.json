@@ -1,0 +1,52 @@
+{
+  "pages": {
+    "has-other-names": {
+      "header": "Have you been known by any other names?"
+    },
+    "confirm": {
+      "sections": {
+        "pdf-applicant-details": {
+          "header": "Applicant’s details"
+        },
+        "other-names": {
+          "header": "Does the applicant have other names?"
+        }
+      }
+    }
+  },
+  "fields": {
+    "hasOtherNames": {
+      "legend": "Have you been known by any other names?",
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "otherName": {
+      "label": "Other name",
+      "changeLinkDescription": "Your other name"
+    },
+    "otherNames": {
+      "label": "Other names",
+      "changeLinkDescription": "Your other names"
+    },
+    "brpNumber": {
+      "label": "Biometric residence permit (BRP) number",
+      "hint": "For example, ‘ZU1234567’.",
+      "changeLinkDescription": "Your Biometric residence permit (BRP) number"
+    },
+    "dateOfBirth": {
+      "legend": "Date of Birth",
+      "hint": "For example, 31 3 1980",
+      "changeLinkDescription": "Your date of birth"
+    },
+    "surname": {
+      "label": "Surname",
+      "changeLinkDescription": "A surname"
+    },
+    "firstName": {
+      "label": "First name",
+      "changeLinkDescription": "A first name"
+    }
+  }
+}
