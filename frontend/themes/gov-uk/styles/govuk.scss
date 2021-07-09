@@ -20,6 +20,8 @@ $path: "/public/images/" !default;
 @import "helpers";
 @import "cookie-banner";
 @import "cookie-settings";
+@import "check_your_answers";
+@import "pdf";
 
 // Modules
 @import "modules/validation";
