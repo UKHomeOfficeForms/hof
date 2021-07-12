@@ -92,7 +92,7 @@ const Wizard = (steps, fields, setts) => {
     const controller = new Controller(options);
 
     controller.use([
-      require('./middleware/check-session')(route, controller, steps, first),
+      require('./middleware/check-session')(route, controller, steps, first, settings),
       require('./middleware/check-complete')(route, controller, steps, first),
       require('./middleware/check-progress')(route, controller, steps, first)
     ]);

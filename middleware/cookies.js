@@ -3,6 +3,7 @@
 const URI = require('urijs');
 
 const isHealthcheckUrl = (path, healthcheckUrls) => healthcheckUrls.some(url => path.includes(url));
+const secureHttps = config => config.protocol === 'https' || config.env === 'production';
 
 module.exports = options => {
   const checkName = 'hof-cookie-check';
@@ -27,7 +28,7 @@ module.exports = options => {
       err.code = 'NO_COOKIES';
       next(err, req, res, next);
     } else {
-      res.cookie(cookieName, 1);
+      res.cookie(cookieName, 1, { sameSite: 'strict', secure: secureHttps(options), httpOnly: true });
 
       const redirectURL = (req.originalUrl && req.originalUrl.match(/^\/[^\/\\]/)) ?
         new URI(req.originalUrl).addQuery(encodeURIComponent(paramName)) : '/';
