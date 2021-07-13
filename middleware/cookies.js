@@ -28,7 +28,10 @@ module.exports = options => {
       next(err, req, res, next);
     } else {
       res.cookie(cookieName, 1);
-      const redirectURL = new URI(req.originalUrl).addQuery(encodeURIComponent(paramName));
+
+      const redirectURL = (req.originalUrl && req.originalUrl.match(/^\/[^\/\\]/)) ?
+        new URI(req.originalUrl).addQuery(encodeURIComponent(paramName)) : '/';
+
       res.redirect(redirectURL.toString());
     }
   };
