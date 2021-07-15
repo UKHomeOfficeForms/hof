@@ -4,6 +4,7 @@ const moment = require('moment');
 const _ = require('lodash');
 const libPhoneNumber = require('libphonenumber-js/max');
 const deprecate = require('deprecate');
+const emailValidator = require('./email');
 
 // validator methods should return false (or falsy value) for *invalid* input
 // and true (or truthy value) for *valid* input.
@@ -38,8 +39,7 @@ module.exports = Validators = {
   },
 
   email(value) {
-    // eslint-disable-next-line max-len
-    return value === '' || Validators.regex(value, /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    return value === '' || emailValidator(value);
   },
 
   between(value, min, max) {
