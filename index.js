@@ -213,7 +213,8 @@ function bootstrap(options) {
       'Use `pages` to define static terms and conditions page.'
     );
     app.get('/terms-and-conditions', (req, res) => {
-      res.render('terms', req.translate('terms'));
+      const locals = Object.assign({}, { appName: config.appName }, req.translate('terms'));
+      res.render('terms', locals);
     });
   }
 
