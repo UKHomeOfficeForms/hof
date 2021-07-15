@@ -1474,14 +1474,6 @@ const translate = require('i18n-future').middleware({
 });
 app.use(translate);
 ```
-### Cookie Banner
-
-The cookie banner has a placeholder named serviceName that you can set within the locals of your hof application so that the appropriate value is displayed.
-
-```js
-res.locals.serviceName = <yourServiceName>
-```
-
 
 # HOF FRONTEND THEME
 
