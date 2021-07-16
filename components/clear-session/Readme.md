@@ -3,6 +3,22 @@
 ## What this does
 Resets the HOF session model `req.sessionModel.reset()` and clears anything stored by Redis when a user has submitted their information. This behaviour can be used on the final/penultimate step in a flow to ensure proper session clearing.
 
+Clear session happens automatically for the step that uses it if it has no next step. However, if it does, then set the following on the step:
+```
+'/confirm': {
+  behaviour: require('hof').components.clearSession,
+  clearSession: true,
+  next: '/confirmation'
+}
+```
+However if you want to prevent clear session where there is no next step then set 'clearSession' to false:
+```
+'/confirm': {
+  behaviour: require('hof').components.clearSession,
+  clearSession: false
+}
+```
+
 ## Additional information
 
 In your fields file the clear session behaviour can be brought in like this.
