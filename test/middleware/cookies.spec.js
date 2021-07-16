@@ -14,7 +14,9 @@ describe('cookies', () => {
     });
     middleware = require('../../middleware/cookies')({
       'cookie-name': 'hof_cookie',
-      'param-name': 'hof_param'
+      'param-name': 'hof_param',
+      protocpl: 'http',
+      env: 'development'
     });
     next = sinon.stub();
   });
@@ -40,7 +42,34 @@ describe('cookies', () => {
 
     it('attempts to set a cookie if one is not available', () => {
       middleware(req, res);
-      res.cookie.should.have.been.calledWith('hof_cookie', 1);
+      res.cookie.should.have.been.calledOnce.calledWithExactly('hof_cookie', 1, {
+        sameSite: 'strict', secure: false, httpOnly: true
+      });
+    });
+
+    it('creates a secure cookie if protocol https', () => {
+      middleware = require('../../middleware/cookies')({
+        'cookie-name': 'hof_cookie',
+        'param-name': 'hof_param',
+        protocol: 'https'
+      });
+      middleware(req, res);
+      res.cookie.should.have.been.calledOnce.calledWithExactly('hof_cookie', 1, {
+        sameSite: 'strict', secure: true, httpOnly: true
+      });
+    });
+
+    it('creates a secure cookie if protocol https', () => {
+      middleware = require('../../middleware/cookies')({
+        'cookie-name': 'hof_cookie',
+        'param-name': 'hof_param',
+        protocol: 'http',
+        env: 'production'
+      });
+      middleware(req, res);
+      res.cookie.should.have.been.calledOnce.calledWithExactly('hof_cookie', 1, {
+        sameSite: 'strict', secure: true, httpOnly: true
+      });
     });
 
     it('redirects to self with query parameter', () => {

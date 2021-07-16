@@ -219,7 +219,7 @@ function bootstrap(options) {
   }
 
   app.use(userMiddleware);
-  app.use(hofMiddleware.cookies());
+  app.use(hofMiddleware.cookies(config));
   loadRoutes(app, config);
   applyErrorMiddlewares(app, config);
 
