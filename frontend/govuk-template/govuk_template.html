@@ -6,38 +6,32 @@
     <meta charset="utf-8" />
     <title>{{$pageTitle}}{{/pageTitle}}</title>
 
-    <!--[if gt IE 8]><!--><link href="{{govukAssetPath}}stylesheets/govuk-template.css?0.17.3" media="screen" rel="stylesheet" type="text/css" /><!--<![endif]-->
-    <!--[if IE 6]><link href="{{govukAssetPath}}stylesheets/govuk-template-ie6.css?0.17.3" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
-    <!--[if IE 7]><link href="{{govukAssetPath}}stylesheets/govuk-template-ie7.css?0.17.3" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
-    <!--[if IE 8]><link href="{{govukAssetPath}}stylesheets/govuk-template-ie8.css?0.17.3" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
-    <link href="{{govukAssetPath}}stylesheets/govuk-template-print.css?0.17.3" media="print" rel="stylesheet" type="text/css" />
+    <!--[if gt IE 8]><!--><link rel="stylesheet" media="screen" href="{{govukAssetPath}}stylesheets/govuk-template.css?0.26.0"/><!--<![endif]-->
+    <!--[if IE 6]><link rel="stylesheet" media="screen" href="{{govukAssetPath}}stylesheets/govuk-template-ie6.css?0.26.0"/><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" media="screen" href="{{govukAssetPath}}stylesheets/govuk-template-ie7.css?0.26.0"/><![endif]-->
+    <!--[if IE 8]><link rel="stylesheet" media="screen" href="{{govukAssetPath}}stylesheets/govuk-template-ie8.css?0.26.0"/><![endif]-->
+    <link rel="stylesheet" media="print" href="{{govukAssetPath}}stylesheets/govuk-template-print.css?0.26.0"/>
 
-    <!--[if IE 8]>
-    <script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
-      (function(){if(window.opera){return;}
-       setTimeout(function(){var a=document,g,b={families:(g=
-       ["nta"]),urls:["{{govukAssetPath}}stylesheets/fonts-ie8.css?0.17.3"]},
-       c="{{govukAssetPath}}javascripts/vendor/goog/webfont-debug.js?0.17.3",d="script",
-       e=a.createElement(d),f=a.getElementsByTagName(d)[0],h=g.length;WebFontConfig
-       ={custom:b},e.src=c,f.parentNode.insertBefore(e,f);for(;h=h-1;a.documentElement
-       .className+=' wf-'+g[h].replace(/\s/g,'').toLowerCase()+'-n4-loading');},0)
-      })()
-    </script>
-    <![endif]-->
-    <!--[if gte IE 9]><!--><link href="{{govukAssetPath}}stylesheets/fonts.css?0.17.3" media="all" rel="stylesheet" type="text/css" /><!--<![endif]-->
-    <!--[if lt IE 9]><script src="{{govukAssetPath}}javascripts/ie.js?0.17.3"></script><![endif]-->
+    <link rel="stylesheet" media="all" href="{{govukAssetPath}}stylesheets/fonts.css?0.26.0"/>
+    <!--[if lt IE 9]><script src="{{govukAssetPath}}javascripts/ie.js?0.26.0"></script><![endif]-->
 
-    <link rel="shortcut icon" href="{{govukAssetPath}}images/favicon.ico?0.17.3" type="image/x-icon" />
-    <link rel="mask-icon" href="{{govukAssetPath}}images/gov.uk_logotype_crown.svg?0.17.3" color="#0b0c0c">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{govukAssetPath}}images/apple-touch-icon-152x152.png?0.17.3">
-    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{{govukAssetPath}}images/apple-touch-icon-120x120.png?0.17.3">
-    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="{{govukAssetPath}}images/apple-touch-icon-76x76.png?0.17.3">
-    <link rel="apple-touch-icon-precomposed" href="{{govukAssetPath}}images/apple-touch-icon-60x60.png?0.17.3">
+    <link rel="shortcut icon" href="{{govukAssetPath}}images/favicon.ico?0.26.0" type="image/x-icon" />
+    
+    <link rel="mask-icon" href="{{govukAssetPath}}images/gov.uk_logotype_crown.svg?0.26.0" color="#0b0c0c">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{govukAssetPath}}images/apple-touch-icon-180x180.png?0.26.0">
+    <link rel="apple-touch-icon" sizes="167x167" href="{{govukAssetPath}}images/apple-touch-icon-167x167.png?0.26.0">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{govukAssetPath}}images/apple-touch-icon-152x152.png?0.26.0">
+    <link rel="apple-touch-icon" href="{{govukAssetPath}}images/apple-touch-icon.png?0.26.0">
+
+    
+    <meta name="theme-color" content="#0b0c0c" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:image" content="{{govukAssetPath}}images/opengraph-image.png?0.17.3">
 
     {{$head}}{{/head}}
+
+    
+    <meta property="og:image" content="{{govukAssetPath}}images/opengraph-image.png?0.26.0">
   </head>
 
   <body class="{{$bodyClasses}}{{/bodyClasses}}">
@@ -62,8 +56,8 @@
       <div class="header-wrapper">
         <div class="header-global">
           <div class="header-logo">
-            <a href="{{$homepageUrl}}https://www.gov.uk{{/homepageUrl}}" title="{{$logoLinkTitle}}Go to the GOV.UK homepage{{/logoLinkTitle}}" id="logo" class="content">
-              <img src="{{govukAssetPath}}images/gov.uk_logotype_crown_invert_trans.png?0.17.3" width="35" height="31" alt=""> {{$globalHeaderText}}GOV.UK{{/globalHeaderText}}
+            <a href="{{$homepageUrl}}https://www.gov.uk{{/homepageUrl}}" title="{{$logoLinkTitle}}Go to the GOV.UK homepage{{/logoLinkTitle}}" id="logo" class="content" data-module="track-click" data-track-category="homeLinkClicked" data-track-action="homeHeader">
+              <img src="{{govukAssetPath}}images/gov.uk_logotype_crown_invert_trans.png?0.26.0" width="36" height="32" alt=""> {{$globalHeaderText}}GOV.UK{{/globalHeaderText}}
             </a>
           </div>
           {{$insideHeader}}{{/insideHeader}}
@@ -97,7 +91,7 @@
           </div>
 
           <div class="copyright">
-            <a href="http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">{{$crownCopyrightMessage}}© Crown copyright{{/crownCopyrightMessage}}</a>
+            <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">{{$crownCopyrightMessage}}© Crown copyright{{/crownCopyrightMessage}}</a>
           </div>
         </div>
       </div>
@@ -105,8 +99,11 @@
 
     <div id="global-app-error" class="app-error hidden"></div>
 
-    <script src="{{govukAssetPath}}javascripts/govuk-template.js?0.17.3"></script>
+    <script src="{{govukAssetPath}}javascripts/govuk-template.js?0.26.0"></script>
 
     {{$bodyEnd}}{{/bodyEnd}}
+
+    
+    <script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>if (typeof window.GOVUK === 'undefined') document.body.className = document.body.className.replace('js-enabled', '');</script>
   </body>
 </html>

@@ -1,7 +1,7 @@
 
 const ClearSessionBehaviour = require('../../components').clearSession;
 
-describe.only('Clear session behaviour', () => {
+describe('Clear session behaviour', () => {
   class Base {}
 
   describe('#getValues', () => {
