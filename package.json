@@ -82,7 +82,7 @@
     "showdown": "^1.8.2",
     "uglify-js": "^2.8.22",
     "underscore": "^1.12.1",
-    "urijs": "^1.19.2",
+    "urijs": "^1.19.7",
     "winston": "^3.3.3"
   },
   "devDependencies": {
