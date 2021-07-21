@@ -16,7 +16,8 @@ module.exports = {
   },
   translate: {
     src: 'apps/**/translations/src',
-    match: 'apps/**/translations/src/**/*.json'
+    match: 'apps/**/translations/src/**/*.json',
+    shared: 'apps/common/translations/src'
   },
   images: {
     src: 'assets/images',
