@@ -111,6 +111,31 @@ Additionally the server instance created by `watch` can be configured by setting
 * `cmd` - defines the command used to start the server
 * `extensions` - defines the file extensions which will be watched to trigger a restart
 
+### Shared Translations
+
+By default translations put in the commons directory in a HOF project, i.e. `app/common/translations/src`, are bundles together and shared with other translation files of the same name, e.g. fields.json, buttons.json etc. Any other files will have their own json file created in the default.json translation file of a sub application. E.g. in `app/<sub_app>/translations/en/default.json`.
+
+To override this behaviour you can add the following to your `hof.settings.json` file or to the settings possible to hof on your server.js file
+
+Hof.settings.json example
+```
+"build": {
+  "translate": {
+    "shared": "./apps/another_common_directory/translations/src"
+  }
+}
+```
+
+server.js example
+```
+const hof = require('hof');
+const settings = { ...behaviours, ...routes };
+
+settings.build = { translate: { shared: "./apps/another_common_directory/translations/src" } };
+
+const app = hof(settings);
+```
+
 ## HOF TRANSPILER
 
 Home office forms transpiler is a tiny tool that can be used as part of a build or manually to convert multipart locales files into one default.json. This is used in our stack for translations of form applications.
