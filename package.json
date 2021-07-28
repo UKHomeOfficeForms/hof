@@ -78,7 +78,7 @@
     "reqres": "^3.0.1",
     "request": "^2.79.0",
     "rimraf": "^3.0.2",
-    "sass": "^1.35.1",
+    "sass": "^1.35.2",
     "serve-static": "^1.14.1",
     "showdown": "^1.8.2",
     "uglify-js": "^2.8.22",
