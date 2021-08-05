@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign, consistent-return */
 'use strict';
 
 const _ = require('lodash');
@@ -35,16 +36,16 @@ module.exports = class Helpers {
    * @returns {String} - the first translation found
    */
   static getTitle(route, lookup, fields, locals) {
-     let fieldName = '';
-     if (_.size(fields)) {
-       fieldName = Object.keys(fields)[0];
-     }
-     return lookup([
-       `pages.${route}.header`,
-       `fields.${fieldName}.label`,
-       `fields.${fieldName}.legend`
-     ], locals);
-   }
+    let fieldName = '';
+    if (_.size(fields)) {
+      fieldName = Object.keys(fields)[0];
+    }
+    return lookup([
+      `pages.${route}.header`,
+      `fields.${fieldName}.label`,
+      `fields.${fieldName}.legend`
+    ], locals);
+  }
 
   /**
    * Helper function to return intro if
@@ -55,10 +56,10 @@ module.exports = class Helpers {
    * @returns {String} the translation if found
    */
   static getIntro(route, lookup, locals) {
-     return lookup([
-       `pages.${route}.intro`
-     ], locals);
-   }
+    return lookup([
+      `pages.${route}.intro`
+    ], locals);
+  }
 
   /**
    * Utility function which returns true
@@ -84,8 +85,8 @@ module.exports = class Helpers {
       values = [values];
     }
     return values.map(value => {
-      let key = `fields.${field}.options.${value}.label`;
-      let result = translate(key);
+      const key = `fields.${field}.options.${value}.label`;
+      const result = translate(key);
       return result === key ? value : result;
     }).join('\n');
   }
@@ -97,12 +98,12 @@ module.exports = class Helpers {
    * @param {String} key - the key to translate
    * @returns {String|undefined} the string result if successful, undefined if not
    */
-   static conditionalTranslate(translate, key) {
-     let result = translate(key);
-     if (result !== key) {
-       return result;
-     }
-   }
+  static conditionalTranslate(translate, key) {
+    const result = translate(key);
+    if (result !== key) {
+      return result;
+    }
+  }
 
   /**
    * Utility function which looks up translations with fallback values
@@ -127,7 +128,7 @@ module.exports = class Helpers {
     }
     return lookup([
       `pages.${key}.summary`,
-      `pages.${key}.header`,
+      `pages.${key}.header`
     ]) || key;
   }
 };

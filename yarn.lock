@@ -3212,10 +3212,10 @@ escodegen@^2.0.0:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-hof@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/eslint-config-hof/-/eslint-config-hof-1.0.5.tgz#4550e78086e6e4112d421fbe5d97f7298144623d"
-  integrity sha512-izzx8592P+U4j5eZ2Kkv6rQ53GrJ/Hq8UWG/vrxgfUh3EhoBQ0hXMGZKxXEnrfrPGPWRGYgAfPS905fOq4O3Nw==
+eslint-config-hof@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-hof/-/eslint-config-hof-1.1.0.tgz#9c1298f35f5c4508972e0590b437ba5b8bb06451"
+  integrity sha512-NAn0t/BNiZbuYRlN1HfFLiiXN77KbcMt3Cusm4VssUbU1Uz0/v8Qz/7KAMxJkZ0hOZm3FSWfrQgJBdteTfYPVQ==
   dependencies:
     babel-eslint "^10.1.0"
     eslint "^7.27.0"

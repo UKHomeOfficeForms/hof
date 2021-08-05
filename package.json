@@ -94,7 +94,7 @@
     "concat-stream": "^1.4.7",
     "csv": "^5.3.2",
     "eslint": "^7.30.0",
-    "eslint-config-hof": "^1.0.5",
+    "eslint-config-hof": "^1.1.0",
     "funkie": "0.0.5",
     "funkie-phantom": "0.0.1",
     "istanbul": "^0.4.3",
