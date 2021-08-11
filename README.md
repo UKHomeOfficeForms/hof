@@ -978,6 +978,24 @@ Alternatively, a field can be passed as an object with a `field` property defini
        combiner: (values) => values.map(it => Number(it)).reduce((a, b) => a + b, 0)
      }
   ```
+* `multipleRowsFromAggregate` - `Object` if this object exists on a field, it uses the `labelCategory`, `valueCategory` and `valueTranslation` values to populate the row's label and value name but also iterates over multiple rows that have been aggregated under one field name. There is one good reference of this in Firearms where the following example is used:
+```javascript
+{
+  field: 'location-addresses',
+  step: '/location-add-another-address',
+  multipleRowsFromAggregate: {
+    labelCategory: 'address',
+    valueCategory: 'address-category',
+    // Optional: uses valueCategory name if not specified
+    valueTranslation: 'location-address-category'
+  }
+}
+```
+The `location-addresses` field is one that the application has setup to aggregate and store all addresses labelled with the `address` field. Each address is a storage location for firearms, and so there is a sub-category which lists what firearms type is listed under each address (i.e. Full-bore, small-bore, muzzle-loading), and these are stored under the `address-category` field. Along with translations to them in the `fields.json` file living under the `location-address-category` translation header. By utilising these three values one can achieve the following output on the summary page.
+
+![Firearms Summary Page Example](assets/firearms_summary_page_example.png)
+
+This allows the creation of summary rows based on unknown dynamic user input, i.e. we can not predict in advance how many addresses a user wants to input, what the addresses are and how many categories the user wants to attach to each address. This allows you to easily list them this way.
 
 ## Translations
 

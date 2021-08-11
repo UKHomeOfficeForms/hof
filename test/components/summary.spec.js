@@ -58,6 +58,17 @@ describe('summary behaviour', () => {
             parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
           }
         ],
+        'range-addresses': [
+          {
+            field: 'locationAddresses',
+            step: '/location-add-another-address',
+            multipleRowsFromAggregate: {
+              labelCategory: 'address',
+              valueCategory: 'address-category',
+              valueTranslation: 'location-address-category'
+            }
+          }
+        ],
         'has-other-names': [
           {
             step: '/has-other-names',
@@ -80,7 +91,9 @@ describe('summary behaviour', () => {
         '/has-other-names':
           { fields: ['hasOtherNames'] },
         '/other-names':
-          { fields: ['otherNames'] }
+          { fields: ['otherNames'] },
+        '/range-addresses':
+          { fields: ['locationAddresses'] }
       }
     };
 
@@ -96,7 +109,21 @@ describe('summary behaviour', () => {
         { itemTitle: 'Steve', fields: [{ field: 'firstName', value: 'Steve' }, { field: 'surname', value: 'Adams' }] }
       ]
     });
-
+    // location addresses Values
+    req.sessionModel.set('locationAddresses', [
+      {
+        address: 'Range 1 Address',
+        'address-category': [
+          'full-bore-rifles', 'small-bore-rifles', 'muzzle-loading-pistols'
+        ]
+      },
+      {
+        address: 'Range 2 Address',
+        'address-category': [
+          'full-bore-rifles', 'small-bore-rifles'
+        ]
+      }
+    ]);
 
     Behaviour = SummaryBehaviour(Base);
     behaviour = new Behaviour(req.form.options);
@@ -306,6 +333,38 @@ describe('summary behaviour', () => {
         step: '/pdf-applicant-details',
         field: 'brpNumber'
       });
+    });
+
+    it('should return the correct result for multiple fields', () => {
+      const multipleFieldKey = {
+        field: 'locationAddresses',
+        step: '/location-add-another-address',
+        multipleRowsFromAggregate: {
+          labelCategory: 'address',
+          valueCategory: 'address-category',
+          valueTranslation: 'location-address-category'
+        }
+      };
+
+      behaviour.getFieldData(multipleFieldKey, req).should.eql([
+        {
+          field: 'locationAddresses',
+          step: '/location-add-another-address',
+          changeLinkDescription: 'Change Location',
+          label: 'Range 1 Address',
+          value: 'Full Bore Rifles\n' +
+              'Small Bore Rifles\n' +
+              'Muzzle Loading Pistols'
+        },
+        {
+          field: 'locationAddresses',
+          step: '/location-add-another-address',
+          changeLinkDescription: 'Change Location',
+          label: 'Range 2 Address',
+          value: 'Full Bore Rifles\n' +
+              'Small Bore Rifles'
+        }
+      ]);
     });
 
     it('should return the correct result for aggregated fields', () => {
