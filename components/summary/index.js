@@ -30,11 +30,12 @@ module.exports = SuperClass => class extends SuperClass {
       fieldsSpecifications.map(fieldSpec => {
         let fieldData = {};
         const multipleRows = fieldSpec.multipleRowsFromAggregate;
+        const useOriginalValue = fieldSpec.useOriginalValue;
 
         if (typeof fieldSpec === 'string' || multipleRows) {
-          fieldData = this.getFieldData(fieldSpec, req);
+          fieldData = this.getFieldData(fieldSpec, req, useOriginalValue);
         } else if (this.dependencySatisfied(fieldSpec, req)) {
-          fieldData = Object.assign(this.getFieldData(fieldSpec.field, req), fieldSpec);
+          fieldData = Object.assign(this.getFieldData(fieldSpec.field, req, useOriginalValue), fieldSpec);
         }
 
         if (!multipleRows) {
@@ -132,9 +133,9 @@ module.exports = SuperClass => class extends SuperClass {
     return req.translate(`fields[${key}].options.[${value}]`);
   }
 
-  getFieldData(key, req) {
+  getFieldData(key, req, useOriginalValue) {
     if (this.isCheckbox(key, req)) {
-      return this.parseCheckBoxField(key, req);
+      return this.parseCheckBoxField(key, req, useOriginalValue);
     }
 
     return key.multipleRowsFromAggregate ?
@@ -148,11 +149,11 @@ module.exports = SuperClass => class extends SuperClass {
         req.form.options.fieldsConfig[key].mixin === 'radio-group');
   }
 
-  parseCheckBoxField(key, req) {
+  parseCheckBoxField(key, req, useOriginalValue) {
     let value = req.sessionModel.get(key);
     const step = this.getStepForField(key, req.form.options.steps);
     const changeLink = `${req.baseUrl}${step}/edit#${key}-${value}`;
-    value = this.translateCheckBoxOptions(key, value, req);
+    value = useOriginalValue ? value : this.translateCheckBoxOptions(key, value, req);
 
     return {
       changeLinkDescription: this.translateChangeLink(key, req),
