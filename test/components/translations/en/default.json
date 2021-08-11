@@ -15,6 +15,22 @@
     }
   },
   "fields": {
+    "locationAddresses": {
+      "changeLinkDescription": "Change Location"
+    },
+    "location-address-category": {
+      "options": {
+        "full-bore-rifles": {
+          "label": "Full Bore Rifles"
+        },
+        "small-bore-rifles": {
+          "label": "Small Bore Rifles"
+        },
+        "muzzle-loading-pistols": {
+          "label": "Muzzle Loading Pistols"
+        }
+      }
+    },
     "hasOtherNames": {
       "legend": "Have you been known by any other names?",
       "options": {

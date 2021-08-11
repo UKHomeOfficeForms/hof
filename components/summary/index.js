@@ -29,18 +29,23 @@ module.exports = SuperClass => class extends SuperClass {
     let populatedFields =
       fieldsSpecifications.map(fieldSpec => {
         let fieldData = {};
+        const multipleRows = fieldSpec.multipleRowsFromAggregate;
 
-        if (typeof fieldSpec === 'string') {
+        if (typeof fieldSpec === 'string' || multipleRows) {
           fieldData = this.getFieldData(fieldSpec, req);
         } else if (this.dependencySatisfied(fieldSpec, req)) {
           fieldData = Object.assign(this.getFieldData(fieldSpec.field, req), fieldSpec);
         }
 
-        fieldData.value = fieldSpec.derivation ? this.runCombinerForDerivedField(fieldSpec, req) : fieldData.value;
-        fieldData.value = (typeof fieldSpec.parse === 'function') ? fieldSpec.parse(fieldData.value) : fieldData.value;
+        if (!multipleRows) {
+          fieldData.value = fieldSpec.derivation ?
+            this.runCombinerForDerivedField(fieldSpec, req) : fieldData.value;
+          fieldData.value = (typeof fieldSpec.parse === 'function') ?
+            fieldSpec.parse(fieldData.value) : fieldData.value;
+        }
 
         return fieldData;
-      }).filter(f => f.value);
+      }).filter(f => f.value || Array.isArray(f));
 
     populatedFields = flatMap(populatedField => {
       if (populatedField.value && populatedField.value.aggregatedValues) {
@@ -128,35 +133,62 @@ module.exports = SuperClass => class extends SuperClass {
   }
 
   getFieldData(key, req) {
-    const settings = req.form.options;
-    let value = req.sessionModel.get(key);
-    let changeLink;
-    let step;
+    if (this.isCheckbox(key, req)) {
+      return this.parseCheckBoxField(key, req);
+    }
 
-    const fieldIsCheckbox = value && req.form.options.fieldsConfig[key] &&
+    return key.multipleRowsFromAggregate ?
+      this.parseMultipleFields(key, req) :
+      this.parseSingleField(key, req);
+  }
+
+  isCheckbox(key, req) {
+    return req.sessionModel.get(key) && req.form.options.fieldsConfig[key] &&
       (req.form.options.fieldsConfig[key].mixin === 'checkbox-group' ||
         req.form.options.fieldsConfig[key].mixin === 'radio-group');
+  }
 
-    if (fieldIsCheckbox) {
-      step = this.getStepForField(key, settings.steps);
-      changeLink = `${req.baseUrl}${step}/edit#${key}-${value}`;
-      value = this.translateCheckBoxOptions(key, value, req);
-
-      return {
-        changeLinkDescription: this.translateChangeLink(key, req),
-        label: this.translateLabel(key, req),
-        value,
-        step,
-        field: key,
-        changeLink
-      };
-    }
+  parseCheckBoxField(key, req) {
+    let value = req.sessionModel.get(key);
+    const step = this.getStepForField(key, req.form.options.steps);
+    const changeLink = `${req.baseUrl}${step}/edit#${key}-${value}`;
+    value = this.translateCheckBoxOptions(key, value, req);
 
     return {
       changeLinkDescription: this.translateChangeLink(key, req),
       label: this.translateLabel(key, req),
       value,
-      step: this.getStepForField(key, settings.steps),
+      step,
+      field: key,
+      changeLink
+    };
+  }
+
+  parseMultipleFields(key, req) {
+    const multipleRows = key.multipleRowsFromAggregate;
+    const labelCategory = multipleRows.labelCategory;
+    const valueCategory = multipleRows.valueCategory;
+    const translationValue = multipleRows.valueTranslation || multipleRows.valueCategory;
+
+    return req.sessionModel.get(key.field).map(input => {
+      return {
+        field: key.field,
+        step: key.step,
+        changeLinkDescription: this.translateChangeLink(key.field, req),
+        label: input[labelCategory],
+        value: [].concat(input[valueCategory])
+          .map(category => req.translate(`fields.${translationValue}.options.${category}.label`))
+          .join('\n')
+      };
+    }).filter(f => f.value);
+  }
+
+  parseSingleField(key, req) {
+    return {
+      changeLinkDescription: this.translateChangeLink(key, req),
+      label: this.translateLabel(key, req),
+      value: req.sessionModel.get(key),
+      step: this.getStepForField(key, req.form.options.steps),
       field: key
     };
   }
