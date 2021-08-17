@@ -29,6 +29,9 @@ const defaults = {
     secret: process.env.SESSION_SECRET || 'changethis',
     name: process.env.SESSION_NAME || 'hod.sid'
   },
+  apis: {
+    pdfConverter: process.env.PDF_CONVERTER_URL
+  },
   serveStatic: process.env.SERVE_STATIC_FILES !== 'false'
 };
 
