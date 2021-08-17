@@ -282,6 +282,7 @@ module.exports.transpiler = require('./transpiler/');
 module.exports.middleware = require('./middleware');
 module.exports.controller = require('./controller');
 module.exports.model = require('./model');
+module.exports.apis = require('./model/apis');
 module.exports.wizard = require('./wizard');
 module.exports.components = require('./components');
 module.exports.utils = require('./utilities');
