@@ -318,14 +318,15 @@ describe('hof server', () => {
 
       bs.start({
         port: '8002'
-      }).then(() => {
-        bs.stop().then(() => {
-          require('request')('http://localhost:8002', err => {
+      }).then(async () => {
+        await bs.stop();
+
+        require('axios')('http://localhost:8002')
+          .catch(err => {
             err.should.be.instanceof(Error);
             err.code.should.equal('ECONNREFUSED');
             done();
           });
-        });
       });
     });
 

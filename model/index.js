@@ -2,7 +2,7 @@
 'use strict';
 
 const _ = require('lodash');
-const request = require('request');
+const request = require('axios');
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -94,10 +94,10 @@ module.exports = class Model extends EventEmitter {
 
     let settings = Object.assign({}, originalSettings);
     settings.timeout = settings.timeout || this.options.timeout;
-    settings.uri = settings.uri || settings.url || url.format(settings);
+    settings.url = settings.uri || settings.url || url.format(settings);
     settings.body = settings.body || body || settings.data;
 
-    settings = _.omit(settings, urlKeys, 'data', 'url');
+    settings = _.omit(settings, urlKeys, 'data', 'uri');
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
@@ -137,22 +137,23 @@ module.exports = class Model extends EventEmitter {
             }
           };
 
-          this._request(settings, (err, response) => {
-            if (err) {
+          this._request(settings)
+            .then(response => {
+              return this.handleResponse(response, (error, data, status) => {
+                if (error) {
+                  error.headers = response.headers;
+                }
+                _callback(error, data, status);
+              });
+            })
+            .catch(err => {
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
                 err.status = 504;
               }
               err.status = err.status || (response && response.statusCode) || 503;
               return _callback(err, null, err.status);
-            }
-            return this.handleResponse(response, (error, data, status) => {
-              if (error) {
-                error.headers = response.headers;
-              }
-              _callback(error, data, status);
             });
-          });
         });
       });
 
