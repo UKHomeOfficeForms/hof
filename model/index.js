@@ -151,7 +151,7 @@ module.exports = class Model extends EventEmitter {
                 err.message = 'Connection timed out';
                 err.status = 504;
               }
-              err.status = err.status || (response && response.statusCode) || 503;
+              err.status = err.status || 503;
               return _callback(err, null, err.status);
             });
         });
