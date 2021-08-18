@@ -106,7 +106,7 @@ describe('Model', () => {
 
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
     });
@@ -119,7 +119,7 @@ describe('Model', () => {
 
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
     });
@@ -131,7 +131,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
     });
@@ -145,7 +145,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('GET');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         expect(options.body).to.not.be.ok;
       }, done));
     });
@@ -157,7 +157,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
     });
@@ -169,7 +169,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         expect(options.body).to.not.be.ok;
       }, done));
     });
@@ -214,7 +214,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
     });
@@ -227,7 +227,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('https://secure-example.com/foo/bar');
+        options.url.should.equal('https://secure-example.com/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
     });
@@ -239,7 +239,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('PUT');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
         options.body.should.equal('{"name":"Test name"}');
       }, done));
     });
@@ -345,7 +345,7 @@ describe('Model', () => {
       model._request.yieldsAsync(success);
       model.save(sandbox(() => {
         model._request.should.have.been.called;
-        model._request.args[0][0].uri.should.equal('http://proxy-example.com:1234/');
+        model._request.args[0][0].url.should.equal('http://proxy-example.com:1234/');
       }, done));
     });
 
@@ -515,7 +515,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('GET');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
       }, done));
     });
 
@@ -590,7 +590,7 @@ describe('Model', () => {
       model._request.yieldsAsync(success);
       model.fetch(sandbox(() => {
         model._request.should.have.been.called;
-        model._request.args[0][0].uri.should.equal('http://proxy-example.com:1234/');
+        model._request.args[0][0].url.should.equal('http://proxy-example.com:1234/');
       }, done));
     });
 
@@ -768,7 +768,7 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('DELETE');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
       }, done));
     });
 
@@ -843,7 +843,7 @@ describe('Model', () => {
       model._request.yieldsAsync(success);
       model.delete(sandbox(() => {
         model._request.should.have.been.called;
-        model._request.args[0][0].uri.should.equal('http://proxy-example.com:1234/');
+        model._request.args[0][0].url.should.equal('http://proxy-example.com:1234/');
       }, done));
     });
 
