@@ -203,7 +203,11 @@ function bootstrap(options) {
       'Use `pages` to define static cookies page.'
     );
     app.get('/cookies', (req, res) => {
-      const locals = Object.assign({}, { appName: config.appName }, req.translate('cookies'));
+      const locals = Object.assign({}, {
+        appName: config.appName,
+        cookieName: config.session.name
+      }, req.translate('cookies'));
+
       res.render('cookies', locals);
     });
   }

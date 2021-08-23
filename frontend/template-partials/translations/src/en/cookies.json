@@ -97,7 +97,7 @@
     ],
     "rows": [
       [
-        "hod.sid",
+        "{{cookieName}}",
         "Stores a session ID and temporarily stores data you enter to enable you to make an application",
         "When you close your browser"
       ],
