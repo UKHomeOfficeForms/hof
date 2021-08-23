@@ -95,12 +95,10 @@
       "Purpose",
       "Expires"
     ],
+    "defaultCookieName": "hof.sid",
+    "defaultCookiePurpose": "Stores a session ID and temporarily stores data you enter to enable you to make an application",
+    "defaultCookieExpires": "When you close your browser",
     "rows": [
-      [
-        "{{cookieName}}",
-        "Stores a session ID and temporarily stores data you enter to enable you to make an application",
-        "When you close your browser"
-      ],
       [
         "hof-wizard-sc",
         "Tells us when your session starts so we can tell you if it expires",
