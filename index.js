@@ -198,10 +198,6 @@ function bootstrap(options) {
   app.use(markdown(config.markdown));
 
   if (config.getCookies === true) {
-    deprecate(
-      '`getCookies` option is deprecated and may be removed in future versions.',
-      'Use `pages` to define static cookies page.'
-    );
     app.get('/cookies', (req, res) => {
       const locals = Object.assign({}, {
         appName: config.appName,
@@ -212,13 +208,19 @@ function bootstrap(options) {
     });
   }
   if (config.getTerms === true) {
-    deprecate(
-      '`getTerms` option is deprecated and may be removed in future versions.',
-      'Use `pages` to define static terms and conditions page.'
-    );
     app.get('/terms-and-conditions', (req, res) => {
-      const locals = Object.assign({}, { appName: config.appName }, req.translate('terms'));
+      const locals = Object.assign({}, {
+        appName: config.appName
+      }, req.translate('terms'));
       res.render('terms', locals);
+    });
+  }
+  if (config.getAccessibility === true) {
+    app.get('/accessibility', (req, res) => {
+      const locals = Object.assign({}, {
+        appName: config.appName
+      }, req.translate('accessibility'));
+      res.render('accessibility', locals);
     });
   }
 
