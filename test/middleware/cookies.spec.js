@@ -43,7 +43,7 @@ describe('cookies', () => {
     it('attempts to set a cookie if one is not available', () => {
       middleware(req, res);
       res.cookie.should.have.been.calledOnce.calledWithExactly('hof_cookie', 1, {
-        sameSite: 'strict', secure: false, httpOnly: true
+        sameSite: 'lax', secure: false, httpOnly: true
       });
     });
 
@@ -55,7 +55,7 @@ describe('cookies', () => {
       });
       middleware(req, res);
       res.cookie.should.have.been.calledOnce.calledWithExactly('hof_cookie', 1, {
-        sameSite: 'strict', secure: true, httpOnly: true
+        sameSite: 'lax', secure: true, httpOnly: true
       });
     });
 
@@ -68,7 +68,7 @@ describe('cookies', () => {
       });
       middleware(req, res);
       res.cookie.should.have.been.calledOnce.calledWithExactly('hof_cookie', 1, {
-        sameSite: 'strict', secure: true, httpOnly: true
+        sameSite: 'lax', secure: true, httpOnly: true
       });
     });
 
@@ -120,13 +120,13 @@ describe('cookies', () => {
       expect(next.firstCall.args[3]).to.eql(next);
     });
 
-    it('redirects to self when there are no cookies and there is am attempt to redirect to malicious site', () => {
+    it('redirects to self with hof query when no cookies set and attempting to redirect to malicious site', () => {
       req = httpMock.createRequest({
         method: 'GET',
         url: '//bbc.co.uk'
       });
       middleware(req, res);
-      res.redirect.should.have.been.calledWith('/');
+      res.redirect.should.have.been.calledWith('/?hof_param');
     });
 
     it('does not raise an error when is a default healthcheck url', () => {

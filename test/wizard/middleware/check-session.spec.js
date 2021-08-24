@@ -55,7 +55,7 @@ describe('middleware/check-session', () => {
     const middleware = checkSession('/route', { options: { checkSession: false } }, {}, '/first', { protocol: 'http' });
     middleware(req, res, () => {
       res.cookie.should.have.been.calledOnce.calledWithExactly('hof-wizard-sc', 1, {
-        sameSite: 'strict', secure: false, httpOnly: true
+        sameSite: 'lax', secure: false, httpOnly: true
       });
     });
   });
@@ -69,7 +69,7 @@ describe('middleware/check-session', () => {
     );
     middleware(req, res, () => {
       res.cookie.should.have.been.calledOnce.calledWithExactly('hof-wizard-sc', 1, {
-        sameSite: 'strict', secure: true, httpOnly: true
+        sameSite: 'lax', secure: true, httpOnly: true
       });
     });
   });
@@ -83,7 +83,7 @@ describe('middleware/check-session', () => {
     );
     middleware(req, res, () => {
       res.cookie.should.have.been.calledOnce.calledWithExactly('hof-wizard-sc', 1, {
-        sameSite: 'strict', secure: false, httpOnly: true
+        sameSite: 'lax', secure: false, httpOnly: true
       });
     });
   });
@@ -97,7 +97,7 @@ describe('middleware/check-session', () => {
     );
     middleware(req, res, () => {
       res.cookie.should.have.been.calledOnce.calledWithExactly('hof-wizard-sc', 1, {
-        sameSite: 'strict', secure: true, httpOnly: true
+        sameSite: 'lax', secure: true, httpOnly: true
       });
     });
   });
