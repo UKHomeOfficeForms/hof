@@ -79,8 +79,7 @@ function initialiseCookieBanner() {
 
 function handleSaveSettings(e) {
   e.preventDefault();
-  var usageChecked = document.getElementById('radio-1').checked;
-  setCookiePreferences({ essential: true, usage: usageChecked });
+  setCookiePreferences({ essential: true, usage: document.getElementById('radio-1').checked });
 
   var cookieNotification = document.getElementById('cookie-notification');
   var cookieBanner = document.getElementById('cookie-banner');
@@ -92,9 +91,6 @@ function handleSaveSettings(e) {
   if (cookieNotification !== null) {
     cookieNotification.style.display = 'block';
     cookieNotification.focus();
-  }
-  if (usageChecked) {
-    window.location = document.URL;
   }
 }
 
