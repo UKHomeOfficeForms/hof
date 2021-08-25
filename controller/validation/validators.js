@@ -92,7 +92,12 @@ module.exports = Validators = {
    * Validates international phone numbers (fixed and mobile) including UK.
    * Non-GB phone numbers will require country code to validate.
    */
-  internationalPhoneNumber(value) {
+  internationalPhoneNumber(value, code) {
+    if (code) {
+      const phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, code);
+      return phoneNumber && phoneNumber.isValid() && phoneNumber.country === code;
+    }
+    console.log('>>>>>>>>>>>>hello is it me your looking for')
     const phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, 'GB') || '';
     return value === '' || (phoneNumber && phoneNumber.isValid());
   },

@@ -358,6 +358,23 @@ describe('Validators', () => {
           Validators.internationalPhoneNumber(i).should.be.ok;
         });
       });
+
+      it.only('accepts a spainish number with a spanish code', () => {
+        const telephoneAndCountry = {tel: '+34932853834', code: 'ES'}
+        Validators.internationalPhoneNumber(telephoneAndCountry.tel, telephoneAndCountry.code).should.be.ok
+      }),
+      it.only('does NOT accept a british number with a spanish code', () => {
+        const telephoneAndCountry = {tel: '+442074598398', code: 'ES'}
+        Validators.internationalPhoneNumber(telephoneAndCountry.tel, telephoneAndCountry.code).should.not.be.ok
+      }),
+      it.only('does NOT accept a british number with a Peru code', () => {
+        const telephoneAndCountry = {tel: '+524432818708', code: 'PE'}
+        Validators.internationalPhoneNumber(telephoneAndCountry.tel, telephoneAndCountry.code).should.not.be.ok
+      })
+      it.only('accepts any number', () => {
+        const telephoneAndCountry = {tel: '+524432818708'}
+        Validators.internationalPhoneNumber(telephoneAndCountry.tel).should.be.ok
+      })
     });
   });
 
