@@ -11,8 +11,7 @@
                 type="{{type}}"
                 name="{{key}}"
                 id="{{key}}-{{value}}"
-                value="{{value}}"
-                required="true"
+                value="{{value}}"                
                 {{#toggle}} data-toggle="{{toggle}}"{{/toggle}}
                 {{#selected}} checked="checked"{{/selected}}
                 {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}{{/optionHint}}{{/error}}
