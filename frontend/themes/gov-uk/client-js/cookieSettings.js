@@ -43,6 +43,7 @@ function initialiseBannerButtons() {
   document.getElementById('accept-cookies-button').addEventListener('click', function () {
     setCookiePreferences({essential: true, usage: true});
     showCookieBannerSubmitted();
+    window.location.reload;
   });
 
   document.getElementById('reject-cookies-button').addEventListener('click', function () {

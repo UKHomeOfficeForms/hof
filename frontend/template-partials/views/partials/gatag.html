@@ -10,6 +10,14 @@
 
         ga('create', '{{gaTagId}}', 'auto');
 
+        {{#gaCrossDomainTrackingTagId}}
+          ga('create', '{{gaCrossDomainTrackingTagId}}', 'auto', 'govuk_shared', { 'allowLinker': true });
+          ga('govuk_shared.require', 'linker');
+          ga('govuk_shared.set', 'anonymizeIp', true);
+          ga('govuk_shared.set', 'allowAdFeatures', false);
+          ga('govuk_shared.linker:autoLink', ['www.gov.uk', 'www.nationalarchives.gov.uk', 'www.eforms.homeoffice.gov.uk']);
+        {{/gaCrossDomainTrackingTagId}}
+
         var path = document.location.href;
         var regex = /f_t=([\s\S]*?)?(&|$)/;
 
@@ -20,6 +28,10 @@
         }
 
         ga('send', 'pageview');
+
+        {{#gaCrossDomainTrackingTagId}}
+          ga('govuk_shared.send', 'pageview')
+        {{/gaCrossDomainTrackingTagId}}
       }
 
     </script>
