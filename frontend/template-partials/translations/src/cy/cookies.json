@@ -85,12 +85,10 @@
       "Pwrpas",
       "Dod i ben"
     ],
+    "defaultCookieName": "hmbrp.sid",
+    "defaultCookiePurpose": "Mae’n Storio ID sesiwn a storio data rydych chi\nn ei gofnodi dros dro i’ch galluogi i wneud cais",
+    "defaultCookieExpires": "Pan fyddwch yn cau eich porwr",
     "rows": [
-      [
-        "hmbrp.sid",
-        "Mae’n Storio ID sesiwn a storio data rydych chi\nn ei gofnodi dros dro i’ch galluogi i wneud cais",
-        "Pan fyddwch yn cau eich porwr"
-      ],
       [
         "hof-wizard-sc",
         "Mae’n dweud wrthym pan mae eich sesiwn yn dechrau fel ein bod yn gallu dweud wrthych os yw’n dod i ben",

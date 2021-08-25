@@ -545,7 +545,7 @@ module.exports = {
 # HOF Model
 Simple model for interacting with http/rest apis.
 
-##Usage
+## Usage
 ```javascript
 const Model = require('./model');
 ```
@@ -737,6 +737,23 @@ model.on('success', function (data, settings, statusCode, responseTime) { });
 `fail` is emitted when an API request fails
 ```javascript
 model.on('fail', function (err, data, settings, statusCode, responseTime) { });
+```
+
+### HOF Model APIs
+- `Html-To-Pdf Converter`: This extends the HOF model to interact with the html-to-pdf converter API https://github.com/UKHomeOffice/html-pdf-converter. The environmental variable `PDF_CONVERTER_URL` needs to be set to its local url when running in the same kube namespace to the service that wants to use it. This is then followed by the default port `10443` and then the URI for which part of the service you want to consume. For example:`https://html-pdf-converter:10443/convert` when the container is named `html-pdf-converter` in your kube deployment file. This has to be set to `https` for communication between services to work on ACP. However, `settings.rejectUnauthorized = false;` is set in the model to circumvent expired certificates due to this. This is preferable to using:
+```
+name: NODE_TLS_REJECT_UNAUTHORIZED
+value: "0"
+```
+which should NOT be used as it sets ignoring TLS at a global level which could present a MITM (Man-In-The-Middle) attack.
+
+Usage: Example below, as per the converter docs (link above) it accepts html and responds with Buffered data in pdf format which can then be either written to a file or attached to a Gov Notify message:
+```
+const PDFModel = require('hof').apis.pdfConverter;
+
+const pdfModel = new PDFModel();
+pdfModel.set({ template: html });
+const pdfData = await pdfModel.save();
 ```
 
 # HOF Middleware

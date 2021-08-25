@@ -28,10 +28,12 @@ module.exports = options => {
       err.code = 'NO_COOKIES';
       next(err, req, res, next);
     } else {
-      res.cookie(cookieName, 1, { sameSite: 'strict', secure: secureHttps(options), httpOnly: true });
+      // Set samesite to lax to allow setting cookies on redirects from Gov.UK
+      res.cookie(cookieName, 1, { sameSite: 'lax', secure: secureHttps(options), httpOnly: true });
 
-      const redirectURL = (req.originalUrl && req.originalUrl.match(/^\/[^\/\\]/)) ?
-        new URI(req.originalUrl).addQuery(encodeURIComponent(paramName)) : '/';
+      const uriClean = req.originalUrl && req.originalUrl.match(/^\/[^\/\\]/);
+      const uriToRedirect = uriClean ? req.originalUrl : '/';
+      const redirectURL = new URI(uriToRedirect).addQuery(encodeURIComponent(paramName));
 
       res.redirect(redirectURL.toString());
     }

@@ -127,8 +127,11 @@ function bootstrap(options) {
 
   app.use(helmet());
 
+  // Add common locals all pages can access
   app.use((req, res, next) => {
     res.locals.nonce = crypto.randomBytes(16).toString('hex');
+    res.locals.appName = config.appName;
+    res.locals.cookieName = config.session.name;
     next();
   });
 
@@ -203,7 +206,7 @@ function bootstrap(options) {
       'Use `pages` to define static cookies page.'
     );
     app.get('/cookies', (req, res) => {
-      const locals = Object.assign({}, { appName: config.appName }, req.translate('cookies'));
+      const locals = Object.assign({}, req.translate('cookies'));
       res.render('cookies', locals);
     });
   }
@@ -213,7 +216,7 @@ function bootstrap(options) {
       'Use `pages` to define static terms and conditions page.'
     );
     app.get('/terms-and-conditions', (req, res) => {
-      const locals = Object.assign({}, { appName: config.appName }, req.translate('terms'));
+      const locals = Object.assign({}, req.translate('terms'));
       res.render('terms', locals);
     });
   }
@@ -282,6 +285,7 @@ module.exports.transpiler = require('./transpiler/');
 module.exports.middleware = require('./middleware');
 module.exports.controller = require('./controller');
 module.exports.model = require('./model');
+module.exports.apis = require('./model/apis');
 module.exports.wizard = require('./wizard');
 module.exports.components = require('./components');
 module.exports.utils = require('./utilities');

@@ -1,0 +1,28 @@
+<table>
+  <thead>
+  <tr>
+    {{#headers}}
+    <th>{{.}}</th>
+    {{/headers}}
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    {{#cookieName}}
+      <td>{{cookieName}}</td>
+    {{/cookieName}}
+    {{^cookieName}}
+      <td>{{defaultCookieName}}</td>
+    {{/cookieName}}
+    <td>{{defaultCookiePurpose}}</td>
+    <td>{{defaultCookieExpires}}</td>
+  </tr>
+  {{#rows}}
+  <tr>
+    {{#.}}
+    <td>{{.}}</td>
+    {{/.}}
+  </tr>
+  {{/rows}}
+  </tbody>
+</table>

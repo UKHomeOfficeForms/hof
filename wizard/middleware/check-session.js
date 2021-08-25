@@ -11,6 +11,7 @@ module.exports = (route, controller, steps, first, settings) => (req, res, next)
     }
   }
   req.session.exists = true;
-  res.cookie('hof-wizard-sc', 1, { sameSite: 'strict', secure: secureHttps(settings), httpOnly: true });
+  // Set samesite to lax to allow setting cookies on redirects from Gov.UK
+  res.cookie('hof-wizard-sc', 1, { sameSite: 'lax', secure: secureHttps(settings), httpOnly: true });
   return next();
 };

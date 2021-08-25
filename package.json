@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "19.6.1",
+  "version": "19.8.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -61,6 +61,7 @@
     "homeoffice-countries": "^0.1.0",
     "i18n-future": "^2.0.0",
     "i18n-lookup": "^0.1.0",
+    "is-pdf": "^1.0.0",
     "libphonenumber-js": "^1.9.22",
     "lodash": "^4.17.21",
     "minimatch": "^3.0.3",
