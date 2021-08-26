@@ -2,12 +2,15 @@
 
 module.exports = key => ({
   [`${key}-day`]: {
-    label: 'Day'
+    label: 'Day',
+    autocomplete: 'bday-day'
   },
   [`${key}-month`]: {
-    label: 'Month'
+    label: 'Month',
+    autocomplete: 'bday-month'
   },
   [`${key}-year`]: {
-    label: 'Year'
+    label: 'Year',
+    autocomplete: 'bday-year'
   }
 });
