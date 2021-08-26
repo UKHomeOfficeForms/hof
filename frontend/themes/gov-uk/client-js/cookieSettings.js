@@ -43,6 +43,7 @@ function initialiseBannerButtons() {
   document.getElementById('accept-cookies-button').addEventListener('click', function () {
     setCookiePreferences({essential: true, usage: true});
     showCookieBannerSubmitted();
+    sessionStorage.setItem('reloading', 'true');
     window.location = document.URL;
   });
 
@@ -119,7 +120,25 @@ function initialiseCookiePage() {
   }
 }
 
+function onLoad() {
+  window.onload = function () {
+    var reloading = sessionStorage.getItem('reloading');
+    if (reloading) {
+      sessionStorage.removeItem('reloading');
+
+      var bannerContainer = document.getElementById('global-cookie-message');
+      var cookieBanner = document.getElementById('cookie-banner');
+
+      if (bannerContainer !== null && cookieBanner !== null) {
+        bannerContainer.style.display = 'block';
+      }
+      showCookieBannerSubmitted();
+    }
+  };
+}
+
 module.exports = {
   initialiseCookieBanner: initialiseCookieBanner,
-  initialiseCookiePage: initialiseCookiePage
+  initialiseCookiePage: initialiseCookiePage,
+  onLoad: onLoad
 };

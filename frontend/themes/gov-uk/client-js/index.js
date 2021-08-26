@@ -16,5 +16,6 @@ helpers.documentReady(progressiveReveal);
 helpers.documentReady(formFocus);
 helpers.documentReady(cookieSettings.initialiseCookieBanner);
 helpers.documentReady(cookieSettings.initialiseCookiePage);
+helpers.documentReady(cookieSettings.onLoad);
 helpers.documentReady(characterCount);
 helpers.documentReady(validation);
