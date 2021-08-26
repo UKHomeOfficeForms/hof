@@ -117,7 +117,7 @@ module.exports = config => {
       if (process.env.HOF_EXAMPLE_APP === 'true') {
         const rootDir = require('path').resolve(__dirname, '../../../');
         ignored.push(`${rootDir}/frontend/govuk-template/govuk_template.html`);
-        watchLocation = rootDir;
+        watchLocation = [rootDir, '.'];
       }
 
       const watcher = chokidar.watch(watchLocation, { ignored });
