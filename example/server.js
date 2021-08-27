@@ -1,7 +1,7 @@
 /* eslint-disable */ 
 'use strict';
 
-const bootstrap = require('hof-bootstrap');
+const bootstrap = require('../');
 
 bootstrap({
   translations: './apps/example-app/translations',

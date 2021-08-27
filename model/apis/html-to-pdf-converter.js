@@ -1,7 +1,7 @@
 'use strict';
 
 const Model = require('..');
-const isPdf = require('is-pdf');
+const isPdf = require('../../');
 const config = require('../../config/hof-defaults');
 
 module.exports = class PDFModel extends Model {

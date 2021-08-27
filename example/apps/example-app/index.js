@@ -2,7 +2,7 @@
 'use strict';
 
 const moment = require('moment');
-const SummaryPageBehaviour = require('hof').components.summary;
+const SummaryPageBehaviour = require('../../../').components.summary;
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
