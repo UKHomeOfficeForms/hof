@@ -103,6 +103,7 @@ module.exports = config => {
   function watch() {
     return new Promise(resolve => {
       const ignored = [].concat(config.watch.ignore);
+      let watchLocation = '.';
 
       if (!config.watchNodeModules) {
         console.log('Ignoring node_modules directory. To watch node_modules run with --watch-node-modules flag');
@@ -113,7 +114,13 @@ module.exports = config => {
         ignored.push(/(^|[\/\\])\../);
       }
 
-      const watcher = chokidar.watch('.', { ignored });
+      if (process.env.HOF_EXAMPLE_APP === 'true') {
+        const rootDir = require('path').resolve(__dirname, '../../../');
+        ignored.push(`${rootDir}/frontend/govuk-template/govuk_template.html`);
+        watchLocation = [rootDir, '.'];
+      }
+
+      const watcher = chokidar.watch(watchLocation, { ignored });
 
       watcher.on('ready', () => {
         const watched = watcher.getWatched();
