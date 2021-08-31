@@ -41,8 +41,8 @@
 <!-- For new Google Analytics 4 Property Tags -->
 {{#ga4TagId}}
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ga4TagId}}"></script>
-  <script>
+  <script async {{#nonce}} nonce="{{nonce}}"{{/nonce}} src="https://www.googletagmanager.com/gtag/js?id={{ga4TagId}}"></script>
+  <script {{#nonce}} nonce="{{nonce}}"{{/nonce}}>
     var preferences = JSON.parse(GOVUK.cookie('cookie_preferences'));
 
     if (preferences !== null && preferences.usage === true) {
