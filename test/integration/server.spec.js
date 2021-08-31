@@ -378,7 +378,7 @@ describe('hof server', () => {
     it('can extend CSP directives with CSP config', () => {
       const directives = {
         /* eslint-disable quotes */
-        styleSrc: ["'self'", "'another'"],
+        styleSrc: ["'self'", 'www.googletagmanager.com', 'fonts.googleapis.com', 'tagmanager.google.com', "'another'"],
         imgSrc: ["'test.com/some_path'"],
         scriptSrc: "'www.analytics.com'"
         /* eslint-enable quotes */
