@@ -75,13 +75,17 @@ const getContentSecurityPolicy = (config, res) => {
   /* eslint-enable quotes */
 
   const gaDirectives = {
+    styleSrc: ['www.googletagmanager.com', 'fonts.googleapis.com', 'tagmanager.google.com'],
+    fontSrc: ['fonts.gstatic.com '],
     scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
-    imgSrc: 'www.google-analytics.com',
+    imgSrc: ['www.google-analytics.com', 'ssl.gstatic.com'],
     connectSrc: ['www.google-analytics.com']
   };
 
   if (config.gaTagId) {
+    directives.styleSrc = directives.styleSrc.concat(gaDirectives.styleSrc);
     directives.scriptSrc = directives.scriptSrc.concat(gaDirectives.scriptSrc);
+    directives.fontSrc = directives.fontSrc.concat(gaDirectives.fontSrc);
     directives.imgSrc = directives.imgSrc.concat(gaDirectives.imgSrc);
     directives.connectSrc = gaDirectives.connectSrc;
   }

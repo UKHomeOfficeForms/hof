@@ -50,7 +50,12 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', '{{ga4TagId}}');
+      {{^gaAllowDebug}}
+        gtag('config', '{{ga4TagId}}');
+      {{/gaAllowDebug}}
+      {{#gaAllowDebug}}
+        gtag('config', '{{ga4TagId}}', { 'debug_mode': true } );
+      {{/gaAllowDebug}}
     }
   </script>
 {{/ga4TagId}}
