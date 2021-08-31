@@ -68,7 +68,7 @@ const getContentSecurityPolicy = (config, res) => {
     defaultSrc: ["'none'"],
     styleSrc: ["'self'"],
     imgSrc: ["'self'"],
-    fontSrc: ["'self'", 'data:', 'www.design-system.service.gov.uk'],
+    fontSrc: ["'self'", 'data:', 'https://design-system.service.gov.uk'],
     scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
     'frame-ancestors': ["'none'"]
   };
