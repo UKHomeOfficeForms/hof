@@ -1,3 +1,4 @@
+<!-- For old Universal Google Analytics Property Tags -->
 {{#gaTagId}}
     <script{{#nonce}} nonce="{{nonce}}"{{/nonce}}>
       var preferences = JSON.parse(GOVUK.cookie('cookie_preferences'));
@@ -36,3 +37,16 @@
 
     </script>
 {{/gaTagId}}
+
+<!-- For new Google Analytics 4 Property Tags -->
+{{#ga4TagId}}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ga4TagId}}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '{{ga4TagId}}');
+  </script>
+{{/ga4TagId}}
