@@ -3,6 +3,7 @@
 
 const moment = require('moment');
 const SummaryPageBehaviour = require('../../../').components.summary;
+const InternationalPhoneNumber = require('./behaviours/international-number');
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
@@ -34,6 +35,15 @@ module.exports = {
     '/checkboxes': {
       fields: ['incomeTypes'],
       next: '/radiobuttons'
+    },
+    '/confirmation': {
+      backLink: false
+    },
+    '/international-phone-number': {
+      behaviours: InternationalPhoneNumber,
+      fields: [
+        'int-phone-number'
+      ]
     }
   }
 };

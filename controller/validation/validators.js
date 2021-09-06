@@ -92,14 +92,16 @@ module.exports = Validators = {
    * Validates international phone numbers (fixed and mobile) including UK.
    * Non-GB phone numbers will require country code to validate.
    */
-  internationalPhoneNumber(value) {
-    const phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, 'GB') || '';
-    return value === '' || (phoneNumber && phoneNumber.isValid());
+  internationalPhoneNumber(value, code) {
+    const countryCode = code || 'GB';
+    const phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, countryCode) || '';
+    const isValidComparedToGivenCountry = code ? phoneNumber.country === countryCode : true;
+    return value === '' || (phoneNumber && phoneNumber.isValid() && isValidComparedToGivenCountry);
   },
 
   ukPhoneNumber(value) {
-    const phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, 'GB');
-    return phoneNumber && phoneNumber.isValid() && phoneNumber.country === 'GB';
+    const phoneNumber = libPhoneNumber.parsePhoneNumberFromString(value, 'GB')  || '';
+    return value === '' || (phoneNumber && phoneNumber.isValid() && phoneNumber.country === 'GB');
   },
 
   ukmobilephone(value) {

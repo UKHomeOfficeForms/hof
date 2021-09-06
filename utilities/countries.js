@@ -10,4 +10,3 @@ const transform = (list, options) => {
 };
 
 module.exports = options => transform(countries.allCountries, options);
-module.exports.countryCodes = () => transform(countries.allCountries, options)

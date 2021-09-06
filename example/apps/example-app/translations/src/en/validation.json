@@ -17,5 +17,14 @@
   },
   "incomeTypes": {
     "default": "Select all options that apply to you."
+  },
+  "date-example": {
+    "required": "Enter a date",
+    "date": "Enter a valid date",
+    "before": "Date cannot be in the future"
+  },
+  "int-phone-number": {
+    "required": "Enter an international phone number",
+    "internationalPhoneNumber": "Enter a valid international phone number"
   }
 }

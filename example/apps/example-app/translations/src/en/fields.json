@@ -48,5 +48,8 @@
         "label": "Other"
       }
     }
+  },
+  "int-phone-number": {
+    "legend": "International phone number"
   }
 }

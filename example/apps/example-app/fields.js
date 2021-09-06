@@ -19,7 +19,7 @@ module.exports = {
   street: {
     validate: ['notUrl', { type: 'maxlength', arguments: 50 }],
     labelClassName: 'visuallyhidden'
-  }, 
+  },
   townOrCity: {
     validate: ['required', 'notUrl',
       { type: 'regex', arguments: /^([^0-9]*)$/ },
@@ -40,5 +40,24 @@ module.exports = {
       'housing_benefit',
       'other'
     ]
+  },
+  message: {
+    mixin: 'textarea',
+    validate: 'required',
+    labelClassName: 'visuallyhidden',
+    // we want to ignore default formatters as we want
+    // to preserve white space
+    'ignore-defaults': true,
+    // apply the other default formatters
+    formatter: ['trim', 'hyphens'],
+    // attributes here are passed to the field element
+    attributes: [{
+      attribute: 'rows',
+      value: 6
+    }]
+  },
+  'int-phone-number': {
+    validate: ['required'],
+    labelClassName: 'visuallyhidden'
   }
 }
