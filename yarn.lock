@@ -6019,10 +6019,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.9.22:
-  version "1.9.23"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.23.tgz#e28babdaaaf7e09fbaf23a1c714166fa63001ea3"
-  integrity sha512-+qWSwPyJWSV9ukb7Iu21WpWEP7irFWR1ojoYykL2itAfXKj9FjsTjS6PPZoPUOZk+1kxliHjwsilqA1TNeOhuQ==
+libphonenumber-js@^1.9.24:
+  version "1.9.32"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.32.tgz#ec8048c7a9d7bb0ce282c5bccea2f945a056af29"
+  integrity sha512-sXuNLzTU/lNUZ78eWUi5JvqaHAhwBMuMT17613EjLZl/ejIoDe0EV225Xhw4vuZ6FcqkiwsF8qHcOyyn1dBEWQ==
 
 lines-and-columns@^1.1.6:
   version "1.1.6"
