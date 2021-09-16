@@ -129,8 +129,8 @@ describe('markdown middleware', () => {
       });
 
       it('returns file contents parsed as markdown', () => {
-        expect(res.locals.markdown()('file')).to.equal('<h1 id="helloworld">hello world</h1>');
-        expect(res.locals.markdown()('other')).to.equal('<h1 id="helloother">hello other</h1>');
+        expect(res.locals.markdown()('file')).to.equal('<h1>hello world</h1>\n');
+        expect(res.locals.markdown()('other')).to.equal('<h1>hello other</h1>\n');
       });
 
       it('preserves html', () => {
@@ -140,7 +140,7 @@ describe('markdown middleware', () => {
       it('supports tables', () => {
         expect(res.locals.markdown()('table'))
           // eslint-disable-next-line max-len
-          .to.equal('<table>\n<thead>\n<tr>\n<th>heading</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>hello table</td>\n</tr>\n</tbody>\n</table>');
+          .to.equal('<table>\n<thead>\n<tr>\n<th>heading</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>hello table</td>\n</tr>\n</tbody>\n</table>\n');
       });
     });
   });
