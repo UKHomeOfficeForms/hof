@@ -5,8 +5,22 @@ const concat = (x, y) => x.concat(y);
 const flatMap = (f, xs) => xs.map(f).reduce(concat, []);
 
 module.exports = SuperClass => class extends SuperClass {
+  getSectionSettings(settings) {
+    if (settings.sections) {
+      return settings.sections;
+    }
+    return Object.keys(settings.steps).reduce((map, key) => {
+      const fields = settings.steps[key].fields;
+      if (fields) {
+        map[key.replace(/^\//, '')] = fields;
+      }
+      return map;
+    }, {});
+  }
+
   getRowsForSummarySections(req) {
-    const sections = req.form.options.sections;
+    const settings = req.form.options;
+    const sections = this.getSectionSettings(settings);
     return Object.keys(sections)
       .map(section => {
         const fieldsInSection = sections[section].steps || sections[section];
