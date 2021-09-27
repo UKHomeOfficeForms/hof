@@ -11,9 +11,12 @@ module.exports = {
   name: 'example-app',
   params: '/:action?',
   steps: {
-    '/first-step': {
+    '/landing-page': {
       fields: [
-        'your-name'
+        'landing-page-radio',
+        'basic-form',
+        'complex-form',
+        'build-your-own-form'
       ],
       next: '/second-step'
     },

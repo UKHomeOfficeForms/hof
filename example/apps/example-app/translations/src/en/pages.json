@@ -1,6 +1,6 @@
 {
-  "first-step": {
-    "intro": "This text is located in /apps/example-app/translations/src/en/pages.json with the key \"step-name.intro\""
+  "landing-page": {
+    "intro": "Choose one of the options below and press continue."
   },
   "second-step": {
     "header": "What are your contact details {{values.your-name}}?"

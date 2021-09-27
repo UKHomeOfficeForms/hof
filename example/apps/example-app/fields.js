@@ -4,21 +4,23 @@
 const dateComponent = require('../../..').components.date;
 
 module.exports = {
-  'your-name': {
-    mixin: 'input-text',
-    // a custom validator can be used by passing a named function
-    // as a validator. The error-type is the name of the function
-    validate: ['required', function moreThanOneWord(input) {
-      return input.split(' ').length > 1;
+  'landing-page-radio': {
+    mixin: 'radio-group',
+    validate: ['required'],
+    className: ['inLine', 'form-group'],
+    legend: {
+      className: 'visuallyhidden'
+    },
+    options: [{
+      value: 'basic-form',
+      label: 'Basic form'
+    }, {
+      value: 'complex-form',
+      label: 'Complex form'
+    }, {
+      value: 'build-your-own-form',
+      label: 'Build your own form'
     }],
-    // if there is a single field on a step, it is a convention to show
-    // it as the step title. Example here:
-    // http://govuk-elements.herokuapp.com/form-elements#form-radio-buttons
-    // Adding the class "visuallyhidden" prevents the default label from
-    // rendering the same label again. There is an outstanding issue with
-    // screenreaders reading the label/title twice:
-    // https://github.com/alphagov/govuk_elements/issues/320
-    labelClassName: 'visuallyhidden'
   },
   'date-example': dateComponent('date-example', {
     validate: ['required', 'date', 'before']
