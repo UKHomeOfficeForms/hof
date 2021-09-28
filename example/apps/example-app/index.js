@@ -26,54 +26,15 @@ module.exports = {
         condition: {
           field: 'landing-page-radio',
           value: 'complex-form'
-        }},
-        {
+        }
+      }, {
         target: '/build-your-own-form',
         condition: {
           field: 'landing-page-radio',
           value: 'build-your-own-form'
-          }}
-    ],
-    },
-    '/second-step': {
-      fields: [
-        'email-address',
-        'phone-number'
+          }
+      }
       ],
-      next: '/third-step'
-    },
-    '/third-step': {
-      fields: [
-        'date-example'
-      ],
-      next: '/fourth-step'
-    },
-    '/fourth-step': {
-      fields: [
-        'message'
-      ],
-      next: '/confirm'
-    },
-    '/confirm': {
-      behaviours: [SummaryPageBehaviour, 'complete'],
-      sections: {
-        'personal-details': [
-          'your-name',
-          'email-address',
-          'phone-number'
-        ],
-        'enquiry-details': [
-          {
-            field: 'date-example',
-            parse: value => moment(value, DATE_FORMAT).format(PRETTY_DATE_FORMAT)
-          },
-          'message'
-        ]
-      },
-      next: '/confirmation'
-    },
-    '/confirmation': {
-      backLink: false
     }
   }
 };
