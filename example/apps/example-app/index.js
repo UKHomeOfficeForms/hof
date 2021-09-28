@@ -14,7 +14,6 @@ module.exports = {
       fields: [
         'landing-page-radio'
       ],
-      next: '/second-step',
       forks: [{
         target: '/basic-form',
         condition: {
