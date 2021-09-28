@@ -9,14 +9,10 @@ const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
 
 module.exports = {
   name: 'example-app',
-  params: '/:action?',
   steps: {
     '/landing-page': {
       fields: [
-        'landing-page-radio',
-        'basic-form',
-        'complex-form',
-        'build-your-own-form'
+        'landing-page-radio'
       ],
       next: '/second-step'
     },
