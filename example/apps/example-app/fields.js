@@ -8,15 +8,7 @@ module.exports = {
     legend: {
       className: 'visuallyhidden'
     },
-    options: [{
-      value: 'basic-form',
-      label: 'Basic form'
-    }, {
-      value: 'complex-form',
-      label: 'Complex form'
-    }, {
-      value: 'build-your-own-form',
-      label: 'Build your own form'
-    }],
+    options: ['basic-form', 'complex-form', 'build-your-own-form']
   }
-};
+}
+

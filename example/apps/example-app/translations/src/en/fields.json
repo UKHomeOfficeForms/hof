@@ -1,3 +1,16 @@
 {
-    
+  "landing-page-radio": {
+    "legend": "Legend text",
+    "options": {
+      "basic-form": {
+        "label": "Basic form"
+      },
+      "complex-form": {
+        "label": "Complex form"
+      },
+      "build-your-own-form": {
+        "label": "Build your own form"
+      }
+    }
+  }
 }

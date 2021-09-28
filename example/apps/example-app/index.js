@@ -14,26 +14,14 @@ module.exports = {
       fields: [
         'landing-page-radio'
       ],
+      next: '/name',
       forks: [{
-        target: '/basic-form',
-        condition: {
-          field: 'landing-page-radio',
-          value: 'basic-form'
-        }
-      }, {
-        target: '/complex-form',
-        condition: {
-          field: 'landing-page-radio',
-          value: 'complex-form'
-        }
-      }, {
-        target: '/build-your-own-form',
+        target: 'build-your-own-form',
         condition: {
           field: 'landing-page-radio',
           value: 'build-your-own-form'
-          }
-      }
-      ],
-    }
-  }
+        }
+      }],
+    },
+  },
 };
