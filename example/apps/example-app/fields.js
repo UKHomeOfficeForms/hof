@@ -10,7 +10,9 @@ module.exports = {
     },
     options: ['basic-form', 'complex-form', 'build-your-own-form']
   },
-  // address steps from RIL 
+  name: {
+    validate:['required', 'notUrl', { type: 'maxlength', arguments: 200 }],
+  },
   building: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 100 }]
   },
