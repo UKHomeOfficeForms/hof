@@ -1,29 +1,15 @@
 {
-  "your-name": {
-    "label": "What is your full name?"
-  },
-  "email-address": {
-    "label": "What is your email address?",
-    "hint": "We will send a confirmation email to the address you provide"
-  },
-  "phone-number": {
-    "label": "What is your phone number",
-    "hint": "You can enter text in this field"
-  },
-  "message": {
-    "label": "Why are you contacting us?"
-  },
-  "date-example": {
-    "legend": "Enter a date in the past",
-    "parts": {
-      "day": {
-        "label": "Day"
+  "landing-page-radio": {
+    "legend": "Legend text",
+    "options": {
+      "basic-form": {
+        "label": "Basic form"
       },
-      "month": {
-        "label": "Month"
+      "complex-form": {
+        "label": "Complex form"
       },
-      "year": {
-        "label": "Year"
+      "build-your-own-form": {
+        "label": "Build your own form"
       }
     }
   }

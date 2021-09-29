@@ -1,54 +1,6 @@
 {
-  "first-step": {
-    "intro": "This text is located in /apps/example-app/translations/src/en/pages.json with the key \"step-name.intro\""
-  },
-  "second-step": {
-    "header": "What are your contact details {{values.your-name}}?"
-  },
-  "confirm": {
-    "header": "Check your answers",
-    "intro": "Make sure the information you are submitting is correct",
-    "sections": {
-      "personal-details": {
-        "header": "Your personal details"
-      },
-      "enquiry-details": {
-        "header": "your enquiry details"
-      }
-    },
-    "fields": {
-      "your-name": {
-        "label": "Full name"
-      },
-      "email-address": {
-        "label": "Email address"
-      },
-      "phone-number": {
-        "label": "Phone number"
-      },
-      "date-example": {
-        "label": "A Date"
-      },
-      "message": {
-        "label": "Reason for contact"
-      }
-    }
-  },
-  "confirmation": {
-    "alert": "Thank you for submitting the form",
-    "subheader": "What happens next?",
-    "content": "We have sent a confirmation email to {{values.email-address}}."
-  },
-  "email": {
-    "subject": {
-      "customer": "This is the subject of the email sent to the customer",
-      "caseworker": "This is the subject of the email sent to the caseworker"
-    },
-    "intro": {
-      "customer": "This is the intro text sent to the customer - not included if omitted"
-    },
-    "outro": {
-      "caseworker": "This is the outro text sent to the caseworker - not included if omitted"
-    }
+  "landing-page": {
+    "header": "Landing page",
+    "intro": "Choose one of the options below and press continue."
   }
 }
