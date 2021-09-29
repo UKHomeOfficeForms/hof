@@ -1,6 +1,6 @@
 {
   "landing-page-radio": {
-    "required": "Select an option below and press continue",
+    "required": "Select an option below and press continue"
   },
   "building": {
     "default": "Enter details of your building and street"
