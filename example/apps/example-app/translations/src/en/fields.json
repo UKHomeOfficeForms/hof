@@ -13,6 +13,9 @@
       }
     }
   },
+  "name":{
+    "label": "Full name"
+  },
   "building": {
     "label": "Building and street"
   },

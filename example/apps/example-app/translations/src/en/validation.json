@@ -2,6 +2,9 @@
   "landing-page-radio": {
     "required": "Select an option below and press continue"
   },
+  "name":{
+    "default": "Enter your full name"
+  },
   "building": {
     "default": "Enter details of your building and street"
   },
