@@ -12,5 +12,17 @@
         "label": "Build your own form"
       }
     }
+  },
+  "building": {
+    "label": "Building and street"
+  },
+  "street": {
+    "label": "Address line 2"
+  },
+  "townOrCity": {
+    "label": "Town or city"
+   }, 
+  "postcode": { 
+    "label": "Postcode"
   }
 }
