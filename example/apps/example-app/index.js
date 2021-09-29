@@ -23,6 +23,10 @@ module.exports = {
         }
       }],
     },
+    '/name':{
+      fields: ['name'],
+      next: '/address'
+    },
     '/address': {
       fields: ['building', 'street', 'townOrCity', 'postcode'],
       next: '/checkboxes',
