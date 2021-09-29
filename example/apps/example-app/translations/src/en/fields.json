@@ -1,6 +1,6 @@
 {
   "landing-page-radio": {
-    "legend": "Legend text",
+    "legend": "Which form would you like to explore?",
     "options": {
       "basic-form": {
         "label": "Basic form"
