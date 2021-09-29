@@ -1,5 +1,15 @@
 {
   "landing-page-radio": {
-    "required": "Select an option below and press continue"
+    "required": "Select an option below and press continue",
+  },
+  "building": {
+    "default": "Enter details of your building and street"
+  },
+  "townOrCity": {
+    "default": "Enter a town or city",
+    "regex": "Enter a town or city without including digits"
+  },
+  "postcode": {
+    "default": "Enter your postcode"
   }
 }

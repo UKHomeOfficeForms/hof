@@ -23,5 +23,9 @@ module.exports = {
         }
       }],
     },
-  },
+    '/address': {
+      fields: ['building', 'street', 'townOrCity', 'postcode'],
+      next: '/checkboxes',
+    }
+  }
 };
