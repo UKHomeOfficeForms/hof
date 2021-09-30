@@ -28,24 +28,24 @@
   "postcode": { 
     "label": "Postcode"
   },
-  "petsOwned" : {
-    "legend": "Select the pets that you own",
-    "hint": "You can select multiple boxes",
+  "incomeTypes" : {
+    "legend": "Select the options where you believe you receive income from",
+    "hint": "Select all options that apply to you.",
     "options": {
-      "Cat": {
-        "label": "Cat"
+      "Salary": {
+        "label": "Salary"
       },
-      "Dog": {
-        "label": "Dog"
+      "Universal Credit": {
+        "label": "Universal Credit"
       },
-      "Bird": {
-        "label": "Bird"
+      "Child Benefit": {
+        "label": "Child Benefit"
       },
-      "Fish": {
-        "label": "Fish"
+      "Housing Benefit": {
+        "label": "Housing Benefit"
       },
-      "None of the above": {
-        "label": "None of the above"
+      "Other": {
+        "label": "Other"
       }
     }
   }

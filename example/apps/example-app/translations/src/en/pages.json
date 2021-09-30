@@ -11,7 +11,6 @@
     "intro": "If you have no fixed address, enter an address where we can contact you."
   },
   "checkboxes": {
-    "header": "Do you own any of the animals listed below?",
-    "intro": "If you do not have any of the pets listed below, select 'None of the above.'"
+    "header": "Where does your money come from each month?"
   }
 }

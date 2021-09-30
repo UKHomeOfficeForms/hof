@@ -37,15 +37,15 @@ module.exports = {
     validate: ['required', 'postcode'],
     formatter: ['removespaces', 'uppercase']
   },
-  petsOwned: {
+  incomeTypes: {
     mixin: 'checkbox-group',
-    validate: ['required', notBothOptions],
+    validate: ['required'],
     options: [
-      'Cat',
-      'Dog',
-      'Bird',
-      'Fish',
-      'None of the above'
+      'Salary',
+      'Universal Credit',
+      'Child Benefit',
+      'Housing Benefit',
+      'Other'
     ]
   }
 }

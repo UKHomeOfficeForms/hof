@@ -32,7 +32,8 @@ module.exports = {
       next: '/checkboxes',
     },
     '/checkboxes': {
-      fields: ['petsOwned'],
+      fields: ['incomeTypes'],
+      validate: ['required'],
       next: '/radiobuttons'
     }
   }
