@@ -12,5 +12,16 @@
   },
   "checkboxes": {
     "header": "Where does your money come from each month?"
+  },
+  "confirm": {
+    "header": "Check your answers before submitting your application.",
+    "sections": {
+      "applicantsDetails": {
+        "header": "Applicant's details"
+      },
+      "address": {
+        "header": "Address"
+      }
+    }
   }
 }

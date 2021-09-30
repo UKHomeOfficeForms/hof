@@ -24,7 +24,7 @@ module.exports = {
         }
       }],
     },
-    '/name':{
+    '/name': {
       fields: ['name'],
       next: '/address'
     },
@@ -40,7 +40,23 @@ module.exports = {
       behaviours: InternationalPhoneNumber,
       fields: [
         'int-phone-number'
-      ]
+      ],
+      next: '/confirm',
+    },
+    '/confirm': {
+      behaviours: [SummaryPageBehaviour],
+      sections: {
+        applicantsDetails: [
+          'name'
+        ],
+        address: [
+          'building',
+          'street',
+          'townOrCity',
+          'postcode'
+        ]
+      },
+      next: '/confirmation'
     }
   }
 };
