@@ -34,11 +34,11 @@ module.exports = {
     mixin: 'checkbox-group',
     validate: ['required'],
     options: [
-      'Salary',
-      'Universal Credit',
-      'Child Benefit',
-      'Housing Benefit',
-      'Other'
+      'salary',
+      'universal_credit',
+      'child_benefit',
+      'housing_benefit',
+      'other'
     ]
   }
 }

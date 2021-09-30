@@ -29,22 +29,22 @@
     "label": "Postcode"
   },
   "incomeTypes" : {
-    "legend": "Select the options where you believe you receive income from",
+    "legend": "Select the options where you receive income from",
     "hint": "Select all options that apply to you.",
     "options": {
-      "Salary": {
+      "salary": {
         "label": "Salary"
       },
-      "Universal Credit": {
+      "universal_credit": {
         "label": "Universal Credit"
       },
-      "Child Benefit": {
+      "child_benefit": {
         "label": "Child Benefit"
       },
-      "Housing Benefit": {
+      "housing_benefit": {
         "label": "Housing Benefit"
       },
-      "Other": {
+      "other": {
         "label": "Other"
       }
     }
