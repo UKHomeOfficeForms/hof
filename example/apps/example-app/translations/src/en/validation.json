@@ -14,5 +14,8 @@
   },
   "postcode": {
     "default": "Enter your postcode"
+  },
+  "petsOwned": {
+    "default": "Select the pets that you own or select 'None of the above' if this applies to you"
   }
 }

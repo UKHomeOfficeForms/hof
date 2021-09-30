@@ -27,5 +27,26 @@
    }, 
   "postcode": { 
     "label": "Postcode"
+  },
+  "petsOwned" : {
+    "legend": "Select the pets that you own",
+    "hint": "You can select multiple boxes",
+    "options": {
+      "Cat": {
+        "label": "Cat"
+      },
+      "Dog": {
+        "label": "Dog"
+      },
+      "Bird": {
+        "label": "Bird"
+      },
+      "Fish": {
+        "label": "Fish"
+      },
+      "None of the above": {
+        "label": "None of the above"
+      }
+    }
   }
 }

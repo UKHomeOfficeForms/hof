@@ -30,6 +30,10 @@ module.exports = {
     '/address': {
       fields: ['building', 'street', 'townOrCity', 'postcode'],
       next: '/checkboxes',
+    },
+    '/checkboxes': {
+      fields: ['petsOwned'],
+      next: '/radiobuttons'
     }
   }
 };

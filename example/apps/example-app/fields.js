@@ -29,5 +29,16 @@ module.exports = {
   postcode: {
     validate: ['required', 'postcode'],
     formatter: ['removespaces', 'uppercase']
+  },
+  petsOwned: {
+    mixin: 'checkbox-group',
+    validate: ['required'],
+    options: [
+      'Cat',
+      'Dog',
+      'Bird',
+      'Fish',
+      'None of the above'
+    ]
   }
 }
