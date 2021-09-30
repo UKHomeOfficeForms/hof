@@ -23,13 +23,28 @@ module.exports = {
         }
       }],
     },
-    '/name':{
+    '/name': {
       fields: ['name'],
       next: '/address'
     },
     '/address': {
       fields: ['building', 'street', 'townOrCity', 'postcode'],
-      next: '/checkboxes',
+      next: '/confirm',
+    },
+    '/confirm': {
+      behaviours: [SummaryPageBehaviour],
+      sections: {
+        applicantsDetails: [
+          'name'
+        ],
+        address: [
+          'building',
+          'street',
+          'townOrCity',
+          'postcode'
+        ]
+      },
+      next: '/confirmation'
     }
   }
 };
