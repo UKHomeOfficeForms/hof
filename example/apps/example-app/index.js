@@ -33,7 +33,6 @@ module.exports = {
     },
     '/checkboxes': {
       fields: ['incomeTypes'],
-      validate: ['required'],
       next: '/radiobuttons'
     }
   }
