@@ -16,6 +16,7 @@
     "default": "Enter your postcode"
   },
   "petsOwned": {
-    "default": "Select the pets that you own or select 'None of the above' if this applies to you"
+    "default": "Select the pets that you own or select 'None of the above' if this applies to you",
+    "notBothOptions": "You must not select a pet and the 'None of the above' box"
   }
 }

@@ -1,5 +1,12 @@
 /* eslint-disable */
 'use strict';
+const _ = require('lodash');
+
+//Is there a better place to put this function? Custom validator folder?
+function notBothOptions(vals) {
+  const values = _.castArray(vals);
+  return !(values.length > 1 && values.indexOf('None of the above') > -1);
+}
 
 module.exports = {
   'landing-page-radio': {
@@ -32,7 +39,7 @@ module.exports = {
   },
   petsOwned: {
     mixin: 'checkbox-group',
-    validate: ['required'],
+    validate: ['required', notBothOptions],
     options: [
       'Cat',
       'Dog',
