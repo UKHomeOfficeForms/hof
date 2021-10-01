@@ -19,7 +19,7 @@ module.exports = {
   street: {
     validate: ['notUrl', { type: 'maxlength', arguments: 50 }],
     labelClassName: 'visuallyhidden'
-  }, 
+  },
   townOrCity: {
     validate: ['required', 'notUrl',
       { type: 'regex', arguments: /^([^0-9]*)$/ },
@@ -40,5 +40,9 @@ module.exports = {
       'housing_benefit',
       'other'
     ]
+  },
+  'int-phone-number': {
+    validate: ['required'],
+    labelClassName: 'visuallyhidden'
   }
 }

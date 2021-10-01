@@ -1,4 +1,4 @@
-/* eslint-disable func-names */
+/* eslint-disable func-names, guard-for-in */
 'use strict';
 
 const Validators = require('../../../controller').validators;
@@ -320,7 +320,29 @@ describe('Validators', () => {
     });
   });
 
-  describe('internationalPhoneNumber', () => {
+  describe('#internationalPhoneNumber', () => {
+    describe('country codes', () => {
+      const gbNumber = '+442079460000';
+      const basicInternationalNumber = '+12087462300';
+      const complexAmericanNumber = '(213) 373-42-53 ext. 1234';
+      const countryCode = 'US';
+
+      it('validates against country code if passed to validator', () => {
+        Validators.internationalPhoneNumber(gbNumber, countryCode).should.not.be.ok;
+        Validators.internationalPhoneNumber(complexAmericanNumber, countryCode).should.be.ok;
+      });
+
+      it('passes default GB country code if no country code passed to validator', () => {
+        Validators.internationalPhoneNumber(gbNumber).should.be.ok;
+        Validators.internationalPhoneNumber(complexAmericanNumber).should.not.be.ok;
+      });
+
+      it('passes generic international numbers if no country code passed to validator', () => {
+        Validators.internationalPhoneNumber(gbNumber).should.be.ok;
+        Validators.internationalPhoneNumber(basicInternationalNumber).should.be.ok;
+      });
+    });
+
     describe('invalid values', function () {
       const inputs = [
         '123',
@@ -339,25 +361,35 @@ describe('Validators', () => {
     });
 
     describe('valid values', function () {
-      const inputs = [
+      const defaultGBInputs = [
         '',
         '02079460000',
         '07900000000',
         '+442079460000',
         '+447900000000',
-        '+33609555167',
-        '0033609555167',
         '020 7946 0000',
-        '+44020 79460000',
-        '+963-995-5566-40',
-        '+90-505-5578-633',
-        '+22898555987'
+        '+44020 79460000'
       ];
-      inputs.forEach(i => {
+      const multinationalInputs = {
+        FR: ['+33609555167', '0033609555167'],
+        SY: ['+963-995-5566-40'],
+        TR: ['+90-505-5578-633'],
+        TG: ['+22898555987']
+      };
+
+      defaultGBInputs.forEach(i => {
         it(testName(i), () => {
           Validators.internationalPhoneNumber(i).should.be.ok;
         });
       });
+
+      for (const countryCode in multinationalInputs) {
+        multinationalInputs[countryCode].forEach(i => {
+          it(testName(`International Number ${i}`), () => {
+            Validators.internationalPhoneNumber(i, countryCode).should.be.ok;
+          });
+        });
+      }
     });
   });
 
