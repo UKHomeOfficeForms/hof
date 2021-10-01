@@ -4,7 +4,7 @@ const validators = require('../../../../controller').validators;
 
 module.exports = SuperClass => class extends SuperClass {
   validateField(key, req) {
-    const code = req.sessionModel.get('countryCode') || 'GB';
+    const code = req.sessionModel.get('countryCode');
     const number = req.form.values['int-phone-number'];
 
     const isValid = validators.internationalPhoneNumber(number, code);
