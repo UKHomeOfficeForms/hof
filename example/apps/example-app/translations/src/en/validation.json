@@ -14,5 +14,8 @@
   },
   "postcode": {
     "default": "Enter your postcode"
+  },
+  "incomeTypes": {
+    "default": "Select all options that apply to you."
   }
 }

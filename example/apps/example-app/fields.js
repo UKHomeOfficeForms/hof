@@ -29,5 +29,16 @@ module.exports = {
   postcode: {
     validate: ['required', 'postcode'],
     formatter: ['removespaces', 'uppercase']
+  },
+  incomeTypes: {
+    mixin: 'checkbox-group',
+    validate: ['required'],
+    options: [
+      'salary',
+      'universal_credit',
+      'child_benefit',
+      'housing_benefit',
+      'other'
+    ]
   }
 }

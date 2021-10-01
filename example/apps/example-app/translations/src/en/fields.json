@@ -27,5 +27,26 @@
    }, 
   "postcode": { 
     "label": "Postcode"
+  },
+  "incomeTypes" : {
+    "legend": "Select the options where you receive income from",
+    "hint": "Select all options that apply to you.",
+    "options": {
+      "salary": {
+        "label": "Salary"
+      },
+      "universal_credit": {
+        "label": "Universal Credit"
+      },
+      "child_benefit": {
+        "label": "Child Benefit"
+      },
+      "housing_benefit": {
+        "label": "Housing Benefit"
+      },
+      "other": {
+        "label": "Other"
+      }
+    }
   }
 }
