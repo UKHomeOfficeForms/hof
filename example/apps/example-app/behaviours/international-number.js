@@ -11,10 +11,10 @@ module.exports = SuperClass => class extends SuperClass {
 
     if (!isValid) {
       return new this.ValidationError('int-phone-number', {
-            key: 'int-phone-number',
-            type: 'internationalPhoneNumber',
-            redirect: undefined
-          });
+        key: 'int-phone-number',
+        type: 'internationalPhoneNumber',
+        redirect: undefined
+      });
     }
 
     return super.validateField(key, req);

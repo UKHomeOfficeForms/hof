@@ -1,4 +1,4 @@
-/* eslint-disable func-names */
+/* eslint-disable func-names, guard-for-in */
 'use strict';
 
 const Validators = require('../../../controller').validators;
@@ -383,7 +383,7 @@ describe('Validators', () => {
         });
       });
 
-      for (let countryCode in multinationalInputs) {
+      for (const countryCode in multinationalInputs) {
         multinationalInputs[countryCode].forEach(i => {
           it(testName(`International Number ${i}`), () => {
             Validators.internationalPhoneNumber(i, countryCode).should.be.ok;
