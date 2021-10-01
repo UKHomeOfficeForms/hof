@@ -36,9 +36,6 @@ module.exports = {
       fields: ['incomeTypes'],
       next: '/radiobuttons'
     },
-    '/confirmation': {
-      backLink: false
-    },
     '/international-phone-number': {
       behaviours: InternationalPhoneNumber,
       fields: [
