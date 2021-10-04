@@ -36,6 +36,9 @@ module.exports = {
       fields: ['incomeTypes'],
       next: '/confirm'
     },
+    '/rebased-page': {
+      fields: ['rebased']
+    },
     '/international-phone-number': {
       behaviours: InternationalPhoneNumber,
       fields: [

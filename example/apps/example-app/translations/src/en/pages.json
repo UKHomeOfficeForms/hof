@@ -26,5 +26,8 @@
         "header": "Income"
       }
     }
+  },
+  "rebased-page": {
+    "header": "A fanastic rebase!"
   }
 }

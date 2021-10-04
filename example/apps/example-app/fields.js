@@ -41,6 +41,9 @@ module.exports = {
       'other'
     ]
   },
+  rebased: {
+    mixin: 'input-text'
+  },
   'int-phone-number': {
     validate: ['required'],
     labelClassName: 'visuallyhidden'
