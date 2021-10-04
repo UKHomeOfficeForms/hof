@@ -24,7 +24,7 @@ module.exports = {
         }
       }],
     },
-    '/name':{
+    '/name': {
       fields: ['name'],
       next: '/address'
     },
@@ -34,13 +34,32 @@ module.exports = {
     },
     '/checkboxes': {
       fields: ['incomeTypes'],
-      next: '/radiobuttons'
+      next: '/confirm'
     },
     '/international-phone-number': {
       behaviours: InternationalPhoneNumber,
       fields: [
         'int-phone-number'
-      ]
+      ],
+      next: '/confirm',
+    },
+    '/confirm': {
+      behaviours: [SummaryPageBehaviour],
+      sections: {
+        applicantsDetails: [
+          'name'
+        ],
+        address: [
+          'building',
+          'street',
+          'townOrCity',
+          'postcode'
+        ],
+        income: [
+          'incomeTypes'
+        ]
+      },
+      next: '/confirmation'
     }
   }
 };
