@@ -34,7 +34,7 @@ module.exports = {
     },
     '/checkboxes': {
       fields: ['incomeTypes'],
-      next: '/radiobuttons'
+      next: '/confirm'
     },
     '/international-phone-number': {
       behaviours: InternationalPhoneNumber,
@@ -54,7 +54,10 @@ module.exports = {
           'street',
           'townOrCity',
           'postcode'
-        ]
+        ],
+        income: [
+          'incomeTypes'
+        ],
       },
       next: '/confirmation'
     }
