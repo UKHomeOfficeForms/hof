@@ -6008,10 +6008,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.9.24:
-  version "1.9.32"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.32.tgz#ec8048c7a9d7bb0ce282c5bccea2f945a056af29"
-  integrity sha512-sXuNLzTU/lNUZ78eWUi5JvqaHAhwBMuMT17613EjLZl/ejIoDe0EV225Xhw4vuZ6FcqkiwsF8qHcOyyn1dBEWQ==
+libphonenumber-js@^1.9.34:
+  version "1.9.36"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.36.tgz#ba56c2f5600ba34677389d0acc1a5fe8a1206561"
+  integrity sha512-eaQRvOHmBKOxd2TKNml5lx1/7+nm4MftXTUXPTcBS70mm7U3AUNBNPF99tNBpkrYQNu+YFP553ranMsbshqqTA==
 
 lines-and-columns@^1.1.6:
   version "1.1.6"
