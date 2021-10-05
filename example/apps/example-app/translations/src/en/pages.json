@@ -13,6 +13,9 @@
   "checkboxes": {
     "header": "Where does your money come from each month?"
   },
+  "radio": {
+    "header": "What country was the appeal lodged?"
+  },
   "confirm": {
     "header": "Check your answers before submitting your application.",
     "sections": {
@@ -24,6 +27,9 @@
       },
       "income": {
         "header": "Income"
+      },
+      "appealDetails": {
+        "header": "Appeal details"
       }
     }
   }

@@ -49,6 +49,20 @@
       }
     }
   },
+  "countryOfHearing": {
+    "legend": "What country was the appeal lodged?",
+    "options": {
+      "englandAndWales": {
+        "label": "England and Wales"
+      },
+      "scotland": {
+        "label": "Scotland"
+      },
+      "northernIreland": {
+        "label": "Northern Ireland"
+      } 
+    } 
+  },
   "int-phone-number": {
     "legend": "International phone number"
   }

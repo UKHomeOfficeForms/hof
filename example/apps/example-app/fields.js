@@ -41,6 +41,18 @@ module.exports = {
       'other'
     ]
   },
+  countryOfHearing: {
+    mixin: 'radio-group',
+    validate: ['required'],
+    legend: {
+      className: 'visuallyhidden'
+    },
+    options: [
+      'englandAndWales',
+      'scotland',
+      'northernIreland'
+    ]
+  },
   'int-phone-number': {
     validate: ['required'],
     labelClassName: 'visuallyhidden'
