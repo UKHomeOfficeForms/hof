@@ -34,6 +34,10 @@ module.exports = {
     },
     '/checkboxes': {
       fields: ['incomeTypes'],
+      next: '/radio'
+    },
+    '/radio':{
+      fields: ['countryOfHearing'],
       next: '/confirm'
     },
     '/international-phone-number': {
@@ -57,6 +61,9 @@ module.exports = {
         ],
         income: [
           'incomeTypes'
+        ], 
+        appealDetails: [
+          'countryOfHearing'
         ]
       },
       next: '/confirmation'

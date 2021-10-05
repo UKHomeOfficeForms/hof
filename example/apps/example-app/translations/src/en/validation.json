@@ -18,10 +18,8 @@
   "incomeTypes": {
     "default": "Select all options that apply to you."
   },
-  "date-example": {
-    "required": "Enter a date",
-    "date": "Enter a valid date",
-    "before": "Date cannot be in the future"
+  "countryOfHearing": {
+    "default": "Select where the appeal hearing is to be held"
   },
   "int-phone-number": {
     "required": "Enter an international phone number",
