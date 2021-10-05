@@ -6,6 +6,9 @@
   "name": {
     "header": "What is your full name?"
   },
+  "dob": {
+    "header": "What is your date of birth?"
+  },
   "address": {
     "header": "What is your address in the UK?",
     "intro": "If you have no fixed address, enter an address where we can contact you."

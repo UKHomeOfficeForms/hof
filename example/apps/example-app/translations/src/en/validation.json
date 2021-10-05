@@ -5,6 +5,11 @@
   "name":{
     "default": "Enter your full name"
   },
+  "dateOfBirth": {
+    "default": "Enter your date of birth in the correct format; for example, 31 10 1990",
+    "after": "Enter a date after 1 1 1900",
+    "before": "Enter a date that is in the past"
+  },
   "building": {
     "default": "Enter details of your building and street"
   },
