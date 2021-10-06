@@ -13,8 +13,12 @@
       }
     }
   },
-  "name":{
+  "name": {
     "label": "Full name"
+  },
+  "dateOfBirth": {
+    "legend": "Date of birth",
+    "hint": "For example, 31 10 1990"
   },
   "building": {
     "label": "Building and street"

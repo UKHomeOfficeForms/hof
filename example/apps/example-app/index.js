@@ -4,8 +4,6 @@
 const moment = require('moment');
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
-
-const DATE_FORMAT = 'YYYY-MM-DD';
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
 
 module.exports = {
@@ -26,6 +24,10 @@ module.exports = {
     },
     '/name': {
       fields: ['name'],
+      next: '/dob'
+    },
+    '/dob': {
+      fields: ['dateOfBirth'],
       next: '/address'
     },
     '/address': {
@@ -51,7 +53,11 @@ module.exports = {
       behaviours: [SummaryPageBehaviour],
       sections: {
         applicantsDetails: [
-          'name'
+          'name',
+          {
+            field: 'dateOfBirth',
+            parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
+          }
         ],
         address: [
           'building',
