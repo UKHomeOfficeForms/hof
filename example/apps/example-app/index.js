@@ -49,6 +49,9 @@ module.exports = {
       ],
       next: '/confirm',
     },
+    '/check':{
+      
+    }
     '/confirm': {
       behaviours: [SummaryPageBehaviour],
       sections: {
