@@ -27,7 +27,7 @@
     "default": "Select where the appeal hearing is to be held"
   },
   "email": {
-    "default": "Enter your email address"
+    "default": "Enter your email address in the correct format"
   },
   "int-phone-number": {
     "required": "Enter an international phone number",
