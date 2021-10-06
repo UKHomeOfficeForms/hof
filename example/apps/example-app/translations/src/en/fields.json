@@ -72,7 +72,7 @@
   },
   "phone": {
     "label": "Phone number",
-    "hint": "International phone numbers require the international dialing code"
+    "hint": "International phone numbers require the international dialling code, for example +33235066182"
   },
   "int-phone-number": {
     "legend": "International phone number"
