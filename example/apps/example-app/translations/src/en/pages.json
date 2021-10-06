@@ -19,6 +19,9 @@
   "radio": {
     "header": "What country was the appeal lodged?"
   },
+  "email": {
+    "header": "Enter your email address"
+  },
   "confirm": {
     "header": "Check your answers before submitting your application.",
     "sections": {
@@ -33,6 +36,9 @@
       },
       "appealDetails": {
         "header": "Appeal details"
+      },
+      "contactDetails": {
+        "header": "Contact details"
       }
     }
   }

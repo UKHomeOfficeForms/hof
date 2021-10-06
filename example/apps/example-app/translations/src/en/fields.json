@@ -67,6 +67,9 @@
       } 
     } 
   },
+  "email" : {
+    "label": "Email address"
+  },
   "int-phone-number": {
     "legend": "International phone number"
   }

@@ -40,6 +40,10 @@ module.exports = {
     },
     '/radio':{
       fields: ['countryOfHearing'],
+      next: '/email'
+    },
+    '/email': {
+      fields: ['email'],
       next: '/confirm'
     },
     '/international-phone-number': {
@@ -70,6 +74,9 @@ module.exports = {
         ], 
         appealDetails: [
           'countryOfHearing'
+        ],
+        contactDetails: [
+          'email'
         ]
       },
       next: '/confirmation'
