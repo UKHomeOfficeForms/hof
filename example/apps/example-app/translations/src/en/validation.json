@@ -26,6 +26,9 @@
   "countryOfHearing": {
     "default": "Select where the appeal hearing is to be held"
   },
+  "email": {
+    "default": "Enter your email address"
+  },
   "int-phone-number": {
     "required": "Enter an international phone number",
     "internationalPhoneNumber": "Enter a valid international phone number"

@@ -58,6 +58,9 @@ module.exports = {
       'northernIreland'
     ]
   },
+  email: {
+    validate: ['required', 'email'],
+  },
   'int-phone-number': {
     validate: ['required'],
     labelClassName: 'visuallyhidden'
