@@ -79,6 +79,11 @@ module.exports = {
       },
       next: '/confirmation'
     },
+    '/confirmation': {
+      backlink: false, 
+      template: 'confirmation',
+      clearSession: true,
+    },
     '/international-phone-number': {
       behaviours: InternationalPhoneNumber,
       fields: [
