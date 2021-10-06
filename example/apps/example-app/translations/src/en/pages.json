@@ -22,6 +22,9 @@
   "email": {
     "header": "Enter your email address"
   },
+  "phone-number": {
+    "header": "Enter your phone number"
+  },
   "confirm": {
     "header": "Check your answers before submitting your application.",
     "sections": {
