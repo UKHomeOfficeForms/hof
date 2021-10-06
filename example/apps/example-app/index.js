@@ -44,14 +44,11 @@ module.exports = {
     },
     '/email': {
       fields: ['email'],
-      next: '/confirm'
+      next: '/phone-number'
     },
-    '/international-phone-number': {
-      behaviours: InternationalPhoneNumber,
-      fields: [
-        'int-phone-number'
-      ],
-      next: '/confirm',
+    '/phone-number': {
+      fields: ['phone'],
+      next: '/confirm'
     },
     '/confirm': {
       behaviours: [SummaryPageBehaviour],
@@ -76,10 +73,18 @@ module.exports = {
           'countryOfHearing'
         ],
         contactDetails: [
-          'email'
+          'email',
+          'phone'
         ]
       },
       next: '/confirmation'
-    }
+    },
+    '/international-phone-number': {
+      behaviours: InternationalPhoneNumber,
+      fields: [
+        'int-phone-number'
+      ],
+      next: '/confirm',
+    },
   }
 };

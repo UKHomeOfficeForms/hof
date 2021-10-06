@@ -59,7 +59,10 @@ module.exports = {
     ]
   },
   email: {
-    validate: ['required', 'email'],
+    validate: ['required', 'email']
+  },
+  phone: {
+    validate: ['required', 'internationalPhoneNumber']
   },
   'int-phone-number': {
     validate: ['required'],
