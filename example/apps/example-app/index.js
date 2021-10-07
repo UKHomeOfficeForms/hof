@@ -51,7 +51,7 @@ module.exports = {
       next: '/confirm'
     },
     '/confirm': {
-      behaviours: [SummaryPageBehaviour],
+      behaviours: [SummaryPageBehaviour, 'complete'],
       sections: {
         applicantsDetails: [
           'name',
@@ -80,9 +80,7 @@ module.exports = {
       next: '/confirmation'
     },
     '/confirmation': {
-      backlink: false, 
-      template: 'confirmation',
-      clearSession: true,
+      backLink: false
     },
     '/international-phone-number': {
       behaviours: InternationalPhoneNumber,
