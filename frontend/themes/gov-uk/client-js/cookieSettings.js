@@ -132,6 +132,7 @@ function onLoad() {
       if (bannerContainer !== null && cookieBanner !== null) {
         bannerContainer.style.display = 'block';
       }
+      initialiseBannerButtons();
       showCookieBannerSubmitted();
     }
   };
