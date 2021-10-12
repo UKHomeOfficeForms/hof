@@ -40,6 +40,13 @@ module.exports = {
     },
     '/radio':{
       fields: ['countryOfHearing'],
+      forks: [{
+        target: '/text-input-area',
+        condition: {
+          field: 'landing-page-radio',
+          value: 'complex-form'
+        }
+      }],
       next: '/email'
     },
     '/email': {
@@ -48,6 +55,10 @@ module.exports = {
     },
     '/phone-number': {
       fields: ['phone'],
+      next: '/confirm'
+    },
+    '/text-input-area': {
+      fields: ['complaintDetails'],
       next: '/confirm'
     },
     '/confirm': {
@@ -75,6 +86,9 @@ module.exports = {
         contactDetails: [
           'email',
           'phone'
+        ], 
+        complaintDetails: [
+          'complaintDetails'
         ]
       },
       next: '/confirmation'

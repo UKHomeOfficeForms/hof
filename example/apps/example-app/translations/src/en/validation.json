@@ -35,5 +35,9 @@
   "int-phone-number": {
     "required": "Enter an international phone number",
     "internationalPhoneNumber": "Enter a valid international phone number"
+  },
+  "complaintDetails": {
+    "default": "Enter details about why you are making a complaint",
+    "maxlength": "Keep to the 5000 character limit"
   }
 }
