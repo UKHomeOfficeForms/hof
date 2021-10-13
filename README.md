@@ -9,9 +9,7 @@ HOF (Home Office Forms) is a framework designed to assist developers in creating
 
 ### Set up the example app
 
-Install Homebrew, if it is not installed 
-
-https://brew.sh/
+Install [Homebrew](https://brew.sh/), if it is not installed 
 
 Once Homebrew is installed run 
 
