@@ -7,6 +7,69 @@ HOF (Home Office Forms) is a framework designed to assist developers in creating
 
 ## Resources
 
+### Set up the example app
+
+Install Homebrew, if it is not installed 
+
+https://brew.sh/
+
+Once Homebrew is installed run 
+
+```bash
+brew install nvm
+```
+```bash
+source ~/.bash_profile
+```
+
+Install the correct version of node
+
+```bash
+nvm install 14.15.0
+```
+
+Set the node version
+
+```bash
+nvm use 14.15.0
+```
+
+Clone the service locally
+
+```bash
+git clone ... 
+```
+
+Install yarn 
+
+```bash
+npm i yarn -g 
+```
+
+Install the dependencies 
+
+```bash
+yarn
+```
+
+Move into the example folder 
+
+```bash
+cd example
+```
+
+Install any example app specific dependencies 
+
+```bash
+yarn
+```
+
+Run in development mode 
+
+```bash
+yarn start:dev
+```
+
 ### HOF documentation
 
 [https://ukhomeofficeforms.github.io/hof-guide/](https://ukhomeofficeforms.github.io/hof-guide/)
