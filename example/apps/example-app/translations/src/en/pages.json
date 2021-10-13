@@ -25,6 +25,10 @@
   "phone-number": {
     "header": "Enter your phone number"
   },
+  "text-input-area": {
+    "header": "What are the details of your complaint?",
+    "intro": "Briefly summarise your complaint. Include anything that can help our investigation."
+  },
   "confirm": {
     "header": "Check your answers before submitting your application.",
     "sections": {
@@ -42,6 +46,9 @@
       },
       "contactDetails": {
         "header": "Contact details"
+      },
+      "complaintDetails": {
+        "header": "Complaint details"
       }
     }
   },
