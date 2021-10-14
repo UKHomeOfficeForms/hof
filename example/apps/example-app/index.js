@@ -1,10 +1,8 @@
 /* eslint-disable */
 'use strict';
 
-const moment = require('moment');
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
-const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
 
 module.exports = {
   name: 'example-app',
@@ -63,34 +61,7 @@ module.exports = {
     },
     '/confirm': {
       behaviours: [SummaryPageBehaviour, 'complete'],
-      sections: {
-        applicantsDetails: [
-          'name',
-          {
-            field: 'dateOfBirth',
-            parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
-          }
-        ],
-        address: [
-          'building',
-          'street',
-          'townOrCity',
-          'postcode'
-        ],
-        income: [
-          'incomeTypes'
-        ], 
-        appealDetails: [
-          'countryOfHearing'
-        ],
-        contactDetails: [
-          'email',
-          'phone'
-        ], 
-        complaintDetails: [
-          'complaintDetails'
-        ]
-      },
+      sections: require('./sections/summary-data-sections'),
       next: '/confirmation'
     },
     '/confirmation': {
