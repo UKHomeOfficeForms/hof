@@ -2,30 +2,30 @@ const moment = require('moment');
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
 
 module.exports = {
-  'applicantsDetails': [
+  applicantsDetails: [
     'name',
     {
       field: 'dateOfBirth',
       parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
     }
   ],
-  'address': [
+  address: [
     'building',
     'street',
     'townOrCity',
     'postcode'
   ],
-  'income': [
+  income: [
     'incomeTypes'
   ], 
-  'appealDetails': [
+  appealDetails: [
     'countryOfHearing'
   ],
-  'contactDetails': [
+  contactDetails: [
     'email',
     'phone'
   ], 
-  'complaintDetails': [
+  complaintDetails: [
     'complaintDetails'
   ]
 }
