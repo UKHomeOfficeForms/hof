@@ -17,15 +17,15 @@ module.exports = {
   ],
   income: [
     'incomeTypes'
-  ], 
+  ],
   appealDetails: [
     'countryOfHearing'
   ],
   contactDetails: [
     'email',
     'phone'
-  ], 
+  ],
   complaintDetails: [
     'complaintDetails'
   ]
-}
+};

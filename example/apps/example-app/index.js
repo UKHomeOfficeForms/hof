@@ -30,7 +30,7 @@ module.exports = {
     },
     '/address': {
       fields: ['building', 'street', 'townOrCity', 'postcode'],
-      next: '/checkboxes',
+      next: '/checkboxes'
     },
     '/checkboxes': {
       fields: ['incomeTypes'],
@@ -72,7 +72,7 @@ module.exports = {
       fields: [
         'int-phone-number'
       ],
-      next: '/confirm',
+      next: '/confirm'
     },
   }
 };
