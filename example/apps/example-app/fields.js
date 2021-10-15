@@ -82,5 +82,14 @@ module.exports = {
       attribute: 'rows',
       value: 8
     }]
+  },
+  countrySelect: {
+    mixin: 'select',
+    className: ['typeahead'],
+    options: [''].concat(require('homeoffice-countries').allCountries),
+    legend: {
+      className: 'visuallyhidden'
+    },
+    validate: ['required']
   }
 }

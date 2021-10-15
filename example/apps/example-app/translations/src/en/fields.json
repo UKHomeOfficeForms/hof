@@ -79,5 +79,9 @@
   },
   "complaintDetails": {
     "label": "Complaint details"
+  },
+  "countrySelect": {
+    "label": "Select a country",
+    "hint": "Start to type the country name and options will appear"
   }
 }

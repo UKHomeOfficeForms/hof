@@ -11,7 +11,8 @@
   },
   "author": "",
   "dependencies": {
+    "jquery": "^3.6.0",
+    "typeahead-aria": "^1.0.4"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

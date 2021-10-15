@@ -2,3 +2,14 @@
 # yarn lockfile v1
 
 
+jquery@>=1.11, jquery@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
+  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
+
+typeahead-aria@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/typeahead-aria/-/typeahead-aria-1.0.4.tgz#d2829cc01c0226a367627f3098a468c4e0343f00"
+  integrity sha1-0oKcwBwCJqNnYn8wmKRoxOA0PwA=
+  dependencies:
+    jquery ">=1.11"
