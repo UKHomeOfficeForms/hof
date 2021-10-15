@@ -68,7 +68,7 @@ module.exports = {
     validate: ['required'],
     labelClassName: 'visuallyhidden'
   },
-  'complaintDetails': {
+  complaintDetails: {
     mixin: 'textarea',
     labelClassName: 'visuallyhidden',
     // we want to ignore default formatters as we want
