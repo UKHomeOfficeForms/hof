@@ -81,7 +81,7 @@
     "label": "Complaint details"
   },
   "countrySelect": {
-    "label": "Selet a country",
-    "hint": "Start to type the country name"
+    "label": "Select a country",
+    "hint": "Start to type the country name and options will appear"
   }
 }

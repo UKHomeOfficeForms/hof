@@ -68,7 +68,41 @@ module.exports = {
     },
     '/confirm': {
       behaviours: [SummaryPageBehaviour, 'complete'],
+<<<<<<< HEAD
       sections: require('./sections/summary-data-sections'),
+=======
+      sections: {
+        applicantsDetails: [
+          'name',
+          {
+            field: 'dateOfBirth',
+            parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
+          }
+        ],
+        address: [
+          'building',
+          'street',
+          'townOrCity',
+          'postcode'
+        ],
+        income: [
+          'incomeTypes'
+        ], 
+        appealDetails: [
+          'countryOfHearing'
+        ],
+        contactDetails: [
+          'email',
+          'phone'
+        ], 
+        complaintDetails: [
+          'complaintDetails'
+        ],
+        countrySelect: [
+          'countrySelect'
+        ]
+      },
+>>>>>>> add country search select
       next: '/confirmation'
     },
     '/confirmation': {
