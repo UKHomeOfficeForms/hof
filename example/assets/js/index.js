@@ -1,19 +1,20 @@
+/* eslint-disable func-names */
 
 require('../../../frontend/themes/gov-uk/client-js');
 
-var $ = require('jquery');
-var typeahead = require('typeahead-aria');
-var Bloodhound = require('typeahead-aria').Bloodhound;
+const $ = require('jquery');
+const typeahead = require('typeahead-aria');
+const Bloodhound = require('typeahead-aria').Bloodhound;
 
 
 typeahead.loadjQueryPlugin();
 $('.typeahead').each(function applyTypeahead() {
-  var $el = $(this);
-  var $parent = $el.parent();
-  var attributes = $el.prop('attributes');
-  var $input = $('<input/>');
-  var selectedValue = $el.val();
-  var typeaheadList = $el.find('option').map(function mapOptions() {
+  const $el = $(this);
+  const $parent = $el.parent();
+  const attributes = $el.prop('attributes');
+  const $input = $('<input/>');
+  const selectedValue = $el.val();
+  const typeaheadList = $el.find('option').map(function mapOptions() {
     if (this.value === '') {
       return undefined;
     }
@@ -36,20 +37,20 @@ $('.typeahead').each(function applyTypeahead() {
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       local: typeaheadList,
       sorter: function sorter(a, b) {
-        var input = $input.val();
-        var startsWithInput = function startsWithInput(x) {
+        const input = $input.val();
+        const startsWithInput = function startsWithInput(x) {
           return x.toLowerCase().substr(0, input.length) === input.toLowerCase() ? -1 : 1;
         };
-        var compareAlpha = function compareAlpha(x, y) {
-          var less = x < y ? -1 : 1;
+        const compareAlpha = function compareAlpha(x, y) {
+          const less = x < y ? -1 : 1;
           return x === y ? 0 : less;
         };
-        var compareStartsWithInput = function compareStartsWithInput(x, y) {
-          var startsWithFirst = startsWithInput(x);
-          var startsWithSecond = startsWithInput(y);
+        const compareStartsWithInput = function compareStartsWithInput(x, y) {
+          const startsWithFirst = startsWithInput(x);
+          const startsWithSecond = startsWithInput(y);
           return startsWithFirst === startsWithSecond ? 0 : startsWithFirst;
         };
-        var first = compareStartsWithInput(a, b);
+        const first = compareStartsWithInput(a, b);
         return first === 0 ? compareAlpha(a, b) : first;
       }
     }),
