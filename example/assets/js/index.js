@@ -1,4 +1,4 @@
-/* eslint-disable func-names, no-missing-require */
+/* eslint-disable func-names, node/no-missing-require */
 
 require('../../../frontend/themes/gov-uk/client-js');
 
