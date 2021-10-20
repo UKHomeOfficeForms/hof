@@ -33,6 +33,7 @@
     "label": "Postcode"
   },
   "incomeTypes" : {
+    "label": "Sources of income",
     "legend": "Select the options where you receive income from",
     "hint": "Select all options that apply to you.",
     "options": {
@@ -54,7 +55,7 @@
     }
   },
   "countryOfHearing": {
-    "legend": "What country was the appeal lodged?",
+    "label": "Country of hearing",
     "options": {
       "englandAndWales": {
         "label": "England and Wales"
@@ -81,7 +82,7 @@
     "label": "Complaint details"
   },
   "appealStages": {
-    "label": "Choose an appeal stage from the drop down menu",
+    "label": "Appeal stage",
     "options": {
       "null": "Select..."
     }

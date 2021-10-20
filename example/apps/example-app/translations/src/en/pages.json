@@ -30,7 +30,8 @@
     "intro": "Briefly summarise your complaint. Include anything that can help our investigation."
   },
   "select":{
-    "header": "What is the appeal stage?"
+    "header": "What is the appeal stage?",
+    "intro": "Choose an appeal stage from the drop down menu"
   },
   "confirm": {
     "header": "Check your answers before submitting your application.",

@@ -38,6 +38,7 @@ module.exports = {
   },
   incomeTypes: {
     mixin: 'checkbox-group',
+    labelClassName: 'visuallyhidden',
     validate: ['required'],
     options: [
       'salary',
@@ -86,6 +87,7 @@ module.exports = {
   },
   appealStages: {
     mixin: 'select',
+    labelClassName: 'visuallyhidden',
     validate: ['required'],
     options: [{
       value: '',
