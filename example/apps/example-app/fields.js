@@ -2,6 +2,7 @@
 'use strict';
 
 const dateComponent = require('../../../').components.date;
+const staticAppealStages = require('./lib/staticAppealStages');
 
 module.exports = {
   'landing-page-radio': {
@@ -82,5 +83,13 @@ module.exports = {
       attribute: 'rows',
       value: 8
     }]
+  },
+  appealStages: {
+    mixin: 'select',
+    validate: ['required'],
+    options: [{
+      value: '',
+      label: 'fields.appealStages.options.null'
+    }].concat(staticAppealStages.getstaticAppealStages())
   }
 }

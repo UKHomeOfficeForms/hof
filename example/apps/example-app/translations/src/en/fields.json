@@ -79,5 +79,11 @@
   },
   "complaintDetails": {
     "label": "Complaint details"
+  },
+  "appealStages": {
+    "label": "Choose an appeal stage from the drop down menu",
+    "options": {
+      "null": "Select..."
+    }
   }
 }

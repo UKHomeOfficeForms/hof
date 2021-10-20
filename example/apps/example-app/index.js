@@ -57,6 +57,10 @@ module.exports = {
     },
     '/text-input-area': {
       fields: ['complaintDetails'],
+      next: '/select'
+    },
+    '/select':{ 
+      fields: ['appealStages'], 
       next: '/confirm'
     },
     '/confirm': {
