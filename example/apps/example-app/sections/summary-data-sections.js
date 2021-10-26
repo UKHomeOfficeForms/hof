@@ -24,7 +24,7 @@ module.exports = {
     'countryOfHearing',
     {
       field: 'appealStages',
-      parse: v => staticAppealStages.getstaticAppealStages().find(appealStage => appealStage.value === v).label
+      parse: v => (v !== undefined ?(staticAppealStages.getstaticAppealStages().find(appealStage => appealStage.value === v).label): '') 
     }
   ],
   contactDetails: [
