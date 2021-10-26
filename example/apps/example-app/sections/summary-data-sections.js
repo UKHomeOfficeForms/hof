@@ -1,7 +1,6 @@
 const moment = require('moment');
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
-const staticAppealStages = require('../lib/staticAppealStages');
-
+const APPEAL_STAGES = require('../lib/staticAppealStages').getstaticAppealStages();
 
 module.exports = {
   applicantsDetails: [
@@ -24,7 +23,7 @@ module.exports = {
     'countryOfHearing',
     {
       field: 'appealStages',
-      parse: v => (v !== undefined ?(staticAppealStages.getstaticAppealStages().find(appealStage => appealStage.value === v).label): '') 
+      parse: v => (v !== undefined ? APPEAL_STAGES.find(appealStage => appealStage.value === v).label : '')
     }
   ],
   contactDetails: [
