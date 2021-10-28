@@ -41,6 +41,6 @@
     "maxlength": "Keep to the 5000 character limit"
   },
   "countrySelect": {
-    "default": "Enter your country"
+    "default": "Enter your country of residence"
   }
 }
