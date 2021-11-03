@@ -2,6 +2,7 @@
 'use strict';
 
 const dateComponent = require('../../../').components.date;
+const staticAppealStages = require('./lib/staticAppealStages');
 
 module.exports = {
   'landing-page-radio': {
@@ -37,6 +38,7 @@ module.exports = {
   },
   incomeTypes: {
     mixin: 'checkbox-group',
+    labelClassName: 'visuallyhidden',
     validate: ['required'],
     options: [
       'salary',
@@ -82,5 +84,14 @@ module.exports = {
       attribute: 'rows',
       value: 8
     }]
+  },
+  appealStages: {
+    mixin: 'select',
+    labelClassName: 'visuallyhidden',
+    validate: ['required'],
+    options: [{
+      value: '',
+      label: 'fields.appealStages.options.null'
+    }].concat(staticAppealStages.getstaticAppealStages())
   }
 }
