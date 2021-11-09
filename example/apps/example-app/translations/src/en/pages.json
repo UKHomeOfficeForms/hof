@@ -3,6 +3,10 @@
     "header": "Landing page",
     "intro": "Choose one of the options below and press continue."
   },
+  "build-your-own-form": {
+    "title": "Build your own form",
+    "subheader": "Access the build your own form guidance link"
+  },
   "name": {
     "header": "What is your full name?"
   },
@@ -55,10 +59,6 @@
         "header": "Complaint details"
       }
     }
-  },
-  "build-your-own-form": {
-    "title": "Build your own form",
-    "subheader": "Access the build your own form guidance link"
   },
   "confirmation": {
     "title": "Application sent",
