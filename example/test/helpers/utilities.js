@@ -1,4 +1,3 @@
-const _ = require('lodash');
 
 const areOrderedEqual = (arr1, arr2) => JSON.stringify(arr1) === JSON.stringify(arr2);
 
