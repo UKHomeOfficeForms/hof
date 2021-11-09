@@ -56,6 +56,10 @@
       }
     }
   },
+  "build-your-own-form": {
+    "title": "Build your own form",
+    "subheader": "Access the build your own form guidance link"
+  },
   "confirmation": {
     "title": "Application sent",
     "alert": "Application sent", 

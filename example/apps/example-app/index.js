@@ -13,12 +13,15 @@ module.exports = {
       ],
       next: '/name',
       forks: [{
-        target: 'build-your-own-form',
+        target: '/build-your-own-form',
         condition: {
           field: 'landing-page-radio',
           value: 'build-your-own-form'
         }
       }],
+    },
+    '/build-your-own-form': {
+      template: 'form-guidance-link'
     },
     '/name': {
       fields: ['name'],
