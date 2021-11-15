@@ -22,7 +22,7 @@
   },
   "scripts": {
     "test": "yarn run unit && yarn run test:cookie-banner && yarn run test:functional && yarn run test:client && yarn run test:lint",
-    "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\"",
+    "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\" \"example/test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha",
     "test:lint": "eslint . --config ./node_modules/eslint-config-hof/default.js",
     "test:functional": "funkie mocha ./test/functional-tests --exit",
