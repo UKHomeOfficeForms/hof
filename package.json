@@ -28,6 +28,9 @@
     "test:functional": "funkie mocha ./test/functional-tests --exit",
     "test:client": "karma start test/frontend/toolkit/karma.conf.js",
     "test:cookie-banner": "jest test/frontend/jest",
+    "test:acceptance": "TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
+    "test:acceptance_browser": "ACCEPTANCE_WITH_BROWSER=true TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
+    "test:cucumber": "cucumber-js -f @cucumber/pretty-formatter \"example/test/_features/**/*.feature\" --require example/test/_features/test.setup.js --require \"example/test/_features/step_definitions/**/*.js\" --tags $TAGS",
     "ci": "travis-conditions",
     "postversion": "git push && git push --tags"
   },
@@ -88,6 +91,8 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^7.3.0",
+    "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@types/jest": "^26.0.14",
     "chai": "^3.5.0",
     "chai-as-promised": "^7.1.1",
@@ -112,6 +117,7 @@
     "node-mocks-http": "^1.6.2",
     "npm-run-all": "^3.1.1",
     "nyc": "^15.1.0",
+    "playwright": "^1.16.3",
     "postcode": "0.2.2",
     "proxyquire": "^1.7.11",
     "release-it": "^14.10.0",

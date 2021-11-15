@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=10.22.1"
+  },
   "scripts": {
     "start": "node server.js",
     "start:dev": "HOF_EXAMPLE_APP=true ../bin/hof-build watch",
@@ -10,8 +13,6 @@
     "postinstall": "yarn run build"
   },
   "author": "",
-  "dependencies": {
-  },
-  "devDependencies": {
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
