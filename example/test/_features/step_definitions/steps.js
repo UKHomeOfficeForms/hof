@@ -82,3 +82,8 @@ Then('I should see the {string} error', async function (content) {
   await this.page.waitForSelector('body', { timeout: 15000 });
   expect(await this.page.innerText('.validation-summary.error-summary')).to.include(content);
 }.bind(World));
+
+Then('I select field {string} and value {string}', async function(field, value) {
+  await this.page.selectOption(`select#${field}`, { label: `${value}`});
+  expect(await this.page.innerText('body')).to.include(value);
+}.bind(World));
