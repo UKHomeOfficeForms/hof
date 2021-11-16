@@ -62,7 +62,6 @@ Feature: validations
     Then I should see 'Application sent' on the page
     Then I click the 'Start again' button
     Then I should be on the 'landing-page' page showing 'Choose one of the options below and press continue.'
-
   @complex_form
   Scenario: Full Complex Form Submission
     Given I start the 'base' application journey
