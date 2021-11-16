@@ -29,7 +29,7 @@ Feature: Complex Form
     Then I fill 'complaintDetails' text area with 'I would like to make a complaint'
     Then I click the 'Continue' button
     Then I should be on the 'select' page showing 'What is the appeal stage?'
-    Then I select field 'appealStages' and value '01. First Tier IAC Appeal - In Country Appeals'
+    Then I select 'appealStages' and '01. First Tier IAC Appeal - In Country Appeals'
     Then I click the 'Continue' button
     Then I should be on the 'confirm' page showing 'Check your answers before submitting your application.'
     Then I click the 'Confirm submission' button

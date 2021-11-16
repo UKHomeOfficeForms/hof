@@ -62,7 +62,7 @@ Feature: validations
     Then I should see 'Application sent' on the page
     Then I click the 'Start again' button
     Then I should be on the 'landing-page' page showing 'Choose one of the options below and press continue.'
-    
+
   @complex_form
   Scenario: Full Complex Form Submission
     Given I start the 'base' application journey
@@ -110,7 +110,7 @@ Feature: validations
     Then I click the 'Continue' button
     Then I click the 'Continue' button
     Then I should see the 'Select an appeal stage from the list' error
-    Then I select field 'appealStages' and value '01. First Tier IAC Appeal - In Country Appeals'
+    Then I select 'appealStages' and '01. First Tier IAC Appeal - In Country Appeals'
     Then I click the 'Continue' button
     Then I click the 'Confirm submission' button
     Then I should see 'Application sent' on the page
