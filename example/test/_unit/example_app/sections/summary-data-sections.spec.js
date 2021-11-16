@@ -1,10 +1,11 @@
 const sections = require('../../../../../example/apps/example-app/sections/summary-data-sections.js');
 const pages = require('../../../../../example/apps/example-app/translations/src/en/pages.json');
+const fields = require('../../../../../example/apps/example-app/fields.js');
 const utilities = require('../../../helpers/utilities');
-
 
 const mappedSections = utilities.mapSections(sections);
 const areOrderedEqual = utilities.areOrderedEqual;
+const containsAll = utilities.containsAll;
 
 describe('Apply Summary Data Sections', () => {
   describe('Sections and Pages', () => {
@@ -74,6 +75,50 @@ describe('Apply Summary Data Sections', () => {
       ];
       const result = areOrderedEqual(sectionFields, expectedFields);
       expect(result).to.be.true;
+    });
+  });
+
+  describe('Sections and Fields', () => {
+    it('applicantsDetails', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.applicantsDetails)
+      ).to.be.true;
+    });
+
+    it('address', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.address)
+      ).to.be.true;
+    });
+
+    it('income', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.income)
+      ).to.be.true;
+    });
+
+    it('appealDetails', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.appealDetails)
+      ).to.be.true;
+    });
+
+    it('contactDetails', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.contactDetails)
+      ).to.be.true;
+    });
+
+    it('complaintDetails', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.complaintDetails)
+      ).to.be.true;
     });
   });
 });
