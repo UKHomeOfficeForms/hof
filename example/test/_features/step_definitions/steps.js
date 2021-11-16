@@ -2,7 +2,9 @@ const { Given, Then } = require('@cucumber/cucumber');
 const expect = require('chai').expect;
 const World = require('../test.setup.js');
 const config = require('../../../config');
+
 const domain = config.hosts.acceptanceTests;
+
 Given('I start the {string} application journey', async function (subApp) {
   this.subApp = subApp === 'base' ? '' : `/${subApp}`;
   await this.page.goto(`${domain}${this.subApp}`);
