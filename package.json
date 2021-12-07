@@ -43,7 +43,7 @@
     "chalk": "^2.0.0",
     "chokidar": "^3.4.0",
     "connect-redis": "^5.2.0",
-    "cookie-parser": "^1.4.1",
+    "cookie-parser": "^1.4.6",
     "cp": "^0.2.0",
     "csrf": "^3.0.2",
     "debug": "^4.3.1",
