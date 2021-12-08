@@ -13,6 +13,9 @@
     "postinstall": "yarn run build"
   },
   "author": "",
-  "dependencies": {},
+  "dependencies": {
+    "knex": "^0.95.14",
+    "pg": "^8.7.1"
+  },
   "devDependencies": {}
 }
