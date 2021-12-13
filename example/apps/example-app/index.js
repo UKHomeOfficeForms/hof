@@ -3,10 +3,17 @@
 
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
+// const SaveFormSession = require('./behaviours/save-form-session')
+const getFormSession = require('./behaviours/get-form-session')
 
 module.exports = {
   name: 'example-app',
   steps: {
+    '/sessions':{
+      behaviours: getFormSession,
+      template: 'sessions' ,
+      next: '/landing-page'
+    },
     '/landing-page': {
       fields: [
         'landing-page-radio'
@@ -55,6 +62,7 @@ module.exports = {
       next: '/phone-number'
     },
     '/phone-number': {
+      // behaviours: SaveFormSession, 
       fields: ['phone'],
       next: '/confirm'
     },
@@ -63,7 +71,8 @@ module.exports = {
       next: '/select'
     },
     '/select':{ 
-      fields: ['appealStages'], 
+      // behaviours: SaveFormSession, 
+      fields: ['appealStages'],
       next: '/confirm'
     },
     '/confirm': {

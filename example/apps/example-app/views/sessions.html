@@ -1,0 +1,35 @@
+{{<partials-page}}
+{{$page-content}}
+  <h1>This is just some text</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">ID</th>
+            <th scope="col" class="govuk-table__header">Created on</th>
+            <th scope="col" class="govuk-table__header">Updated on</th>
+            <th scope="col" class="govuk-table__header">Session</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {{#sessionResults}}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{id}}</td>
+              <td class="govuk-table__cell">{{createdAt}}</td>
+              <td class="govuk-table__cell">{{updatedAt}}</td>
+              <td class="govuk-table__cell">{{session}}</td>
+            </tr>
+          {{/sessionResults}}
+          {{^sessionResults}}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell" colspan="5">You do not currently have any draft reports</td>
+          </tr>
+          {{/sessionResults}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {{#input-submit}}continue{{/input-submit}} 
+{{/page-content}}
+{{/partials-page}}
