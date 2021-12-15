@@ -10,14 +10,10 @@ const _ = require('lodash')
 module.exports = superclass => class extends superclass{
   locals(req, res) {
     const superlocals = super.locals(req, res);
-    console.log('superlocals', superlocals)
     const data = Object.assign({}, {
       sessionResults: _.sortBy(req.sessionResults, 'id').reverse(),
     });
     const locals = Object.assign({}, superlocals, data);
-    
-    console.log('locals', locals)
-
     return locals;
   }
 
@@ -25,7 +21,6 @@ module.exports = superclass => class extends superclass{
     await axios.get(baseUrl)
     .then(function(response){
       const resBody = response.data
-      console.log('resBody', resBody)
       if (resBody && resBody.length && resBody[0].session) {
         req.sessionResults = [];
         resBody.forEach(form => {

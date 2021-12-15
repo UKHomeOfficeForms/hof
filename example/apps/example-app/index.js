@@ -3,7 +3,7 @@
 
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
-// const SaveFormSession = require('./behaviours/save-form-session')
+const SaveFormSession = require('./behaviours/save-form-session')
 const getFormSession = require('./behaviours/get-form-session')
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
   steps: {
     '/sessions':{
       behaviours: getFormSession,
-      template: 'sessions' ,
+      template: 'sessions',
       next: '/landing-page'
     },
     '/landing-page': {
@@ -62,17 +62,20 @@ module.exports = {
       next: '/phone-number'
     },
     '/phone-number': {
-      // behaviours: SaveFormSession, 
       fields: ['phone'],
-      next: '/confirm'
+      next: '/save-and-exit'
     },
     '/text-input-area': {
       fields: ['complaintDetails'],
       next: '/select'
     },
     '/select':{ 
-      // behaviours: SaveFormSession, 
       fields: ['appealStages'],
+      next: '/save-and-exit'
+    },
+    '/save-and-exit':{
+      behaviours: SaveFormSession,
+      template: 'save-and-exit',
       next: '/confirm'
     },
     '/confirm': {
