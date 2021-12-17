@@ -40,7 +40,6 @@ module.exports = superclass => class extends superclass{
             }
             req.sessionResults.push(formSession)
           })
-          console.log('session results', req.sessionResults)
         }
       })
       .catch((err) => {
@@ -50,5 +49,30 @@ module.exports = superclass => class extends superclass{
         next()
       })     
     })
-  }  
+  }
+  
+  saveValues(req, res, next){
+    super.saveValues(req, res, err => {
+      if (req.body.delete || req.body.resume) {
+        const id = req.body.resume || req.body.delete;
+        axios.get(baseUrl + '/' + id)
+        .then(function(response){
+          const resBody = response.data
+          if (resBody && resBody.length && resBody[0].session){
+            if (req.body.delete) {
+              req.sessionModel.set('toDelete', {
+                id: req.body.delete,
+              });
+              return res.redirect('/are-you-sure');
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      } else {
+        next();
+      }
+    })
+  }
 }

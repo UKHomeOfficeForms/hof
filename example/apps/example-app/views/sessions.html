@@ -10,6 +10,7 @@
             <th scope="col" class="govuk-table__header">Created on</th>
             <th scope="col" class="govuk-table__header">Updated on</th>
             <th scope="col" class="govuk-table__header">Session</th>
+            <th scope="col" class="govuk-table__header">Next steps</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -19,6 +20,10 @@
               <td class="govuk-table__cell">{{createdAt}}</td>
               <td class="govuk-table__cell">{{updatedAt}}</td>
               <td class="govuk-table__cell">{{session}}</td>
+              <td class="govuk-table__cell">
+                <!-- <button name="resume" value="{{id}}" class="govuk-button">Go to report</button>&nbsp; -->
+                <button class="govuk-button govuk-button--secondary" name="delete" value="{{id}}">Delete report</button>
+              </td>
             </tr>
           {{/sessionResults}}
           {{^sessionResults}}

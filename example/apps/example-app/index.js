@@ -5,6 +5,7 @@ const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
 const SaveFormSession = require('./behaviours/save-form-session')
 const getFormSession = require('./behaviours/get-form-session')
+const areYouSure = require('./behaviours/are-you-sure')
 
 module.exports = {
   name: 'example-app',
@@ -13,6 +14,10 @@ module.exports = {
       behaviours: getFormSession,
       template: 'sessions',
       next: '/landing-page'
+    },
+    '/are-you-sure':{
+      behaviours: areYouSure,
+      template: 'are-you-sure',
     },
     '/landing-page': {
       fields: [
