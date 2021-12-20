@@ -65,6 +65,11 @@ module.exports = superclass => class extends superclass{
               });
               return res.redirect('/are-you-sure');
             }
+            if (req.body.resume){
+              req.sessionModel.set(resBody[0].session);
+              req.sessionModel.set('id', req.body.resume);
+              return res.redirect('/continue-report');
+            }
           }
         })
         .catch((err) => {

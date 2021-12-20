@@ -8,7 +8,7 @@ module.exports = {
       host:     'localhost',
       port:      5432,
       user:     'alicelui',
-      password: 'passalice',
+      password: '',
       database: 'hof_example_al'
     },
 

@@ -6,6 +6,7 @@ const InternationalPhoneNumber = require('./behaviours/international-number');
 const SaveFormSession = require('./behaviours/save-form-session')
 const getFormSession = require('./behaviours/get-form-session')
 const areYouSure = require('./behaviours/are-you-sure')
+const continueReport = require('./behaviours/continue-report')
 
 module.exports = {
   name: 'example-app',
@@ -82,6 +83,14 @@ module.exports = {
       behaviours: SaveFormSession,
       template: 'save-and-exit',
       next: '/confirm'
+    },
+    '/continue-report':{
+      behaviours: [
+        continueReport
+      ],
+      template: 'continue-report',
+      backLink: false,
+      next:'/name'
     },
     '/confirm': {
       behaviours: [SummaryPageBehaviour, 'complete'],
