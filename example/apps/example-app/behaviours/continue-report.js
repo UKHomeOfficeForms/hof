@@ -1,9 +1,6 @@
-'use strict'
+'use strict';
 
-const axios = require('axios');
-const baseUrl = 'http://localhost:3000/session'
-
-module.exports = superclass => class extends superclass{
+module.exports = superclass => class extends superclass {
   locals(req, res) {
     const superlocals = super.locals(req, res);
     const locals = Object.assign({}, superlocals, {
@@ -13,15 +10,12 @@ module.exports = superclass => class extends superclass{
     return locals;
   }
 
-  saveValues(req, res, next){
+  saveValues(req, res, next) {
     super.saveValues(req, res, err => {
-      console.log('id', req.sessionModel.get('id'))
       if (err) {
         next(err);
       }
       next();
     });
   }
-}
-
-
+};

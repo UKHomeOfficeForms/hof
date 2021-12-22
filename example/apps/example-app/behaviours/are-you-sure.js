@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require('axios');
-const baseUrl = 'http://localhost:3000/session'
+const baseUrl = 'http://localhost:3000/session';
 
 
 module.exports = superclass => class extends superclass {
@@ -24,20 +24,20 @@ module.exports = superclass => class extends superclass {
 
   saveValues(req, res, next) {
     super.saveValues(req, res, err => {
+      if (err) {
+        next(err);
+      }
       if (req.body.confirm) {
-        const id = req.sessionModel.get('toDelete').id
+        const id = req.sessionModel.get('toDelete').id;
         axios.delete(baseUrl + '/' + id)
-        .then(function(){
-          req.sessionModel.unset('toDelete');
-          res.redirect('/sessions');
-        })
-        .catch(function(err){
-          console.log(err)
-        })
+          .then(function () {
+            req.sessionModel.unset('toDelete');
+            res.redirect('/sessions');
+          });
       } else {
         req.sessionModel.unset('toDelete');
         res.redirect('/sessions');
       }
-    })
+    });
   }
-}
+};

@@ -5,9 +5,9 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      host:     'localhost',
-      port:      5432,
-      user:     'alicelui',
+      host: 'localhost',
+      port: 5432,
+      user: 'alicelui',
       password: '',
       database: 'hof_example_al'
     },
@@ -21,8 +21,8 @@ module.exports = {
     client: 'pg',
     connection: {
       host: 'localhost',
-      port:      5432,
-      user:     'alicelui',
+      port: 5432,
+      user: 'alicelui',
       password: 'passalice',
       database: 'hof_example_al_test'
     },
