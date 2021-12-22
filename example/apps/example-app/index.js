@@ -7,6 +7,7 @@ const SaveFormSession = require('./behaviours/save-form-session')
 const getFormSession = require('./behaviours/get-form-session')
 const areYouSure = require('./behaviours/are-you-sure')
 const continueReport = require('./behaviours/continue-report')
+const deleteSession = require('./behaviours/delete-form-session')
 
 module.exports = {
   name: 'example-app',
@@ -93,7 +94,7 @@ module.exports = {
       next:'/name'
     },
     '/confirm': {
-      behaviours: [SummaryPageBehaviour, 'complete'],
+      behaviours: [SummaryPageBehaviour, 'complete', deleteSession],
       sections: require('./sections/summary-data-sections'),
       next: '/confirmation'
     },
