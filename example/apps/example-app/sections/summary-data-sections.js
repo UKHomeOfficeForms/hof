@@ -27,5 +27,8 @@ module.exports = {
   ],
   complaintDetails: [
     'complaintDetails'
+  ],
+  countrySelect: [
+    'countrySelect'
   ]
 };
