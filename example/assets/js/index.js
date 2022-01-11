@@ -1,3 +1,5 @@
+/* eslint-disable */
+'use strict'
 
 require('../../../frontend/themes/gov-uk/client-js');
 
