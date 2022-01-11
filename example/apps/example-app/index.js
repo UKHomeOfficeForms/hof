@@ -59,7 +59,6 @@ module.exports = {
     '/country-select' : {
       behaviours: CountrySelect,
       fields: ['countrySelect'],
-      continueOnEdit: true,
       next:'/text-input-area'
     },
     '/text-input-area': {
