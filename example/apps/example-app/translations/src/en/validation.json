@@ -26,6 +26,9 @@
   "countryOfHearing": {
     "default": "Select where the appeal hearing is to be held"
   },
+  "countrySelect": {
+    "default": "Enter your country of residence"
+  },
   "email": {
     "default": "Enter your email address in the correct format"
   },
