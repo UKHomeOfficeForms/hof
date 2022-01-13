@@ -11,6 +11,7 @@ const defaults = {
   },
   getCookies: true,
   getTerms: true,
+  getAccessibility: false,
   viewEngine: 'html',
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,

@@ -5,6 +5,11 @@
 
 HOF (Home Office Forms) is a framework designed to assist developers in creating form-based workflows in a rapid, repeatable and secure way. It aims to reduce simple applications as much as possible to being configuration-only.
 
+## Server Settings
+In your `hof.settings.json` file you can add `getTerms: false` and `getCookies: false` to turn off the default cookies, and terms and conditions information provided by the HOF framework. This is if you want to provide more specific material at the service level in regards to these subject matter otherwise the defaults should suffice.
+
+Also you can set `getAccessibility: true` to get the default accessibility document for this framework if one is not provided at the service level. It is assumed there should have been an accessibility audit carried out for a service already hence why the default setting for this is set to `false`. But if a generic placeholder is needed to ensure the service is legally compliant then this can be set to `true` to provide the default one presented within the framework.
+
 ## Resources
 
 ### HOF documentation

@@ -204,6 +204,16 @@ function bootstrap(options) {
   app.use(mixins());
   app.use(markdown(config.markdown));
 
+  if (config.getAccessibility === true) {
+    deprecate(
+      '`getAccessibility` option is deprecated and may be removed in future versions.',
+      'Use `pages` to define static cookies page.'
+    );
+    app.get('/accessibility', (req, res) => {
+      const locals = Object.assign({}, req.translate('accessibility'));
+      res.render('accessibility', locals);
+    });
+  }
   if (config.getCookies === true) {
     deprecate(
       '`getCookies` option is deprecated and may be removed in future versions.',
