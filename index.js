@@ -135,6 +135,7 @@ function bootstrap(options) {
   app.use((req, res, next) => {
     res.locals.nonce = crypto.randomBytes(16).toString('hex');
     res.locals.appName = config.appName;
+    res.locals.htmlLang = config.htmlLang;
     res.locals.cookieName = config.session.name;
     next();
   });

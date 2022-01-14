@@ -3,6 +3,7 @@
 
 const defaults = {
   appName: process.env.APP_NAME || 'HOF Application',
+  htmlLang: 'en',
   root: process.cwd(),
   translations: 'translations',
   start: true,
