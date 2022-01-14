@@ -25,11 +25,10 @@ describe('apps/example-app/behaviours/country-select', () => {
   });
 
   describe('countryselect', () => {
-    it('checks to see if all country options labels contain country list in its fields', () => {
+    it('checks to see if each country has a country label', () => {
       controller.configure(req, res, () => {
         const countryOptions = req.form.options.fields.countrySelect.options;
         const countryLabels = [''].concat(_.map(countryOptions, obj => obj.label));
-        countryLabels.concat(['Please select a country']);
         homeOfficeCountries.splice(1, 0, 'Please select a country');
         countryLabels.should.deep.equal((homeOfficeCountries));
       });
