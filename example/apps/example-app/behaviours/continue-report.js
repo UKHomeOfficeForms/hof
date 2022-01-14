@@ -15,7 +15,7 @@ module.exports = superclass => class extends superclass {
       if (err) {
         next(err);
       }
-      next();
+      return res.redirect('/confirm');
     });
   }
 };
