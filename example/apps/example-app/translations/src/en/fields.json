@@ -81,6 +81,48 @@
   "complaintDetails": {
     "label": "Complaint details"
   },
+  "weaponsTypes":{
+    "legend": "Select all that apply",
+    "summary": "Sections, weapon type(s)",
+    "options": {
+      "unspecified": {
+        "label": "Unspecified sections and quantities"
+      },
+      "fully_automatic": {
+        "label": "Fully automatic or burst-fire weapons - Section 5(1)(a)"
+      },
+      "self_loading": {
+        "label": "Self-loading or pump-action rifles and carbines but not pistols - Section 5(1)(ab)"
+      },
+      "short_pistols": {
+        "label": "Short firearms pistols and revolvers - Section 5(1)(aba)"
+      },
+      "short_self_loading": {
+        "label": "Short self-loading or pump-action shotguns - Section 5(1)(ac)"
+      },
+      "large_revolvers": {
+        "label": "Large smooth-bore revolvers - Section 5(1)(ad)"
+      },
+      "rocket_launchers": {
+        "label": "Rocket launchers and mortars - Section 5(1)(ae)"
+      },
+      "air_rifles": {
+        "label": "Air rifle, air gun or air pistol for use with self-contained gas cartridge - Section 5(1)(af)"
+      },
+      "fire_noxious_substance": {
+        "label": "Weapons which fire noxious substances - Section 5(1)(b)"
+      },
+      "disguised_firearms": {
+        "label": "Firearms disguised as other objects - Section 5(1A)(a)"
+      },
+      "military_use_rockets": {
+        "label": "Rockets/ammunition with exploding missiles for military use - Section 5(1A)(b)"
+      },
+      "projecting_launchers": {
+        "label": "Launchers or projecting apparatus for use with the rockets or ammunition detailed above - Section 5(1A)(c)"
+      }
+    }
+  },
   "appealStages": {
     "label": "Appeal stage",
     "options": {

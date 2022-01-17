@@ -33,6 +33,10 @@
     "header": "What are the details of your complaint?",
     "intro": "Briefly summarise your complaint. Include anything that can help our investigation."
   },
+  "checkbox-with-exclusive-option":{
+    "header": "Which sections do the weapons or components fall under?",
+    "intro": "Select all that apply and state the maximum quantities held at any one time. If the sections and quantities aren't backed up by the evidence provided, it may delay the application or result in the authority not being approved."
+  },
   "select":{
     "header": "What is the appeal stage?",
     "intro": "Choose an appeal stage from the drop down menu"

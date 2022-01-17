@@ -60,6 +60,10 @@ module.exports = {
     },
     '/text-input-area': {
       fields: ['complaintDetails'],
+      next: '/checkbox-with-exclusive-option'
+    },
+    '/checkbox-with-exclusive-option':{
+      fields: ['weaponsTypes'],
       next: '/select'
     },
     '/select':{ 

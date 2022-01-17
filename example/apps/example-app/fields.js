@@ -85,6 +85,25 @@ module.exports = {
       value: 8
     }]
   },
+  weaponsTypes:{
+    mixin: 'checkbox-group',
+    labelClassName: 'visuallyhidden',
+    validate: ['required'],
+    options: [
+      'unspecified',
+      'fully_automatic',
+      'self_loading',
+      'short_pistols',
+      'short_self_loading',
+      'large_revolvers',
+      'rocket_launchers',
+      'air_rifles',
+      'fire_noxious_substance',
+      'disguised_firearms',
+      'military_use_rockets',
+      'projecting_launchers'
+    ]
+  },
   appealStages: {
     mixin: 'select',
     labelClassName: 'visuallyhidden',
