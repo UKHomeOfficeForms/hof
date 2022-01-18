@@ -23,15 +23,25 @@ describe('apps/example-app/behaviours/country-select', () => {
     const CountrySelectController = Behaviour(Controller);
     controller = new CountrySelectController({});
   });
-
   describe('countryselect', () => {
-    it('checks to see if each country has a country label', () => {
+    it('checks to see if each country has its country label', () => {
       controller.configure(req, res, () => {
         const countryOptions = req.form.options.fields.countrySelect.options;
-        const countryLabels = [''].concat(_.map(countryOptions, obj => obj.label));
-        homeOfficeCountries.splice(1, 0, 'Please select a country');
-        countryLabels.should.deep.equal((homeOfficeCountries));
+        const countryLabels = _.map(countryOptions, obj => obj.label);
+        const countryLabelsList = _.drop(countryLabels);
+        const homeOfficeCountriesList = _.drop(homeOfficeCountries);
+        countryLabelsList.should.deep.equal((homeOfficeCountriesList));
+      });
+    });
+    it('checks to see an empty selection has a label "Please select a country"', () => {
+      controller.configure(req, res, () => {
+        const countryOptions = req.form.options.fields.countrySelect.options;
+        const countryLabels = _.map(countryOptions, obj => obj.label);
+        const emptyCountryIndex = _.indexOf(countryLabels, 'Please select a country');
+        const emptyHomeOfficeCountryIndex = _.indexOf(homeOfficeCountries, '');
+        emptyCountryIndex.should.deep.equal((emptyHomeOfficeCountryIndex));
       });
     });
   });
+
 });
