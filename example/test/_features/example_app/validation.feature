@@ -104,6 +104,14 @@ Feature: validations
     Then I select 'England and Wales'
     Then I click the 'Continue' button
     Then I click the 'Continue' button
+    Then I should see the 'Enter your country of residence' error
+    Then I fill 'countrySelect' with 'Fake Country'
+    Then I click the 'Continue' button
+    Then I should see the 'Enter a valid country of residence' error
+    Then I fill 'countrySelect' with 'United'
+    Then I select 'United Kingdom'
+    Then I click the 'Continue' button
+    Then I click the 'Continue' button
     Then I should see the 'Enter details about why you are making a complaint' error
     Then I fill 'complaintDetails' text area with 'I would like to make a complaint'
     Then I click the 'Continue' button

@@ -13,6 +13,9 @@
     "postinstall": "yarn run build"
   },
   "author": "",
-  "dependencies": {},
+  "dependencies": {
+    "jquery": "^3.6.0",
+    "typeahead-aria": "^1.0.4"
+  },
   "devDependencies": {}
 }

@@ -1,6 +1,7 @@
 /* eslint-disable */
 'use strict';
 
+const CountrySelect = require('./behaviours/country-select')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
 
@@ -42,7 +43,7 @@ module.exports = {
     '/radio':{
       fields: ['countryOfHearing'],
       forks: [{
-        target: '/text-input-area',
+        target: '/country-select',
         condition: {
           field: 'landing-page-radio',
           value: 'complex-form'
@@ -57,6 +58,11 @@ module.exports = {
     '/phone-number': {
       fields: ['phone'],
       next: '/confirm'
+    },
+    '/country-select': {
+      behaviours: CountrySelect,
+      fields: ['countrySelect'],
+      next: '/text-input-area'
     },
     '/text-input-area': {
       fields: ['complaintDetails'],

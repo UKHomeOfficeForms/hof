@@ -70,6 +70,15 @@ module.exports = {
     validate: ['required'],
     labelClassName: 'visuallyhidden'
   },
+  countrySelect: {
+    mixin: 'select',
+    className: ['typeahead'],
+    options:[''].concat(require('homeoffice-countries').allCountries),
+    legend: {
+      className: 'visuallyhidden'
+    },
+    validate: ['required']
+  },
   complaintDetails: {
     mixin: 'textarea',
     labelClassName: 'visuallyhidden',

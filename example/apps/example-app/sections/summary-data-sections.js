@@ -31,6 +31,9 @@ module.exports = {
     'email',
     'phone'
   ],
+  countrySelect: [
+    'countrySelect'
+  ],
   complaintDetails: [
     'complaintDetails'
   ]

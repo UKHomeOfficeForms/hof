@@ -25,6 +25,10 @@ Feature: Complex Form
     Then I should be on the 'radio' page showing 'What country was the appeal lodged?'
     Then I select 'England and Wales'
     Then I click the 'Continue' button
+    Then I should be on the 'country-select' page showing 'What country is your address located?'
+    Then I fill 'countrySelect' with 'United'
+    Then I select 'United Kingdom'
+    Then I click the 'Continue' button
     Then I should be on the 'text-input-area' page showing 'What are the details of your complaint?'
     Then I fill 'complaintDetails' text area with 'I would like to make a complaint'
     Then I click the 'Continue' button
