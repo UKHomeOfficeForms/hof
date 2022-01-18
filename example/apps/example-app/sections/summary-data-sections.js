@@ -31,10 +31,10 @@ module.exports = {
     'email',
     'phone'
   ],
-  complaintDetails: [
-    'complaintDetails'
-  ],
   countrySelect: [
     'countrySelect'
+  ],
+  complaintDetails: [
+    'complaintDetails'
   ]
 };

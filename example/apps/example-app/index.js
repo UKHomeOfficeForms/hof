@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use strict';
 
-const countrySelect = require('./behaviours/country-select')
+const CountrySelect = require('./behaviours/country-select')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
 
@@ -60,7 +60,7 @@ module.exports = {
       next: '/confirm'
     },
     '/country-select': {
-      behaviours: countrySelect,
+      behaviours: CountrySelect,
       fields: ['countrySelect'],
       next: '/text-input-area'
     },

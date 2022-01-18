@@ -43,5 +43,4 @@ describe('apps/example-app/behaviours/country-select', () => {
       });
     });
   });
-
 });
