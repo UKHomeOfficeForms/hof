@@ -1,8 +1,14 @@
 /* eslint-disable */
 'use strict';
 
+const _ = require('lodash');
 const dateComponent = require('../../../').components.date;
 const staticAppealStages = require('./lib/staticAppealStages');
+
+function notBothOptions(vals) {
+  const values = _.castArray(vals);
+  return !(values.length > 1 && values.indexOf('unspecified') > -1);
+}
 
 module.exports = {
   'landing-page-radio': {
@@ -88,7 +94,7 @@ module.exports = {
   weaponsTypes:{
     mixin: 'checkbox-group',
     labelClassName: 'visuallyhidden',
-    validate: ['required'],
+    validate: ['required', notBothOptions],
     options: [
       'unspecified',
       'fully_automatic',

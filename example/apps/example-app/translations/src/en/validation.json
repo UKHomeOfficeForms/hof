@@ -41,7 +41,8 @@
     "maxlength": "Keep to the 5000 character limit"
   },
   "weaponsTypes":{
-    "required": "Select at least one option"
+    "required": "Select at least one option",
+    "notBothOptions": "You can't choose unspecified categories and choose a category. You must deselect the unspecified category option, or the selected categories to continue"
   },
   "appealStages": {
     "required": "Select an appeal stage from the list"
