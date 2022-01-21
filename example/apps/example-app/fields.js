@@ -96,7 +96,10 @@ module.exports = {
     labelClassName: 'visuallyhidden',
     validate: ['required', notBothOptions],
     options: [
-      'unspecified',
+      {
+        value: 'unspecified',
+        child: 'partials/or'
+      },        
       'fully_automatic',
       'self_loading',
       'short_pistols',

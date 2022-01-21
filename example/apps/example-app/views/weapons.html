@@ -1,0 +1,14 @@
+{{<partials-page}}
+  {{$page-content}}
+
+    <div class="panel-indent">
+      <p>{{#t}}pages.checkbox-with-exclusive-option.important{{/t}}</p>
+    </div>
+
+    {{#fields}}
+      {{#renderField}}{{/renderField}}
+    {{/fields}}
+
+    {{#input-submit}}continue{{/input-submit}}
+  {{/page-content}}
+{{/partials-page}}

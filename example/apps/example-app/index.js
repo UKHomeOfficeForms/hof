@@ -63,6 +63,7 @@ module.exports = {
       next: '/checkbox-with-exclusive-option'
     },
     '/checkbox-with-exclusive-option':{
+      template: 'weapons',
       fields: ['weaponsTypes'],
       next: '/select'
     },

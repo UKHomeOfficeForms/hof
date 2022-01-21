@@ -35,7 +35,8 @@
   },
   "checkbox-with-exclusive-option":{
     "header": "Which sections do the weapons or components fall under?",
-    "intro": "Select all that apply and state the maximum quantities held at any one time. If the sections and quantities aren't backed up by the evidence provided, it may delay the application or result in the authority not being approved."
+    "intro": "Select all that apply and state the maximum quantities held at any one time. If the sections and quantities aren't backed up by the evidence provided, it may delay the application or result in the authority not being approved.",
+    "important": "Only in certain circumstances, such as transporting prohibited items under seal, should you select the unspecified option."
   },
   "select":{
     "header": "What is the appeal stage?",
