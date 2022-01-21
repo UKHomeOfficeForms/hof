@@ -82,8 +82,8 @@
     "label": "Complaint details"
   },
   "weaponsTypes":{
+    "label": "Selected weapon types(s)",
     "legend": "Select all that apply",
-    "summary": "Sections, weapon type(s)",
     "options": {
       "unspecified": {
         "label": "Unspecified sections and quantities"
