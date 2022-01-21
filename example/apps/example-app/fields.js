@@ -102,5 +102,26 @@ module.exports = {
       value: '',
       label: 'fields.appealStages.options.null'
     }].concat(staticAppealStages.getstaticAppealStages())
+  },
+  continueSavedForms: {
+    mixin: 'radio-group',
+    validate: ['required'],
+    legend: {
+      className: 'visuallyhidden'
+    },
+    options: [{
+      value: 'yes',
+      toggle: 'savedFormEmail',
+      child: 'partials/saved-form-email'
+    }, {
+      value: 'no'
+    }]
+  },
+  savedFormEmail: {
+    validate: ['email', 'required'],
+    dependent: {
+      field: 'continueSavedForms',
+      value: 'yes'
+    }
   }
 }

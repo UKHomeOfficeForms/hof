@@ -90,5 +90,18 @@
     "options": {
       "null": "Select..."
     }
+  },
+  "continueSavedForms": {
+    "options":{
+      "yes": {
+        "label": "Yes"
+      },
+      "no": {
+        "label": "No"
+      }
+    }
+  },
+  "savedFormEmail": {
+    "label": "What email did you use to save the form"
   }
 }
