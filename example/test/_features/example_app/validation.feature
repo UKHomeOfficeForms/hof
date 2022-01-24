@@ -130,7 +130,7 @@ Feature: validations
     Then I should be on the 'landing-page' page showing 'Choose one of the options below and press continue.'
 
   @complex_form @continue-saved-form
-  Scenario: Full Basic Form Submission
+  Scenario: Partial Complex Form Submission Continuing A Saved Form
     Given I start the 'base' application journey
     Given I start the 'base' application journey
     Then I continue to the next step

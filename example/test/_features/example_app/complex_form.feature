@@ -2,7 +2,7 @@
 Feature: Complex Form
   A user should select complex form on the landing page
 
-  Scenario: Complex Form Submission without continuing a previously saved form
+  Scenario: Complex Form Submission Without Continuing A Saved Form
     Given I start the 'base' application journey
     Then I should be on the 'landing-page' page showing 'Choose one of the options below and press continue.'
     Then I choose 'Complex form'
@@ -44,8 +44,8 @@ Feature: Complex Form
     Then I click the 'Start again' button
     Then I should be on the 'landing-page' page showing 'Choose one of the options below and press continue.'
   
-  @continue-saved-form continuing a saved form
-  Scenario: Complex form submission
+  @continue-saved-form 
+  Scenario: Complex Form Submission Continuing A Saved Form
     Given I start the 'base' application journey
     Then I should be on the 'landing-page' page showing 'Choose one of the options below and press continue.'
     Then I choose 'Complex form'
