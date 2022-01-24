@@ -46,5 +46,11 @@
   },
   "appealStages": {
     "required": "Select an appeal stage from the list"
+  },
+  "continueSavedForms": {
+    "required": "Do you want to continue a form you have previously saved?"
+  },
+  "savedFormEmail": { 
+    "default": "Enter the email address used to save the form in the correct format"
   }
 }

@@ -97,7 +97,7 @@ module.exports = {
       next: '/confirm'
     },
     '/continue-saved-form':{
-      template: 'continue-saved-forms',
+      template: 'continue-saved-form',
       fields: [
         'continueSavedForms',
         'savedFormEmail'

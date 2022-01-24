@@ -102,6 +102,7 @@
     }
   },
   "savedFormEmail": {
-    "label": "What email did you use to save the form"
+    "label": "Enter the email address used to save the form",
+    "hint": "Email address"
   }
 }
