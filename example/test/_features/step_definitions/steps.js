@@ -18,6 +18,10 @@ Then('I check {string}', async function (name) {
   await this.page.check(`#${name}`);
 }.bind(World));
 
+Then('I uncheck {string}', async function (name) {
+  await this.page.uncheck(`#${name}`);
+}.bind(World));
+
 Then('I choose {string}', async function (name) {
   await this.page.click(`text=${name}`);
 }.bind(World));

@@ -28,6 +28,10 @@ Feature: Complex Form
     Then I should be on the 'text-input-area' page showing 'What are the details of your complaint?'
     Then I fill 'complaintDetails' text area with 'I would like to make a complaint'
     Then I click the 'Continue' button
+    Then I should be on the 'checkbox-with-exclusive-option' page showing 'Which sections do the weapons or components fall under?'
+    Then I check 'weaponsTypes-fully_automatic'
+    Then I check 'weaponsTypes-large_revolvers'
+    Then I click the 'Continue' button
     Then I should be on the 'select' page showing 'What is the appeal stage?'
     Then I select 'appealStages' and '01. First Tier IAC Appeal - In Country Appeals'
     Then I click the 'Continue' button

@@ -107,6 +107,15 @@ Feature: validations
     Then I should see the 'Enter details about why you are making a complaint' error
     Then I fill 'complaintDetails' text area with 'I would like to make a complaint'
     Then I click the 'Continue' button
+    Then I continue to the next step
+    Then I should see the 'Select at least one option' error
+    Then I check 'weaponsTypes-unspecified'
+    Then I check 'weaponsTypes-fully_automatic'
+    Then I continue to the next step
+    Then I should see the 'You can\'t choose unspecified categories and choose a category. You must deselect the unspecified category option, or the selected categories to continue' error
+    Then I uncheck 'weaponsTypes-unspecified'
+    Then I check 'weaponsTypes-projecting_launchers'
+    Then I continue to the next step
     Then I click the 'Continue' button
     Then I should see the 'Select an appeal stage from the list' error
     Then I select 'appealStages' and '01. First Tier IAC Appeal - In Country Appeals'
