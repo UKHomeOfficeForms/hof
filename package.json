@@ -87,7 +87,7 @@
     "serve-static": "^1.14.1",
     "uglify-js": "^3.14.3",
     "underscore": "^1.12.1",
-    "urijs": "^1.19.7",
+    "urijs": "^1.19.8",
     "winston": "^3.3.3"
   },
   "devDependencies": {
