@@ -1,3 +1,7 @@
+## 2022-02-22, Version 19.13.2 (Stable), @MCrawleyHomeOffice
+* Added resolutions for various vulnerable child dependencies
+* Updated patch version to 19.13.2
+
 ## 2020-06-02, Version 16.0.0 (Stable), @andymoody
 * Update version of helmet to 3.22.0
 * Update version of i18n-future to 2.0.0
