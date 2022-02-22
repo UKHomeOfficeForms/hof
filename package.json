@@ -137,6 +137,9 @@
     "exit": "true"
   },
   "resolutions": {
-    "underscore": "^1.12.1"
+    "underscore": "^1.12.1",
+    "cached-path-relative": "^1.1.0",
+    "shell-quote": "^1.7.3",
+    "json-schema": "^0.4.0"
   }
 }
