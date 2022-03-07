@@ -66,8 +66,15 @@ function setupLabels(labels) {
 
 function formFocus() {
   var forms = document.getElementsByTagName('form');
+  var elementFromSummaryPage = window.location.hash.replace(/^#/, '');
+  var checkEditMode = window.location.pathname.split('/').pop();
   var labels;
   var summaries;
+
+  if (elementFromSummaryPage && checkEditMode === 'edit') {
+    document.getElementById(elementFromSummaryPage).focus();
+    document.getElementById(elementFromSummaryPage + '-group').scrollIntoView();
+  }
 
   if (forms.length > 0) {
     labels = document.getElementsByTagName('label');

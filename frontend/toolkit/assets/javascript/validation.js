@@ -11,7 +11,7 @@ function clicked(e) {
   var elem = helpers.target(e);
 
   var groupId = elem.getAttribute('href').replace(/^#/, '');
-  var group = document.getElementById(groupId);
+  var group = document.getElementById(groupId + '-group') || document.getElementById(groupId);
   var inputs;
 
   if (group) {
