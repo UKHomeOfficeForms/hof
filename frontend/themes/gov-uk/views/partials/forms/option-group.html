@@ -1,28 +1,37 @@
-<div id="{{key}}-group" class="form-group{{#className}} {{className}} {{/className}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} validation-error{{/error}}">
-    <fieldset role="{{role}}"{{#ariaRequired}} aria-required="true"{{/ariaRequired}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}>
-        <legend>
-            <span{{#legendClassName}} class="{{legendClassName}}"{{/legendClassName}}>{{legend}}</span>
+<div id="{{key}}-group" class="govuk-form-group {{#className}} {{className}} {{/className}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} validation-error{{/error}}">
+    <fieldset class="govuk-fieldset" {{#hint}} aria-describedby="{{key}}-hint"{{/hint}}>
+        <legend class="govuk-fieldset__legend">
+            {{#heading}}
+              <h1 class="govuk-fieldset__heading">
+            {{/heading}}
+                <span{{#legendClassName}} class="{{legendClassName}}"{{/legendClassName}}>{{legend}}</span>
+            {{#heading}}
+              </h1>
+            {{/heading}}
             {{#hint}}<span id="{{key}}-hint" class="form-hint">{{hint}}</span>{{/hint}}
             {{#error}}<span id="{{key}}-error" class="error-message">{{error.message}}</span>{{/error}}
         </legend>
+        <div class="govuk-radios" data-module="govuk-radios">
         {{#options}}
-        <div class="multiple-choice">
-            <input
-                type="{{type}}"
-                name="{{key}}"
-                id="{{key}}-{{value}}"
-                value="{{value}}"                
-                {{#toggle}} data-toggle="{{toggle}}"{{/toggle}}
-                {{#selected}} checked="checked"{{/selected}}
-                {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}{{/optionHint}}{{/error}}
-                {{#error}} aria-describedby="{{key}}-error" aria-invalid="true"{{/error}}
-            >
-            <label class="block-label" for="{{key}}-{{value}}">
-                {{{label}}}
-                {{#optionHint}}<span id="{{key}}-{{value}}-hint" class="form-hint">{{optionHint}}</span>{{/optionHint}}
-            </label>
-        </div>
+            <div class="govuk-radios__item">
+                <input
+                    class="govuk-radios__input"
+                    type="{{type}}"
+                    name="{{key}}"
+                    id="{{key}}-{{value}}"
+                    value="{{value}}"
+                    {{#toggle}} data-toggle="{{toggle}}"{{/toggle}}
+                    {{#selected}} checked="checked"{{/selected}}
+                    {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}{{/optionHint}}{{/error}}
+                    {{#error}} aria-describedby="{{key}}-error" aria-invalid="true"{{/error}}
+                >
+                <label class="govuk-label govuk-radios__label" for="{{key}}-{{value}}">
+                    {{{label}}}
+                    {{#optionHint}}<span id="{{key}}-{{value}}-hint" class="form-hint">{{optionHint}}</span>{{/optionHint}}
+                </label>
+            </div>
         {{#renderChild}}{{/renderChild}}
         {{/options}}
+        </div>
     </fieldset>
 </div>
