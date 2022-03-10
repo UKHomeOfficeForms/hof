@@ -219,8 +219,6 @@ module.exports = function (options) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
-      console.log('-------------> opts = ', opts)
-      console.log('-------------> field = ', field)
 
       let legendClassName;
       let legendValue = 'fields.' + key + '.legend';
@@ -232,7 +230,7 @@ module.exports = function (options) {
           legendValue = legend.value;
         }
       }
-      const optGroupVar = {
+      return {
         key: key,
         error: this.errors && this.errors[key],
         legend: t(legendValue),
@@ -281,9 +279,6 @@ module.exports = function (options) {
         className: classNames(field),
         renderChild: renderChild.bind(this)
       };
-
-      console.log('------------> optGroupVar =', optGroupVar)
-      return optGroupVar;
     }
 
     // eslint-disable-next-line complexity
