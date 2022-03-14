@@ -150,6 +150,9 @@ function bootstrap(options) {
 
   app.use(helmet.noSniff());
 
+  // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')))
+
   if (config.noCache && config.noCache !== 'false') {
     app.use((req, res, next) => {
       res.setHeader('cache-control', ['no-store', 'no-cache', 'must-revalidate', 'proxy-revalidate']);

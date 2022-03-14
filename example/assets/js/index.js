@@ -2,6 +2,8 @@
 'use strict'
 
 require('../../../frontend/themes/gov-uk/client-js');
+const GOVUKFrontend = require('../../../node_modules/govuk-frontend')
+GOVUKFrontend.initAll()
 
 var $ = require('jquery');
 var typeahead = require('typeahead-aria');
