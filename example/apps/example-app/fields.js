@@ -8,9 +8,7 @@ module.exports = {
   'landing-page-radio': {
     mixin: 'radio-group',
     validate: ['required'],
-    legend: {
-      className: 'visuallyhidden'
-    },
+    heading: ['true'],
     options: ['basic-form', 'complex-form', 'build-your-own-form']
   },
   name: {
