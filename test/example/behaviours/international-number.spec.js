@@ -27,7 +27,7 @@ describe('International Phone Number Example Behaviour', () => {
     superValidateStub = sinon.stub();
     superValidateStub.withArgs('int-phone-number', req).returns('success');
 
-    Behaviour = require('../../../example/apps/example-app/behaviours/international-number');
+    Behaviour = require('../../../sandbox/apps/sandbox/behaviours/international-number');
     Behaviour = Behaviour(Base);
     behaviour = new Behaviour();
     behaviour.ValidationError = superValidationErrorStub;
