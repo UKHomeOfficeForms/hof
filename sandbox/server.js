@@ -4,9 +4,9 @@
 const bootstrap = require('../');
 
 bootstrap({
-  translations: './apps/example-app/translations',
+  translations: './apps/sandbox/translations',
   routes: [
-    require('./apps/example-app')
+    require('./apps/sandbox')
   ],
   getAccessibility: true
 });

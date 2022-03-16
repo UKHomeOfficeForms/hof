@@ -6,7 +6,7 @@ const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
 
 module.exports = {
-  name: 'example-app',
+  name: 'sandbox',
   steps: {
     '/landing-page': {
       fields: [

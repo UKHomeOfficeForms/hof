@@ -1,6 +1,6 @@
 frontend/govuk-template/govuk_template.html
-example/apps/*/translations/en
-example/public
+sandbox/apps/*/translations/en
+sandbox/public
 node_modules
 coverage
 npm-debug.log
