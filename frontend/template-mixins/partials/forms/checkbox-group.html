@@ -29,7 +29,7 @@
                 type="{{type}}"
                 name="{{key}}"
                 id="{{key}}-{{value}}"
-                value="{{value}}"                
+                value="{{value}}"
                 {{#toggle}} data-toggle="{{toggle}}"{{/toggle}}
                 {{#selected}} checked="checked"{{/selected}}
                 {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}{{/optionHint}}{{/error}}
@@ -37,7 +37,7 @@
             >
             <label class="govuk-label govuk-checkboxes__label" for="{{key}}-{{value}}">
                 {{{label}}}
-                {{#optionHint}}<div id="{{key}}-{{value}}-item-hint" class="govuk-hint">{{optionHint}}</div>{{/optionHint}}
+                {{#optionHint}}<div id="{{key}}-{{value}}-item-hint" class="govuk-hint govuk-radios__hint">{{optionHint}}</div>{{/optionHint}}
             </label>
         </div>
         {{#renderChild}}{{/renderChild}}

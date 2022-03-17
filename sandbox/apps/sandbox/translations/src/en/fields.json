@@ -18,7 +18,7 @@
     "label": "Full name"
   },
   "dateOfBirth": {
-    "legend": "What is your date of birth?",
+    "legend": "Date of birth",
     "hint": "For example, 31 10 1990"
   },
   "building": {
@@ -29,8 +29,8 @@
   },
   "townOrCity": {
     "label": "Town or city"
-   }, 
-  "postcode": { 
+   },
+  "postcode": {
     "label": "Postcode"
   },
   "incomeTypes" : {
@@ -66,8 +66,8 @@
       },
       "northernIreland": {
         "label": "Northern Ireland"
-      } 
-    } 
+      }
+    }
   },
   "email" : {
     "label": "Email address"

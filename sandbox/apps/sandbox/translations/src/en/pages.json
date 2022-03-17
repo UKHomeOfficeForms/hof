@@ -50,7 +50,7 @@
   },
   "confirmation": {
     "title": "Application sent",
-    "alert": "Application sent", 
+    "alert": "Application sent",
     "subheader": "What happens next",
     "content": "We’ll contact you with the decision of your application or if we need more information from you."
   }

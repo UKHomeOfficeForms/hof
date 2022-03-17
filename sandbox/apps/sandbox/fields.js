@@ -16,6 +16,9 @@ module.exports = {
   },
   name: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }],
+    // need to remove this for the heading to go
+    labelClassName: ['govuk-label--l'],
+    isPageHeading: 'true'
   },
   'dateOfBirth': dateComponent('dateOfBirth', {
     mixin: 'input-date',
@@ -67,6 +70,8 @@ module.exports = {
     ]
   },
   email: {
+    isPageHeading: 'true',
+    labelClassName: ['govuk-label--l'],
     validate: ['required', 'email']
   },
   phone: {
@@ -109,6 +114,7 @@ module.exports = {
     // apply the other default formatters
     formatter: ['trim', 'hyphens'],
     isPageHeading: 'true',
+    labelClassName: ['govuk-label--l'],
     // attributes here are passed to the field element
     validate: ['required', { type: 'maxword', arguments: 10 }],
     attributes: [{
