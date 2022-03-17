@@ -95,6 +95,7 @@ module.exports = {
     mixin: 'textarea',
     // we want to ignore default formatters as we want
     // to preserve white space
+    isPageHeading: 'true',
     'ignore-defaults': true,
     // apply the other default formatters
     formatter: ['trim', 'hyphens'],
