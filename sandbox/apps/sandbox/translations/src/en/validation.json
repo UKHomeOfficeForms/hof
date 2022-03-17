@@ -42,7 +42,7 @@
   },
   "complaintDetails": {
     "default": "Enter details about why you are making a complaint",
-    "maxlength": "Keep to the 5000 character limit"
+    "maxlength": "Keep to the {{maxlength}} character limit"
   },
   "appealStages": {
     "required": "Select an appeal stage from the list"

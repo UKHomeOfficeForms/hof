@@ -220,15 +220,15 @@ describe('Template Mixins', () => {
         }));
       });
 
-      it('sets `labelClassName` to "form-label" by default', () => {
+      it('sets `labelClassName` to "govuk-label" by default', () => {
         middleware(req, res, next);
         res.locals['input-text']().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'form-label'
+          labelClassName: 'govuk-label'
         }));
       });
 
-      it('overrides `labelClassName` when set in field options', () => {
+      it('adds a `labelClassName` when set in field options', () => {
         res.locals.options.fields = {
           'field-name': {
             labelClassName: 'visuallyhidden'
@@ -237,7 +237,7 @@ describe('Template Mixins', () => {
         middleware(req, res, next);
         res.locals['input-text']().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'visuallyhidden'
+          labelClassName: 'govuk-label visuallyhidden'
         }));
       });
 
@@ -250,7 +250,7 @@ describe('Template Mixins', () => {
         middleware(req, res, next);
         res.locals['input-text']().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'abc def'
+          labelClassName: 'govuk-label abc def'
         }));
       });
 
@@ -258,7 +258,7 @@ describe('Template Mixins', () => {
         middleware(req, res, next);
         res.locals['input-text']().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'form-group'
+          formGroupClassName: 'govuk-form-group'
         }));
       });
 
@@ -316,7 +316,7 @@ describe('Template Mixins', () => {
         res.locals['input-text']().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
           required: false,
-          labelClassName: 'visuallyhidden'
+          labelClassName: 'govuk-label visuallyhidden'
         }));
       });
 
@@ -423,7 +423,7 @@ describe('Template Mixins', () => {
         }));
       });
 
-      it('form-group-year class is set to the year field by default', () => {
+      it('govuk-form-group class is set in the date fields by default', () => {
         middleware(req, res, next);
         res.locals['input-date']().call(res.locals, 'field-name');
 
@@ -433,16 +433,16 @@ describe('Template Mixins', () => {
         const monthCall = render.getCall(4);
         const yearCall = render.getCall(6);
 
-        dayCall.should.not.have.been.calledWith(sinon.match({
-          formGroupClassName: 'form-group-year'
+        dayCall.should.have.been.calledWith(sinon.match({
+          formGroupClassName: 'govuk-form-group'
         }));
 
-        monthCall.should.not.have.been.calledWith(sinon.match({
-          formGroupClassName: 'form-group-year'
+        monthCall.should.have.been.calledWith(sinon.match({
+          formGroupClassName: 'govuk-form-group'
         }));
 
         yearCall.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'form-group-year'
+          formGroupClassName: 'govuk-form-group'
         }));
       });
 
@@ -726,18 +726,18 @@ describe('Template Mixins', () => {
         }));
       });
 
-      it('sets `labelClassName` to "form-label" by default', () => {
+      it('sets `labelClassName` to "govuk-label" by default', () => {
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
         res.locals.textarea().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'form-label'
+          labelClassName: 'govuk-label'
         }));
       });
 
-      it('overrides `labelClassName` when set in field options', () => {
+      it('adds `labelClassName` to existing default classes when set in field options', () => {
         res.locals.options.fields = {
           'field-name': {
             labelClassName: 'visuallyhidden'
@@ -746,11 +746,11 @@ describe('Template Mixins', () => {
         middleware(req, res, next);
         res.locals.textarea().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'visuallyhidden'
+          labelClassName: 'govuk-label visuallyhidden'
         }));
       });
 
-      it('sets all classes of `labelClassName` option', () => {
+      it('adds all classes of `labelClassName` option to existing defaults', () => {
         res.locals.options.fields = {
           'field-name': {
             labelClassName: ['abc', 'def']
@@ -759,7 +759,7 @@ describe('Template Mixins', () => {
         middleware(req, res, next);
         res.locals.textarea().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'abc def'
+          labelClassName: 'govuk-label abc def'
         }));
       });
 
@@ -1231,18 +1231,18 @@ describe('Template Mixins', () => {
         res.locals.select().should.be.a('function');
       });
 
-      it('defaults `labelClassName` to "form-label"', () => {
+      it('defaults `labelClassName` to "govuk-label "', () => {
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
         res.locals.select().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'form-label'
+          labelClassName: 'govuk-label'
         }));
       });
 
-      it('overrides `labelClassName` when set in field options', () => {
+      it('adds `labelClassName` to the default class when set in field options', () => {
         res.locals.options.fields = {
           'field-name': {
             labelClassName: 'visuallyhidden'
@@ -1251,11 +1251,11 @@ describe('Template Mixins', () => {
         middleware(req, res, next);
         res.locals.select().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'visuallyhidden'
+          labelClassName: 'govuk-label visuallyhidden'
         }));
       });
 
-      it('sets all classes of `labelClassName` option', () => {
+      it('adds all classes of `labelClassName` option', () => {
         res.locals.options.fields = {
           'field-name': {
             labelClassName: ['abc', 'def']
@@ -1264,7 +1264,7 @@ describe('Template Mixins', () => {
         middleware(req, res, next);
         res.locals.select().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'abc def'
+          labelClassName: 'govuk-label abc def'
         }));
       });
 
@@ -1739,13 +1739,13 @@ describe('Template Mixins', () => {
           middleware(req, res, next);
           res.locals['radio-group']().call(res.locals, 'field-name');
           renderChild = render.lastCall.args[0].renderChild();
-          renderChild.call(fields['field-name'].options[0]).should.be.equal('<div id="child-field-name-panel" class="reveal js-hidden">\n    <div class="panel-indent">\n<div>some html</div>    </div>\n</div>\n');
+          renderChild.call(fields['field-name'].options[0]).should.be.equal('<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden">\n<div>some html</div></div>\n');
           sinon.stub(Hogan, 'compile').returns({
             render: render
           });
         });
 
-        it('accepts a template mixin and renders it in a panel', () => {
+        it('accepts a template mixin and renders it in a panel with the default checkbox markup showing up', () => {
           Hogan.compile.restore();
           options[0] = {
             value: true,
@@ -1756,11 +1756,9 @@ describe('Template Mixins', () => {
           sinon.stub(res.locals, 'input-text').returns(function (key) {
             return Hogan.compile('<div>{{key}}</div>').render({ key: key });
           });
-          let output = '<div id="child-field-name-panel" class="reveal js-hidden">';
-          output += '\n    <div class="panel-indent">\n';
+          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden">\n';
           output += '<div>child-field-name</div>';
-          output += '    </div>';
-          output += '\n</div>\n';
+          output += '</div>\n';
           renderChild.call(_.extend({}, fields['field-name'].options[0], res.locals)).should.be.equal(output);
           res.locals['input-text'].restore();
           sinon.stub(Hogan, 'compile').returns({
@@ -1832,11 +1830,9 @@ describe('Template Mixins', () => {
           sinon.stub(res.locals, 'input-text').returns(function (key) {
             return Hogan.compile('<div>{{key}}</div>').render({ key: key });
           });
-          let output = '<div id="child-field-name-panel" class="reveal js-hidden">';
-          output += '\n    <div class="panel-indent">\n';
+          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden">\n';
           output += '<div>child-field-name</div>';
-          output += '    </div>';
-          output += '\n</div>\n';
+          output += '</div>\n';
           renderChild.call(_.extend({}, fields['field-name'], res.locals)).should.be.equal(output);
           sinon.stub(Hogan, 'compile').returns({
             render: render

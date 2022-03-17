@@ -1,10 +1,15 @@
-<div id="{{id}}-group" class="form-group{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} validation-error{{/error}}">
-    <label for="{{id}}" class="{{labelClassName}}">
+<div id="{{id}}-group" class="{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
+    {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}<label for="{{id}}" class="{{labelClassName}}{{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
         {{{label}}}
-        {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="form-hint">{{hint}}</span>{{/hint}}
-        {{#error}}<span class="error-message">{{error.message}}</span>{{/error}}
+        {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</span>{{/hint}}
+        {{#error}}
+          <p class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{error.message}}
+          </p>
+        {{/error}}
     </label>
-    <select id="{{id}}" class="form-control{{#className}} {{className}}{{/className}}{{#error}} invalid-input{{/error}}" name="{{id}}" aria-required="{{required}}">
+    {{#isPageHeading}}</h1>{{/isPageHeading}}
+    <select id="{{id}}" class="govuk-select{{#className}} {{className}}{{/className}}{{#error}} invalid-input{{/error}}" name="{{id}}" aria-required="{{required}}">
     {{#options}}
         <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
     {{/options}}

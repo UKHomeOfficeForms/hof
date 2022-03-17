@@ -1,5 +1,4 @@
-<div id="{{toggle}}-panel" class="reveal js-hidden">
-    <div class="panel-indent">
-        {{#renderMixin}}{{/renderMixin}}
-    </div>
+<div id="{{toggle}}-panel" class="{{#radioOption}}govuk-radios__conditional govuk-radios__conditional--hidden{{/radioOption}}
+  {{^radioOption}}govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden{{/radioOption}}">
+  {{#renderMixin}}{{/renderMixin}}
 </div>

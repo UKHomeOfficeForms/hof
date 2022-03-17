@@ -35,7 +35,7 @@ function showCookieBannerSubmitted() {
   document.getElementById('cookie-banner-info').style.display = 'none';
   document.getElementById('cookie-banner-actions').style.display = 'none';
   var cookieBannerSubmitted = document.getElementById('cookie-banner-submitted');
-  cookieBannerSubmitted.style.display = 'flex';
+  cookieBannerSubmitted.style.display = 'block';
   cookieBannerSubmitted.focus();
 }
 

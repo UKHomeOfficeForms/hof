@@ -627,10 +627,71 @@ describe('controller', () => {
       });
     });
 
+    describe('getHeader()', () => {
+      let lookup;
+      beforeEach(() => {
+        controller = new Controller({template: 'foo'});
+        lookup = sinon.stub();
+      });
+
+      it('calls lookup with the correct list of keys', () => {
+        const expected = 'pages.step-one.header';
+        controller.getHeader('step-one', lookup);
+        lookup.firstCall.args[0].should.equal(expected);
+      });
+
+      it('passes locals too lookup as second arg', () => {
+        const locals = {};
+        controller.getHeader('step-one', lookup, locals);
+        lookup.firstCall.args[1].should.be.equal(locals);
+      });
+    });
+
+    describe('getCaptionHeading()', () => {
+      let lookup;
+      beforeEach(() => {
+        controller = new Controller({template: 'foo'});
+        lookup = sinon.stub();
+      });
+
+      it('calls lookup with the correct list of keys', () => {
+        const expected = 'pages.step-one.captionHeading';
+        controller.getCaptionHeading('step-one', lookup);
+        lookup.firstCall.args[0].should.equal(expected);
+      });
+
+      it('passes locals too lookup as second arg', () => {
+        const locals = {};
+        controller.getCaptionHeading('step-one', lookup, locals);
+        lookup.firstCall.args[1].should.be.equal(locals);
+      });
+    });
+
+    describe('getSubHeading()', () => {
+      let lookup;
+      beforeEach(() => {
+        controller = new Controller({template: 'foo'});
+        lookup = sinon.stub();
+      });
+
+      it('calls lookup with the correct list of keys', () => {
+        const expected = 'pages.step-one.subHeading';
+        controller.getSubHeading('step-one', lookup);
+        lookup.firstCall.args[0].should.equal(expected);
+      });
+
+      it('passes locals too lookup as second arg', () => {
+        const locals = {};
+        controller.getSubHeading('step-one', lookup, locals);
+        lookup.firstCall.args[1].should.be.equal(locals);
+      });
+    });
+
     describe('getTitle()', () => {
       let lookup;
       let fields;
       beforeEach(() => {
+        controller = new Controller({template: 'foo'});
         lookup = sinon.stub();
         fields = {
           'field-one': {}
@@ -657,6 +718,7 @@ describe('controller', () => {
     describe('getIntro()', () => {
       let lookup;
       beforeEach(() => {
+        controller = new Controller({template: 'foo'});
         lookup = sinon.stub();
       });
 

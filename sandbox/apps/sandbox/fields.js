@@ -8,16 +8,25 @@ module.exports = {
   'landing-page-radio': {
     mixin: 'radio-group',
     validate: ['required'],
-    legend: {
-      className: 'visuallyhidden'
-    },
+    isPageHeading: true,
+    // Design system says to avoid in-line unless it's two options,
+    // so just added as an example below but by default it isn't
+    className: ['govuk-radios--inline'],
     options: ['basic-form', 'complex-form', 'build-your-own-form']
   },
   name: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }],
+    // need to remove this for the heading to go
+    labelClassName: ['govuk-label--l'],
+    isPageHeading: 'true'
   },
-  dateOfBirth: dateComponent('dateOfBirth', {
-    validate: ['required', 'before', { type: 'after', arguments: ['1900'] }]
+  'dateOfBirth': dateComponent('dateOfBirth', {
+    isPageHeading: 'true',
+    validate: [
+      'required',
+      'date',
+      { type: 'after', arguments: ['1900'] }
+    ]
   }),
   building: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 100 }]
@@ -37,6 +46,7 @@ module.exports = {
     formatter: ['removespaces', 'uppercase']
   },
   incomeTypes: {
+    isPageHeading: 'true',
     mixin: 'checkbox-group',
     labelClassName: 'visuallyhidden',
     validate: ['required'],
@@ -49,11 +59,9 @@ module.exports = {
     ]
   },
   countryOfHearing: {
+    isPageHeading: 'true',
     mixin: 'radio-group',
     validate: ['required'],
-    legend: {
-      className: 'visuallyhidden'
-    },
     options: [
       'englandAndWales',
       'scotland',
@@ -61,6 +69,8 @@ module.exports = {
     ]
   },
   email: {
+    isPageHeading: 'true',
+    labelClassName: ['govuk-label--l'],
     validate: ['required', 'email']
   },
   phone: {
@@ -72,6 +82,7 @@ module.exports = {
   },
   countrySelect: {
     mixin: 'select',
+    isPageHeading: 'true',
     className: ['typeahead'],
     options:[''].concat(require('homeoffice-countries').allCountries),
     legend: {
@@ -81,14 +92,15 @@ module.exports = {
   },
   complaintDetails: {
     mixin: 'textarea',
-    labelClassName: 'visuallyhidden',
     // we want to ignore default formatters as we want
     // to preserve white space
+    isPageHeading: 'true',
     'ignore-defaults': true,
     // apply the other default formatters
     formatter: ['trim', 'hyphens'],
+    labelClassName: ['govuk-label--l'],
     // attributes here are passed to the field element
-    validate: ['required', { type: 'maxlength', arguments: 5000 }],
+    validate: ['required', { type: 'maxlength', arguments: 10 }],
     attributes: [{
       attribute: 'rows',
       value: 8
@@ -96,7 +108,7 @@ module.exports = {
   },
   appealStages: {
     mixin: 'select',
-    labelClassName: 'visuallyhidden',
+    isPageHeading: 'true',
     validate: ['required'],
     options: [{
       value: '',
