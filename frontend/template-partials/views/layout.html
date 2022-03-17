@@ -5,25 +5,29 @@
   {{$pageTitle}}
     {{#errorlist.length}}{{#t}}errorlist.prefix{{/t}}{{/errorlist.length}}{{$header}}{{/header}} &ndash; GOV.UK
   {{/pageTitle}}
-  {{$headerClass}}with-proposition{{/headerClass}}
+  {{$headerClass}}govuk-header{{/headerClass}}
   {{$insideHeader}}{{/insideHeader}}
   {{$main}}
-    <main class="main" role="main">
-      <div class="phase-banner">
-        <p>
-          <strong class="phase-tag">{{#t}}journey.phase{{/t}}</strong>
-          <span>This is a new service – your <a href="{{feedbackUrl}}{{^feedbackUrl}}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{{/feedbackUrl}}">feedback</a> will help us to improve it.</span>
+    <!--main class="main" role="main"-->
+	<div class="govuk-width-container ">
+      <div class="govuk-phase-banner">
+        <p class="govuk-phase-banner__content">
+          <strong class="govuk-tag govuk-phase-banner__content__tag">{{#t}}journey.phase{{/t}}</strong>
+          <span  class="govuk-phase-banner__text">This is a new service – your <a href="{{feedbackUrl}}{{^feedbackUrl}}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{{/feedbackUrl}}">feedback</a> will help us to improve it.</span>
         </p>
       </div>
       <span id="step">
         {{> partials-back}} <span>{{$step}}{{/step}}</span>
       </span>
-      <div class="grid-row" id="content">
-        {{> partials-maincontent-left}}
-      </div>
+	  <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
+		  <div class="govuk-grid-row" id="content">
+			{{> partials-maincontent-left}}
+		  </div>
+	  </main>
       {{> partials-continue}}
       <script type="text/javascript" src="{{assetPath}}/js/bundle.js"></script>
-    </main>
+	  </div>
+    <!--/main-->
   {{/main}}
   {{$cookieMessage}}
     {{#gaTagId}}
@@ -37,14 +41,14 @@
     {{/gaTagId}}
   {{/cookieMessage}}
   {{$footerSupportLinks}}
-    <ul>
+    <ul class="govuk-footer__inline-list">
       {{#footerSupportLinks}}
-        <li><a href="{{path}}">{{#t}}{{property}}{{/t}}</a></li>
+        <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="{{path}}">{{#t}}{{property}}{{/t}}</a></li>
       {{/footerSupportLinks}}
       {{^footerSupportLinks}}
-        <li><a href="/cookies">{{#t}}base.cookies{{/t}}</a></li>
-        <li><a href="/terms-and-conditions">{{#t}}base.terms{{/t}}</a></li>
-        <li><a href="/accessibility">{{#t}}base.accessibility{{/t}}</a></li>
+        <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="/cookies">{{#t}}base.cookies{{/t}}</a></li>
+        <li class="govuk-footer__inline-list-item"><a  class="govuk-footer__link" href="/terms-and-conditions">{{#t}}base.terms{{/t}}</a></li>
+        <li class="govuk-footer__inline-list-item"><a  class="govuk-footer__link" href="/accessibility">{{#t}}base.terms{{/t}}</a></li>
       {{/footerSupportLinks}}
     </ul>
   {{/footerSupportLinks}}

@@ -1,6 +1,6 @@
-<form action="" method="POST" {{$encoding}}{{/encoding}} autocomplete="off" novalidate="true" spellcheck="false">
+<form class="form" action="" method="POST" {{$encoding}}{{/encoding}} autocomplete="off" novalidate="true" spellcheck="false">
   {{$intro}}
-    {{#intro}}<p>{{intro}}</p>{{/intro}}
+    {{#intro}}<p class="form-block">{{intro}}</p>{{/intro}}
   {{/intro}}
   {{$form}}{{/form}}
   {{#csrf-token}}

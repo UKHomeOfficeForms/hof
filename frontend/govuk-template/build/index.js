@@ -12,7 +12,7 @@ function addNonceValueAttributeToInlineScripts(compiledTemplateString) {
 }
 
 module.exports = () => {
-  const template = require.resolve('govuk_template_mustache/views/layouts/govuk_template.html');
+  const template = require.resolve('govuk_template_mustache/views/layouts/govuk_template-scrap.html');
 
   const govukTemplate = fs.readFileSync(template, { encoding: 'utf-8' });
   const compiledTemplate = Hogan.compile(govukTemplate).render(govukConfig);

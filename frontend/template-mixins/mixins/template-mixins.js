@@ -200,7 +200,7 @@ module.exports = function (options) {
         value: this.values && this.values[key],
         label: t(lKey),
         labelClassName: classNames(field, 'labelClassName') || 'form-label',
-        formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'form-group',
+        formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'govuk-form-group',
         hint: hint,
         hintId: extension.hintId || (hint ? key + '-hint' : null),
         error: this.errors && this.errors[key],
