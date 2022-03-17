@@ -1,10 +1,10 @@
 {{$content-outer}}
 {{$preloader}}{{/preloader}}
-  <div class="column-two-thirds">
+  <div class="govuk-grid-column-two-thirds">
     {{$validationSummary}}{{/validationSummary}}
-    <header>
-      <h1>{{$header}}{{/header}}</h1>
-    </header>
+    {{#captionHeading}}<span class="govuk-caption-l">{{captionHeading}}</span>{{/captionHeading}}
+    {{#header}}<h1 class="govuk-heading-xl">{{header}}</h1>{{/header}}
+    {{#subHeading}}<div id="page-header" class="govuk-heading-l">{{subHeading}}</div>{{/subHeading}}
     {{$content}}{{/content}}
   </div>
 {{/content-outer}}

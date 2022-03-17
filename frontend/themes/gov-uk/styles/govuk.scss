@@ -12,6 +12,10 @@ $path: "/public/images/" !default;
 // https://github.com/alphagov/govuk_elements/blob/master/packages/govuk-elements-sass/public/sass/_elements.scss
 @import "govuk-elements-sass/public/sass/elements";
 
+// Govuk frontend
+// https://github.com/alphagov/govuk-frontend-docs
+@import "node_modules/govuk-frontend/govuk/all";
+
 // Custom
 @import "base";
 @import "layout";

@@ -111,12 +111,36 @@ module.exports = class Controller extends BaseController {
       fields,
       route,
       baseUrl: req.baseUrl,
+      skipToMain: this.getFirstFormItem(req.form.options.fields),
       title: this.getTitle(route, lookup, req.form.options.fields, res.locals),
+      header: this.getHeader(route, lookup, res.locals),
+      captionHeading: this.getCaptionHeading(route, lookup, res.locals),
+      subHeading: this.getSubHeading(route, lookup, res.locals),
       intro: this.getIntro(route, lookup, res.locals),
       backLink: this.getBackLink(req, res),
       nextPage: this.getNextStep(req, res),
       errorLength: this.getErrorLength(req, res)
     }, stepLocals);
+  }
+
+  getFirstFormItem(fields) {
+    let firstFieldKey;
+    if (_.size(fields)) {
+      firstFieldKey = Object.keys(fields)[0];
+    }
+    return firstFieldKey | 'main-content';
+  }
+
+  getHeader(route, lookup, locals) {
+    return lookup(`pages.${route}.header`, locals);
+  }
+
+  getCaptionHeading(route, lookup, locals) {
+    return lookup(`pages.${route}.captionHeading`, locals);
+  }
+
+  getSubHeading(route, lookup, locals) {
+    return lookup(`pages.${route}.subHeading`, locals);
   }
 
   getTitle(route, lookup, fields, locals) {
@@ -140,6 +164,21 @@ module.exports = class Controller extends BaseController {
   _getErrors(req, res, callback) {
     super._getErrors(req, res, () => {
       Object.keys(req.form.errors).forEach(key => {
+        if (req.form && req.form.options && req.form.options.fields) {
+          const field = req.form.options.fields[key];
+          // get first option for radios
+          if (field.mixin === 'radio-group') {
+            req.form.errors[key].errorLinkId = key + '-' + field.options[0];
+          // eslint-disable-next-line brace-style
+          }
+          // get first field for date input control
+          else if (field && field.controlType === 'date-input') {
+            req.form.errors[key].errorLinkId = key + '-day';
+          } else {
+            req.form.errors[key].errorLinkId = key;
+          }
+        }
+
         req.form.errors[key].message = this.getErrorMessage(req.form.errors[key], req, res);
       });
       callback();

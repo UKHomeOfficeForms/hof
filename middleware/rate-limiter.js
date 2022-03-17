@@ -4,6 +4,7 @@ const redis = require('redis');
 const config = require('./../config/hof-defaults');
 
 module.exports = (options, rateLimitType) => {
+  // eslint-disable-next-line no-console
   const logger = options.logger || { log: (func, msg) => console[func](msg) };
   const rateLimits = options.rateLimits[rateLimitType];
   const timestampName = `${rateLimitType}TimeStamp`;

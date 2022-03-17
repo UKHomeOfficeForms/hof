@@ -1,11 +1,15 @@
-<div id="{{id}}-group" class="form-group{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{^date}}{{#error}} validation-error{{/error}}{{/date}}">
-    <label for="{{id}}" class="{{labelClassName}}">
-        <span class="label-text">{{{label}}}</span>
-        {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="form-hint">{{hint}}</span>{{/hint}}
-        {{^date}}{{#error}}<span class="error-message">{{error.message}}</span>{{/error}}{{/date}}
-    </label>
+<div id="{{id}}-group" class="{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}}{{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
+    {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}<label for="{{id}}" class="{{labelClassName}}">
+        {{{label}}}
+      </label>
+    {{#isPageHeading}}</h1>{{/isPageHeading}}
+    {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</span>{{/hint}}
+    {{#error}}
+      <p class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> {{error.message}}
+      </p>
+    {{/error}}
     {{#renderChild}}{{/renderChild}}
-    <div class="govuk-input__wrapper">
         {{#attributes}}
             {{#prefix}}
                 <div class="govuk-input__prefix" aria-hidden="true">{{prefix}}</div>
@@ -15,7 +19,7 @@
             type="{{type}}"
             name="{{id}}"
             id="{{id}}"
-            class="form-control{{#className}} {{className}}{{/className}}{{#error}} invalid-input{{/error}}"
+            class="{{^className}}govuk-input{{/className}}{{#className}}{{className}}{{/className}}{{#error}} invalid-input{{/error}}"
             aria-required="{{required}}"
             {{#value}} value="{{value}}"{{/value}}
             {{#min}} min="{{min}}"{{/min}}
@@ -34,5 +38,4 @@
                 <div class="govuk-input__prefix" aria-hidden="true">{{suffix}}</div>
             {{/suffix}}
         {{/attributes}}
-    </div>
 </div>

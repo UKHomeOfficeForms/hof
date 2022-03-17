@@ -12,11 +12,13 @@ const renderer = require('./render');
 const PANELMIXIN = 'partials/mixins/panel';
 const PARTIALS = [
   'partials/forms/input-text-group',
+  'partials/forms/input-text-date',
   'partials/forms/input-submit',
   'partials/forms/select',
   'partials/forms/checkbox',
   'partials/forms/textarea-group',
-  'partials/forms/option-group'
+  'partials/forms/option-group',
+  'partials/forms/checkbox-group'
 ];
 
 // This returns a middleware that places mixins against the `res.locals` object.
@@ -191,6 +193,7 @@ module.exports = function (options) {
       const lKey = getTranslationKey(field, key, 'label');
       const hint = conditionalTranslate(hKey);
       const required = isRequired(field);
+      const labelClassName = classNames(field, 'labelClassName');
       const autocomplete = field.autocomplete || extension.autocomplete;
 
       return Object.assign({}, extension, {
@@ -199,8 +202,8 @@ module.exports = function (options) {
         type: extension.type || type(field),
         value: this.values && this.values[key],
         label: t(lKey),
-        labelClassName: classNames(field, 'labelClassName') || 'form-label',
-        formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'form-group',
+        labelClassName: labelClassName ? `govuk-label ${labelClassName}` : 'govuk-label',
+        formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'govuk-form-group',
         hint: hint,
         hintId: extension.hintId || (hint ? key + '-hint' : null),
         error: this.errors && this.errors[key],
@@ -210,6 +213,7 @@ module.exports = function (options) {
         date: extension.date,
         autocomplete: autocomplete,
         child: field.child,
+        isPageHeading: field.isPageHeading,
         attributes: field.attributes,
         renderChild: renderChild.bind(this)
       });
@@ -219,7 +223,7 @@ module.exports = function (options) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
-
+      const detail = field.detail;
       let legendClassName;
       let legendValue = 'fields.' + key + '.legend';
       if (legend) {
@@ -236,7 +240,8 @@ module.exports = function (options) {
         legend: t(legendValue),
         legendClassName: legendClassName,
         role: opts.type === 'radio' ? 'radiogroup' : 'group',
-        ariaRequired: opts.type === 'radio',
+        isPageHeading: field.isPageHeading,
+        detail: detail ? detail : '',
         hint: conditionalTranslate(getTranslationKey(field, key, 'hint')),
         options: _.map(field.options, function (obj) {
           let selected = false;
@@ -270,6 +275,7 @@ module.exports = function (options) {
             value: value,
             type: opts.type,
             selected: selected,
+            radioOption: opts.type === 'radio',
             toggle: toggle,
             child: child,
             optionHint: conditionalTranslate(optionHint) || ''
@@ -355,7 +361,7 @@ module.exports = function (options) {
         }
       },
       'checkbox-group': {
-        path: 'partials/forms/option-group',
+        path: 'partials/forms/checkbox-group',
         renderWith: optionGroup,
         options: {
           type: 'checkbox'
@@ -425,16 +431,21 @@ module.exports = function (options) {
                 year: autocomplete + '-year'
               };
             }
+            const isThisRequired = field.validate ? field.validate.indexOf('required') > -1 : false;
+            const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
+            const classNameDay = (field.controlsClass && field.controlsClass.day) ? field.controlsClass.day : 'govuk-date-input__input govuk-input--width-2';
+            const classNameMonth = (field.controlsClass && field.controlsClass.month) ? field.controlsClass.month : 'govuk-date-input__input govuk-input--width-2';
+            const classNameYear = (field.controlsClass && field.controlsClass.year) ? field.controlsClass.year : 'govuk-date-input__input govuk-input--width-4';
 
             const parts = [];
 
             if (isExact) {
-              const dayPart = compiled['partials/forms/input-text-group'].render(inputText.call(this, key + '-day', { pattern: '[0-9]*', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day }));
+              const dayPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-day', { pattern: '[0-9]*', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
               parts.push(dayPart);
             }
 
-            const monthPart = compiled['partials/forms/input-text-group'].render(inputText.call(this, key + '-month', { pattern: '[0-9]*', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month }));
-            const yearPart = compiled['partials/forms/input-text-group'].render(inputText.call(this, key + '-year', { pattern: '[0-9]*', maxlength: 4, hintId: key + '-hint', date: true, formGroupClassName: 'form-group-year', autocomplete: autocomplete.year }));
+            const monthPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-month', { pattern: '[0-9]*', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
+            const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { pattern: '[0-9]*', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
 
             return parts.concat(monthPart, yearPart).join('\n');
           };
