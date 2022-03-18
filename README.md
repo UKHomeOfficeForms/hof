@@ -1629,13 +1629,11 @@ if a nonce value is provided by the version of HOF.
 
 ## Example
 
-There is an example implmentation in '/example'. To run:
+There is an example implementation in [demo application](https://github.com/UKHomeOffice/home-office-forms-demo).
 
-```
-cd example
-npm install
-npm start
-```
+## Sandbox
+
+There is a sandbox application for developers to test components directly in hof called [sandbox](/sandbox)
 
 # HOF FRONTEND TOOLKIT
 Set of common UI patterns/styles for HOF projects
