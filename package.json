@@ -30,7 +30,7 @@
     "test:cookie-banner": "jest test/frontend/jest",
     "test:acceptance": "TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
     "test:acceptance_browser": "ACCEPTANCE_WITH_BROWSER=true TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
-    "test:cucumber": "cucumber-js -f @cucumber/pretty-formatter \"sandbox/test/_features/**/*.feature\" --require sandbox/test/_features/test.setup.js --require \"example/test/_features/step_definitions/**/*.js\" --tags $TAGS",
+    "test:cucumber": "cucumber-js -f @cucumber/pretty-formatter \"sandbox/test/_features/**/*.feature\" --require sandbox/test/_features/test.setup.js --require \"sandbox/test/_features/step_definitions/**/*.js\" --tags $TAGS",
     "ci": "travis-conditions",
     "postversion": "git push && git push --tags"
   },

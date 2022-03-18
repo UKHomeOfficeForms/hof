@@ -6,7 +6,7 @@ coverage
 npm-debug.log
 .idea
 *.iml
-components/.DS_Store
+.DS_Store
 
 # Logs
 logs
