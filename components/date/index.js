@@ -82,13 +82,15 @@ module.exports = (key, opts) => {
   };
 
   // defaultFormatters on the base controller replace '--' with '-' on the process step.
-  // This ensures having the correct number of hyphens,
-  //  so values do not jump from year to month when the page reloads.
+  // This ensures having the correct number of hyphens, so values do not jump from year to month.
+  // This should only be done on a partially completed date field otherwise the validation messages break.
   const postProcess = (req, res, next) => {
-    req.form.values[key] = req.body[key];
+    const value = req.form.values[key];
+    if (value) {
+      req.form.values[key] = req.body[key];
+    }
     next();
   };
-
   // if date field is included in errorValues, extend
   // errorValues with the individual components
   const preGetErrors = (req, res, next) => {
