@@ -165,18 +165,15 @@ module.exports = class BaseController extends EventEmitter {
   }
 
   _sanitize(req, res, callback) {
-    for(var property in req.form.values)
-    {
-        //For each property in our form data
-        for(let blacklisted in defaults.sanitisationBlacklistArray) {
-          let blacklistedDetail = defaults.sanitisationBlacklistArray[blacklisted];
-          var regexQuery = new RegExp(blacklistedDetail.regex, "gi");
-          //Remove duplicates and add the hyphen
-          console.log('Before: ' + req.form.values[property]);
-          req.form.values[property] = req.form.values[property].replace(regexQuery, blacklistedDetail.replace);
-          console.log('After: ' + req.form.values[property]);
-        }
-    }
+    Object.keys(req.form.values).forEach(function(property,propertyIndex) {
+      // For each property in our form data
+      Object.keys(defaults.sanitisationBlacklistArray).forEach(function(blacklisted,blacklistedIndex) {
+        const blacklistedDetail = defaults.sanitisationBlacklistArray[blacklisted];
+        const regexQuery = new RegExp(blacklistedDetail.regex, 'gi');
+        // Will perform the required replace based on our passed in regex and the replace string
+        req.form.values[property] = req.form.values[property].replace(regexQuery, blacklistedDetail.replace);
+      });
+    });
     callback();
   }
 
