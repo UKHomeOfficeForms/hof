@@ -517,6 +517,26 @@ describe('Form Controller', () => {
       form.validate.should.have.been.calledOn(form);
     });
 
+    describe.only('sanitise inputs', () => {
+      const tests = [
+        {value: "HELLO/..;/WORLD", expected: "HELLOWORLD"},
+        {value: "1/*2*/3|4&&5@@6..7/etc/PASSwd8C:\\9Cmd.eXe10/..;/11<12>13[14]15~16&#17%U18", expected: "1234&5@6.7891011<-12>-13[-14]-15~-16&#-17%U-18"},
+        {value: "@@ABC123", expected: "@ABC123"},
+      ];
+
+      tests.forEach(({value, expected}) => {
+        it(`sanitisation returns correct data`, function () {
+          req.form = {
+            values: {
+              value: value,
+            }
+          };
+          form._sanitize(req, res, cb);
+          req.form.values.value.should.equal(expected);
+        });
+      });
+    });
+
     describe('valid inputs', () => {
       it('calls form.saveValues', () => {
         form.post(req, res, cb);

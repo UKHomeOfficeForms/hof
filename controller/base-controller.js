@@ -8,6 +8,7 @@ const debug = require('debug')('hmpo:form');
 const dataFormatter = require('./formatting');
 const dataValidator = require('./validation');
 const ErrorClass = require('./validation-error');
+const defaults = require('../config/hof-defaults');
 
 module.exports = class BaseController extends EventEmitter {
   constructor(options) {
@@ -69,6 +70,7 @@ module.exports = class BaseController extends EventEmitter {
         this._configure.bind(this),
         this._process.bind(this),
         this._validate.bind(this),
+        this._sanitize.bind(this),
         this._getHistoricalValues.bind(this),
         this.saveValues.bind(this),
         this.successHandler.bind(this),
@@ -160,6 +162,22 @@ module.exports = class BaseController extends EventEmitter {
     const validator = vld || dataValidator(req.form.options.fields);
     const emptyValue = formatter(key, '');
     return validator(key, req.form.values[key], req.form.values, emptyValue);
+  }
+
+  _sanitize(req, res, callback) {
+    for(var property in req.form.values)
+    {
+        //For each property in our form data
+        for(let blacklisted in defaults.sanitisationBlacklistArray) {
+          let blacklistedDetail = defaults.sanitisationBlacklistArray[blacklisted];
+          var regexQuery = new RegExp(blacklistedDetail.regex, "gi");
+          //Remove duplicates and add the hyphen
+          console.log('Before: ' + req.form.values[property]);
+          req.form.values[property] = req.form.values[property].replace(regexQuery, blacklistedDetail.replace);
+          console.log('After: ' + req.form.values[property]);
+        }
+    }
+    callback();
   }
 
   _process(req, res, callback) {
