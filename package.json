@@ -69,7 +69,7 @@
     "lodash": "^4.17.21",
     "markdown-it": "^12.3.2",
     "minimatch": "^3.0.3",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "mixwith": "^0.1.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.24.0",
