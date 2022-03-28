@@ -8,7 +8,6 @@ const debug = require('debug')('hmpo:form');
 const dataFormatter = require('./formatting');
 const dataValidator = require('./validation');
 const ErrorClass = require('./validation-error');
-const sanitisationBlacklistArray = require('../config/sanitisation-rules');
 
 module.exports = class BaseController extends EventEmitter {
   constructor(options) {
@@ -70,7 +69,6 @@ module.exports = class BaseController extends EventEmitter {
         this._configure.bind(this),
         this._process.bind(this),
         this._validate.bind(this),
-        this._sanitize.bind(this),
         this._getHistoricalValues.bind(this),
         this.saveValues.bind(this),
         this.successHandler.bind(this),
@@ -162,19 +160,6 @@ module.exports = class BaseController extends EventEmitter {
     const validator = vld || dataValidator(req.form.options.fields);
     const emptyValue = formatter(key, '');
     return validator(key, req.form.values[key], req.form.values, emptyValue);
-  }
-
-  _sanitize(req, res, callback) {
-    Object.keys(req.form.values).forEach(function(property,propertyIndex) {
-      // For each property in our form data
-      Object.keys(sanitisationBlacklistArray).forEach(function(blacklisted,blacklistedIndex) {
-        const blacklistedDetail = sanitisationBlacklistArray[blacklisted];
-        const regexQuery = new RegExp(blacklistedDetail.regex, 'gi');
-        // Will perform the required replace based on our passed in regex and the replace string
-        req.form.values[property] = req.form.values[property].replace(regexQuery, blacklistedDetail.replace);
-      });
-    });
-    callback();
   }
 
   _process(req, res, callback) {
