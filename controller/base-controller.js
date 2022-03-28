@@ -165,6 +165,9 @@ module.exports = class BaseController extends EventEmitter {
   }
 
   _sanitize(req, res, callback) {
+    //If we don't have any data, no need to progress
+    if(!req.form || !req.form.values) return callback();
+
     Object.keys(req.form.values).forEach(function(property,propertyIndex) {
       //If it's not a string, don't sanitise it
       if(_.isString(req.form.values[property])) {
