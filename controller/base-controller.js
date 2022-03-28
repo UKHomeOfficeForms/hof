@@ -8,7 +8,7 @@ const debug = require('debug')('hmpo:form');
 const dataFormatter = require('./formatting');
 const dataValidator = require('./validation');
 const ErrorClass = require('./validation-error');
-const defaults = require('../config/hof-defaults');
+const sanitisationBlacklistArray = require('../config/sanitisation-rules');
 
 module.exports = class BaseController extends EventEmitter {
   constructor(options) {
@@ -167,8 +167,8 @@ module.exports = class BaseController extends EventEmitter {
   _sanitize(req, res, callback) {
     Object.keys(req.form.values).forEach(function(property,propertyIndex) {
       // For each property in our form data
-      Object.keys(defaults.sanitisationBlacklistArray).forEach(function(blacklisted,blacklistedIndex) {
-        const blacklistedDetail = defaults.sanitisationBlacklistArray[blacklisted];
+      Object.keys(sanitisationBlacklistArray).forEach(function(blacklisted,blacklistedIndex) {
+        const blacklistedDetail = sanitisationBlacklistArray[blacklisted];
         const regexQuery = new RegExp(blacklistedDetail.regex, 'gi');
         // Will perform the required replace based on our passed in regex and the replace string
         req.form.values[property] = req.form.values[property].replace(regexQuery, blacklistedDetail.replace);

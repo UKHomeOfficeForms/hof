@@ -538,7 +538,12 @@ describe('Form Controller', () => {
         {
           value: '1/*2*/3|4&&5@@6..7/etc/PASSwd8C:\\9Cmd.eXe10/..;/11<12>13[14]15~16&#17%U18',
           expected: '1234&5@6.7891011<-12>-13[-14]-15~-16&#-17%U-18'
-        }
+        },
+        { value: 'Test User', expected: 'Test User'},
+        { value: '123 Test Street', expected: '123 Test Street'},
+        { value: 'London', expected: 'London'},
+        { value: 'United Kingdom', expected: 'United Kingdom'},
+        { value: '2022-01-01', expected: '2022-01-01' }
       ];
 
       tests.forEach(({value, expected}) => {
