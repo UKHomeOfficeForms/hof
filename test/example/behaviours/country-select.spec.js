@@ -1,11 +1,11 @@
 'use strict';
 
-const Behaviour = require('../../../example/apps/example-app/behaviours/country-select');
+const Behaviour = require('../../../sandbox/apps/sandbox/behaviours/country-select');
 const homeOfficeCountries = [''].concat(require('homeoffice-countries').allCountries);
 const Controller = require('../../../controller');
 const _ = require('lodash');
 
-describe('apps/example-app/behaviours/country-select', () => {
+describe('apps/sandbox/behaviours/country-select', () => {
   let controller;
   let req;
   let res;

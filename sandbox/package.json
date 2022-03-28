@@ -8,8 +8,8 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:dev": "HOF_EXAMPLE_APP=true ../bin/hof-build watch",
-    "build": "HOF_EXAMPLE_APP=true ../bin/hof-build",
+    "start:dev": "HOF_SANDBOX=true ../bin/hof-build watch",
+    "build": "HOF_SANDBOX=true ../bin/hof-build",
     "postinstall": "yarn run build"
   },
   "author": "",

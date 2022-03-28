@@ -112,7 +112,7 @@ const getContentSecurityPolicy = (config, res) => {
  * @param options {object} Configuration options for the HOF application
  * @param options.behaviours {object | Array<object>} The HOF behaviour(s) to invoke for all sub-applications
  * @param options.translations {string} The translations path for the application
- * @param options.routes {Array<object>} The sub-applications for this app: for example; require('./apps/example-app')
+ * @param options.routes {Array<object>} The sub-applications for this app: for sandbox; require('./apps/sandbox')
  * @param options.views {Array<string>} The view template paths for the application
  * @param options.middleware {Array<function>} An array of Express middleware functions to use
  * @param options.theme {string} Optional HOF theme - defaults to govuk
