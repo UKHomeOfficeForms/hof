@@ -72,7 +72,7 @@
     "minimist": "^1.2.0",
     "mixwith": "^0.1.1",
     "mkdirp": "^0.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "morgan": "^1.10.0",
     "mustache": "^2.3.0",
     "nodemailer": "^6.6.3",
@@ -87,7 +87,7 @@
     "serve-static": "^1.14.1",
     "uglify-js": "^3.14.3",
     "underscore": "^1.12.1",
-    "urijs": "^1.19.10",
+    "urijs": "^1.19.11",
     "winston": "^3.3.3"
   },
   "devDependencies": {
