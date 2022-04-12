@@ -543,7 +543,9 @@ describe('Form Controller', () => {
         { value: '123 Test Street', expected: '123 Test Street'},
         { value: 'London', expected: 'London'},
         { value: 'United Kingdom', expected: 'United Kingdom'},
-        { value: '2022-01-01', expected: '2022-01-01' }
+        { value: '2022-01-01', expected: '2022-01-01' },
+        { value: false, expected: false },
+        { value: 12345, expected: 12345 }
       ];
 
       tests.forEach(({value, expected}) => {
@@ -556,6 +558,22 @@ describe('Form Controller', () => {
           form._sanitize(req, res, cb);
           req.form.values.value.should.equal(expected);
         });
+      });
+
+      //Also check for an empty req.form.values
+      it('sanitisation returns correct data when form data is empty', function () {
+        req.form = {
+          values: {}
+        };
+        form._sanitize(req, res, cb);
+        req.form.values.should.be.empty;
+      });
+
+      //Also check for an empty req.form.values
+      it('sanitisation returns correct data when form data is undefined', function () {
+        req.form = {};
+        form._sanitize(req, res, cb);
+        expect(req.form.values).to.be.undefined;
       });
     });
 
