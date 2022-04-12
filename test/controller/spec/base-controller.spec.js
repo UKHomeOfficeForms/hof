@@ -560,7 +560,7 @@ describe('Form Controller', () => {
         });
       });
 
-      //Also check for an empty req.form.values
+      // Also check for an empty req.form.values
       it('sanitisation returns correct data when form data is empty', function () {
         req.form = {
           values: {}
@@ -569,7 +569,7 @@ describe('Form Controller', () => {
         req.form.values.should.be.empty;
       });
 
-      //Also check for an empty req.form.values
+      // Also check for an empty req.form.values
       it('sanitisation returns correct data when form data is undefined', function () {
         req.form = {};
         form._sanitize(req, res, cb);
