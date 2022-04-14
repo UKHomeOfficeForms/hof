@@ -69,7 +69,7 @@
     "lodash": "^4.17.21",
     "markdown-it": "^12.3.2",
     "minimatch": "^3.0.3",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "mixwith": "^0.1.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.29.2",
@@ -88,7 +88,7 @@
     "uglify-js": "^3.14.3",
     "underscore": "^1.12.1",
     "urijs": "^1.19.11",
-    "winston": "^3.3.3"
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.0",
