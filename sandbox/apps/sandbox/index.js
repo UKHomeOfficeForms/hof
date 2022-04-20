@@ -2,6 +2,7 @@
 'use strict';
 
 const CountrySelect = require('./behaviours/country-select')
+const ClearSesssion = require('./behaviours/clear-session')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
 
@@ -68,8 +69,8 @@ module.exports = {
       fields: ['complaintDetails'],
       next: '/select'
     },
-    '/select':{ 
-      fields: ['appealStages'], 
+    '/select':{
+      fields: ['appealStages'],
       next: '/confirm'
     },
     '/confirm': {
@@ -85,6 +86,24 @@ module.exports = {
       fields: [
         'int-phone-number'
       ],
+      next: '/confirm'
+    },
+    '/rra-prototype': {
+      behaviour: ClearSesssion,
+      template: 'rra-prototype',
+      next: '/personalDetails',
+    },
+    '/personalDetails': {
+      behaviour: ClearSesssion,
+      fields: ['rraName', 'rraAdelphiNumber','rraFunction', 'rraEmail'],
+      next: '/professionDetails',
+    },
+    '/professionDetails': {
+      fields: ['rraRole', 'rraGrouping', 'rraGrade', 'rraLevels'],
+      next: '/datm',
+    },
+    '/datm': {
+      fields: ['rraScores', 'rraEvidence'],
       next: '/confirm'
     },
   }

@@ -7,6 +7,10 @@
     "title": "Build your own form",
     "subheader": "Access the build your own form guidance link"
   },
+  "rra-prototype": {
+    "header": "Recruitment and Retention Allowance (RRA) Application ",
+    "subheader": "Guidance on completing the self-assessment"
+  },
   "name": {
     "header": "What is your full name?"
   },
@@ -40,6 +44,30 @@
     "header": "What is the appeal stage?",
     "intro": "Choose an appeal stage from the drop down menu"
   },
+  "personalDetails": {
+    "header": "Personal Details"
+  },
+  "professionDetails": {
+    "header": "Profession Details"
+  },
+  "datm": {
+    "header": "Data Management (DATM)"
+  },
+  "asup": {
+    "header": "Application support ASUP"
+  },
+  "prog": {
+    "header": "Programming PROG"
+  },
+  "test": {
+    "header": "Testing TEST"
+  },
+  "swdn": {
+    "header": "Software design SWDN"
+  },
+  "sint": {
+    "header": "Systems integration and build SINT"
+  },
   "confirm": {
     "header": "Check your answers before submitting your application.",
     "sections": {
@@ -68,7 +96,7 @@
   },
   "confirmation": {
     "title": "Application sent",
-    "alert": "Application sent", 
+    "alert": "Application sent",
     "subheader": "What happens next",
     "content": "We’ll contact you with the decision of your application or if we need more information from you."
   }
