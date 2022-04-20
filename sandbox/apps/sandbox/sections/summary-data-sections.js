@@ -50,18 +50,18 @@ module.exports = {
     'rraRole',
     {
       field: 'rraGrouping',
-      parse: v => _.get(_.find(RRA_GROUPING, group=> group.value === v), 'label', '')
+      parse: v => _.get(_.find(RRA_GROUPING, group => group.value === v), 'label', '')
     },
     'rraGrade',
     {
       field: 'rraLevels',
-      parse: v => _.get(_.find(RRA_LEVELS, group=> group.value === v), 'label', '')
-    },
+      parse: v => _.get(_.find(RRA_LEVELS, group => group.value === v), 'label', '')
+    }
   ],
   datm: [
     {
       field: 'rraScores',
-      parse: v => _.get(_.find(RRA_SCORES, group=> group.value === v), 'label', '')
+      parse: v => _.get(_.find(RRA_SCORES, group => group.value === v), 'label', '')
     },
     'rraEvidence'
   ]

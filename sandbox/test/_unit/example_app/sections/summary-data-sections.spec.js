@@ -27,6 +27,16 @@ describe('Apply Summary Data Sections', () => {
       expect(result).to.be.true;
     });
 
+    it('should check expected fields in data management field', () => {
+      const sectionFields = mappedSections.datm;
+      const expectedFields = [
+        'rraScores',
+        'rraEvidence'
+      ];
+      const result = areOrderedEqual(sectionFields, expectedFields);
+      expect(result).to.be.true;
+    });
+
     it('should check expected fields in address field', () => {
       const sectionFields = mappedSections.address;
       const expectedFields = [
@@ -76,6 +86,15 @@ describe('Apply Summary Data Sections', () => {
       const result = areOrderedEqual(sectionFields, expectedFields);
       expect(result).to.be.true;
     });
+
+    it('should check expected fields in complaint details field', () => {
+      const sectionFields = mappedSections.complaintDetails;
+      const expectedFields = [
+        'complaintDetails'
+      ];
+      const result = areOrderedEqual(sectionFields, expectedFields);
+      expect(result).to.be.true;
+    });
   });
 
   describe('Sections and Fields', () => {
@@ -83,6 +102,13 @@ describe('Apply Summary Data Sections', () => {
       expect(containsAll(
         Object.keys(fields),
         mappedSections.applicantsDetails)
+      ).to.be.true;
+    });
+
+    it('datm', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.datm)
       ).to.be.true;
     });
 

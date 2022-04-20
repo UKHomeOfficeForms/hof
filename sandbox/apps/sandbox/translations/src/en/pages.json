@@ -91,6 +91,15 @@
       },
       "complaintDetails": {
         "header": "Complaint details"
+      },
+      "personalDetails": {
+        "header": "Personal Details"
+      },
+      "professionDetails": {
+        "header": "Profession Details"
+      },
+      "datm": {
+        "header": "Data Management (DATM)"
       }
     }
   },

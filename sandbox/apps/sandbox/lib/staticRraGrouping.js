@@ -5,13 +5,13 @@
 module.exports = {
   getstaticRraGrouping: function () {
     return [
-    { value: 'eng',
-      label: 'Software and Dev Ops Engineering'
-    },
-    {
-      value: 'data',
-      label: 'Data Analysis'
-    }
+      { value: 'eng',
+        label: 'Software and Dev Ops Engineering'
+      },
+      {
+        value: 'data',
+        label: 'Data Analysis'
+      }
     ];
   }
 };
