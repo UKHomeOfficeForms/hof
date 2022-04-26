@@ -24,8 +24,8 @@ module.exports = config => {
         debug(`Loading email template from ${config.template}`);
 
         const template = await new Promise((resolve, reject) => {
-          return fs.readFile(config.template, (err, template) => {
-            return err ? reject(err) : resolve(template.toString('utf8'));
+          return fs.readFile(config.template, (err, resolvedTemplate) => {
+            return err ? reject(err) : resolve(resolvedTemplate.toString('utf8'));
           });
         });
 
