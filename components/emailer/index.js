@@ -61,6 +61,7 @@ module.exports = config => {
         return super.successHandler(req, res, next);
       } catch (e) {
         if (config.emailerFallback) {
+          req.log('error', e.message || e);
           req.sessionModel.set('nodemailer-error', true);
           return super.successHandler(req, res, next);
         }
