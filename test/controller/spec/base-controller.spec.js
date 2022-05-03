@@ -6,6 +6,7 @@ const formatters = require('../../../controller/formatting/formatters');
 const FormError = require('../../../controller/validation-error');
 
 const _ = require('lodash');
+const { escapeSelector } = require('jquery');
 const EventEmitter = require('events').EventEmitter;
 
 describe('Form Controller', () => {
@@ -517,7 +518,7 @@ describe('Form Controller', () => {
       form.validate.should.have.been.calledOn(form);
     });
 
-    describe('sanitise inputs', () => {
+    describe.only('sanitise inputs', () => {
       const tests = [
         { value: 'HELLO\/*TEST*\/WORLD1', expected: 'HELLOTESTWORLD1' },
         { value: 'HELLO|WORLD2', expected: 'HELLOWORLD2' },
@@ -549,14 +550,34 @@ describe('Form Controller', () => {
       ];
 
       tests.forEach(({value, expected}) => {
-        it('sanitisation returns correct data', function () {
+        it('sanitisation returns correct data when feature flag enabled', function () {
           req.form = {
             values: {
               value: value
             }
           };
+          let res = {
+            locals: {
+              sanitiseInputs: true
+            }
+          };
           form._sanitize(req, res, cb);
           req.form.values.value.should.equal(expected);
+        });
+
+        it('sanitisation returns unchanged data when feature flag disabled', function () {
+          req.form = {
+            values: {
+              value: value
+            }
+          };
+          let res = {
+            locals: {
+              sanitiseInputs: false
+            }
+          };
+          form._sanitize(req, res, cb);
+          req.form.values.value.should.equal(value);
         });
       });
 
@@ -565,6 +586,11 @@ describe('Form Controller', () => {
         req.form = {
           values: {}
         };
+        let res = {
+          locals: {
+            sanitiseInputs: true
+          }
+        };
         form._sanitize(req, res, cb);
         req.form.values.should.be.empty;
       });
@@ -572,6 +598,11 @@ describe('Form Controller', () => {
       // Also check for an empty req.form.values
       it('sanitisation returns correct data when form data is undefined', function () {
         req.form = {};
+        let res = {
+          locals: {
+            sanitiseInputs: true
+          }
+        };
         form._sanitize(req, res, cb);
         expect(req.form.values).to.be.undefined;
       });

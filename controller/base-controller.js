@@ -9,6 +9,7 @@ const dataFormatter = require('./formatting');
 const dataValidator = require('./validation');
 const ErrorClass = require('./validation-error');
 const sanitisationBlacklistArray = require('../config/sanitisation-rules');
+const { config } = require('bluebird');
 
 module.exports = class BaseController extends EventEmitter {
   constructor(options) {
@@ -165,6 +166,9 @@ module.exports = class BaseController extends EventEmitter {
   }
 
   _sanitize(req, res, callback) {
+    //Sanitisation could be disabled in the config
+    if(!res.locals.sanitiseInputs) return;
+
     // If we don't have any data, no need to progress
     if(!_.isEmpty(req.form.values)) {
       Object.keys(req.form.values).forEach(function (property, propertyIndex) {
