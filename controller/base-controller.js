@@ -166,7 +166,7 @@ module.exports = class BaseController extends EventEmitter {
 
   _sanitize(req, res, callback) {
     // Sanitisation could be disabled in the config
-    if(!this.options.sanitiseInputs) callback();
+    if(!this.options.sanitiseInputs) return callback();
 
     // If we don't have any data, no need to progress
     if(!_.isEmpty(req.form.values)) {
