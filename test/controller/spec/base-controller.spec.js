@@ -6,7 +6,6 @@ const formatters = require('../../../controller/formatting/formatters');
 const FormError = require('../../../controller/validation-error');
 
 const _ = require('lodash');
-const { escapeSelector } = require('jquery');
 const EventEmitter = require('events').EventEmitter;
 
 describe('Form Controller', () => {
@@ -556,11 +555,9 @@ describe('Form Controller', () => {
               value: value
             }
           };
-          
           form.options = {
             sanitiseInputs: true
           };
-
           form._sanitize(req, res, cb);
           req.form.values.value.should.equal(expected);
         });
