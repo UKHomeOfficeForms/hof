@@ -556,11 +556,11 @@ describe('Form Controller', () => {
               value: value
             }
           };
-          let res = {
-            locals: {
-              sanitiseInputs: true
-            }
+          
+          form.options = {
+            sanitiseInputs: true
           };
+
           form._sanitize(req, res, cb);
           req.form.values.value.should.equal(expected);
         });
@@ -571,10 +571,8 @@ describe('Form Controller', () => {
               value: value
             }
           };
-          let res = {
-            locals: {
-              sanitiseInputs: false
-            }
+          form.options = {
+            sanitiseInputs: false
           };
           form._sanitize(req, res, cb);
           req.form.values.value.should.equal(value);
@@ -586,10 +584,8 @@ describe('Form Controller', () => {
         req.form = {
           values: {}
         };
-        let res = {
-          locals: {
-            sanitiseInputs: true
-          }
+        form.options = {
+          sanitiseInputs: true
         };
         form._sanitize(req, res, cb);
         req.form.values.should.be.empty;
@@ -598,10 +594,8 @@ describe('Form Controller', () => {
       // Also check for an empty req.form.values
       it('sanitisation returns correct data when form data is undefined', function () {
         req.form = {};
-        let res = {
-          locals: {
-            sanitiseInputs: true
-          }
+        form.options = {
+          sanitiseInputs: true
         };
         form._sanitize(req, res, cb);
         expect(req.form.values).to.be.undefined;
