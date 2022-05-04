@@ -9,7 +9,6 @@ const dataFormatter = require('./formatting');
 const dataValidator = require('./validation');
 const ErrorClass = require('./validation-error');
 const sanitisationBlacklistArray = require('../config/sanitisation-rules');
-const { config } = require('bluebird');
 
 module.exports = class BaseController extends EventEmitter {
   constructor(options) {
