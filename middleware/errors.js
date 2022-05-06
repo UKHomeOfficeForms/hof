@@ -21,6 +21,24 @@ const getContent = (err, translate) => {
     content.message = (translate && translate('errors.cookies-required.message'));
   }
 
+  if (err.code === 'DDOS_RATE_LIMIT') {
+    err.status = 429;
+    err.template = 'rate-limit-error';
+    err.title = (translate && translate('errors.ddos-rate-limit.title'));
+    err.message = (translate && translate('errors.ddos-rate-limit.message'));
+    content.title = (translate && translate('errors.ddos-rate-limit.title'));
+    content.message = (translate && translate('errors.ddos-rate-limit.message'));
+  }
+
+  if (err.code === 'SUBMISSION_RATE_LIMIT') {
+    err.status = 429;
+    err.template = 'rate-limit-error';
+    err.title = (translate && translate('errors.submission-rate-limit.title'));
+    err.message = (translate && translate('errors.submission-rate-limit.message'));
+    content.title = (translate && translate('errors.submission-rate-limit.title'));
+    content.message = (translate && translate('errors.submission-rate-limit.message'));
+  }
+
   err.code = err.code || 'UNKNOWN';
   err.status = err.status || 500;
 
