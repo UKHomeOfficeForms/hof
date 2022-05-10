@@ -39,8 +39,8 @@ module.exports = (options, rateLimitType) => {
         }
 
         if (!record || oldRecord) {
-          let newRecord = [];
-          let requestLog = {
+          const newRecord = [];
+          const requestLog = {
             [timestampName]: currentRequestTime.unix(),
             [countName]: 1
           };
@@ -49,23 +49,24 @@ module.exports = (options, rateLimitType) => {
           return next();
         }
         // if record is found, parse it's value and calculate number of requests users has made within the last window
-        let requestsWithinWindow = data.filter(entry => entry[timestampName] > windowStartTimestamp);
+        const requestsWithinWindow = data.filter(entry => entry[timestampName] > windowStartTimestamp);
 
-        let totalWindowRequestsCount = requestsWithinWindow.reduce((accumulator, entry) => {
+        const totalWindowRequestsCount = requestsWithinWindow.reduce((accumulator, entry) => {
           return accumulator + entry[countName];
         }, 0);
 
         if (!options.rateLimits.env || options.rateLimits.env === 'development') {
           const requestsRemaining = MAX_WINDOW_REQUEST_COUNT - totalWindowRequestsCount;
-          logger.log('info', `Requests made by client: ${totalWindowRequestsCount}\nRequests remaining: ${requestsRemaining}`);
+          const msg = `Requests made by client: ${totalWindowRequestsCount}\nRequests remaining: ${requestsRemaining}`;
+          logger.log('info', msg);
         }
         // if number of requests made is greater than or equal to the desired maximum, return error
         if (totalWindowRequestsCount >= MAX_WINDOW_REQUEST_COUNT) {
           return next({ code: ERROR_CODE });
         }
         // if number of requests made is less than allowed maximum, log new entry
-        let lastRequestLog = data[data.length - 1];
-        let potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime
+        const lastRequestLog = data[data.length - 1];
+        const potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime
           .subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, 'minutes')
           .unix();
         //  if interval has not passed since last request log, increment counter
