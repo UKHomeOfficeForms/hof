@@ -31,7 +31,8 @@ const defaults = {
   session: {
     ttl: process.env.SESSION_TTL || 1800,
     secret: process.env.SESSION_SECRET || 'changethis',
-    name: process.env.SESSION_NAME || 'hod.sid'
+    name: process.env.SESSION_NAME || 'hod.sid',
+    sanitiseInputs: false
   },
   apis: {
     pdfConverter: process.env.PDF_CONVERTER_URL
