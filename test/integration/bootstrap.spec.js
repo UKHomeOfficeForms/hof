@@ -147,8 +147,7 @@ describe('bootstrap()', () => {
       });
 
       return bs.should.have.all.keys('server', 'stop', 'start', 'use');
-    }
-    );
+    });
 
     it('can instantiate a custom behaviour for the route', () => {
       bs = bootstrap({
