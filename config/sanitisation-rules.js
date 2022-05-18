@@ -7,16 +7,16 @@ const sanitisationBlacklistArray = {
   // The regex is the rule we used to find them (note some dictate repeating characters)
   // And the replace is what we're replacing that pattern with. Usually nothing sometimes a
   // single character or sometimes a single character followed by a "-"
-  '/*': { regex: '\/\\*', replace: '' },
-  '*/': { regex: '\\*\\/', replace: '' },
-  '|': { regex: '\\|', replace: '' },
+  '/*': { regex: '\/\\*', replace: '-' },
+  '*/': { regex: '\\*\\/', replace: '-' },
+  '|': { regex: '\\|', replace: '-' },
   '&&': { regex: '&&+', replace: '&' },
   '@@': { regex: '@@+', replace: '@' },
-  '/..;/': { regex: '/\\.\\.;/', replace: '' }, // Purposely input before ".." as they conflict
+  '/..;/': { regex: '/\\.\\.;/', replace: '-' }, // Purposely input before ".." as they conflict
   '..': { regex: '\\.\\.+', replace: '.' },
-  '/etc/passwd': { regex: '\/etc\/passwd', replace: '' },
-  'c:\\': { regex: 'c:\\\\', replace: '' },
-  'cmd.exe': { regex: 'cmd\\.exe', replace: '' },
+  '/etc/passwd': { regex: '\/etc\/passwd', replace: '-' },
+  'c:\\': { regex: 'c:\\\\', replace: '-' },
+  'cmd.exe': { regex: 'cmd\\.exe', replace: '-' },
   '<': { regex: '<', replace: '<-' },
   '>': { regex: '>', replace: '>-' },
   '[': { regex: '\\[+', replace: '[-' },
