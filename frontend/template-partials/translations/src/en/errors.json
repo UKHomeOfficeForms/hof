@@ -17,10 +17,14 @@
   },
   "ddos-rate-limit": {
     "title": "Too many requests submitted",
-    "message": "You have submitted too many requests in quick succession. Please try again in a few minutes."
+    "message": "You have submitted too many requests in quick succession.",
+    "pre-time-to-wait": "Please try again in ",
+    "post-time-to-wait": " minutes."
   },
   "submission-rate-limit": {
     "title": "Too many submissions",
-    "message": "You have submitted too many applications in a short space of time. Please try again in a few minutes."
+    "message": "You have submitted too many applications in a short space of time.",
+    "pre-time-to-wait": "Please try again in ",
+    "post-time-to-wait": " minutes."
   }
 }
