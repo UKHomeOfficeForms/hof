@@ -204,6 +204,10 @@ function bootstrap(options) {
   }));
   app.use(mixins());
   app.use(markdown(config.markdown));
+  // rate limits have to be loaded before all routes so it is applied to them
+  if (config.rateLimits.requests.active) {
+    app.use(hofMiddleware.rateLimiter(config, 'requests'));
+  }
 
   if (config.getAccessibility === true) {
     deprecate(

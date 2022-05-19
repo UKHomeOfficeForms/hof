@@ -1,0 +1,90 @@
+
+const moment = require('moment');
+const redis = require('redis');
+
+const redisClient = redis.createClient();
+
+module.exports = (options, rateLimitType) => {
+  const logger = options.logger || { log: (func, msg) => console[func](msg) };
+  const rateLimits = options.rateLimits[rateLimitType];
+  const timestampName = `${rateLimitType}TimeStamp`;
+  const countName = `${rateLimitType}Count`;
+
+  const WINDOW_SIZE_IN_MINUTES = rateLimits.windowSizeInMinutes;
+  const MAX_WINDOW_REQUEST_COUNT = rateLimits.maxWindowRequestCount;
+  const WINDOW_LOG_INTERVAL_IN_MINUTES = rateLimits.windowLogIntervalInMinutes;
+  const ERROR_CODE = rateLimits.errCode;
+
+  return (req, res, next) => {
+    try {
+      // check that redis client exists
+      if (!redisClient) {
+        logger.log('error', 'Redis client does not exist!');
+        return next();
+      }
+      // fetch records of current user using IP address, returns null when no record is found
+      return redisClient.get(req.ip, (err, record) => {
+        if (err) {
+          logger.log('error', `Error with requesting redis session for rate limiting: ${err}`);
+          return next();
+        }
+        const currentRequestTime = moment();
+        const windowStartTimestamp = moment().subtract(WINDOW_SIZE_IN_MINUTES, 'minutes').unix();
+        let oldRecord = false;
+        let data;
+        //  if no record is found , create a new record for user and store to redis
+        if (record) {
+          data = JSON.parse(record);
+          oldRecord = data[data.length - 1][timestampName] < windowStartTimestamp;
+        }
+
+        if (!record || oldRecord) {
+          const newRecord = [];
+          const requestLog = {
+            [timestampName]: currentRequestTime.unix(),
+            [countName]: 1
+          };
+          newRecord.push(requestLog);
+          redisClient.set(req.ip, JSON.stringify(newRecord));
+          return next();
+        }
+        // if record is found, parse it's value and calculate number of requests users has made within the last window
+        const requestsWithinWindow = data.filter(entry => entry[timestampName] > windowStartTimestamp);
+
+        const totalWindowRequestsCount = requestsWithinWindow.reduce((accumulator, entry) => {
+          return accumulator + entry[countName];
+        }, 0);
+
+        if (!options.rateLimits.env || options.rateLimits.env === 'development') {
+          const requestsRemaining = MAX_WINDOW_REQUEST_COUNT - totalWindowRequestsCount;
+          const msg = `Requests made by client: ${totalWindowRequestsCount}\nRequests remaining: ${requestsRemaining}`;
+          logger.log('info', msg);
+        }
+        // if number of requests made is greater than or equal to the desired maximum, return error
+        if (totalWindowRequestsCount >= MAX_WINDOW_REQUEST_COUNT) {
+          return next({ code: ERROR_CODE });
+        }
+        // if number of requests made is less than allowed maximum, log new entry
+        const lastRequestLog = data[data.length - 1];
+        const potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime
+          .subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, 'minutes')
+          .unix();
+        //  if interval has not passed since last request log, increment counter
+        if (lastRequestLog[timestampName] > potentialCurrentWindowIntervalStartTimeStamp) {
+          lastRequestLog[countName]++;
+          data[data.length - 1] = lastRequestLog;
+        } else {
+          //  if interval has passed, log new entry for current user and timestamp
+          data.push({
+            [timestampName]: currentRequestTime.unix(),
+            [countName]: 1
+          });
+        }
+        redisClient.set(req.ip, JSON.stringify(data));
+        return next();
+      });
+    } catch (err) {
+      return next(err);
+    }
+  };
+};

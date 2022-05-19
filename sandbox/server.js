@@ -8,5 +8,10 @@ bootstrap({
   routes: [
     require('./apps/sandbox')
   ],
+  rateLimits: {
+    requests: {
+      active: true
+    }
+  },
   getAccessibility: true
 });

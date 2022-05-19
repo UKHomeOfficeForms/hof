@@ -1,5 +1,6 @@
 'use strict';
 /* eslint no-process-env: "off" */
+const rateLimits = require('./rate-limits');
 
 const defaults = {
   appName: process.env.APP_NAME || 'HOF Application',
@@ -40,4 +41,4 @@ const defaults = {
   serveStatic: process.env.SERVE_STATIC_FILES !== 'false'
 };
 
-module.exports = defaults;
+module.exports = Object.assign({}, defaults, rateLimits);
