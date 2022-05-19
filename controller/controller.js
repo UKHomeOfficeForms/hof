@@ -57,7 +57,8 @@ module.exports = class Controller extends BaseController {
       const evalCondition = condition => _.isFunction(condition) ?
         condition(req, res) :
         condition.value === (req.form.values[condition.field] ||
-          (req.form.historicalValues && req.form.historicalValues[condition.field]));
+        (!Object.keys(req.form.values).includes(condition.field) &&
+        _.get(req, `form.historicalValues[${condition.field}]`)));
 
       if (evalCondition(value.condition)) {
         if (value.continueOnEdit) {
