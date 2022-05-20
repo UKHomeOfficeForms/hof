@@ -139,11 +139,11 @@ module.exports = class Helpers {
    * @param {Function|Object} condition - a field condition that is either a function or object
    * @returns {Boolean} the boolean result of whether a field value is set on the page or session for a fork
    */
-   static isFieldValueInPageOrSessionValid(req, res, condition) {
-     return _.isFunction(condition) ?
-       condition(req, res) :
-       condition.value === (req.form.values[condition.field] ||
-       (!Object.keys(req.form.values).includes(condition.field) &&
-       _.get(req, `form.historicalValues[${condition.field}]`)));
-   }
+  static isFieldValueInPageOrSessionValid(req, res, condition) {
+    return _.isFunction(condition) ?
+      condition(req, res) :
+      condition.value === (req.form.values[condition.field] ||
+      (!Object.keys(req.form.values).includes(condition.field) &&
+      _.get(req, `form.historicalValues[${condition.field}]`)));
+  }
 };
