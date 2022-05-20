@@ -8,6 +8,7 @@ const debug = require('debug')('hmpo:form');
 const dataFormatter = require('./formatting');
 const dataValidator = require('./validation');
 const ErrorClass = require('./validation-error');
+const Helpers = require('../utilities').helpers;
 const sanitisationBlacklistArray = require('../config/sanitisation-rules');
 
 module.exports = class BaseController extends EventEmitter {
@@ -237,17 +238,9 @@ module.exports = class BaseController extends EventEmitter {
   }
 
   _getForkTarget(req, res) {
-    function evalCondition(condition) {
-      return _.isFunction(condition) ?
-        condition(req, res) :
-        condition.value === (req.form.values[condition.field] ||
-        (!Object.keys(req.form.values).includes(condition.field) &&
-        _.get(req, `form.historicalValues[${condition.field}]`)));
-    }
-
     // If a fork condition is met, its target supercedes the next property
     return req.form.options.forks.reduce((result, value) =>
-      evalCondition(value.condition) ?
+      Helpers.isFieldValueInPageOrSessionValid(req, res, value.condition) ?
         value.target :
         result
     , req.form.options.next);

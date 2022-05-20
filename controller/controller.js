@@ -4,6 +4,7 @@ const _ = require('lodash');
 const i18nLookup = require('i18n-lookup');
 const Mustache = require('mustache');
 const BaseController = require('./base-controller');
+const Helpers = require('../utilities').helpers;
 
 const omitField = (field, req) => field.useWhen && (typeof field.useWhen === 'string'
   ? req.sessionModel.get(field.useWhen) !== 'true'
@@ -54,13 +55,7 @@ module.exports = class Controller extends BaseController {
 
     // If a form condition is met, its target supercedes the next property
     next = _.reduce(forks, (result, value) => {
-      const evalCondition = condition => _.isFunction(condition) ?
-        condition(req, res) :
-        condition.value === (req.form.values[condition.field] ||
-        (!Object.keys(req.form.values).includes(condition.field) &&
-        _.get(req, `form.historicalValues[${condition.field}]`)));
-
-      if (evalCondition(value.condition)) {
+      if (Helpers.isFieldValueInPageOrSessionValid(req, res, value.condition)) {
         if (value.continueOnEdit) {
           req.form.options.continueOnEdit = true;
         }
