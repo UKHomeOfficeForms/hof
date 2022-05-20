@@ -134,9 +134,9 @@ module.exports = class Helpers {
   /**
    * utility function which returns true or false on
    * forks depending on whether a value exists on the page
-   * @param {String} req - an http request object
-   * @param {String} res - an http response object
-   * @param {String} condition - a field condition that is either a function or object
+   * @param {Object} req - an http request object
+   * @param {Object} res - an http response object
+   * @param {Function|Object} condition - a field condition that is either a function or object
    * @returns {Boolean} the boolean result of whether a field value is set on the page or session for a fork
    */
    static isFieldValueInPageOrSessionValid(req, res, condition) {
