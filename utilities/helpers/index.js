@@ -94,7 +94,7 @@ module.exports = class Helpers {
   /**
    * utility function which returns undefined on
    * failed translations instead of returning the key
-   * @param {Function} translate - the translate funtion
+   * @param {Function} translate - the translate function
    * @param {String} key - the key to translate
    * @returns {String|undefined} the string result if successful, undefined if not
    */
@@ -130,5 +130,20 @@ module.exports = class Helpers {
       `pages.${key}.summary`,
       `pages.${key}.header`
     ]) || key;
+  }
+  /**
+   * utility function which returns true or false on
+   * forks depending on whether a value exists on the page
+   * @param {Object} req - an http request object
+   * @param {Object} res - an http response object
+   * @param {Function|Object} condition - a field condition that is either a function or object
+   * @returns {Boolean} the boolean result of whether a field value is set on the page or session for a fork
+   */
+  static isFieldValueInPageOrSessionValid(req, res, condition) {
+    return _.isFunction(condition) ?
+      condition(req, res) :
+      condition.value === (req.form.values[condition.field] ||
+      (!Object.keys(req.form.values).includes(condition.field) &&
+      _.get(req, `form.historicalValues[${condition.field}]`)));
   }
 };
