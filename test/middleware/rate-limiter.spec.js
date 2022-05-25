@@ -10,6 +10,7 @@ describe('rate-limiter', () => {
   let rateLimiter;
   let getStub;
   let setStub;
+  let quitStub;
   let mockOptions;
 
   const staticTimeDay = '2022-05-16 12:00';
@@ -21,6 +22,7 @@ describe('rate-limiter', () => {
     loggerStub = sinon.stub();
     getStub = sinon.stub();
     setStub = sinon.stub();
+    quitStub = sinon.stub();
 
     req.ip = 'default';
 
@@ -75,7 +77,7 @@ describe('rate-limiter', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
-          return { get: getStub, set: setStub };
+          return { get: getStub, set: setStub, quit: quitStub };
         }
       },
       moment: () => moment(staticTimeDay)
@@ -92,24 +94,26 @@ describe('rate-limiter', () => {
     loggerStub.should.have.been.calledOnce.calledWithExactly('error', 'Redis client does not exist!');
     getStub.should.not.have.been.called;
     setStub.should.not.have.been.called;
+    quitStub.should.not.have.been.called;
     next.should.have.been.calledOnce.calledWithExactly();
   });
 
-  it('logs an error and returns if their is a Redis get error', () => {
+  it('logs an error and returns if their is a Redis get error', async () => {
     req.ip = 'error';
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const errMsg = 'Error with requesting redis session for rate limiting: RedisError';
 
     loggerStub.should.have.been.calledOnce.calledWithExactly(req.ip, errMsg);
     getStub.should.have.been.calledOnce;
     setStub.should.not.have.been.called;
-    next.should.have.been.calledOnce.calledWithExactly();
+    quitStub.should.have.been.calledOnce.calledWithExactly();
+    next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
-  it('adds a new record if one does not exist', () => {
+  it('adds a new record if one does not exist', async () => {
     req.ip = 'no_records';
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
       requestsTimeStamp: moment(staticTimeDay).unix(),
@@ -119,12 +123,13 @@ describe('rate-limiter', () => {
     loggerStub.should.not.have.been.called;
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly(req.ip, data);
-    next.should.have.been.calledOnce.calledWithExactly();
+    quitStub.should.have.been.calledOnce.calledWithExactly();
+    next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
-  it('ignores out of date records and sets a new one', () => {
+  it('ignores out of date records and sets a new one', async () => {
     req.ip = 'old_records';
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
       requestsTimeStamp: moment(staticTimeDay).unix(),
@@ -134,53 +139,56 @@ describe('rate-limiter', () => {
     loggerStub.should.not.have.been.called;
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly(req.ip, data);
-    next.should.have.been.calledOnce.calledWithExactly();
+    quitStub.should.have.been.calledOnce.calledWithExactly();
+    next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
-  it('does not log requests made if running in production mode', () => {
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+  it('does not log requests made if running in production mode', async () => {
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
     loggerStub.should.not.have.been.called;
   });
 
-  it('logs requests made if running in development mode', () => {
+  it('logs requests made if running in development mode', async () => {
     mockOptions.rateLimits.env = 'development';
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const reqMsg = 'Requests made by client: 2\nRequests remaining: 98';
     loggerStub.should.have.been.calledOnce.calledWithExactly('info', reqMsg);
   });
 
-  it('logs requests made if Node environment not set', () => {
+  it('logs requests made if Node environment not set', async () => {
     mockOptions.rateLimits.env = null;
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const reqMsg = 'Requests made by client: 2\nRequests remaining: 98';
     loggerStub.should.have.been.calledOnce.calledWithExactly('info', reqMsg);
   });
 
-  it('calls the callback with an error if request rate limit hit', () => {
+  it('calls the callback with an error if request rate limit hit', async () => {
     mockOptions.rateLimits.requests.maxWindowRequestCount = 1;
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     loggerStub.should.not.have.been.called;
     getStub.should.have.been.calledOnce;
     setStub.should.not.have.been.called;
+    quitStub.should.have.been.calledOnce.calledWithExactly();
     next.should.have.been.calledOnce.calledWithExactly({ code: 'DDOS_RATE_LIMIT' });
   });
 
-  it('calls the callback with an error if any other submission type rate limit hit', () => {
+  it('calls the callback with an error if any other submission type rate limit hit', async () => {
     req.ip = 'submission_records';
     mockOptions.rateLimits.submissions.maxWindowRequestCount = 99;
-    rateLimiter(mockOptions, 'submissions')(req, res, next);
+    await rateLimiter(mockOptions, 'submissions')(req, res, next);
 
     loggerStub.should.not.have.been.called;
     getStub.should.have.been.calledOnce;
     setStub.should.not.have.been.called;
+    quitStub.should.have.been.calledOnce.calledWithExactly();
     next.should.have.been.calledOnce.calledWithExactly({ code: 'SUBMISSION_RATE_LIMIT' });
   });
 
-  it('splits out requests made within rate limit window by intervals', () => {
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+  it('splits out requests made within rate limit window by intervals', async () => {
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
       requestsTimeStamp: moment(staticTimeDay).subtract(2, 'minutes').unix(),
@@ -193,12 +201,13 @@ describe('rate-limiter', () => {
     loggerStub.should.not.have.been.called;
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly('default', data);
-    next.should.have.been.calledOnce.calledWithExactly();
+    quitStub.should.have.been.calledOnce.calledWithExactly();
+    next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
-  it('tallies up recent requests if within the same interval window', () => {
+  it('tallies up recent requests if within the same interval window', async () => {
     req.ip = 'recent_records';
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
       requestsTimeStamp: moment(staticTimeDay).unix(),
@@ -208,13 +217,14 @@ describe('rate-limiter', () => {
     loggerStub.should.not.have.been.called;
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly('recent_records', data);
-    next.should.have.been.calledOnce.calledWithExactly();
+    quitStub.should.have.been.calledOnce.calledWithExactly();
+    next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
-  it('can successfully add and handle other rate limits', () => {
+  it('can successfully add and handle other rate limits', async () => {
     req.ip = 'submission_records';
     mockOptions.rateLimits.submissions.maxWindowRequestCount = 101;
-    rateLimiter(mockOptions, 'submissions')(req, res, next);
+    await rateLimiter(mockOptions, 'submissions')(req, res, next);
 
     const data = JSON.stringify([{
       submissionsTimeStamp: moment(staticTimeDay).subtract(2, 'minute').unix(),
@@ -227,21 +237,24 @@ describe('rate-limiter', () => {
     loggerStub.should.not.have.been.called;
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly('submission_records', data);
-    next.should.have.been.calledOnce.calledWithExactly();
+    quitStub.should.have.been.calledOnce.calledWithExactly();
+    next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
-  it('calls the callback with an error in the event of a fail', () => {
+  it('calls the callback with an error in the event of a fail', async () => {
+    quitStub = sinon.stub();
+
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
           return { get: () => {
             throw new Error('FAIL');
-          }};
+          }, quit: quitStub };
         }
       }
     });
 
-    rateLimiter(mockOptions, 'requests')(req, res, next);
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     loggerStub.should.not.have.been.called;
     setStub.should.not.have.been.called;
@@ -250,5 +263,6 @@ describe('rate-limiter', () => {
     const errArg = next.firstCall.args[0];
     expect(errArg).to.be.instanceof(Error);
     expect(errArg.message).to.equal('FAIL');
+    quitStub.should.have.been.calledOnce.calledWithExactly();
   });
 });

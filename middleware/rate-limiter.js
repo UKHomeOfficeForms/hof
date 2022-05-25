@@ -2,8 +2,6 @@
 const moment = require('moment');
 const redis = require('redis');
 
-const redisClient = redis.createClient();
-
 module.exports = (options, rateLimitType) => {
   const logger = options.logger || { log: (func, msg) => console[func](msg) };
   const rateLimits = options.rateLimits[rateLimitType];
@@ -15,18 +13,26 @@ module.exports = (options, rateLimitType) => {
   const WINDOW_LOG_INTERVAL_IN_MINUTES = rateLimits.windowLogIntervalInMinutes;
   const ERROR_CODE = rateLimits.errCode;
 
-  return (req, res, next) => {
+  return async (req, res, next) => {
+    const redisClient = redis.createClient();
+
+    // check that redis client exists
+    if (!redisClient) {
+      logger.log('error', 'Redis client does not exist!');
+      return next();
+    }
+
+    const closeConnection = async err => {
+      await redisClient.quit();
+      return next(err);
+    };
+
     try {
-      // check that redis client exists
-      if (!redisClient) {
-        logger.log('error', 'Redis client does not exist!');
-        return next();
-      }
       // fetch records of current user using IP address, returns null when no record is found
-      return redisClient.get(req.ip, (err, record) => {
+      return await redisClient.get(req.ip, async (err, record) => {
         if (err) {
           logger.log('error', `Error with requesting redis session for rate limiting: ${err}`);
-          return next();
+          return await closeConnection();
         }
         const currentRequestTime = moment();
         const windowStartTimestamp = moment().subtract(WINDOW_SIZE_IN_MINUTES, 'minutes').unix();
@@ -45,8 +51,8 @@ module.exports = (options, rateLimitType) => {
             [countName]: 1
           };
           newRecord.push(requestLog);
-          redisClient.set(req.ip, JSON.stringify(newRecord));
-          return next();
+          await redisClient.set(req.ip, JSON.stringify(newRecord));
+          return await closeConnection();
         }
         // if record is found, parse it's value and calculate number of requests users has made within the last window
         const requestsWithinWindow = data.filter(entry => entry[timestampName] > windowStartTimestamp);
@@ -62,7 +68,7 @@ module.exports = (options, rateLimitType) => {
         }
         // if number of requests made is greater than or equal to the desired maximum, return error
         if (totalWindowRequestsCount >= MAX_WINDOW_REQUEST_COUNT) {
-          return next({ code: ERROR_CODE });
+          return await closeConnection({ code: ERROR_CODE });
         }
         // if number of requests made is less than allowed maximum, log new entry
         const lastRequestLog = data[data.length - 1];
@@ -80,11 +86,11 @@ module.exports = (options, rateLimitType) => {
             [countName]: 1
           });
         }
-        redisClient.set(req.ip, JSON.stringify(data));
-        return next();
+        await redisClient.set(req.ip, JSON.stringify(data));
+        return await closeConnection();
       });
     } catch (err) {
-      return next(err);
+      return await closeConnection(err);
     }
   };
 };
