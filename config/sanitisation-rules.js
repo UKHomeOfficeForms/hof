@@ -13,7 +13,7 @@ const sanitisationBlacklistArray = {
   '&&': { regex: '&&+', replace: '&' },
   '@@': { regex: '@@+', replace: '@' },
   '/..;/': { regex: '/\\.\\.;/', replace: '-' }, // Purposely input before ".." as they conflict
-  '..': { regex: '\\.\\.+', replace: '.' },
+  // '..': { regex: '\\.\\.+', replace: '.' }, // Agreed to disable this rule for now unless its specifically required
   '/etc/passwd': { regex: '\/etc\/passwd', replace: '-' },
   'c:\\': { regex: 'c:\\\\', replace: '-' },
   'cmd.exe': { regex: 'cmd\\.exe', replace: '-' },
@@ -22,8 +22,8 @@ const sanitisationBlacklistArray = {
   '[': { regex: '\\[+', replace: '[-' },
   ']': { regex: '\\]+', replace: ']-' },
   '~': { regex: '~', replace: '~-' },
-  '&#': { regex: '&#', replace: '&#-' },
-  '%U': { regex: '%U', replace: '%U-' }
+  '&#': { regex: '&#', replace: '-' },
+  '%U': { regex: '%U', replace: '-' }
 };
 
 module.exports = sanitisationBlacklistArray;
