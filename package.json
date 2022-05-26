@@ -71,7 +71,7 @@
     "minimatch": "^3.0.3",
     "minimist": "^1.2.6",
     "mixwith": "^0.1.1",
-    "mkdirp": "^1.0.4",
+    "mkdirp": "0.5.6",
     "moment": "^2.29.2",
     "morgan": "^1.10.0",
     "mustache": "^2.3.0",
