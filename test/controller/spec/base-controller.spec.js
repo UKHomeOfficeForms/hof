@@ -524,7 +524,7 @@ describe('Form Controller', () => {
         { value: 'HELLO&&WORLD3', expected: 'HELLO&WORLD3' },
         { value: 'HELLO@@WORLD4', expected: 'HELLO@WORLD4' },
         { value: 'HELLO/..;/WORLD5', expected: 'HELLO-WORLD5' },
-        { value: 'HELLO......WORLD6', expected: 'HELLO.WORLD6' },
+        { value: 'HELLO......WORLD6', expected: 'HELLO......WORLD6' },
         { value: 'HELLO/eTc/paSsWdWORLD7', expected: 'HELLO-WORLD7' },
         { value: 'HELLOC:\\WORLD8', expected: 'HELLO-WORLD8' },
         { value: 'HELLOcMd.ExEWORLD9', expected: 'HELLO-WORLD9' },
@@ -533,11 +533,11 @@ describe('Form Controller', () => {
         { value: 'HELLO[WORLD12', expected: 'HELLO[-WORLD12' },
         { value: 'HELLO]WORLD13', expected: 'HELLO]-WORLD13' },
         { value: 'HELLO~WORLD14', expected: 'HELLO~-WORLD14' },
-        { value: 'HELLO&#WORLD15', expected: 'HELLO&#-WORLD15' },
-        { value: 'HELLO%UWORLD16', expected: 'HELLO%U-WORLD16' },
+        { value: 'HELLO&#WORLD15', expected: 'HELLO-WORLD15' },
+        { value: 'HELLO%UWORLD16', expected: 'HELLO-WORLD16' },
         {
           value: '1/*2*/3|4&&5@@6..7/etc/PASSwd8C:\\9Cmd.eXe10/..;/11<12>13[14]15~16&#17%U18',
-          expected: '1-2-3-4&5@6.7-8-9-10-11<-12>-13[-14]-15~-16&#-17%U-18'
+          expected: '1-2-3-4&5@6..7-8-9-10-11<-12>-13[-14]-15~-16-17-18'
         },
         { value: 'Test User', expected: 'Test User'},
         { value: '123 Test Street', expected: '123 Test Street'},
