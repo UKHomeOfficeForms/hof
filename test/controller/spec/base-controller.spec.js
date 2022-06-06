@@ -517,7 +517,7 @@ describe('Form Controller', () => {
       form.validate.should.have.been.calledOn(form);
     });
 
-    describe('sanitise inputs', () => {
+    describe.only('sanitise inputs', () => {
       const tests = [
         { value: 'HELLO\/*TEST*\/WORLD1', expected: 'HELLO-TEST-WORLD1' },
         { value: 'HELLO|WORLD2', expected: 'HELLO-WORLD2' },
@@ -545,7 +545,23 @@ describe('Form Controller', () => {
         { value: 'United Kingdom', expected: 'United Kingdom'},
         { value: '2022-01-01', expected: '2022-01-01' },
         { value: false, expected: false },
-        { value: 12345, expected: 12345 }
+        { value: 12345, expected: 12345 },
+        { value: 'Hello[World', expected: 'Hello[-World' }, //Should add the hypen,
+        { value: 'Hello[[World', expected: 'Hello[-World' }, //Should remove duplicated and add the hypen,
+        { value: 'Hello[[[[[[-World', expected: 'Hello[-World' }, //Should remove duplicates and ignore the hypen
+        { value: 'Hello[-World', expected: 'Hello[-World' }, //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
+        { value: 'Hello<World', expected: 'Hello<-World' }, //Should add the hypen,
+        { value: 'Hello<<World', expected: 'Hello<-World' }, //Should remove duplicated and add the hypen,
+        { value: 'Hello<<<<<<-World', expected: 'Hello<-World' }, //Should remove duplicates and ignore the hypen
+        { value: 'Hello<-World', expected: 'Hello<-World' }, //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
+        { value: 'Hello>World', expected: 'Hello>-World' }, //Should add the hypen,
+        { value: 'Hello>>World', expected: 'Hello>-World' }, //Should remove duplicated and add the hypen,
+        { value: 'Hello>>>>>>-World', expected: 'Hello>-World' }, //Should remove duplicates and ignore the hypen
+        { value: 'Hello>-World', expected: 'Hello>-World' }, //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
+        { value: 'Hello~World', expected: 'Hello~-World' }, //Should add the hypen,
+        { value: 'Hello~~World', expected: 'Hello~-World' }, //Should remove duplicated and add the hypen,
+        { value: 'Hello~~~~~~-World', expected: 'Hello~-World' }, //Should remove duplicates and ignore the hypen
+        { value: 'Hello~-World', expected: 'Hello~-World' } //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
       ];
 
       tests.forEach(({value, expected}) => {
