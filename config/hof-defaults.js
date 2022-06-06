@@ -20,7 +20,7 @@ const defaults = {
   host: process.env.HOST || '0.0.0.0',
   port: process.env.PORT || '8080',
   env: process.env.NODE_ENV || 'development',
-  gaTagId: process.env.GA_TAG,
+  gaTagId: process.env.GA_TAG || 'Test-GA-Tag',
   ga4TagId: process.env.GA_4_TAG,
   gaCrossDomainTrackingTagId: process.env.GDS_CROSS_DOMAIN_GA_TAG,
   loglevel: process.env.LOG_LEVEL || 'info',
