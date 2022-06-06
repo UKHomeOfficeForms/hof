@@ -1,6 +1,7 @@
 
 const moment = require('moment');
 const redis = require('redis');
+const config = require('./../config/hof-defaults');
 
 module.exports = (options, rateLimitType) => {
   const logger = options.logger || { log: (func, msg) => console[func](msg) };
@@ -14,7 +15,7 @@ module.exports = (options, rateLimitType) => {
   const ERROR_CODE = rateLimits.errCode;
 
   return async (req, res, next) => {
-    const redisClient = redis.createClient();
+    const redisClient = redis.createClient(config.redis);
 
     // check that redis client exists
     if (!redisClient) {
