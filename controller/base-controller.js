@@ -177,12 +177,12 @@ module.exports = class BaseController extends EventEmitter {
           // For each property in our form data
           Object.keys(sanitisationBlacklistArray).forEach(function (blacklisted, blacklistedIndex) {
             const blacklistedDetail = sanitisationBlacklistArray[blacklisted];
-            blacklistedDetail.forEach((step) => {
+            blacklistedDetail.forEach(step => {
               const regexQuery = new RegExp(step.regex, 'gi');
               // Will perform the required replace based on our passed in regex and the replace string
               req.form.values[property] = req.form.values[property].replace(regexQuery, step.replace);
             });
-          })  
+          });
         }
       });
     }

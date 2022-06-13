@@ -546,22 +546,38 @@ describe('Form Controller', () => {
         { value: '2022-01-01', expected: '2022-01-01' },
         { value: false, expected: false },
         { value: 12345, expected: 12345 },
-        { value: 'Hello[World', expected: 'Hello[-World' }, //Should add the hypen,
-        { value: 'Hello[[World', expected: 'Hello[-World' }, //Should remove duplicated and add the hypen,
-        { value: 'Hello[[[[[[-World', expected: 'Hello[-World' }, //Should remove duplicates and ignore the hypen
-        { value: 'Hello[-World', expected: 'Hello[-World' }, //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
-        { value: 'Hello<World', expected: 'Hello<-World' }, //Should add the hypen,
-        { value: 'Hello<<World', expected: 'Hello<-World' }, //Should remove duplicated and add the hypen,
-        { value: 'Hello<<<<<<-World', expected: 'Hello<-World' }, //Should remove duplicates and ignore the hypen
-        { value: 'Hello<-World', expected: 'Hello<-World' }, //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
-        { value: 'Hello>World', expected: 'Hello>-World' }, //Should add the hypen,
-        { value: 'Hello>>World', expected: 'Hello>-World' }, //Should remove duplicated and add the hypen,
-        { value: 'Hello>>>>>>-World', expected: 'Hello>-World' }, //Should remove duplicates and ignore the hypen
-        { value: 'Hello>-World', expected: 'Hello>-World' }, //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
-        { value: 'Hello~World', expected: 'Hello~-World' }, //Should add the hypen,
-        { value: 'Hello~~World', expected: 'Hello~-World' }, //Should remove duplicated and add the hypen,
-        { value: 'Hello~~~~~~-World', expected: 'Hello~-World' }, //Should remove duplicates and ignore the hypen
-        { value: 'Hello~-World', expected: 'Hello~-World' } //Should ignore because it's already suffixed with the hyphen and there's no duplicates,
+        // Should add the hypen
+        { value: 'Hello[World', expected: 'Hello[-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello[[World', expected: 'Hello[-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello[[[[[[-World', expected: 'Hello[-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello[-World', expected: 'Hello[-World' },
+        // Should add the hypen
+        { value: 'Hello<World', expected: 'Hello<-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello<<World', expected: 'Hello<-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello<<<<<<-World', expected: 'Hello<-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello<-World', expected: 'Hello<-World' },
+        // Should add the hypen
+        { value: 'Hello>World', expected: 'Hello>-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello>>World', expected: 'Hello>-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello>>>>>>-World', expected: 'Hello>-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello>-World', expected: 'Hello>-World' },
+        // Should add the hypen
+        { value: 'Hello~World', expected: 'Hello~-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello~~World', expected: 'Hello~-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello~~~~~~-World', expected: 'Hello~-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello~-World', expected: 'Hello~-World' }
       ];
 
       tests.forEach(({value, expected}) => {
