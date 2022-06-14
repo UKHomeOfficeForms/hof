@@ -1,6 +1,6 @@
 {
   "name": "hof",
-  "description": "A bootstrap for HOF projects2",
+  "description": "A bootstrap for HOF projects",
   "version": "19.14.7",
   "license": "MIT",
   "main": "index.js",
