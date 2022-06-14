@@ -116,7 +116,7 @@
     "node-mocks-http": "^1.6.2",
     "npm-run-all": "^3.1.1",
     "nyc": "^15.1.0",
-    "playwright": "^1.16.3",
+    "playwright": "1.22.2",
     "postcode": "0.2.2",
     "proxyquire": "^1.7.11",
     "release-it": "^14.10.0",
