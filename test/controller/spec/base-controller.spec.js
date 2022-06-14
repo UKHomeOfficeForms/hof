@@ -517,7 +517,7 @@ describe('Form Controller', () => {
       form.validate.should.have.been.calledOn(form);
     });
 
-    describe.only('sanitise inputs', () => {
+    describe('sanitise inputs', () => {
       const tests = [
         { value: 'HELLO\/*TEST*\/WORLD1', expected: 'HELLO-TEST-WORLD1' },
         { value: 'HELLO|WORLD2', expected: 'HELLO-WORLD2' },
