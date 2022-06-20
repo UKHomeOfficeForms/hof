@@ -24,7 +24,12 @@ function clicked(e) {
     }
 
     if (inputs) {
-      inputs[0].focus();
+      if (inputs[0].getAttribute('type') === 'hidden') {
+        var getVisibleElements = group.querySelectorAll('input[type=text]');
+        getVisibleElements[0].focus();
+      } else {
+        inputs[0].focus();
+      }
     }
   }
 }
