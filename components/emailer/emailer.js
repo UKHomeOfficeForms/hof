@@ -20,7 +20,12 @@ module.exports = class Emailer {
 
     const transport = transports[options.transport](options.transportOptions || {});
 
-    this.emailer = nodemailer.createTransport(transport);
+    if (options.transportOptions !== undefined &&
+      options.transportOptions.host !== undefined && options.transportOptions.host !== null) {
+      this.emailer = nodemailer.createTransport(options.transportOptions);
+    } else {
+      this.emailer = nodemailer.createTransport(transport);
+    }
   }
 
   send(to, subject, body) {
