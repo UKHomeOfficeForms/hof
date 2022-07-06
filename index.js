@@ -79,7 +79,7 @@ const getContentSecurityPolicy = (config, res) => {
     fontSrc: ['fonts.gstatic.com '],
     scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
     imgSrc: ['www.google-analytics.com', 'ssl.gstatic.com'],
-    connectSrc: ['www.google-analytics.com']
+    connectSrc: ['https://www.google-analytics.com', 'https://region1.google-analytics.com']
   };
 
   if (config.gaTagId) {
