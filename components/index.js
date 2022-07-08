@@ -5,5 +5,6 @@ module.exports = {
   clearSession: require('./clear-session'),
   date: require('./date'),
   emailer: require('./emailer'),
+  notify: require('./notify'),
   summary: require('./summary')
 };
