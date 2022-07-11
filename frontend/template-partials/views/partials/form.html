@@ -1,7 +1,8 @@
 <form action="" method="POST" {{$encoding}}{{/encoding}} autocomplete="off" novalidate="true" spellcheck="false">
   {{$intro}}
-    {{#intro}}<span class="govuk-hint" >{{intro}}</span>{{/intro}}
+    {{#intro}}<p>{{intro}}</p>{{/intro}}
   {{/intro}}
+
   {{$form}}{{/form}}
   {{#csrf-token}}
     <input type="hidden" name="x-csrf-token" value="{{csrf-token}}" />
