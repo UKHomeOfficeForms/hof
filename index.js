@@ -260,7 +260,7 @@ function bootstrap(options) {
       const protocol = startConfig.protocol === 'http' ? http : https;
 
       instance.server = protocol.createServer(app);
-      switch(process.env.NODE_ENV.toLowerCase()){
+      switch(defaults.env.toLowerCase()){
         case 'development': 
           return new Promise((resolve, reject) => {
             instance.server.listen(startConfig.port, startConfig.host, err => {
