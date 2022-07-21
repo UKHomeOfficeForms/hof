@@ -260,23 +260,35 @@ function bootstrap(options) {
       const protocol = startConfig.protocol === 'http' ? http : https;
 
       instance.server = protocol.createServer(app);
-
-      return new Promise((resolve, reject) => {
-        instance.server.listen(startConfig.port, startConfig.host, err => {
-          config.logger.log('info', `${config.appName} started!`);
-          resolve(instance);
-        }).on('error', err =>{
-            if(err.code === 'EADDRINUSE'){
-              startConfig.port++;
-              setTimeout(() => {
-                instance.server.listen(startConfig.port);
-              }, 250);
-            }
-            else{
-              reject(new Error('Unable to connect to server'));
-            }
-        });
-      });
+      switch(process.env.NODE_ENV.toLowerCase()){
+        case 'development': 
+          return new Promise((resolve, reject) => {
+            instance.server.listen(startConfig.port, startConfig.host, err => {
+              config.logger.log('info', `${config.appName} started!`);
+              resolve(instance);
+            }).on('error', err =>{
+                if(err.code === 'EADDRINUSE'){
+                  startConfig.port++;
+                  setTimeout(() => {
+                    instance.server.listen(startConfig.port);
+                  }, 250);
+                }
+                else{
+                  reject(new Error('Unable to connect to server'));
+                }
+            });
+          });
+        default:
+          return new Promise((resolve, reject) => {
+            instance.server.listen(startConfig.port, startConfig.host, err => {
+              if (err) {
+                reject(new Error('Unable to connect to server'));
+              }
+              config.logger.log('info', `${config.appName} started!`);
+              resolve(instance);
+            });
+          });
+    }
     },
 
     stop() {
