@@ -303,7 +303,7 @@ module.exports = function (options) {
         invalid: this.errors && this.errors[key] && opts.required,
         label: t(fieldLabel || 'fields.' + key + '.label'),
         selected: selected,
-        className: classNames(field) || 'block-label',
+        className: classNames(field) || 'govuk-label govuk-checkboxes__label',
         child: field.child,
         renderChild: renderChild.bind(this)
       });
