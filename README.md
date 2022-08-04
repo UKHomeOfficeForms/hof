@@ -1471,6 +1471,8 @@ To render a specific fields in your templates use the mixin name (matching those
 - `toggle`: Can be used to toggle the display of the HTML element with a matching `id`. See [hof-frontend-toolkit](https://github.com/UKHomeOfficeForms/hof-frontend-toolkit/blob/master/assets/javascript/progressive-reveal.js) for details.
 - `attributes`: A hash of key/value pairs applicable to a HTML `textarea` field. Each key/value is assigned as an attribute of the `textarea`. For example `spellcheck="true"`.
 - `child`: Render a child partial beneath each option in an `optionGroup`. Accepts a custom mustache template string, a custom partial in the format `partials/{your-partial-name}`, `'html'` which is used to specify the html for the field has already been prerendered, such as in [hof-component-date](https://github.com/UKHomeOfficeForms/hof-component-date) or a template mixin key which will be rendered within a panel element partial.
+- `isPageHeading`: Applicable to `checkbox` and `radio` controls. Sets the legend as the page heading on single page questions.
+- `isWarning`: Applicable to `checkbox` and `radio` controls. Allows warning text to be placed after page headings on single page questions if required.
 
 
 # HOF-template-partials
