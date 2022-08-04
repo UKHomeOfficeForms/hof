@@ -224,6 +224,7 @@ module.exports = function (options) {
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
       const detail = field.detail;
+      let warningValue = 'fields.' + key + '.warning';
       let legendClassName;
       let legendValue = 'fields.' + key + '.legend';
       if (legend) {
@@ -241,6 +242,8 @@ module.exports = function (options) {
         legendClassName: legendClassName,
         role: opts.type === 'radio' ? 'radiogroup' : 'group',
         isPageHeading: field.isPageHeading,
+        isWarning: field.isWarning,
+        warning: t(warningValue),
         detail: detail ? detail : '',
         hint: conditionalTranslate(getTranslationKey(field, key, 'hint')),
         options: _.map(field.options, function (obj) {
