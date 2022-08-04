@@ -224,7 +224,7 @@ module.exports = function (options) {
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
       const detail = field.detail;
-      let warningValue = 'fields.' + key + '.warning';
+      const warningValue = 'fields.' + key + '.warning';
       let legendClassName;
       let legendValue = 'fields.' + key + '.legend';
       if (legend) {
