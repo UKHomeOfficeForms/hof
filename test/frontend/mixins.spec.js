@@ -828,11 +828,11 @@ describe('Template Mixins', () => {
         }));
       });
 
-      it('should default className `block-label`', () => {
+      it('should default className `govuk-label govuk-checkboxes__label`', () => {
         middleware(req, res, next);
         res.locals.checkbox().call(res.locals, 'field-name');
         render.should.have.been.calledWith(sinon.match({
-          className: 'block-label'
+          className: 'govuk-label govuk-checkboxes__label'
         }));
       });
 

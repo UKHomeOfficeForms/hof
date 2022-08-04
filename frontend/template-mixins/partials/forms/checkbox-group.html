@@ -5,6 +5,15 @@
                 {{legend}}
             {{#isPageHeading}}</h1>{{/isPageHeading}}
         </legend>
+        {{#isWarning}}
+        <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-warning-text__assistive">Warning</span>
+             {{warning}}
+            </strong>
+          </div>
+        {{/isWarning}}
         {{#hint}}<div id="{{key}}-hint" class="govuk-hint">{{hint}}</div>{{/hint}}
         {{#error}}
         <p id="{{key}}-error" class="govuk-error-message">
