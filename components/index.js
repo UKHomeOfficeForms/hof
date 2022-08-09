@@ -6,5 +6,5 @@ module.exports = {
   date: require('./date'),
   emailer: require('./emailer'),
   summary: require('./summary'),
-  notify: require('./notify'),
+  notify: require('./notify')
 };
