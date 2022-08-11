@@ -88,6 +88,7 @@
     "uglify-js": "^3.14.3",
     "underscore": "^1.12.1",
     "urijs": "^1.19.11",
+    "uuid": "^8.3.2",
     "winston": "^3.7.2"
   },
   "devDependencies": {

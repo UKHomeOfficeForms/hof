@@ -1,6 +1,6 @@
 'use strict';
 const NotifyClient = require('notifications-node-client').NotifyClient;
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = class Notify {
   constructor(opts) {
@@ -11,7 +11,7 @@ module.exports = class Notify {
   }
 
   send(email) {
-    const reference = uuid.v1();
+    const reference = uuidv4();
 
     return this.notifyClient.sendEmail(this.notifyTemplate, email.recipient, {
       personalisation: {
