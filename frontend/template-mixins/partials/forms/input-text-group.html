@@ -1,5 +1,5 @@
 <div id="{{id}}-group" class="{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}}{{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
-    {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}<label for="{{id}}" class="{{labelClassName}}">
+    {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}<label for="{{id}}" class="{{labelClassName}}{{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
         {{{label}}}
       </label>
     {{#isPageHeading}}</h1>{{/isPageHeading}}
