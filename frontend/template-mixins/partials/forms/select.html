@@ -9,7 +9,7 @@
         {{/error}}
     </label>
     {{#isPageHeading}}</h1>{{/isPageHeading}}
-    <select id="{{id}}" class="govuk-select{{#className}} {{className}}{{/className}}{{#error}} invalid-input{{/error}}" name="{{id}}" aria-required="{{required}}">
+    <select id="{{id}}" class="govuk-select{{#className}} {{className}}{{/className}}{{#error}} govuk-select—error{{/error}}" name="{{id}}" aria-required="{{required}}">
     {{#options}}
         <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
     {{/options}}
