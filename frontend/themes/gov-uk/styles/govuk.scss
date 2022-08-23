@@ -14,7 +14,7 @@ $path: "/public/images/" !default;
 
 // Govuk frontend
 // https://github.com/alphagov/govuk-frontend-docs
-@import "node_modules/govuk-frontend/govuk/all";
+@import "govuk-frontend";
 
 // Custom
 @import "base";
