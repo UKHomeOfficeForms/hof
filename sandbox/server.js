@@ -13,5 +13,6 @@ bootstrap({
       active: true
     }
   },
-  getAccessibility: true
+  getAccessibility: true,
+  "port": 8082
 });
