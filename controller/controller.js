@@ -115,6 +115,7 @@ module.exports = class Controller extends BaseController {
       title: this.getTitle(route, lookup, req.form.options.fields, res.locals),
       header: this.getHeader(route, lookup, res.locals),
       captionHeading: this.getCaptionHeading(route, lookup, res.locals),
+      warning: this.getWarning(route, lookup, res.locals),
       subHeading: this.getSubHeading(route, lookup, res.locals),
       intro: this.getIntro(route, lookup, res.locals),
       backLink: this.getBackLink(req, res),
@@ -141,6 +142,10 @@ module.exports = class Controller extends BaseController {
 
   getSubHeading(route, lookup, locals) {
     return lookup(`pages.${route}.subHeading`, locals);
+  }
+
+  getWarning(route, lookup, locals) {
+    return lookup(`pages.${route}.warning`, locals);
   }
 
   getTitle(route, lookup, fields, locals) {
