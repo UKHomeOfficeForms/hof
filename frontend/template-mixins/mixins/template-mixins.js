@@ -215,6 +215,7 @@ module.exports = function (options) {
         child: field.child,
         isPageHeading: field.isPageHeading,
         attributes: field.attributes,
+        isPrefixOrSuffix: _.map(field.attributes, item => {if (item.prefix || item.suffix !== undefined) return true;}),
         renderChild: renderChild.bind(this)
       });
     }
