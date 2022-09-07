@@ -1,6 +1,8 @@
 
 const moment = require('moment');
 const redis = require('redis');
+const { createClient } = require('redis');
+
 const config = require('./../config/hof-defaults');
 
 module.exports = (options, rateLimitType) => {
@@ -15,7 +17,8 @@ module.exports = (options, rateLimitType) => {
   const ERROR_CODE = rateLimits.errCode;
 
   return async (req, res, next) => {
-    const redisClient = redis.createClient(config.redis);
+    const redisClient = createClient(config.redis);
+    redisClient.connect();
 
     // check that redis client exists
     if (!redisClient) {
@@ -23,6 +26,22 @@ module.exports = (options, rateLimitType) => {
       return next();
     }
 
+    redisClient.on('connecting', () => {
+      logger.info('Connecting to redis');
+    });
+
+    redisClient.on('connect', () => {
+      logger.info('Connected to redis');
+    });
+
+    redisClient.on('reconnecting', () => {
+      logger.info('Reconnecting to redis');
+    });
+
+    redisClient.on('error', e => {
+      logger.error(e);
+    });
+    
     const closeConnection = async err => {
       await redisClient.quit();
       return next(err);
