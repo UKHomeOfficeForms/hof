@@ -70,7 +70,8 @@ const getContentSecurityPolicy = (config, res) => {
     imgSrc: ["'self'"],
     fontSrc: ["'self'", 'data:', 'https://design-system.service.gov.uk'],
     scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
-    'frame-ancestors': ["'none'"]
+    'frame-ancestors': ["'none'"],
+    'base-uri': ["'self'"]
   };
   /* eslint-enable quotes */
 

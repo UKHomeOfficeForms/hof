@@ -26,7 +26,7 @@ function getHeaders(res, type) {
   return headers;
 }
 
-describe('hof server', () => {
+describe.only('hof server', () => {
   before(() => {
     bootstrap.configure('root', root);
   });
@@ -518,6 +518,7 @@ describe('hof server', () => {
             .and.include("'self'");
           /* eslint-enable quotes */
           csp['frame-ancestors'].should.eql(['\'none\'']);
+          csp['base-uri'].should.eql(['\'self\'']);
         });
     });
 
