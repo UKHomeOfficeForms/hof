@@ -26,7 +26,7 @@ function getHeaders(res, type) {
   return headers;
 }
 
-describe.only('hof server', () => {
+describe('hof server', () => {
   before(() => {
     bootstrap.configure('root', root);
   });
