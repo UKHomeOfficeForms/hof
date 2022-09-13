@@ -171,9 +171,14 @@ module.exports = class Controller extends BaseController {
       Object.keys(req.form.errors).forEach(key => {
         if (req.form && req.form.options && req.form.options.fields) {
           const field = req.form.options.fields[key];
-          // get first option for radios
-          if (field.mixin === 'radio-group') {
-            req.form.errors[key].errorLinkId = key + '-' + field.options[0];
+          // get first option for radios and checkbox
+          if (field.mixin === 'radio-group' || field.mixin === 'checkbox-group') {
+            // get first option for radios and checkbox where there is a toggle
+            if(typeof field.options[0] === 'object') {
+              req.form.errors[key].errorLinkId = key + '-' + field.options[0].value;
+            } else {
+              req.form.errors[key].errorLinkId = key + '-' + field.options[0];
+            }
           // eslint-disable-next-line brace-style
           }
           // get first field for date input control
