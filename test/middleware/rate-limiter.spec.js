@@ -11,6 +11,8 @@ describe('rate-limiter', () => {
   let getStub;
   let setStub;
   let quitStub;
+  let connectStub;
+  let onStub;
   let mockOptions;
 
   const staticTimeDay = '2022-05-16 12:00';
@@ -23,6 +25,8 @@ describe('rate-limiter', () => {
     getStub = sinon.stub();
     setStub = sinon.stub();
     quitStub = sinon.stub();
+    connectStub = sinon.stub();
+    onStub = sinon.stub();
 
     req.ip = 'default';
 
@@ -77,8 +81,14 @@ describe('rate-limiter', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
-          return { get: getStub, set: setStub, quit: quitStub };
-        }
+          return { set: setStub, connect: connectStub.resolves(),get: getStub,
+            v4: {
+              QUIT: quitStub
+            },
+            legacyMode: true,
+            on: onStub
+           };
+        },
       },
       moment: () => moment(staticTimeDay)
     });
@@ -86,7 +96,10 @@ describe('rate-limiter', () => {
 
   it('logs an error and returns if no redis client is present', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
-      redis: { createClient: () => null }
+      redis: { 
+        createClient: () => null,
+        on: onStub
+       }
     });
 
     rateLimiter(mockOptions, 'requests')(req, res, next);
@@ -124,6 +137,7 @@ describe('rate-limiter', () => {
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly(req.ip, data);
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    connectStub.should.have.been.calledOnce;
     next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
@@ -140,17 +154,20 @@ describe('rate-limiter', () => {
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly(req.ip, data);
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    connectStub.should.have.been.calledOnce;
     next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
   it('does not log requests made if running in production mode', async () => {
     await rateLimiter(mockOptions, 'requests')(req, res, next);
+    connectStub.should.have.been.calledOnce;
     loggerStub.should.not.have.been.called;
   });
 
   it('logs requests made if running in development mode', async () => {
     mockOptions.rateLimits.env = 'development';
     await rateLimiter(mockOptions, 'requests')(req, res, next);
+    connectStub.should.have.been.calledOnce;
 
     const reqMsg = 'Requests made by client: 2\nRequests remaining: 98';
     loggerStub.should.have.been.calledOnce.calledWithExactly('info', reqMsg);
@@ -159,6 +176,7 @@ describe('rate-limiter', () => {
   it('logs requests made if Node environment not set', async () => {
     mockOptions.rateLimits.env = null;
     await rateLimiter(mockOptions, 'requests')(req, res, next);
+    connectStub.should.have.been.calledOnce;
 
     const reqMsg = 'Requests made by client: 2\nRequests remaining: 98';
     loggerStub.should.have.been.calledOnce.calledWithExactly('info', reqMsg);
@@ -172,6 +190,7 @@ describe('rate-limiter', () => {
     getStub.should.have.been.calledOnce;
     setStub.should.not.have.been.called;
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    connectStub.should.have.been.calledOnce;
     next.should.have.been.calledOnce.calledWithExactly({ code: 'DDOS_RATE_LIMIT' });
   });
 
@@ -184,6 +203,7 @@ describe('rate-limiter', () => {
     getStub.should.have.been.calledOnce;
     setStub.should.not.have.been.called;
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    connectStub.should.have.been.calledOnce;
     next.should.have.been.calledOnce.calledWithExactly({ code: 'SUBMISSION_RATE_LIMIT' });
   });
 
@@ -202,6 +222,7 @@ describe('rate-limiter', () => {
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly('default', data);
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    connectStub.should.have.been.calledOnce;
     next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
@@ -218,6 +239,7 @@ describe('rate-limiter', () => {
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly('recent_records', data);
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    connectStub.should.have.been.calledOnce;
     next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
@@ -238,6 +260,7 @@ describe('rate-limiter', () => {
     getStub.should.have.been.calledOnce;
     setStub.should.have.been.calledOnce.calledWithExactly('submission_records', data);
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    connectStub.should.have.been.calledOnce;
     next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
@@ -247,9 +270,13 @@ describe('rate-limiter', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
-          return { get: () => {
+          return { connect: connectStub,get: () => {
             throw new Error('FAIL');
-          }, quit: quitStub };
+          }, v4: {
+            QUIT: quitStub
+           }, 
+           on: onStub
+          };
         }
       }
     });

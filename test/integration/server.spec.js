@@ -714,7 +714,7 @@ describe('hof server', () => {
     let reqMiddleware;
 
     beforeEach(() => {
-      redisClient = redis.createClient();
+      redisClient = redis.createClient({legacyMode: true});
     });
 
     afterEach(() => {
