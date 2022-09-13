@@ -714,11 +714,7 @@ describe('hof server', () => {
     let reqMiddleware;
 
     beforeEach(() => {
-      // Will default to localhost
-      redisClient = redis.createClient({ legacy: true, socket: {
-        host: '',
-        port: ''
-      }});
+      redisClient = redis.createClient({legacyMode: true});
     });
 
     afterEach(() => {
