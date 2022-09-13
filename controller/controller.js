@@ -177,7 +177,7 @@ module.exports = class Controller extends BaseController {
           // eslint-disable-next-line brace-style
           }
           // get first field for date input control
-          else if (field && field.controlType === 'date-input') {
+          else if (field && field.mixin === 'input-date') {
             req.form.errors[key].errorLinkId = key + '-day';
           } else {
             req.form.errors[key].errorLinkId = key;
