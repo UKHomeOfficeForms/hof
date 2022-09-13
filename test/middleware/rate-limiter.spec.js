@@ -81,14 +81,14 @@ describe('rate-limiter', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
-          return { set: setStub, connect: connectStub.resolves(),get: getStub,
+          return { set: setStub, connect: connectStub.resolves(), get: getStub,
             v4: {
               QUIT: quitStub
             },
             legacyMode: true,
             on: onStub
-           };
-        },
+          };
+        }
       },
       moment: () => moment(staticTimeDay)
     });
@@ -96,10 +96,10 @@ describe('rate-limiter', () => {
 
   it('logs an error and returns if no redis client is present', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
-      redis: { 
+      redis: {
         createClient: () => null,
         on: onStub
-       }
+      }
     });
 
     rateLimiter(mockOptions, 'requests')(req, res, next);
@@ -270,12 +270,12 @@ describe('rate-limiter', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
-          return { connect: connectStub,get: () => {
+          return { connect: connectStub, get: () => {
             throw new Error('FAIL');
           }, v4: {
             QUIT: quitStub
-           }, 
-           on: onStub
+          },
+          on: onStub
           };
         }
       }
