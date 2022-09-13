@@ -21,6 +21,7 @@ module.exports = {
     isPageHeading: 'true'
   },
   'dateOfBirth': dateComponent('dateOfBirth', {
+    mixin: 'input-date',
     isPageHeading: 'true',
     validate: [
       'required',
