@@ -14,5 +14,5 @@ bootstrap({
     }
   },
   getAccessibility: true,
-  "port": 8082
+  "port": 8080
 });
