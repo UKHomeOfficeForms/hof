@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "19.14.16",
+  "version": "19.14.16-redis-beta.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
