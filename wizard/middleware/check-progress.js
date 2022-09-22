@@ -28,8 +28,8 @@ module.exports = (route, controller, steps, begin) => {
     return _.uniq(allSteps);
   };
 
-   // Gets all the possible routes
-   const walkAllPossibleSteps = (stepName, allStepsInService, allVisitedSteps) => {
+  // Gets all the possible routes
+  const walkAllPossibleSteps = (stepName, allStepsInService, allVisitedSteps) => {
     const stepIncludingFieldsAndForks = allStepsInService[stepName];
     if (!stepIncludingFieldsAndForks) { return; }
 
