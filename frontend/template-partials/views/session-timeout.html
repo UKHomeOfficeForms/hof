@@ -1,6 +1,7 @@
 {{<error}}
   {{$content}}
-    <p>{{{content.message}}}</p>
+    <h1 class="govuk-heading-l">{{{content.title}}}</h1>
+    <h2 class="govuk-heading-m">{{{content.message}}}</h2>
     <a href="{{startLink}}" class="govuk-button" role="button">{{#t}}buttons.start-again{{/t}}</a>
   {{/content}}
 {{/error}}
