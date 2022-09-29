@@ -1722,3 +1722,9 @@ Additional vendor JavaScript files are included. These are:
 - safari-cachebuster.js
 
 Copy `assets/javascript/vendor` into your javascript directory (ie `hmpo/vendor`) and compile them with your JavaScript.
+
+## Journey Header Navigation.html page
+
+- Navigation.html contains a journeyHeaderURL, which is set in the controller. 
+- getJourneyHeaderURL within the controller translates an empty baseURL to '/'.
+- The above helps fix broken journey header URLs in the GRO and UKVIC services which both have a baseURL's set to '/'.
