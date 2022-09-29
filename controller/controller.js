@@ -113,6 +113,7 @@ module.exports = class Controller extends BaseController {
       baseUrl: req.baseUrl,
       skipToMain: this.getFirstFormItem(req.form.options.fields),
       title: this.getTitle(route, lookup, req.form.options.fields, res.locals),
+      journeyHeaderURL: this.getJourneyHeaderURL(req.baseUrl),
       header: this.getHeader(route, lookup, res.locals),
       captionHeading: this.getCaptionHeading(route, lookup, res.locals),
       warning: this.getWarning(route, lookup, res.locals),
@@ -122,6 +123,10 @@ module.exports = class Controller extends BaseController {
       nextPage: this.getNextStep(req, res),
       errorLength: this.getErrorLength(req, res)
     }, stepLocals);
+  }
+
+  getJourneyHeaderURL(url) {
+    return url === '' ? '/' : url;
   }
 
   getFirstFormItem(fields) {
