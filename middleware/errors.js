@@ -12,6 +12,8 @@ const getContent = (err, translate) => {
   if (err.code === 'SESSION_TIMEOUT') {
     err.status = 401;
     err.template = 'session-timeout';
+    err.title = (translate && translate('errors.session.title'));
+    err.message = (translate && translate('errors.session.message'));
     content.title = (translate && translate('errors.session.title'));
     content.message = (translate && translate('errors.session.message'));
   }
