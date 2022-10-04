@@ -44,9 +44,9 @@
     {{/gaTagId}}
   {{/cookieMessage}}
   {{$footerSupportLinks}}
-    <ul>
+    <ul class="govuk-footer__inline-list">
       {{#footerSupportLinks}}
-        <li class="govuk-footer__inline-list-item"><a href="{{path}}">{{#t}}{{property}}{{/t}}</a></li>
+        <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="{{path}}">{{#t}}{{property}}{{/t}}</a></li>
       {{/footerSupportLinks}}
       {{^footerSupportLinks}}
         <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="/cookies">{{#t}}base.cookies{{/t}}</a></li>
