@@ -1,14 +1,22 @@
-<div id="{{id}}-group" class="form-group{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} validation-error{{/error}}">
-    <label for="{{id}}" class="{{labelClassName}}">
+{{#maxlength}}
+<div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="{{maxlength}}">
+{{/maxlength}}
+<div id="{{id}}-group" class="{{#compound}}form-group-compound {{/compound}}{{#formGroupClassName}}{{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
+    {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}<label for="{{id}}" class="{{labelClassName}}{{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
         {{{label}}}
-        {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="form-hint">{{hint}}</span>{{/hint}}
-        {{#error}}<span id="{{id}}-error" class="error-message">{{error.message}}</span>{{/error}}
+        {{#error}} 
+        <p id="{{id}}-error" class="govuk-error-message">
+            <span id="{{id}}-error" class="govuk-visually-hidden">Error:</span>{{error.message}}
+          </p>
+        {{/error}}
     </label>
+    {{#isPageHeading}}</h1>{{/isPageHeading}}
+    {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</div>{{/hint}}
     {{#renderChild}}{{/renderChild}}
     <textarea
         name="{{id}}"
         id="{{id}}"
-        class="form-control{{#className}} {{className}}{{/className}} {{#maxlength}}maxlength{{/maxlength}}{{#error}} invalid-input{{/error}}"
+        class="govuk-textarea{{#className}} {{className}}{{/className}} {{#maxlength}}maxlength{{/maxlength}}{{#error}} govuk-input--error{{/error}}"
         aria-required="{{required}}"
         {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
         {{#attributes}}
@@ -19,5 +27,6 @@
         {{^error}}{{^hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint"{{/maxlength}}{{/hintId}}{{/error}}
         {{#error}} aria-invalid="true" aria-describedby="{{id}}-error"{{/error}}
     >{{value}}</textarea>
-    {{#maxlength}}<span id="{{id}}-maxlength-hint" class="maxlength-hint form-hint" aria-live="polite">You can enter up to {{maxlength}} characters</span>{{/maxlength}}
+    {{#maxlength}}<div id="{{id}}-maxlength-hint" class="govuk-character-count__message" aria-live="polite">You have {{maxlength}} characters remaining</div>{{/maxlength}}
 </div>
+{{#maxlength}}</div>{{/maxlength}}

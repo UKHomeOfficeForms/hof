@@ -203,11 +203,13 @@ describe('hof server', () => {
           }
         }]
       });
+
+
       return request(bs.server)
         .get('/step')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.contain('<div class="content">'));
+        .expect(res => res.text.should.contain('<div class="govuk-header__content">'));
     });
 
     it('serves a view on request to an optional baseUrl', () => {

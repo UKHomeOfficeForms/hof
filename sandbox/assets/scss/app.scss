@@ -8,20 +8,20 @@
     width: 65%;
   }
   
-  .tt-suggestion {
-    padding: 0.5em;
-  
-    &:hover,
-    &.tt-cursor {
-      color: #fff;
-      background-color: #0097cf;
-    }
-  
-    &:hover {
-      cursor: pointer;
-    }
+.tt-suggestion {
+  padding: 0.5em;
+
+  &:hover,
+  &.tt-cursor {
+    color: #fff;
+    background-color: #0097cf;
   }
-  
-  .twitter-typeahead {
-    width: 100%;
+
+  &:hover {
+    cursor: pointer;
   }
+}
+
+.twitter-typeahead {
+  width: 100%;
+}

@@ -58,15 +58,13 @@ describe('character-count', function () {
       $('#test').val('tooManyChars');
       util.triggerEvent(document.getElementById('test'), 'input');
       $('#test').hasClass('textarea-error').should.be.true;
-      $('#test-maxlength-hint').hasClass('error-message').should.be.true;
-      $('#test-maxlength-hint').hasClass('form-hint').should.be.false;
+      $('#test-maxlength-hint').hasClass('govuk-error-message').should.be.true;
 
       // go back into limit and assert it has removed error class
       $('#test').val('nineChars');
       util.triggerEvent(document.getElementById('test'), 'input');
       $('#test').hasClass('textarea-error').should.be.false;
-      $('#test-maxlength-hint').hasClass('form-hint').should.be.true;
-      $('#test-maxlength-hint').hasClass('error-messsage').should.be.false;
+      $('#test-maxlength-hint').hasClass('govuk-error-message').should.be.false;
     });
   });
 

@@ -1,4 +1,4 @@
-frontend/govuk-template/govuk_template.html
+frontend/govuk-template/govuk_template_generated.html
 sandbox/apps/*/translations/en
 sandbox/public
 node_modules
@@ -7,22 +7,12 @@ npm-debug.log
 .idea
 *.iml
 .DS_Store
-
-# Logs
+.env
 logs
 *.log
 npm-debug.log*
-
-# Coverage directory used by tools like istanbul
 coverage
-
-# nyc test coverage
 .nyc_output
-
-# Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
-
-# Dependency directories
 node_modules
-
 .emails
