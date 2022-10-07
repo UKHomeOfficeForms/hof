@@ -8,6 +8,7 @@ module.exports = {
       'nominated-nationality',
       'nationality-error',
       'country',
+      'country-of-birth',
       'someone-else-nationality'
     ]
   }
