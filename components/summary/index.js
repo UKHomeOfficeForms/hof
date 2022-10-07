@@ -121,7 +121,8 @@ module.exports = SuperClass => class extends SuperClass {
   }
 
   getStepForField(key, steps) {
-    return Object.keys(steps).filter(step => steps[step].fields && steps[step].fields.indexOf(key) > -1)[0];
+    const keyName = Array.isArray(key) ? key[0] : key;
+    return Object.keys(steps).filter(step => steps[step].fields && steps[step].fields.indexOf(keyName) > -1)[0];
   }
 
 
