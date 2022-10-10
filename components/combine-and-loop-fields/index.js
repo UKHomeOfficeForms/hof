@@ -95,6 +95,9 @@ module.exports = config => {
         condition: {
           field: field,
           value: 'yes'
+        },
+        legend: {
+          className: 'visuallyhidden'
         }
       });
       next();
