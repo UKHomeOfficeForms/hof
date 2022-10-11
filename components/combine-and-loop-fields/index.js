@@ -5,7 +5,7 @@ const path = require('path');
 const express = require('express');
 
 module.exports = config => {
-  const { returnTo, groupName, fieldsToGroup, combineValuesToSingleField, removePrefix } = config;
+  const { returnTo, groupName, fieldsToGroup, combineValuesToSingleField, removePrefix, groupOptional } = config;
 
   if (removePrefix && typeof removePrefix !== 'string') {
     throw new Error('removePrefix is a string and is optional for loops');
@@ -71,7 +71,7 @@ module.exports = config => {
         });
       }
 
-      const target = items.length ? req.form.options.route : returnTo;
+      const target = (items.length || groupOptional) ? req.form.options.route : returnTo;
       const action = req.params.action || '';
       res.redirect(path.join(req.baseUrl, target, action));
     }
@@ -84,7 +84,10 @@ module.exports = config => {
         validate: ['required'],
         options: [
           'yes', 'no'
-        ]
+        ],
+        legend: {
+          className: 'visuallyhidden'
+        }
       }, req.form.options.fieldSettings);
 
       // add conditonal fork
@@ -95,9 +98,6 @@ module.exports = config => {
         condition: {
           field: field,
           value: 'yes'
-        },
-        legend: {
-          className: 'visuallyhidden'
         }
       });
       next();
