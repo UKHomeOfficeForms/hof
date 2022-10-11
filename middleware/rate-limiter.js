@@ -16,7 +16,7 @@ module.exports = (options, rateLimitType) => {
   const ERROR_CODE = rateLimits.errCode;
 
   return async (req, res, next) => {
-    const redisClient = redis.createClient(config.redis);
+    const redisClient = redis.createClient({ socket: config.redis });
 
     // check that redis client exists
     if (!redisClient) {
