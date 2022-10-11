@@ -1,6 +1,7 @@
 /* eslint-disable */
 'use strict';
 
+const config = require('./config');
 const bootstrap = require('../');
 
 bootstrap({
@@ -14,5 +15,7 @@ bootstrap({
     }
   },
   getAccessibility: true,
-  "port": 8080
+  port: config.port
 });
+
+console.log(`Running on port ${config.port}`);
