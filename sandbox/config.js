@@ -2,6 +2,7 @@
 
 /* eslint no-process-env: 0 */
 module.exports = {
+  port: 8082,
   email: {
     caseworker: process.env.CASEWORKER_EMAIL || '',
     from: process.env.FROM_ADDRESS || '',
