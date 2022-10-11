@@ -42,6 +42,15 @@ module.exports = function (options) {
     return null;
   }
 
+  function maxword(field) {
+    const validation = field.validate || [];
+    const mw = _.findWhere(validation, { type: 'maxword' });
+    if (mw) {
+      return _.isArray(mw.arguments) ? mw.arguments[0] : mw.arguments;
+    }
+    return null;
+  }
+
   function type(field) {
     return field.type || 'text';
   }
@@ -208,6 +217,7 @@ module.exports = function (options) {
         hintId: extension.hintId || (hint ? key + '-hint' : null),
         error: this.errors && this.errors[key],
         maxlength: maxlength(field) || extension.maxlength,
+        maxword: maxword(field) || extension.maxword,
         required: required,
         pattern: extension.pattern,
         date: extension.date,
@@ -216,6 +226,7 @@ module.exports = function (options) {
         isPageHeading: field.isPageHeading,
         attributes: field.attributes,
         isPrefixOrSuffix: _.map(field.attributes, item => {if (item.prefix || item.suffix !== undefined) return true;}),
+        isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
         renderChild: renderChild.bind(this)
       });
     }

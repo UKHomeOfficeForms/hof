@@ -36,5 +36,8 @@ module.exports = {
   ],
   complaintDetails: [
     'complaintDetails'
+  ],
+  whatHappened: [
+    'whatHappened'
   ]
 };

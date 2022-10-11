@@ -1,32 +1,35 @@
-{{#maxlength}}
-<div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="{{maxlength}}">
-{{/maxlength}}
-<div id="{{id}}-group" class="{{#compound}}form-group-compound {{/compound}}{{#formGroupClassName}}{{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
-    {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}<label for="{{id}}" class="{{labelClassName}}{{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
-        {{{label}}}
-        {{#error}} 
-        <p id="{{id}}-error" class="govuk-error-message">
-            <span id="{{id}}-error" class="govuk-visually-hidden">Error:</span>{{error.message}}
-          </p>
-        {{/error}}
-    </label>
-    {{#isPageHeading}}</h1>{{/isPageHeading}}
-    {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</div>{{/hint}}
-    {{#renderChild}}{{/renderChild}}
-    <textarea
-        name="{{id}}"
-        id="{{id}}"
-        class="govuk-textarea{{#className}} {{className}}{{/className}} {{#maxlength}}maxlength{{/maxlength}}{{#error}} govuk-input--error{{/error}}"
-        aria-required="{{required}}"
-        {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
-        {{#attributes}}
-            {{attribute}}="{{value}}"
-        {{/attributes}}
-        {{^error}}{{#hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint {{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
-        {{^error}}{{#hintId}}{{^maxlength}} aria-describedby="{{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
-        {{^error}}{{^hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint"{{/maxlength}}{{/hintId}}{{/error}}
-        {{#error}} aria-invalid="true" aria-describedby="{{id}}-error"{{/error}}
-    >{{value}}</textarea>
-    {{#maxlength}}<div id="{{id}}-maxlength-hint" class="govuk-character-count__message" aria-live="polite">You have {{maxlength}} characters remaining</div>{{/maxlength}}
-</div>
-{{#maxlength}}</div>{{/maxlength}}
+{{#isMaxlengthOrMaxword}}<div class="govuk-character-count" data-module="govuk-character-count"
+    {{#maxlength}}data-maxlength="{{maxlength}}" {{/maxlength}} {{#maxword}}data-maxwords="{{maxword}}" {{/maxword}}>
+    {{/isMaxlengthOrMaxword}}
+    <div id="{{id}}-group" class="govuk-form-group {{#formGroupClassName}}{{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
+        {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}
+            <label for="{{id}}"
+                class="{{labelClassName}}{{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
+                {{{label}}}
+                {{#error}}
+                <p id="{{id}}-error" class="govuk-error-message">
+                    <span id="{{id}}-error" class="govuk-visually-hidden">Error:</span>{{error.message}}
+                </p>
+                {{/error}}
+            </label>
+        {{#isPageHeading}}</h1>{{/isPageHeading}}
+        {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</div>{{/hint}}
+        {{#renderChild}}{{/renderChild}}
+        <textarea name="{{id}}" id="{{id}}"
+            class="govuk-textarea {{#isMaxlengthOrMaxword}}govuk-js-character-count{{/isMaxlengthOrMaxword}} {{#className}}{{className}}{{/className}} {{#error}}govuk-input--error{{/error}}"
+            aria-describedby="{{id}}-info" 
+            {{#attributes}} 
+                {{attribute}}="{{value}}" 
+            {{/attributes}}
+            {{^error}}{{#hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint {{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
+            {{^error}}{{#hintId}}{{^maxlength}} aria-describedby="{{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
+            {{^error}}{{^hintId}}{{#maxlength}}aria-describedby="{{id}}-maxlength-hint" {{/maxlength}}{{/hintId}}{{/error}}
+            {{#error}} aria-invalid="true" aria-describedby="{{id}}-error" {{/error}}
+            >{{value}}</textarea>
+        {{#isMaxlengthOrMaxword}}
+        <div id="{{id}}-info" class=" govuk-hint govuk-character-count__message" aria-live="polite">You have {{#maxlength}}{{maxlength}} characters{{/maxlength}}{{#maxword}}{{maxword}}
+            words{{/maxword}} remaining
+        </div>
+        {{/isMaxlengthOrMaxword}}
+    </div>
+{{#isMaxlengthOrMaxword}}</div>{{/isMaxlengthOrMaxword}}

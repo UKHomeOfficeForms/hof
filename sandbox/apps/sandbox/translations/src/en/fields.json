@@ -15,7 +15,7 @@
     }
   },
   "name": {
-    "label": "What is your full name?"
+    "label": "Full name"
   },
   "dateOfBirth": {
     "legend": "What is your date of birth?",
@@ -70,7 +70,7 @@
     } 
   },
   "email" : {
-    "label": "Enter your email address"
+    "label": "Email address"
   },
   "phone": {
     "label": "Phone number",
@@ -82,6 +82,10 @@
   "complaintDetails": {
     "label": "Complaint details",
     "hint": "Briefly summarise your complaint. Include anything that can help our investigation."
+  },
+  "whatHappened": {
+    "label": "What happened",
+    "hint": "Briefly summarise what happened."
   },
   "countrySelect": {
     "label": "Which country are you based in?",
