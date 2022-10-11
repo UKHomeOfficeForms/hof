@@ -25,6 +25,7 @@ This allows you to specify fields to loop over and add as objects to a parent ar
     ],
     removePrefix: 'storage-',
     combineValuesToSingleField: 'address',
+    groupOptional: true,
     returnTo: '/add-address'
   }),
   next: '/confirm'
@@ -35,5 +36,6 @@ Here are the fields you call this behaviour first to set config for it:
 `fieldsToGroup`: (Required) the fields being specified for an object, e.g. house number, street, postcode, that are grouped together,
 `removePrefix`: (Optional) a string which is used to remove consistent prefixes from a collection of fields that are grouped together,
 `combineValuesToSingleField`: (Optional) a new field that is created with its value being the concatenation of values of the fields specified in `fieldsToGroup`,
-`returnTo`: the next step if you want to add another object to this group
+`groupOptional`: (Optional) set this to true if you want to land on the radio button question if all records in the group are deleted after creation,
+`returnTo`: (Required) the next step if you want to add another object to this group
 ```
