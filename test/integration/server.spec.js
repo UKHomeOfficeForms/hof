@@ -714,6 +714,8 @@ describe('hof server', () => {
     let reqMiddleware;
 
     beforeEach(() => {
+      // Should default to localhost as we haven't passed any credentials in the socket property
+      // https://github.com/redis/node-redis/blob/master/docs/client-configuration.md
       redisClient = redis.createClient({legacyMode: true});
     });
 
