@@ -34,8 +34,10 @@ const defaults = {
   loglevel: process.env.LOG_LEVEL || 'info',
   ignoreMiddlewareLogs: ['/healthz'],
   redis: {
-    port: process.env.REDIS_PORT || '6379',
-    host: process.env.REDIS_HOST || '127.0.0.1',
+    socket: {
+      port: process.env.REDIS_PORT || '6379',
+      host: process.env.REDIS_HOST || '127.0.0.1',  
+    },
     legacyMode: true
   },
   session: {
