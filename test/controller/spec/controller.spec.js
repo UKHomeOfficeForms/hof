@@ -8,7 +8,7 @@ const ErrorClass = require('../../../controller/validation-error');
 
 const BaseController = require('../../../controller/base-controller');
 
-describe.only('controller', () => {
+describe('controller', () => {
   let Controller;
   let controller;
 
