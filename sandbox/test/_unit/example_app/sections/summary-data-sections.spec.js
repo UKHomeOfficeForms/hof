@@ -76,6 +76,15 @@ describe('Apply Summary Data Sections', () => {
       const result = areOrderedEqual(sectionFields, expectedFields);
       expect(result).to.be.true;
     });
+
+    it('should check expected fields in what happened field', () => {
+      const sectionFields = mappedSections.whatHappened;
+      const expectedFields = [
+        'whatHappened'
+      ];
+      const result = areOrderedEqual(sectionFields, expectedFields);
+      expect(result).to.be.true;
+    });
   });
 
   describe('Sections and Fields', () => {
@@ -118,6 +127,13 @@ describe('Apply Summary Data Sections', () => {
       expect(containsAll(
         Object.keys(fields),
         mappedSections.complaintDetails)
+      ).to.be.true;
+    });
+
+    it('whatHappened', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.whatHappened)
       ).to.be.true;
     });
   });

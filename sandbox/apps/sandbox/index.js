@@ -66,6 +66,10 @@ module.exports = {
     },
     '/text-input-area': {
       fields: ['complaintDetails'],
+      next: '/word-count'
+    },
+    '/word-count': {
+      fields: ['whatHappened'],
       next: '/select'
     },
     '/select':{ 

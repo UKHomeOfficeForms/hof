@@ -10,6 +10,12 @@
     "header": "What is your address in the UK?",
     "intro": "If you have no fixed address, enter an address where we can contact you."
   },
+  "name": {
+    "header": "What is your full name?"
+  },
+  "email": {
+    "header": "Enter your email address"
+  },
   "phone-number": {
     "header": "Enter your phone number"
   },
@@ -36,6 +42,9 @@
       },
       "complaintDetails": {
         "header": "Complaint details"
+      },
+      "whatHappened": {
+        "header": "What happened"
       }
     }
   },

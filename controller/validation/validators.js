@@ -62,6 +62,10 @@ module.exports = Validators = {
     return Validators.string(value) && (value === '' || value.length <= length);
   },
 
+  maxword(value, length) {
+    return Validators.string(value) && (value === '' || value.split(/\s+/).length <= length);
+  },
+
   exactlength(value, length) {
     return Validators.string(value) && (value === '' || value.length === length);
   },

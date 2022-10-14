@@ -8,7 +8,7 @@ const ErrorClass = require('../../../controller/validation-error');
 
 const BaseController = require('../../../controller/base-controller');
 
-describe('controller', () => {
+describe.only('controller', () => {
   let Controller;
   let controller;
 
@@ -900,6 +900,12 @@ describe('controller', () => {
         req.translate.withArgs('validation.key.exactlength').returns('This must be {{exactlength}} characters');
         const error = new ErrorClass('key', { type: 'exactlength', arguments: [10] });
         controller.getErrorMessage(error, req, res).should.equal('This must be 10 characters');
+      });
+
+      it('populates maxword messages with the required length', () => {
+        req.translate.withArgs('validation.key.maxword').returns('This must be {{maxword}} words');
+        const error = new ErrorClass('key', { type: 'maxword', arguments: [10] });
+        controller.getErrorMessage(error, req, res).should.equal('This must be 10 words');
       });
 
       it('populates before messages with the required difference', () => {
