@@ -1,0 +1,18 @@
+<dialog id="js-modal-dialog" data-session-timeout="{{sessionTimeOut}}" data-session-timeout-warning="{{sessionTimeOutWarning}}"
+  data-session-timeout-final-warning="{{finalSessionTimeOutWarning}}" data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
+  aria-live="polite" aria-labelledby="dialog-title" aria-describedby="at-timer">
+  <div class="modal-dialog__inner">
+    <h1 id="dialog-title" class="govuk-heading-l">
+      Your application will time out soon
+    </h1>
+    <div class="modal-dialog__inner__text">
+      <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
+      <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
+    </div>
+    <div class="modal-dialog__inner__block">
+      <button class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button">Continue application</button>
+    </div>
+  </div>
+</dialog>
+
+
