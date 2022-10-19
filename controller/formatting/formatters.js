@@ -56,7 +56,7 @@ module.exports = {
   },
 
   ukPostcode(value) {
-    if (typeof value !== 'string') {
+    if (typeof value !== 'string' || value === '') {
       return value;
     }
 
