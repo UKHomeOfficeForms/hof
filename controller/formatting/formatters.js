@@ -53,6 +53,18 @@ module.exports = {
 
   base64decode(value) {
     return Buffer.from(value, 'base64').toString();
+  },
+
+  ukPostcode(value) {
+    if (typeof value !== 'string') {
+      return value;
+    }
+
+    const postcode = this.uppercase(this.removespaces(value));
+    const firstPart = postcode.slice(0, -3);
+    const secondPart = postcode.slice(-3);
+
+    return `${firstPart} ${secondPart}`;
   }
 
 };
