@@ -103,9 +103,11 @@ module.exports = class Controller extends BaseController {
     const locals = super.locals(req, res);
     const stepLocals = req.form.options.locals || {};
 
-    const fields = _.map(req.form.options.fields, (field, key) =>
+    let fields = _.map(req.form.options.fields, (field, key) =>
       Object.assign({}, field, { key })
     );
+    // only include fields that aren't dependents to mitigate duplicate fields on the page
+    fields = fields.filter(field => !req.form.options.fields[field.key].dependent);
 
     return _.extend({}, locals, {
       fields,
