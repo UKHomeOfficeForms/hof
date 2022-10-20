@@ -135,7 +135,7 @@
     "reporter": "spec",
     "require": "test/common.js",
     "recursive": "true",
-    "timeout": "7000",
+    "timeout": "9000",
     "exit": "true"
   },
   "resolutions": {

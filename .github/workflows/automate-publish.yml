@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 14
           registry-url: https://registry.npmjs.org/
       - name: 'Get Previous tag'
         id: previoustag
