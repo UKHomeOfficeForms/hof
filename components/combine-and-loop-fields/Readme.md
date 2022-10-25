@@ -39,3 +39,4 @@ Here are the fields you call this behaviour first to set config for it:
 `groupOptional`: (Optional) set this to true if you want to land on the radio button question if all records in the group are deleted after creation,
 `returnTo`: (Required) the next step if you want to add another object to this group
 ```
+N.B. in the above example we use `continueOnEdit: true` on the individual record step (i.e. `/add-address`) to ensure we revisit the grouped fields page otherwise it will not be added to the group and the user will be returned to the 'Check Your Answers' page upon a field edit.

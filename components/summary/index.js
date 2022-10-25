@@ -59,7 +59,7 @@ module.exports = SuperClass => class extends SuperClass {
           fieldData.value = fieldSpec.derivation ?
             this.runCombinerForDerivedField(fieldSpec, req) : fieldData.value;
           fieldData.value = (typeof fieldSpec.parse === 'function') ?
-            fieldSpec.parse(fieldData.value) : fieldData.value;
+            fieldSpec.parse(fieldData.value, req) : fieldData.value;
         }
 
         return fieldData;
