@@ -5,6 +5,7 @@
   "close": "Close",
   "confirm": "Confirm submission",
   "start-again": "Start again",
+  "timeout": "Continue application",
   "try-again": "Try again",
   "back": "Back"
 }

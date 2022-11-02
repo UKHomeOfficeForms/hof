@@ -289,6 +289,7 @@ module.exports = class BaseController extends EventEmitter {
 
   successHandler(req, res) {
     this.emit('complete', req, res);
-    res.redirect(this.getNextStep(req, res));
+      // res.redirect(req.originalUrl);
+      res.redirect(this.getNextStep(req, res));
   }
 };

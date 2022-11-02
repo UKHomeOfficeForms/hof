@@ -10,7 +10,8 @@
       <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
     </div>
     <div class="modal-dialog__inner__block">
-      <button class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button">Continue application</button>
+      {{#input-close}}timeout{{/input-close}}
+      <button role="button" class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button">Continue application</button>
     </div>
   </div>
 </dialog>

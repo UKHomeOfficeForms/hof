@@ -16,7 +16,6 @@ module.exports = function (packageName, importOriginPath) {
         try {
           return resolve(path.dirname(require.resolve(`${packageName}/package.json`)));
         } catch (e) {
-          console.log(e);
         }
         return reject(err);
       }

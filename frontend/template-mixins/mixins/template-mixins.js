@@ -14,6 +14,7 @@ const PARTIALS = [
   'partials/forms/input-text-group',
   'partials/forms/input-text-date',
   'partials/forms/input-submit',
+  'partials/forms/input-close',
   'partials/forms/select',
   'partials/forms/checkbox',
   'partials/forms/textarea-group',
@@ -407,6 +408,21 @@ module.exports = function (options) {
               id: id
             };
             return compiled['partials/forms/input-submit'].render(obj);
+          };
+        }
+      },
+      'input-close': {
+        handler: function () {
+          return function (props) {
+            props = (props || '').split(' ');
+            const value = props[0] || 'Close';
+            const id = props[1];
+            const obj = {
+              value: t('buttons.' + value),
+              name: "id_name",
+              id: id
+            };
+            return compiled['partials/forms/input-close'].render(obj);
           };
         }
       },
