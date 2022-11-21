@@ -1739,7 +1739,7 @@ describe('Template Mixins', () => {
           middleware(req, res, next);
           res.locals['radio-group']().call(res.locals, 'field-name');
           renderChild = render.lastCall.args[0].renderChild();
-          renderChild.call(fields['field-name'].options[0]).should.be.equal('<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden">\n<div>some html</div></div>\n');
+          renderChild.call(fields['field-name'].options[0]).should.be.equal('<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n<div>some html</div></div>\n');
           sinon.stub(Hogan, 'compile').returns({
             render: render
           });
@@ -1756,7 +1756,7 @@ describe('Template Mixins', () => {
           sinon.stub(res.locals, 'input-text').returns(function (key) {
             return Hogan.compile('<div>{{key}}</div>').render({ key: key });
           });
-          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden">\n';
+          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n';
           output += '<div>child-field-name</div>';
           output += '</div>\n';
           renderChild.call(_.extend({}, fields['field-name'].options[0], res.locals)).should.be.equal(output);
@@ -1830,7 +1830,7 @@ describe('Template Mixins', () => {
           sinon.stub(res.locals, 'input-text').returns(function (key) {
             return Hogan.compile('<div>{{key}}</div>').render({ key: key });
           });
-          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden">\n';
+          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n';
           output += '<div>child-field-name</div>';
           output += '</div>\n';
           renderChild.call(_.extend({}, fields['field-name'], res.locals)).should.be.equal(output);
