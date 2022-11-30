@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "20.1.16",
+  "version": "20.1.17",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
