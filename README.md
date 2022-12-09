@@ -65,6 +65,10 @@ It is recommended to alias `hof-build` to an npm script in your package.json.
 - `images` - copies images from ./assets/images directory to ./public/images
 - `translate` - compiles translation files
 
+Note: For SASS compilation it's possible to additionally configure the following options via the hof.settings file (see the configuration section below)
+- `outputStyle` - Controls whether the CSS output is compressed or not, expanded (default) = non compressed and compressed = compressed CSS output.
+- `quietDeps` - This controls whether you get deprecation warning shown in the console output, if set to false (default) SASS deprecation warnings will be shown in the console, if set to true then deprecation warnings will not be shown in the console output.
+
 ## Watch
 
 You can additionally run a `watch` task to start a server instance, which will automatically restart based on changes to files. This will also re-perform the tasks above when relevant files change.
