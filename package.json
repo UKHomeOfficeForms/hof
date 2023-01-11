@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "20.1.17",
+  "version": "20.1.18",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -79,7 +79,7 @@
     "nodemailer-ses-transport": "^1.5.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemailer-stub-transport": "^1.1.0",
-    "notifications-node-client": "^5.1.1",
+    "notifications-node-client": "^6.0.0",
     "redis": "^3.1.2",
     "reqres": "^3.0.1",
     "request": "^2.79.0",
