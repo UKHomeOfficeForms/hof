@@ -45,10 +45,10 @@ Install the dependencies
 yarn
 ```
 
-Move into the example folder 
+Move into the sandbox folder 
 
 ```bash
-cd example
+cd sandbox
 ```
 
 Install any example app specific dependencies 
