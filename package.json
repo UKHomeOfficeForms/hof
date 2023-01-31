@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "20.1.21",
+  "version": "20.2.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -84,7 +84,7 @@
     "reqres": "^3.0.1",
     "request": "^2.79.0",
     "rimraf": "^3.0.2",
-    "sass": "^1.35.2",
+    "sass": "^1.56.2",
     "serve-static": "^1.14.1",
     "uglify-js": "^3.14.3",
     "underscore": "^1.12.1",

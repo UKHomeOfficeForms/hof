@@ -12,7 +12,9 @@ module.exports = {
     src: 'assets/scss/app.scss',
     out: 'public/css/app.css',
     match: 'assets/scss/**/*.scss',
-    restart: false
+    restart: false,
+    quietDeps: false,
+    outputStyle: 'expanded'
   },
   translate: {
     src: 'apps/**/translations/src',
