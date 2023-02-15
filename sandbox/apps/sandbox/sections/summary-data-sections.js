@@ -1,5 +1,6 @@
 const moment = require('moment');
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
+const PRETTY_TIME_FORMAT = 'k:mma';
 const APPEAL_STAGES = require('../lib/staticAppealStages').getstaticAppealStages();
 const _ = require('lodash');
 
@@ -9,6 +10,12 @@ module.exports = {
     {
       field: 'dateOfBirth',
       parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
+    }
+  ],
+  time: [
+    {
+      field: 'time',
+      parse: t => t && moment(t, 'kk:mm').format(PRETTY_TIME_FORMAT)
     }
   ],
   address: [

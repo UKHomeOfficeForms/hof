@@ -599,6 +599,194 @@ describe('Template Mixins', () => {
       });
     });
 
+    describe('input-time', () => {
+      it('adds a function to res.locals', () => {
+        middleware(req, res, next);
+        res.locals['input-time'].should.be.a('function');
+      });
+
+      it('returns a function', () => {
+        middleware(req, res, next);
+        res.locals['input-time']().should.be.a('function');
+      });
+
+      it('renders 5 times if the field is not marked as inexact', () => {
+        middleware(req, res, next);
+        res.locals['input-time']().call(res.locals, 'field-name');
+        render.callCount.should.be.equal(5);
+      });
+
+      it('renders 3 times if the field is marked as inexact', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            inexact: true
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-time']().call(res.locals, 'field-name');
+        render.callCount.should.be.equal(3);
+      });
+
+      it('looks up field label', () => {
+        middleware(req, res, next);
+        res.locals['input-time']().call(res.locals, 'field-name');
+
+        render.called;
+
+        const hourCall = render.getCall(2);
+        const minuteCall = render.getCall(4);
+
+        hourCall.should.have.been.calledWith(sinon.match({
+          label: 'fields.field-name-hour.label'
+        }));
+
+        minuteCall.should.have.been.calledWith(sinon.match({
+          label: 'fields.field-name-minute.label'
+        }));
+      });
+
+      it('govuk-form-group class is set in the time fields by default', () => {
+        middleware(req, res, next);
+        res.locals['input-time']().call(res.locals, 'field-name');
+
+        render.called;
+
+        const hourCall = render.getCall(2);
+        const minuteCall = render.getCall(4);
+
+        hourCall.should.have.been.calledWith(sinon.match({
+          formGroupClassName: 'govuk-form-group'
+        }));
+
+        minuteCall.should.have.been.calledWith(sinon.match({
+          formGroupClassName: 'govuk-form-group'
+        }));
+      });
+
+      describe('autocomplete', () => {
+        it('should have a suffix of -hour and -minute ', () => {
+          res.locals.options.fields = {
+            'field-name': {
+              autocomplete: 'time'
+            }
+          };
+          middleware(req, res, next);
+          res.locals['input-time']().call(res.locals, 'field-name');
+
+          render.should.have.been.called;
+
+          const hourCall = render.getCall(2);
+          const minuteCall = render.getCall(4);
+
+          hourCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'time-hour'
+          }));
+
+          minuteCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'time-minute'
+          }));
+        });
+
+        it('should be set as exact values if an object is given', () => {
+          res.locals.options.fields = {
+            'field-name': {
+              autocomplete: {
+                hour: 'hour-type',
+                minute: 'minute-type'
+              }
+            }
+          };
+          middleware(req, res, next);
+          res.locals['input-time']().call(res.locals, 'field-name');
+
+          render.called;
+
+          const hourCall = render.getCall(2);
+          const minuteCall = render.getCall(4);
+
+          hourCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'hour-type'
+          }));
+
+          minuteCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'minute-type'
+          }));
+        });
+
+        it('should set autocomplete to off if off is specified', () => {
+          res.locals.options.fields = {
+            'field-name': {
+              autocomplete: 'off'
+            }
+          };
+          middleware(req, res, next);
+          res.locals['input-time']().call(res.locals, 'field-name');
+
+          render.called;
+
+          const hourCall = render.getCall(2);
+          const minuteCall = render.getCall(4);
+
+          hourCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'off'
+          }));
+
+          minuteCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'off'
+          }));
+        });
+
+        it('should default to no attribute across all time fields', () => {
+          middleware(req, res, next);
+          res.locals['input-time']().call(res.locals, 'field-name');
+
+          render.called;
+
+          const hourCall = render.getCall(0);
+          const minuteCall = render.getCall(1);
+
+          hourCall.should.have.been.calledWith(sinon.match({
+            autocomplete: undefined
+          }));
+
+          minuteCall.should.have.been.calledWith(sinon.match({
+            autocomplete: undefined
+          }));
+        });
+      });
+
+      it('prefixes translation lookup with namespace if provided', () => {
+        middleware = mixins({ sharedTranslationsKey: 'name.space' });
+        middleware(req, res, next);
+        res.locals['input-time']().call(res.locals, 'field-name');
+
+        render.called;
+
+        const hourCall = render.getCall(2);
+        const minuteCall = render.getCall(4);
+
+        hourCall.should.have.been.calledWith(sinon.match({
+          label: 'name.space.fields.field-name-hour.label'
+        }));
+
+        minuteCall.should.have.been.calledWith(sinon.match({
+          label: 'name.space.fields.field-name-minute.label'
+        }));
+      });
+
+      it('sets a time boolean to conditionally show input errors', () => {
+        middleware(req, res, next);
+        res.locals['input-time']().call(res.locals, 'field-name');
+
+        render.getCall(2).should.have.been.calledWith(sinon.match({
+          time: true
+        }));
+        render.getCall(2).should.have.been.calledWith(sinon.match({
+          time: true
+        }));
+      });
+    });
+
     describe('input-number', () => {
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
