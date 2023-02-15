@@ -10,6 +10,9 @@
     "after": "Enter a date after 1 1 1900",
     "before": "Enter a date that is in the past"
   },
+  "time": {
+    "default": "Enter a time in the correct format; for example, 12 40"
+  },
   "building": {
     "default": "Enter details of your building and street"
   },

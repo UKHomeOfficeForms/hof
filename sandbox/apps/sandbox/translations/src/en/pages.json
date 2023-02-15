@@ -25,6 +25,9 @@
       "applicantsDetails": {
         "header": "Applicant's details"
       },
+      "time": {
+        "header": "Time"
+      },
       "address": {
         "header": "Address"
       },

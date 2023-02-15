@@ -9,6 +9,7 @@ const emailValidator = require('./email');
 // validator methods should return false (or falsy value) for *invalid* input
 // and true (or truthy value) for *valid* input.
 const dateFormat = 'YYYY-MM-DD';
+const timeFormat = 'kk:mm';
 let Validators;
 
 module.exports = Validators = {
@@ -126,6 +127,18 @@ module.exports = Validators = {
 
   'date-day'(value) {
     return Validators.regex(value, /^\d{2}$/) && parseInt(value, 10) > 0 && parseInt(value, 10) < 32;
+  },
+
+  time(value) {
+    return value === '' || Validators.regex(value, /\d{2}\:\d{2}/) && moment(value, timeFormat).isValid();
+  },
+
+  'time-hour'(value) {
+    return Validators.regex(value, /^\d{2}$/) && parseInt(value, 10) >= 0 && parseInt(value, 10) < 24;
+  },
+
+  'time-minute'(value) {
+    return Validators.regex(value, /^\d{2}$/) && parseInt(value, 10) >= 0 && parseInt(value, 10) < 59;
   },
 
   // eslint-disable-next-line no-inline-comments, spaced-comment

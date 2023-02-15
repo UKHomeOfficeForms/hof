@@ -13,6 +13,9 @@ Feature: Basic Form
     Then I should be on the 'dob' page showing 'What is your date of birth?'
     Then I enter a date of birth for a 30 year old
     Then I click the 'Continue' button
+    Then I should be on the 'time' page showing 'What is the current time?'
+    Then I enter a time for 11:30
+    Then I click the 'Continue' button
     Then I should be on the 'address' page showing 'What is your address in the UK?'
     Then I fill 'building' with '10 Downing Street'
     Then I fill 'townOrCity' with 'London'
