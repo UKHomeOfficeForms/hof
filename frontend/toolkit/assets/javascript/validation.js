@@ -53,7 +53,11 @@ function setup(summary) {
 }
 
 function validation() {
-  var summaries = helpers.getElementsByClass(document.getElementById('content'), 'div', 'validation-summary');
+  var summaries = [];
+
+  if (document.getElementById('content')) {
+    summaries = helpers.getElementsByClass(document.getElementById('content'), 'div', 'validation-summary');
+  }
 
   if (summaries.length) {
     summary = summaries[0];
