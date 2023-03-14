@@ -265,6 +265,7 @@ module.exports = function (options) {
           let toggle;
           let child;
           let optionHint;
+          let useHintText;
 
           if (typeof obj === 'string') {
             value = obj;
@@ -275,6 +276,7 @@ module.exports = function (options) {
             label = obj.label || 'fields.' + key + '.options.' + obj.value + '.label';
             toggle = obj.toggle;
             child = obj.child;
+            useHintText = obj.useHintText;
             optionHint = obj.hint || 'fields.' + key + '.options.' + obj.value + '.hint';
           }
 
@@ -293,7 +295,7 @@ module.exports = function (options) {
             radioOption: opts.type === 'radio',
             toggle: toggle,
             child: child,
-            optionHint: conditionalTranslate(optionHint) || ''
+            optionHint: useHintText ? optionHint : conditionalTranslate(optionHint) || ''
           };
         }, this),
         className: classNames(field),
