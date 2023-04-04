@@ -26,7 +26,9 @@ module.exports = config => {
       sass.render({
         file: config.sass.src,
         importer: importer({ aliases }),
-        aliases
+        aliases,
+        outputStyle: config.sass.outputStyle,
+        quietDeps: config.sass.quietDeps
       }, (err, result) => err ? reject(err) : resolve(result.css));
     }))
     .then(css => new Promise((resolve, reject) => {

@@ -69,6 +69,7 @@ const Wizard = (steps, fields, setts) => {
     options.confirmStep = settings.confirmStep;
     options.clearSession = options.clearSession || false;
     options.fieldsConfig = _.cloneDeep(fields);
+    options.sanitiseInputs = settings.sanitiseInputs;
 
     options.defaultFormatters = [].concat(settings.formatters);
 

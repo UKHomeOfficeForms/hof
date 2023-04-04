@@ -1,6 +1,9 @@
 
 'use strict';
 
+const config = require('../../config/rate-limits');
+const rateLimiter = require('../../middleware/rate-limiter');
+
 const concat = (x, y) => x.concat(y);
 const flatMap = (f, xs) => xs.map(f).reduce(concat, []);
 
@@ -56,7 +59,7 @@ module.exports = SuperClass => class extends SuperClass {
           fieldData.value = fieldSpec.derivation ?
             this.runCombinerForDerivedField(fieldSpec, req) : fieldData.value;
           fieldData.value = (typeof fieldSpec.parse === 'function') ?
-            fieldSpec.parse(fieldData.value) : fieldData.value;
+            fieldSpec.parse(fieldData.value, req) : fieldData.value;
         }
 
         return fieldData;
@@ -118,7 +121,8 @@ module.exports = SuperClass => class extends SuperClass {
   }
 
   getStepForField(key, steps) {
-    return Object.keys(steps).filter(step => steps[step].fields && steps[step].fields.indexOf(key) > -1)[0];
+    const keyName = Array.isArray(key) ? key[0] : key;
+    return Object.keys(steps).filter(step => steps[step].fields && steps[step].fields.indexOf(keyName) > -1)[0];
   }
 
 
@@ -213,6 +217,21 @@ module.exports = SuperClass => class extends SuperClass {
     const rows = this.getRowsForSummarySections(req);
     return Object.assign({}, super.locals(req, res), {
       rows
+    });
+  }
+
+  validate(req, res, next) {
+    if (!config.rateLimits.submissions.active) {
+      return super.validate(req, res, next);
+    }
+    // how do we stop this ballsing up our tests??????
+    const options = Object.assign({}, config, { logger: req });
+
+    return rateLimiter(options, 'submissions')(req, res, err => {
+      if (err) {
+        return next(err);
+      }
+      return super.validate(req, res, next);
     });
   }
 };

@@ -1,5 +1,5 @@
 
-const SummaryBehaviour = require('../../components').summary;
+let SummaryBehaviour = require('../../components').summary;
 const mockTranslations = require('./translations/en/default');
 const Model = require('../../model');
 const moment = require('moment');
@@ -406,6 +406,97 @@ describe('summary behaviour', () => {
           }
         }
       );
+    });
+  });
+
+  describe('#validate', () => {
+    let rateLimiterStub;
+    let yieldStub;
+    let nextStub;
+    let superValidateStub;
+    const mockConfig = {
+      rateLimits: {
+        submissions: {
+          active: true,
+          windowSizeInMinutes: 10,
+          maxWindowRequestCount: 1,
+          windowLogIntervalInMinutes: 1,
+          errCode: 'SUBMISSION_RATE_LIMIT'
+        }
+      }
+    };
+
+    class ValidateBase {
+      validate(...args) {
+        superValidateStub = sinon.stub();
+        return superValidateStub(...args);
+      }
+    }
+
+    beforeEach(() => {
+      yieldStub = sinon.stub();
+      rateLimiterStub = sinon.stub();
+      nextStub = sinon.stub();
+
+      rateLimiterStub.returns(yieldStub);
+      yieldStub.withArgs(req, res).yields();
+      yieldStub.withArgs(req, 'error').yields('ErrorResponse');
+
+      SummaryBehaviour = proxyquire('../components/summary', {
+        '../../config/rate-limits': mockConfig,
+        '../../middleware/rate-limiter': rateLimiterStub
+      });
+
+      Behaviour = SummaryBehaviour(ValidateBase);
+      behaviour = new Behaviour();
+    });
+
+    afterEach(() => {
+      rateLimiterStub.reset();
+      nextStub.reset();
+      superValidateStub.reset();
+    });
+
+    it('calls the rate limiter if submission rate limits enabled', () => {
+      const options = Object.assign({}, mockConfig, { logger: req });
+
+      behaviour.validate(req, res, nextStub);
+
+      rateLimiterStub.should.have.been.calledOnce.calledWithExactly(options, 'submissions');
+      nextStub.should.not.have.been.called;
+      superValidateStub.should.have.been.calledOnce.calledWithExactly(req, res, nextStub);
+    });
+
+    it('calls next with an error if there is a problem with the rate limiter', () => {
+      const options = Object.assign({}, mockConfig, { logger: req });
+
+      behaviour.validate(req, 'error', nextStub);
+
+      rateLimiterStub.should.have.been.calledOnce.calledWithExactly(options, 'submissions');
+      nextStub.should.have.been.calledOnce.calledWithExactly('ErrorResponse');
+      superValidateStub.should.not.have.been.called;
+    });
+
+    it('calls the super validate function only if submission rate limits disabled', () => {
+      SummaryBehaviour = proxyquire('../components/summary', {
+        '../../config/rate-limits': {
+          rateLimits: {
+            submissions: {
+              active: false
+            }
+          }
+        },
+        '../../middleware/rate-limiter': rateLimiterStub
+      });
+
+      Behaviour = SummaryBehaviour(ValidateBase);
+      behaviour = new Behaviour();
+
+      behaviour.validate(req, res, nextStub);
+
+      rateLimiterStub.should.not.have.been.called;
+      nextStub.should.not.have.been.called;
+      superValidateStub.should.have.been.calledOnce.calledWithExactly(req, res, nextStub);
     });
   });
 });
