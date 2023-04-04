@@ -1,24 +1,25 @@
 {{#errorlist.length}}
-<div class="validation-summary" tabindex="-1">
+<div class="govuk-error-summary" aria-labelledby="error-summary-title" data-module="govuk-error-summary" role="alert" tabindex="-1">
     {{$errorlist-title}}
 
       {{#errorLength.single}}
-        <h2 id="error-summary-title">{{#t}}errorlist.title.single{{/t}}</h2>
+        <h2 class="govuk-error-summary__title" id="error-summary-title">{{#t}}errorlist.title.single{{/t}}</h2>
       {{/errorLength.single}}
       {{#errorLength.multiple}}
-        <h2 id="error-summary-title">{{#t}}errorlist.title.multiple{{/t}}</h2>
+        <h2 class="govuk-error-summary__title" id="error-summary-title">{{#t}}errorlist.title.multiple{{/t}}</h2>
       {{/errorLength.multiple}}
 
     {{/errorlist-title}}
-
-    {{<partials-validation-list}}
-        {{$validation-list}}
-            {{#errorlist}}
-                {{#message}}
-                  <li><a href="#{{key}}">{{ message }}</a></li>
-                {{/message}}
-            {{/errorlist}}
-        {{/validation-list}}
-    {{/partials-validation-list}}
+	<div class="govuk-error-summary__body">
+		{{<partials-validation-list}}
+			{{$validation-list}}
+				{{#errorlist}}
+					{{#message}}
+						<li><a href="#{{errorLinkId}}">{{ message }}</a></li>
+					{{/message}}
+				{{/errorlist}}
+			{{/validation-list}}
+		{{/partials-validation-list}}
+	</div>
 </div>
 {{/errorlist.length}}

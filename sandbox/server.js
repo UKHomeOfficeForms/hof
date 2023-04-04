@@ -8,5 +8,11 @@ bootstrap({
   routes: [
     require('./apps/sandbox')
   ],
-  getAccessibility: true
+  rateLimits: {
+    requests: {
+      active: true
+    }
+  },
+  getAccessibility: true,
+  "port": 8082
 });

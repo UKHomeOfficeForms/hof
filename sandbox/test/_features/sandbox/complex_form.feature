@@ -32,6 +32,9 @@ Feature: Complex Form
     Then I should be on the 'text-input-area' page showing 'What are the details of your complaint?'
     Then I fill 'complaintDetails' text area with 'I would like to make a complaint'
     Then I click the 'Continue' button
+    Then I should be on the 'word-count' page showing 'What happened'
+    Then I fill 'whatHappened' text area with 'This is what happened'
+    Then I click the 'Continue' button
     Then I should be on the 'select' page showing 'What is the appeal stage?'
     Then I select 'appealStages' and '01. First Tier IAC Appeal - In Country Appeals'
     Then I click the 'Continue' button

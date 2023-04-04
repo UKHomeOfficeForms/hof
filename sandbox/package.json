@@ -9,13 +9,18 @@
   "scripts": {
     "start": "node server.js",
     "start:dev": "HOF_SANDBOX=true ../bin/hof-build watch",
+    "dev": "yarn && GA_TAG=test nodemon server",
     "build": "HOF_SANDBOX=true ../bin/hof-build",
     "postinstall": "yarn run build"
   },
   "author": "",
   "dependencies": {
+    "govuk-frontend": "3.14",
     "jquery": "^3.6.0",
+    "sass": "^1.53.0",
     "typeahead-aria": "^1.0.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }

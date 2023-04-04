@@ -4,7 +4,6 @@
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
-const mkdirp = require('mkdirp');
 
 const mimes = {
   '.gif': 'image/gif',
@@ -12,7 +11,7 @@ const mimes = {
 };
 
 const mkdir = dir => new Promise((resolve, reject) => {
-  mkdirp(dir, err => err ? reject(err) : resolve());
+  fs.mkdir(dir, {recursive: true}, err => err ? reject(err) : resolve());
 });
 
 const cidToBase64 = (h, attachments) => {

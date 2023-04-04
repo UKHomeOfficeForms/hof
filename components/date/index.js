@@ -40,6 +40,7 @@ const conditionalTranslate = (key, translate) => {
 };
 
 const getLegendClassName = field => field && field.legend && field.legend.className || '';
+const getIsPageHeading = field => field && field.isPageHeading || '';
 
 module.exports = (key, opts) => {
   if (!key) {
@@ -144,8 +145,9 @@ module.exports = (key, opts) => {
     const legend = conditionalTranslate(`fields.${key}.legend`, req.translate);
     const hint = conditionalTranslate(`fields.${key}.hint`, req.translate);
     const legendClassName = getLegendClassName(options);
+    const isPageHeading = getIsPageHeading(options);
     const error = req.form.errors && req.form.errors[key];
-    res.render(template, { key, legend, legendClassName, hint, error }, (err, html) => {
+    res.render(template, { key, legend, legendClassName, isPageHeading, hint, error }, (err, html) => {
       if (err) {
         next(err);
       } else {

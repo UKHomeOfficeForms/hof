@@ -8,6 +8,8 @@ const debug = require('debug')('hmpo:form');
 const dataFormatter = require('./formatting');
 const dataValidator = require('./validation');
 const ErrorClass = require('./validation-error');
+const Helpers = require('../utilities').helpers;
+const sanitisationBlacklistArray = require('../config/sanitisation-rules');
 
 module.exports = class BaseController extends EventEmitter {
   constructor(options) {
@@ -69,6 +71,7 @@ module.exports = class BaseController extends EventEmitter {
         this._configure.bind(this),
         this._process.bind(this),
         this._validate.bind(this),
+        this._sanitize.bind(this),
         this._getHistoricalValues.bind(this),
         this.saveValues.bind(this),
         this.successHandler.bind(this),
@@ -162,6 +165,30 @@ module.exports = class BaseController extends EventEmitter {
     return validator(key, req.form.values[key], req.form.values, emptyValue);
   }
 
+  _sanitize(req, res, callback) {
+    // Sanitisation could be disabled in the config
+    if(!this.options.sanitiseInputs) return callback();
+
+    // If we don't have any data, no need to progress
+    if(!_.isEmpty(req.form.values)) {
+      Object.keys(req.form.values).forEach(function (property, propertyIndex) {
+        // If it's not a string, don't sanitise it
+        if(_.isString(req.form.values[property])) {
+          // For each property in our form data
+          Object.keys(sanitisationBlacklistArray).forEach(function (blacklisted, blacklistedIndex) {
+            const blacklistedDetail = sanitisationBlacklistArray[blacklisted];
+            blacklistedDetail.forEach(step => {
+              const regexQuery = new RegExp(step.regex, 'gi');
+              // Will perform the required replace based on our passed in regex and the replace string
+              req.form.values[property] = req.form.values[property].replace(regexQuery, step.replace);
+            });
+          });
+        }
+      });
+    }
+    return callback();
+  }
+
   _process(req, res, callback) {
     req.form.values = req.form.values || {};
     const formatter = dataFormatter(
@@ -213,16 +240,9 @@ module.exports = class BaseController extends EventEmitter {
   }
 
   _getForkTarget(req, res) {
-    function evalCondition(condition) {
-      return _.isFunction(condition) ?
-        condition(req, res) :
-        condition.value === (req.form.values[condition.field] ||
-                           (req.form.historicalValues && req.form.historicalValues[condition.field]));
-    }
-
     // If a fork condition is met, its target supercedes the next property
     return req.form.options.forks.reduce((result, value) =>
-      evalCondition(value.condition) ?
+      Helpers.isFieldValueInPageOrSessionValid(req, res, value.condition) ?
         value.target :
         result
     , req.form.options.next);
