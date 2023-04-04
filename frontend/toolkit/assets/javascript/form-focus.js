@@ -71,9 +71,18 @@ function formFocus() {
   var labels;
   var summaries;
 
-  if (getElementFromSummaryLink && getEditPath === 'edit') {
+  var editMode = getElementFromSummaryLink && getEditPath === 'edit';
+
+  if (getElementFromSummaryLink && document.getElementById(getElementFromSummaryLink) && editMode) {
     document.getElementById(getElementFromSummaryLink).focus();
+  }
+
+  if (getElementFromSummaryLink && document.getElementById(getElementFromSummaryLink + '-group') && editMode) {
     document.getElementById(getElementFromSummaryLink + '-group').scrollIntoView();
+  }
+
+  if (document.getElementById(getElementFromSummaryLink + '-day') && forms.length === 1 && editMode) {
+    document.getElementById(getElementFromSummaryLink + '-day').focus();
   }
 
   if (forms.length > 0) {

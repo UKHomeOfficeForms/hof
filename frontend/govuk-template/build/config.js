@@ -5,6 +5,7 @@ module.exports = {
   assetPath: '{{govukAssetPath}}',
   afterHeader: '{{$afterHeader}}{{/afterHeader}}',
   bodyClasses: '{{$bodyClasses}}{{/bodyClasses}}',
+  bodyStart: '{{$bodyStart}}{{/bodyStart}}',
   bodyEnd: '{{$bodyEnd}}{{/bodyEnd}}',
   content: '{{$main}}{{/main}}',
   cookieMessage: '{{$cookieMessage}}{{/cookieMessage}}',
@@ -17,8 +18,7 @@ module.exports = {
   insideHeader: '{{$insideHeader}}{{/insideHeader}}',
   pageTitle: '{{$pageTitle}}{{/pageTitle}}',
   propositionHeader: '{{$propositionHeader}}{{/propositionHeader}}',
-  skipLinkMessage: '{{$skipLinkMessage}}Skip to main content{{/skipLinkMessage}}',
   globalHeaderText: '{{$globalHeaderText}}GOV.UK{{/globalHeaderText}}',
-  licenceMessage: '{{$licenceMessage}}<p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated</p>{{/licenceMessage}}',
+  licenceMessage: '{{$licenceMessage}}All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" id="open-government-licence" class="govuk-footer__link" target="_blank" rel="license">Open Government Licence v3.0</a>, except where otherwise stated{{/licenceMessage}}',
   crownCopyrightMessage: '{{$crownCopyrightMessage}}© Crown copyright{{/crownCopyrightMessage}}'
 };

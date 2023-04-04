@@ -10,7 +10,6 @@
 }
 
 #cookie-banner {
-  max-width: 960px;
   margin: 0 15px;
   p {
     margin: 0;
@@ -61,4 +60,55 @@
     margin: 0.5em 0;
     height: fit-content;
   }
+}
+
+// the following are additional hof specific govuk cookie banner styling
+.govuk-banner--success {
+  border-color: #00703c;
+  color: #00703c;
+}
+
+.govuk-banner {
+  border: 5px solid #1d70b8;
+  font-size: 0;
+  margin-bottom: 30px;
+  padding: 10px;
+}
+
+.govuk-banner__icon{
+  display: inline-block;
+}
+
+.govuk-banner__message {
+  font-family: "GDS Transport", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #0b0c0c;
+  display: block;
+  overflow: hidden;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.govuk-banner__assistive {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+  }
+
+.cookie-table-holder > table > tbody > tr > td:first-child{
+  font-weight:bold;
+}
+
+.js-enabled #global-cookie-message {
+  display: none;
 }

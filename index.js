@@ -79,7 +79,7 @@ const getContentSecurityPolicy = (config, res) => {
     fontSrc: ['fonts.gstatic.com '],
     scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
     imgSrc: ['www.google-analytics.com', 'ssl.gstatic.com'],
-    connectSrc: ['www.google-analytics.com']
+    connectSrc: ['https://www.google-analytics.com', 'https://region1.google-analytics.com']
   };
 
   if (config.gaTagId) {
@@ -120,6 +120,8 @@ const getContentSecurityPolicy = (config, res) => {
  * @param options.getTerms {boolean} Optional boolean - whether to mount the /terms endpoint
  * @param options.getCookies {boolean} Optional boolean - whether to mount the /cookies endpoint
  * @param options.noCache {boolean} Optional boolean - whether to disable caching
+ * @param options.getAccessibilityStatement {boolean} Optional boolean - whether to mount the
+ * /accessibility-statement endpoint
  *
  * @returns {object} A new HOF application using the configuration supplied in options
  */
@@ -204,6 +206,13 @@ function bootstrap(options) {
   }));
   app.use(mixins());
   app.use(markdown(config.markdown));
+  // rate limits have to be loaded before all routes so it is applied to them
+  if (config.rateLimits.requests.active) {
+    app.use(hofMiddleware.rateLimiter(config, 'requests'));
+  }
+
+  // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
 
   if (config.getAccessibility === true) {
     deprecate(

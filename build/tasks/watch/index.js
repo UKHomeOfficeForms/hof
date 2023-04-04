@@ -116,7 +116,7 @@ module.exports = config => {
 
       if (process.env.HOF_SANDBOX === 'true') {
         const rootDir = require('path').resolve(__dirname, '../../../');
-        ignored.push(`${rootDir}/frontend/govuk-template/govuk_template.html`);
+        ignored.push(`${rootDir}/frontend/govuk-template/govuk_template_generated.html`);
         watchLocation = [rootDir, '.'];
       }
 

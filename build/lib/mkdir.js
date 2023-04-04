@@ -1,9 +1,9 @@
 'use strict';
 
 const path = require('path');
-const mkdirp = require('mkdirp');
+const fs = require('fs');
 
 module.exports = file => new Promise((resolve, reject) => {
   const dir = path.dirname(file);
-  mkdirp(dir, err => err ? reject(err) : resolve());
+  fs.mkdir(dir, {recursive: true}, err => err ? reject(err) : resolve());
 });

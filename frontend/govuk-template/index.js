@@ -5,18 +5,18 @@ const servestatic = require('serve-static');
 const Router = require('express').Router;
 const buildTemplateLayout = require('./build');
 
-const basedir = path.dirname(require.resolve('govuk_template_mustache/package.json'));
+const basedir = path.dirname(require.resolve('govuk-frontend/package.json'));
 
 const setup = (opts, router) => {
   buildTemplateLayout();
   const options = opts || {};
-  options.path = options.path || '/govuk-assets';
+  options.path = options.path || '/assets';
 
-  router.use(options.path, servestatic(path.join(basedir, './assets'), options));
+  router.use(options.path, servestatic(path.join(basedir, './govuk/assets'), options));
   router.use((req, res, next) => {
     res.locals.govukAssetPath = req.baseUrl + options.path + '/';
     res.locals.partials = res.locals.partials || {};
-    res.locals.partials['govuk-template'] = path.resolve(__dirname, './govuk_template');
+    res.locals.partials['govuk-template'] = path.resolve(__dirname, './govuk_template_generated');
     next();
   });
 

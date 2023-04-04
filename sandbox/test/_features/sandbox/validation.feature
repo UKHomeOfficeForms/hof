@@ -116,6 +116,13 @@ Feature: validations
     Then I fill 'complaintDetails' text area with 'I would like to make a complaint'
     Then I click the 'Continue' button
     Then I click the 'Continue' button
+    Then I should see the 'Enter details about what happened' error
+    Then I fill 'whatHappened' text area with 'This is what happened to when I typed in what happened'
+    Then I click the 'Continue' button
+    Then I should see the 'Keep to the 10 word limit' error
+    Then I fill 'whatHappened' text area with 'This is what happened"
+    Then I click the 'Continue' button
+    Then I click the 'Continue' button
     Then I should see the 'Select an appeal stage from the list' error
     Then I select 'appealStages' and '01. First Tier IAC Appeal - In Country Appeals'
     Then I click the 'Continue' button

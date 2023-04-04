@@ -1,6 +1,8 @@
 'use strict';
 
 const request = require('supertest');
+const _ = require('lodash');
+const redis = require('redis');
 
 const testTag = 'Test-GA-Tag';
 process.env.GA_TAG = testTag;
@@ -201,11 +203,13 @@ describe('hof server', () => {
           }
         }]
       });
+
+
       return request(bs.server)
         .get('/step')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.contain('<div class="content">'));
+        .expect(res => res.text.should.contain('<div class="govuk-header__content">'));
     });
 
     it('serves a view on request to an optional baseUrl', () => {
@@ -699,6 +703,85 @@ describe('hof server', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect('<div>test</div>\n');
+    });
+  });
+
+  describe('with rate limits', () => {
+    let redisClient;
+    let reqMiddleware;
+
+    beforeEach(() => {
+      redisClient = redis.createClient();
+    });
+
+    afterEach(() => {
+      redisClient.del(reqMiddleware.ip);
+    });
+
+    it('does not set up rate limits for requests if they are disabled', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/views`,
+          pages: {
+            '/a-static-page': 'test'
+          }
+        }],
+        rateLimits: {
+          requests: {
+            active: false
+          }
+        }
+      });
+
+      bs.use((req, res) => {
+        reqMiddleware = req;
+        res.json({});
+      });
+
+      return request(bs.server)
+        .get('/a-static-page')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(async () => {
+          await redisClient.get(reqMiddleware.ip, (err, record) => {
+            const recordCount = _.sum(_.map(JSON.parse(record), obj => obj.requestsCount));
+            expect(recordCount).to.eq(0);
+          });
+        });
+    });
+
+    it('sets up rate limits and records request per IP address if they are enabled', () => {
+      const bs = bootstrap({
+        fields: 'fields',
+        routes: [{
+          views: `${root}/views`,
+          pages: {
+            '/a-static-page': 'test'
+          }
+        }],
+        rateLimits: {
+          requests: {
+            active: true
+          }
+        }
+      });
+
+      bs.use((req, res) => {
+        reqMiddleware = req;
+        res.json({});
+      });
+
+      return request(bs.server)
+        .get('/a-static-page')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(200)
+        .expect(async () => {
+          await redisClient.get(reqMiddleware.ip, (err, record) => {
+            const recordCount = _.sum(_.map(JSON.parse(record), obj => obj.requestsCount));
+            expect(recordCount).to.eq(1);
+          });
+        });
     });
   });
 

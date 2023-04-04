@@ -1,0 +1,37 @@
+<div class="govuk-date-input__item">
+    <div id="{{id}}-group" class="{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}">
+      <label for="{{id}}" class="{{labelClassName}}">
+          <span class="label-text">{{{label}}}</span>
+      </label>
+      {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</span>{{/hint}}
+      {{#renderChild}}{{/renderChild}}
+          {{#attributes}}
+              {{#prefix}}
+                  <div class="govuk-input__prefix" aria-hidden="true">{{prefix}}</div>
+              {{/prefix}}
+          {{/attributes}}
+          <input
+              type="{{type}}"
+              name="{{id}}"
+              id="{{id}}"
+              class="govuk-input{{#className}} {{className}}{{/className}}{{#error}} govuk-input--error{{/error}}"
+              aria-required="{{required}}"
+              {{#value}} value="{{value}}"{{/value}}
+              {{#min}} min="{{min}}"{{/min}}
+              {{#max}} max="{{max}}"{{/max}}
+              {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
+              {{#pattern}} pattern="{{pattern}}"{{/pattern}}
+              {{#hintId}} aria-describedby="{{hintId}}"{{/hintId}}
+              {{#error}} aria-invalid="true"{{/error}}
+              {{#autocomplete}} autocomplete="{{autocomplete}}"{{/autocomplete}}
+              {{#attributes}}
+                  {{attribute}}="{{value}}"
+              {{/attributes}}
+          >
+          {{#attributes}}
+              {{#suffix}}
+                  <div class="govuk-input__prefix" aria-hidden="true">{{suffix}}</div>
+              {{/suffix}}
+          {{/attributes}}
+    </div>
+</div>
