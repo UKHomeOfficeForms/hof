@@ -30,12 +30,12 @@ CharacterCount.prototype.updateCount = function () {
   this.$maxlengthHint.innerHTML = 'You have ' + number + characterNoun + remainderSuffix;
 
   if (currentLength >= this.maxLength + 1) {
-    helpers.removeClass(this.$maxlengthHint, 'form-hint');
-    helpers.addClass(this.$maxlengthHint, 'error-message');
+    helpers.removeClass(this.$maxlengthHint, 'govuk-hint');
+    helpers.addClass(this.$maxlengthHint, 'govuk-error-message');
     helpers.addClass(this.$textarea, 'textarea-error');
   } else {
-    helpers.addClass(this.$maxlengthHint, 'form-hint');
-    helpers.removeClass(this.$maxlengthHint, 'error-message');
+    helpers.addClass(this.$maxlengthHint, 'govuk-hint');
+    helpers.removeClass(this.$maxlengthHint, 'govuk-error-message');
     helpers.removeClass(this.$textarea, 'textarea-error');
   }
 };

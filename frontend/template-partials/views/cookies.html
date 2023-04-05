@@ -46,14 +46,14 @@
         {{#intro-cookie-table}}
           {{> partials-table}}
         {{/intro-cookie-table}}
-        <div class="js-enabled">
           <h2>{{session-cookies}}</h2>
           <p>{{session-cookies-content}}</p>
           {{#session-cookies-table}}
             {{> partials-session-cookies-table}}
           {{/session-cookies-table}}
+        <div class="js-enabled">
           <form>
-            <div class="form-group">
+            <div class="govuk-form-group">
               <fieldset>
                 <legend>
                   <h2>{{measuring-use}}</h2>
@@ -76,14 +76,6 @@
             </div>
             {{> partials-cookie-settings-button}}
           </form>
-        </div>
-        <div class="js-disabled">
-          <h2>Cookie settings</h2>
-          <p>We use JavaScript to set most of our cookies. Unfortunately JavaScript is not running on your browser, so you cannot change your settings. You can try:</p>
-          <ul class="list-bullet">
-            <li>reloading the page</li>
-            <li>turning on JavaScript in your browser</li>
-          </ul>
         </div>
       </div>
     {{/gaTagId}}

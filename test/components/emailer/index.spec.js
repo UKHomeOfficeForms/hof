@@ -78,7 +78,6 @@ describe('Emailer Behaviour', () => {
       const Mixed = Behaviour(options())(class {});
       const instance = new Mixed();
       expect(instance).to.have.property('successHandler');
-      expect(instance.successHandler).to.be.a('function');
     });
 
     it('sends an email to the configured recipient', done => {

@@ -66,8 +66,24 @@ function setupLabels(labels) {
 
 function formFocus() {
   var forms = document.getElementsByTagName('form');
+  var getElementFromSummaryLink = window.location.hash.replace(/^#/, '');
+  var getEditPath = window.location.pathname.split('/').pop();
   var labels;
   var summaries;
+
+  var editMode = getElementFromSummaryLink && getEditPath === 'edit';
+
+  if (getElementFromSummaryLink && document.getElementById(getElementFromSummaryLink) && editMode) {
+    document.getElementById(getElementFromSummaryLink).focus();
+  }
+
+  if (getElementFromSummaryLink && document.getElementById(getElementFromSummaryLink + '-group') && editMode) {
+    document.getElementById(getElementFromSummaryLink + '-group').scrollIntoView();
+  }
+
+  if (document.getElementById(getElementFromSummaryLink + '-day') && forms.length === 1 && editMode) {
+    document.getElementById(getElementFromSummaryLink + '-day').focus();
+  }
 
   if (forms.length > 0) {
     labels = document.getElementsByTagName('label');
