@@ -1,0 +1,57 @@
+{
+  "landing-page": {
+    "header": "Landing page"
+  },
+  "build-your-own-form": {
+    "title": "Build your own form",
+    "subheader": "Access the build your own form guidance link"
+  },
+  "address": {
+    "header": "What is your address in the UK?",
+    "intro": "If you have no fixed address, enter an address where we can contact you."
+  },
+  "name": {
+    "header": "What is your full name?"
+  },
+  "email": {
+    "header": "Enter your email address"
+  },
+  "phone-number": {
+    "header": "Enter your phone number"
+  },
+  "confirm": {
+    "header": "Check your answers before submitting your application.",
+    "sections": {
+      "applicantsDetails": {
+        "header": "Applicant's details"
+      },
+      "address": {
+        "header": "Address"
+      },
+      "income": {
+        "header": "Income"
+      },
+      "appealDetails": {
+        "header": "Appeal details"
+      },
+      "countrySelect": {
+        "header": "Country of residence"
+      },
+      "contactDetails": {
+        "header": "Contact details"
+      },
+      "complaintDetails": {
+        "header": "Complaint details"
+      },
+      "whatHappened": {
+        "header": "What happened"
+      }
+    }
+  },
+  "confirmation": {
+    "title": "Application sent",
+    "alert": "Application sent", 
+    "subheader": "What happens next",
+    "content": "We’ll contact you with the decision of your application or if we need more information from you."
+  }
+}

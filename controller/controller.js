@@ -4,6 +4,7 @@ const _ = require('lodash');
 const i18nLookup = require('i18n-lookup');
 const Mustache = require('mustache');
 const BaseController = require('./base-controller');
+const Helpers = require('../utilities').helpers;
 
 const omitField = (field, req) => field.useWhen && (typeof field.useWhen === 'string'
   ? req.sessionModel.get(field.useWhen) !== 'true'
@@ -54,12 +55,7 @@ module.exports = class Controller extends BaseController {
 
     // If a form condition is met, its target supercedes the next property
     next = _.reduce(forks, (result, value) => {
-      const evalCondition = condition => _.isFunction(condition) ?
-        condition(req, res) :
-        condition.value === (req.form.values[condition.field] ||
-          (req.form.historicalValues && req.form.historicalValues[condition.field]));
-
-      if (evalCondition(value.condition)) {
+      if (Helpers.isFieldValueInPageOrSessionValid(req, res, value.condition)) {
         if (value.continueOnEdit) {
           req.form.options.continueOnEdit = true;
         }
@@ -107,20 +103,56 @@ module.exports = class Controller extends BaseController {
     const locals = super.locals(req, res);
     const stepLocals = req.form.options.locals || {};
 
-    const fields = _.map(req.form.options.fields, (field, key) =>
+    let fields = _.map(req.form.options.fields, (field, key) =>
       Object.assign({}, field, { key })
     );
+    // only include fields that aren't dependents to mitigate duplicate fields on the page
+    fields = fields.filter(field => !req.form.options.fields[field.key].dependent);
 
     return _.extend({}, locals, {
       fields,
       route,
       baseUrl: req.baseUrl,
+      skipToMain: this.getFirstFormItem(req.form.options.fields),
       title: this.getTitle(route, lookup, req.form.options.fields, res.locals),
+      journeyHeaderURL: this.getJourneyHeaderURL(req.baseUrl),
+      header: this.getHeader(route, lookup, res.locals),
+      captionHeading: this.getCaptionHeading(route, lookup, res.locals),
+      warning: this.getWarning(route, lookup, res.locals),
+      subHeading: this.getSubHeading(route, lookup, res.locals),
       intro: this.getIntro(route, lookup, res.locals),
       backLink: this.getBackLink(req, res),
       nextPage: this.getNextStep(req, res),
       errorLength: this.getErrorLength(req, res)
     }, stepLocals);
+  }
+
+  getJourneyHeaderURL(url) {
+    return url === '' ? '/' : url;
+  }
+
+  getFirstFormItem(fields) {
+    let firstFieldKey;
+    if (_.size(fields)) {
+      firstFieldKey = Object.keys(fields)[0];
+    }
+    return firstFieldKey | 'main-content';
+  }
+
+  getHeader(route, lookup, locals) {
+    return lookup(`pages.${route}.header`, locals);
+  }
+
+  getCaptionHeading(route, lookup, locals) {
+    return lookup(`pages.${route}.captionHeading`, locals);
+  }
+
+  getSubHeading(route, lookup, locals) {
+    return lookup(`pages.${route}.subHeading`, locals);
+  }
+
+  getWarning(route, lookup, locals) {
+    return lookup(`pages.${route}.warning`, locals);
   }
 
   getTitle(route, lookup, fields, locals) {
@@ -144,6 +176,26 @@ module.exports = class Controller extends BaseController {
   _getErrors(req, res, callback) {
     super._getErrors(req, res, () => {
       Object.keys(req.form.errors).forEach(key => {
+        if (req.form && req.form.options && req.form.options.fields) {
+          const field = req.form.options.fields[key];
+          // get first option for radios and checkbox
+          if (field.mixin === 'radio-group' || field.mixin === 'checkbox-group') {
+            // get first option for radios and checkbox where there is a toggle
+            if(typeof field.options[0] === 'object') {
+              req.form.errors[key].errorLinkId = key + '-' + field.options[0].value;
+            } else {
+              req.form.errors[key].errorLinkId = key + '-' + field.options[0];
+            }
+          // eslint-disable-next-line brace-style
+          }
+          // get first field for date input control
+          else if (field && field.mixin === 'input-date') {
+            req.form.errors[key].errorLinkId = key + '-day';
+          } else {
+            req.form.errors[key].errorLinkId = key;
+          }
+        }
+
         req.form.errors[key].message = this.getErrorMessage(req.form.errors[key], req, res);
       });
       callback();

@@ -1,0 +1,10 @@
+{{<layout}}
+  {{$header}}
+    {{content.title}}
+  {{/header}}
+  {{$content}}
+    <p>{{content.message}}</p>
+    <p>{{content.preTimeToWait}}{{content.timeToWait}}{{content.postTimeToWait}}</p>
+    <a href="/" class="button" role="button">{{#t}}buttons.try-again{{/t}}</a>
+  {{/content}}
+{{/layout}}

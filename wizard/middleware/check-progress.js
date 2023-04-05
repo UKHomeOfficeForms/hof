@@ -28,6 +28,41 @@ module.exports = (route, controller, steps, begin) => {
     return _.uniq(allSteps);
   };
 
+  // Gets all the possible routes
+  const walkAllPossibleSteps = (stepName, allStepsInService, allVisitedSteps) => {
+    const stepIncludingFieldsAndForks = allStepsInService[stepName];
+    if (!stepIncludingFieldsAndForks) { return; }
+
+    const forkTargets = _.map(stepIncludingFieldsAndForks.forks, 'target') || [];
+    const nextStep = stepIncludingFieldsAndForks.next || '';
+
+    // If there is no next step or fork, then we have reached the end of the journey
+    if (!forkTargets.length && !nextStep) {
+      allVisitedSteps.push(stepName);
+      // eslint-disable-next-line consistent-return
+      return _.uniq(allVisitedSteps);
+    }
+
+    const nextStepsAndForks = _.uniq(forkTargets.concat(nextStep));
+
+    // We need to transverse through all 'Next' and 'Forks' for this route
+    nextStepsAndForks.map(each => {
+      if (!allVisitedSteps.includes(each)) {
+        allVisitedSteps.push(each);
+        walkAllPossibleSteps(each, allStepsInService, allVisitedSteps);
+      }
+    });
+  };
+
+  // Create a list of all visited steps
+  const createAllVisitedSteps = (stepName, allStepsInService) => {
+    const allVisitedSteps = [stepName];
+    if (allStepsInService[stepName]) {
+      walkAllPossibleSteps(stepName, allStepsInService, allVisitedSteps);
+    }
+    return _.uniq(allVisitedSteps);
+  };
+
   const invalidateStep = (stepName, scopedSteps, sessionModel) => {
     debug('Invalidating', stepName);
     const step = scopedSteps[stepName] || {};
@@ -55,7 +90,7 @@ module.exports = (route, controller, steps, begin) => {
     debug('next', nextStep);
     debug('potential paths', potentialPaths);
     // if we're following a loop then allow the loop to be invalidated
-    const whitelist = isLoop(nextStep, req.path) ? [route] : getAllPossibleSteps(nextStep, steps);
+    const whitelist = isLoop(nextStep, req.path) ? [route] : createAllVisitedSteps(nextStep, steps);
     // aggregate all potential journeys from the invalidating step
     const invalidateSteps = potentialPaths.reduce((arr, step) => arr.concat(getAllPossibleSteps(step, steps)), []);
 

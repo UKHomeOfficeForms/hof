@@ -4,7 +4,7 @@
 const cp = require('child_process');
 
 module.exports = (cmd, args) => new Promise((resolve, reject) => {
-  if (process.env.HOF_EXAMPLE_APP === 'true') {
+  if (process.env.HOF_SANDBOX === 'true') {
     cmd = cmd.replace('node_modules/hof', '..');
   }
 
