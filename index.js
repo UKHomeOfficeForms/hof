@@ -79,7 +79,7 @@ const getContentSecurityPolicy = (config, res) => {
     fontSrc: ['fonts.gstatic.com '],
     scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
     imgSrc: ['www.google-analytics.com', 'ssl.gstatic.com'],
-    connectSrc: ['www.google-analytics.com']
+    connectSrc: ['https://www.google-analytics.com', 'https://region1.google-analytics.com']
   };
 
   if (config.gaTagId) {
@@ -112,7 +112,7 @@ const getContentSecurityPolicy = (config, res) => {
  * @param options {object} Configuration options for the HOF application
  * @param options.behaviours {object | Array<object>} The HOF behaviour(s) to invoke for all sub-applications
  * @param options.translations {string} The translations path for the application
- * @param options.routes {Array<object>} The sub-applications for this app: for example; require('./apps/example-app')
+ * @param options.routes {Array<object>} The sub-applications for this app: for sandbox; require('./apps/sandbox')
  * @param options.views {Array<string>} The view template paths for the application
  * @param options.middleware {Array<function>} An array of Express middleware functions to use
  * @param options.theme {string} Optional HOF theme - defaults to govuk
@@ -120,6 +120,8 @@ const getContentSecurityPolicy = (config, res) => {
  * @param options.getTerms {boolean} Optional boolean - whether to mount the /terms endpoint
  * @param options.getCookies {boolean} Optional boolean - whether to mount the /cookies endpoint
  * @param options.noCache {boolean} Optional boolean - whether to disable caching
+ * @param options.getAccessibilityStatement {boolean} Optional boolean - whether to mount the
+ * /accessibility-statement endpoint
  *
  * @returns {object} A new HOF application using the configuration supplied in options
  */
@@ -135,6 +137,7 @@ function bootstrap(options) {
   app.use((req, res, next) => {
     res.locals.nonce = crypto.randomBytes(16).toString('hex');
     res.locals.appName = config.appName;
+    res.locals.htmlLang = config.htmlLang;
     res.locals.cookieName = config.session.name;
     next();
   });
@@ -203,7 +206,24 @@ function bootstrap(options) {
   }));
   app.use(mixins());
   app.use(markdown(config.markdown));
+  // rate limits have to be loaded before all routes so it is applied to them
+  if (config.rateLimits.requests.active) {
+    app.use(hofMiddleware.rateLimiter(config, 'requests'));
+  }
 
+  // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
+
+  if (config.getAccessibility === true) {
+    deprecate(
+      '`getAccessibility` option is deprecated and may be removed in future versions.',
+      'Use `pages` to define static cookies page.'
+    );
+    app.get('/accessibility', (req, res) => {
+      const locals = Object.assign({}, req.translate('accessibility'));
+      res.render('accessibility', locals);
+    });
+  }
   if (config.getCookies === true) {
     deprecate(
       '`getCookies` option is deprecated and may be removed in future versions.',

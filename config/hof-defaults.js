@@ -1,8 +1,10 @@
 'use strict';
 /* eslint no-process-env: "off" */
+const rateLimits = require('./rate-limits');
 
 const defaults = {
   appName: process.env.APP_NAME || 'HOF Application',
+  htmlLang: 'en',
   root: process.cwd(),
   translations: 'translations',
   start: true,
@@ -11,13 +13,14 @@ const defaults = {
   },
   getCookies: true,
   getTerms: true,
+  getAccessibility: false,
   viewEngine: 'html',
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,
   host: process.env.HOST || '0.0.0.0',
   port: process.env.PORT || '8080',
   env: process.env.NODE_ENV || 'development',
-  gaTagId: process.env.GA_TAG,
+  gaTagId: process.env.GA_TAG || 'Test-GA-Tag',
   ga4TagId: process.env.GA_4_TAG,
   gaCrossDomainTrackingTagId: process.env.GDS_CROSS_DOMAIN_GA_TAG,
   loglevel: process.env.LOG_LEVEL || 'info',
@@ -29,7 +32,8 @@ const defaults = {
   session: {
     ttl: process.env.SESSION_TTL || 1800,
     secret: process.env.SESSION_SECRET || 'changethis',
-    name: process.env.SESSION_NAME || 'hod.sid'
+    name: process.env.SESSION_NAME || 'hod.sid',
+    sanitiseInputs: false
   },
   apis: {
     pdfConverter: process.env.PDF_CONVERTER_URL
@@ -37,4 +41,4 @@ const defaults = {
   serveStatic: process.env.SERVE_STATIC_FILES !== 'false'
 };
 
-module.exports = defaults;
+module.exports = Object.assign({}, defaults, rateLimits);

@@ -82,7 +82,7 @@ describe('ga-tag', () => {
       test('it should show and focus cookie submitted message on either button click', () => {
         cookieSettings.initialiseCookieBanner();
         document.getElementById('accept-cookies-button').click();
-        expect(document.getElementById('cookie-banner-submitted').style.display).toEqual('flex');
+        expect(document.getElementById('cookie-banner-submitted').style.display).toEqual('block');
         expect(focusMock).toBeCalledTimes(1);
       });
 

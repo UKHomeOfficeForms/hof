@@ -7,12 +7,14 @@ var groupBy = require('lodash').groupBy;
 var helpers = require('./helpers');
 var inputs; var groups;
 var toggleAttr = 'data-toggle';
-var hiddenClass = 'js-hidden';
+var checkboxHiddenClass = 'govuk-checkboxes__conditional--hidden';
+var radioHiddenClass = 'govuk-radios__conditional--hidden';
 
 function inputClicked(e, target) {
   target = target || helpers.target(e);
   var shown;
   each(groups[target.name], function (input) {
+    var hiddenClass = (input.type.match(/checkbox/)) ? checkboxHiddenClass : radioHiddenClass;
     var id = input.getAttribute('aria-controls');
     var toggle = document.getElementById(id);
     if (toggle) {

@@ -22,10 +22,10 @@
     }
 }
 
-.validation-error {
+.govuk-form-group--error {
     box-sizing: border-box;
     padding-left: $gutter-half - $validation-bdr-size;
-    border-left: $validation-bdr-size-lg solid $error-colour;
+    //border-left: $validation-bdr-size-lg solid $error-colour;
 
     &:focus {
         outline: $focus-outline;
@@ -36,16 +36,16 @@
     }
 }
 
-.error-message {
+.govuk-error-message {
     display: block;
     @include media(tablet) {
         margin-bottom: 0.5em;
     }
     @include bold-19;
-    color: $error-colour;
+    //color: $error-colour;
 }
 
 .invalid-input,
-.validation-error .date-input {
+.govuk-form-group--error .date-input {
     border: $validation-bdr-size solid $error-colour;
 }
