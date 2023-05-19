@@ -3,6 +3,7 @@
 
 const config = require('./config');
 const bootstrap = require('../');
+const config = require('./config')
 
 bootstrap({
   translations: './apps/sandbox/translations',
@@ -15,7 +16,7 @@ bootstrap({
     }
   },
   getAccessibility: true,
-  port: config.port
+  "port": config.port
 });
 
 console.log(`Running on port ${config.port}`);
