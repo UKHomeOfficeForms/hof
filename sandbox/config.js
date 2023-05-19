@@ -13,6 +13,6 @@ module.exports = {
     region: process.env.EMAIL_REGION || ''
   },
   hosts: {
-    acceptanceTests: process.env.ACCEPTANCE_HOST_NAME || `http://localhost:${process.env.PORT || 8080}`
+    acceptanceTests: process.env.ACCEPTANCE_HOST_NAME || `http://localhost:${process.env.PORT || 8082}`
   }
 };
