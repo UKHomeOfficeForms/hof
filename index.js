@@ -78,8 +78,16 @@ const getContentSecurityPolicy = (config, res) => {
     styleSrc: ['www.googletagmanager.com', 'fonts.googleapis.com', 'tagmanager.google.com'],
     fontSrc: ['fonts.gstatic.com '],
     scriptSrc: ['www.google-analytics.com', 'ssl.google-analytics.com'],
-    imgSrc: ['www.google-analytics.com', 'ssl.gstatic.com'],
-    connectSrc: ['https://www.google-analytics.com', 'https://region1.google-analytics.com']
+    imgSrc: [
+      'www.google-analytics.com',
+      'ssl.gstatic.com',
+      'www.google.co.uk/ads/ga-audiences'
+    ],
+    connectSrc: [
+      'https://www.google-analytics.com',
+      'https://region1.google-analytics.com',
+      'https://region1.analytics.google.com'
+    ]
   };
 
   if (config.gaTagId) {
