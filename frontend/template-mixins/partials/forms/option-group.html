@@ -28,7 +28,7 @@
               value="{{value}}"
               {{#toggle}} data-toggle="{{toggle}}"{{/toggle}}
               {{#selected}} checked="checked"{{/selected}}
-              {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-item-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-item-hint"{{/hint}}{{/optionHint}}{{/error}}
+              {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-item-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}{{/optionHint}}{{/error}}
               {{#error}} aria-describedby="{{key}}-error" aria-invalid="true"{{/error}}
           >
           <label class="govuk-label govuk-radios__label" for="{{key}}-{{value}}">
