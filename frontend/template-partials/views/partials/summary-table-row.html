@@ -5,10 +5,10 @@
         <dt class="confirm-label">{{label}}</dt>
         <dd class="confirm-value" data-value="{{value}}">{{value}}</dd>
     {{#changeLink}}
-        <dd><span class="link"><a href="{{changeLink}}" id="{{field}}-change-{{index}}">{{#t}}buttons.change{{/t}} <span class="visuallyhidden">{{changeLinkDescription}} from {{value}}</span></a></span></dd>
+        <dd><span><a class="govuk-link" href="{{changeLink}}" id="{{field}}-change-{{index}}">{{#t}}buttons.change{{/t}} <span class="visuallyhidden">{{changeLinkDescription}} from {{value}}</span></a></span></dd>
     {{/changeLink}}
     {{^changeLink}}
-        <dd><span class="link"><a href="{{baseUrl}}{{step}}/edit#{{field}}" id="{{field}}-change">{{#t}}buttons.change{{/t}} <span class="visuallyhidden">{{changeLinkDescription}} from {{value}}</span></a></span></dd>
+        <dd><span><a class="govuk-link" href="{{baseUrl}}{{step}}/edit#{{field}}" id="{{field}}-change">{{#t}}buttons.change{{/t}} <span class="visuallyhidden">{{changeLinkDescription}} from {{value}}</span></a></span></dd>
     {{/changeLink}}
     {{/isSeparator}}
 </div>

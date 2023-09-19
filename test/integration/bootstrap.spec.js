@@ -111,7 +111,7 @@ describe('bootstrap()', () => {
       routes: [{
         steps: {}
       }]
-    })).should.Throw(`Cannot find views at ${root}/invalid_path`)
+    })).should.Throw('ENOENT: no such file or directory, scandir')
   );
 
   it('route views option must be valid when specified', () =>
@@ -147,8 +147,7 @@ describe('bootstrap()', () => {
       });
 
       return bs.should.have.all.keys('server', 'stop', 'start', 'use');
-    }
-    );
+    });
 
     it('can instantiate a custom behaviour for the route', () => {
       bs = bootstrap({

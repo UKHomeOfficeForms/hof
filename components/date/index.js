@@ -40,6 +40,7 @@ const conditionalTranslate = (key, translate) => {
 };
 
 const getLegendClassName = field => field && field.legend && field.legend.className || '';
+const getIsPageHeading = field => field && field.isPageHeading || '';
 
 module.exports = (key, opts) => {
   if (!key) {
@@ -60,6 +61,37 @@ module.exports = (key, opts) => {
     dayOptional = true;
   }
 
+  // take the 3 date parts, padding or defaulting
+  // to '01' if applic, then create a date value in the
+  // format YYYY-MM-DD. Save to req.body for processing
+  const preProcess = (req, res, next) => {
+    const parts = getParts(req.body, fields, key);
+    if (_.some(parts, part => part !== '')) {
+      if (dayOptional && parts.day === '') {
+        parts.day = '01';
+      } else {
+        parts.day = pad(parts.day);
+      }
+      if (monthOptional && parts.month === '') {
+        parts.month = '01';
+      } else {
+        parts.month = pad(parts.month);
+      }
+      req.body[key] = `${parts.year}-${parts.month}-${parts.day}`;
+    }
+    next();
+  };
+
+  // defaultFormatters on the base controller replace '--' with '-' on the process step.
+  // This ensures having the correct number of hyphens, so values do not jump from year to month.
+  // This should only be done on a partially completed date field otherwise the validation messages break.
+  const postProcess = (req, res, next) => {
+    const value = req.form.values[key];
+    if (value) {
+      req.form.values[key] = req.body[key];
+    }
+    next();
+  };
   // if date field is included in errorValues, extend
   // errorValues with the individual components
   const preGetErrors = (req, res, next) => {
@@ -113,8 +145,9 @@ module.exports = (key, opts) => {
     const legend = conditionalTranslate(`fields.${key}.legend`, req.translate);
     const hint = conditionalTranslate(`fields.${key}.hint`, req.translate);
     const legendClassName = getLegendClassName(options);
+    const isPageHeading = getIsPageHeading(options);
     const error = req.form.errors && req.form.errors[key];
-    res.render(template, { key, legend, legendClassName, hint, error }, (err, html) => {
+    res.render(template, { key, legend, legendClassName, isPageHeading, hint, error }, (err, html) => {
       if (err) {
         next(err);
       } else {
@@ -125,35 +158,15 @@ module.exports = (key, opts) => {
     });
   };
 
-  // take the 3 date parts, padding or defaulting
-  // to '01' if applic, then create a date value in the
-  // format YYYY-MM-DD. Save to req.body for processing
-  const preProcess = (req, res, next) => {
-    const parts = getParts(req.body, fields, key);
-    if (_.some(parts, part => part !== '')) {
-      if (dayOptional && parts.day === '') {
-        parts.day = '01';
-      } else {
-        parts.day = pad(parts.day);
-      }
-      if (monthOptional && parts.month === '') {
-        parts.month = '01';
-      } else {
-        parts.month = pad(parts.month);
-      }
-      req.body[key] = `${parts.year}-${parts.month}-${parts.day}`;
-    }
-    next();
-  };
-
   // return config extended with hooks
   return Object.assign({}, options, {
     hooks: {
+      'pre-process': preProcess,
+      'post-process': postProcess,
       'pre-getErrors': preGetErrors,
       'post-getErrors': postGetErrors,
       'post-getValues': postGetValues,
-      'pre-render': preRender,
-      'pre-process': preProcess
+      'pre-render': preRender
     }
   });
 };

@@ -517,6 +517,120 @@ describe('Form Controller', () => {
       form.validate.should.have.been.calledOn(form);
     });
 
+    describe('sanitise inputs', () => {
+      const tests = [
+        { value: 'HELLO\/*TEST*\/WORLD1', expected: 'HELLO-TEST-WORLD1' },
+        { value: 'HELLO|WORLD2', expected: 'HELLO-WORLD2' },
+        { value: 'HELLO&&WORLD3', expected: 'HELLO&WORLD3' },
+        { value: 'HELLO@@WORLD4', expected: 'HELLO@WORLD4' },
+        { value: 'HELLO/..;/WORLD5', expected: 'HELLO-WORLD5' },
+        { value: 'HELLO......WORLD6', expected: 'HELLO......WORLD6' },
+        { value: 'HELLO/eTc/paSsWdWORLD7', expected: 'HELLO-WORLD7' },
+        { value: 'HELLOC:\\WORLD8', expected: 'HELLO-WORLD8' },
+        { value: 'HELLOcMd.ExEWORLD9', expected: 'HELLO-WORLD9' },
+        { value: 'HELLO<WORLD10', expected: 'HELLO<-WORLD10' },
+        { value: 'HELLO>WORLD11', expected: 'HELLO>-WORLD11' },
+        { value: 'HELLO[WORLD12', expected: 'HELLO[-WORLD12' },
+        { value: 'HELLO]WORLD13', expected: 'HELLO]-WORLD13' },
+        { value: 'HELLO~WORLD14', expected: 'HELLO~-WORLD14' },
+        { value: 'HELLO&#WORLD15', expected: 'HELLO-WORLD15' },
+        { value: 'HELLO%UWORLD16', expected: 'HELLO-WORLD16' },
+        {
+          value: '1/*2*/3|4&&5@@6..7/etc/PASSwd8C:\\9Cmd.eXe10/..;/11<12>13[14]15~16&#17%U18',
+          expected: '1-2-3-4&5@6..7-8-9-10-11<-12>-13[-14]-15~-16-17-18'
+        },
+        { value: 'Test User', expected: 'Test User'},
+        { value: '123 Test Street', expected: '123 Test Street'},
+        { value: 'London', expected: 'London'},
+        { value: 'United Kingdom', expected: 'United Kingdom'},
+        { value: '2022-01-01', expected: '2022-01-01' },
+        { value: false, expected: false },
+        { value: 12345, expected: 12345 },
+        // Should add the hypen
+        { value: 'Hello[World', expected: 'Hello[-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello[[World', expected: 'Hello[-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello[[[[[[-World', expected: 'Hello[-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello[-World', expected: 'Hello[-World' },
+        // Should add the hypen
+        { value: 'Hello<World', expected: 'Hello<-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello<<World', expected: 'Hello<-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello<<<<<<-World', expected: 'Hello<-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello<-World', expected: 'Hello<-World' },
+        // Should add the hypen
+        { value: 'Hello>World', expected: 'Hello>-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello>>World', expected: 'Hello>-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello>>>>>>-World', expected: 'Hello>-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello>-World', expected: 'Hello>-World' },
+        // Should add the hypen
+        { value: 'Hello~World', expected: 'Hello~-World' },
+        // Should remove duplicated and add the hypen
+        { value: 'Hello~~World', expected: 'Hello~-World' },
+        // Should remove duplicates and ignore the hypen
+        { value: 'Hello~~~~~~-World', expected: 'Hello~-World' },
+        // Should ignore because it's already suffixed with hyphen with no duplicates
+        { value: 'Hello~-World', expected: 'Hello~-World' }
+      ];
+
+      tests.forEach(({value, expected}) => {
+        it('sanitisation returns correct data when feature flag enabled', function () {
+          req.form = {
+            values: {
+              value: value
+            }
+          };
+          form.options = {
+            sanitiseInputs: true
+          };
+          form._sanitize(req, res, cb);
+          req.form.values.value.should.equal(expected);
+        });
+
+        it('sanitisation returns unchanged data when feature flag disabled', function () {
+          req.form = {
+            values: {
+              value: value
+            }
+          };
+          form.options = {
+            sanitiseInputs: false
+          };
+          form._sanitize(req, res, cb);
+          req.form.values.value.should.equal(value);
+        });
+      });
+
+      // Also check for an empty req.form.values
+      it('sanitisation returns correct data when form data is empty', function () {
+        req.form = {
+          values: {}
+        };
+        form.options = {
+          sanitiseInputs: true
+        };
+        form._sanitize(req, res, cb);
+        req.form.values.should.be.empty;
+      });
+
+      // Also check for an empty req.form.values
+      it('sanitisation returns correct data when form data is undefined', function () {
+        req.form = {};
+        form.options = {
+          sanitiseInputs: true
+        };
+        form._sanitize(req, res, cb);
+        expect(req.form.values).to.be.undefined;
+      });
+    });
+
     describe('valid inputs', () => {
       it('calls form.saveValues', () => {
         form.post(req, res, cb);

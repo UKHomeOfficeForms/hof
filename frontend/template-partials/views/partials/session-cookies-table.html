@@ -1,15 +1,15 @@
-<table>
-  <thead>
-  <tr>
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+  <tr class="govuk-table__row">
     {{#headers}}
-    <th>{{.}}</th>
+    <th scope="col" class="govuk-table__header app-custom-class">{{.}}</th>
     {{/headers}}
   </tr>
   </thead>
   <tbody>
-  <tr>
+  <tr class="govuk-table__row">
     {{#cookieName}}
-      <td>{{cookieName}}</td>
+      <td scope="row" class="govuk-table__header">{{cookieName}}</td>
     {{/cookieName}}
     {{^cookieName}}
       <td>{{defaultCookieName}}</td>

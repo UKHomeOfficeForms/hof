@@ -1,0 +1,54 @@
+{
+  "landing-page-radio": {
+    "required": "Select an option below and press continue"
+  },
+  "name":{
+    "default": "Enter your full name"
+  },
+  "dateOfBirth": {
+    "default": "Enter your date of birth in the correct format; for example, 31 10 1990",
+    "after": "Enter a date after 1 1 1900",
+    "before": "Enter a date that is in the past"
+  },
+  "building": {
+    "default": "Enter details of your building and street"
+  },
+  "townOrCity": {
+    "default": "Enter a town or city",
+    "regex": "Enter a town or city without including digits"
+  },
+  "postcode": {
+    "default": "Enter your postcode"
+  },
+  "incomeTypes": {
+    "default": "Select all options that apply to you."
+  },
+  "countryOfHearing": {
+    "default": "Select where the appeal hearing is to be held"
+  },
+  "countrySelect": {
+    "default": "Enter a valid country of residence",
+    "required": "Enter your country of residence"
+  },
+  "email": {
+    "default": "Enter your email address in the correct format"
+  },
+  "phone": {
+    "default": "Enter your phone number"
+  },
+  "int-phone-number": {
+    "required": "Enter an international phone number",
+    "internationalPhoneNumber": "Enter a valid international phone number"
+  },
+  "complaintDetails": {
+    "default": "Enter details about why you are making a complaint",
+    "maxlength": "Keep to the {{maxlength}} character limit"
+  },
+  "whatHappened": {
+    "default": "Enter details about what happened",
+    "maxword": "Keep to the {{maxword}} word limit"
+  },
+  "appealStages": {
+    "required": "Select an appeal stage from the list"
+  }
+}
