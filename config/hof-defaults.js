@@ -25,6 +25,19 @@ const defaults = {
   gaCrossDomainTrackingTagId: process.env.GDS_CROSS_DOMAIN_GA_TAG,
   loglevel: process.env.LOG_LEVEL || 'info',
   ignoreMiddlewareLogs: ['/healthz'],
+  auth: process.env.AUTH || false,
+  keycloak: {
+    issuer: process.env.AUTH_ISSUER || 'http://localhost:8180/realms/sis-local',
+    authorizationURL: process.env.AUTH_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/auth',
+    tokenURL: process.env.TOKEN_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/token',
+    userInfoURL: process.env.USER_INFO_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/userinfo',
+    clientID: process.env.CLIENT_ID || 'sis',
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: process.env.CALLBACK_URL || 'http://localhost:8080/submit-immigration-intelligence/login/callback',
+    loginRoute: process.env.LOGIN_ROUTE || '/login',
+    // Must be added to valid redirect URI's in Keycloak admin console
+    loginCallbackRoute: process.env.LOGIN_CALLBACK_ROUTE || '/login/callback'
+  },
   redis: {
     port: process.env.REDIS_PORT || '6379',
     host: process.env.REDIS_HOST || '127.0.0.1'
