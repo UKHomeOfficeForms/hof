@@ -1,6 +1,6 @@
 'use strict';
 
-const reqres = require('reqres');
+const reqres = require('axios');
 const SessionModel = require('../../../wizard/model');
 
 module.exports = settings => {

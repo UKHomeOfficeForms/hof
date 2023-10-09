@@ -2,8 +2,8 @@
 'use strict';
 
 const _ = require('lodash');
-// const axios = require('axios');
-const request = require('request');
+const axios = require('axios');
+// const request = require('request');
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 

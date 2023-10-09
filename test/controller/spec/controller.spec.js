@@ -1,8 +1,8 @@
 'use strict';
 
 const _ = require('lodash');
-const response = require('reqres').res;
-const request = require('reqres').req;
+const response = require('axios').res;
+const request = require('axios').req;
 const proxyquire = require('proxyquire');
 const ErrorClass = require('../../../controller/validation-error');
 
