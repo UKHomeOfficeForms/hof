@@ -2,7 +2,8 @@
 'use strict';
 
 const _ = require('lodash');
-const request = require('request');
+const axios = require('axios');
+// const request = require('request');
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -21,13 +22,17 @@ const urlKeys = Object.keys(url.parse(''));
 
 module.exports = class Model extends EventEmitter {
   constructor(attributes, options) {
+    // console.log('Under Model');
+    // console.log('attributes : ', attributes);
+    // console.log('options : ', options);
     super(attributes, options);
     this.options = options || {};
     this.attributes = {};
     this.set(attributes, {
       silent: true
     });
-    this._request = request;
+    this._request = axios;
+    // console.log('this : ', this);
   }
 
   save(options, callback) {
@@ -47,7 +52,9 @@ module.exports = class Model extends EventEmitter {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(data)
       }, reqConf.headers || {});
-
+      // console.log('reqConf : ', reqConf);
+      // console.log('data : ', data);
+      // console.log('callback : ', callback);
       return this.request(reqConf, data, callback);
     });
   }
@@ -61,6 +68,8 @@ module.exports = class Model extends EventEmitter {
     }
     const reqConf = this.requestConfig(options);
     reqConf.method = options.method || 'GET';
+    // console.log('reqConf : ', reqConf);
+    // console.log('callback : ', callback);
     return this.request(reqConf, callback);
   }
 
@@ -73,6 +82,8 @@ module.exports = class Model extends EventEmitter {
     }
     const reqConf = this.requestConfig(options);
     reqConf.method = options.method || 'DELETE';
+    // console.log('reqConf : ', reqConf);
+    // console.log('callback : ', callback);
     return this.request(reqConf, callback);
   }
 
@@ -87,6 +98,7 @@ module.exports = class Model extends EventEmitter {
   }
 
   request(originalSettings, body, callback) {
+    // console.log('Inside request::');
     if (typeof body === 'function' && arguments.length === 2) {
       callback = body;
       body = undefined;
@@ -137,7 +149,7 @@ module.exports = class Model extends EventEmitter {
             }
           };
 
-          this._request(settings, (err, response) => {
+          /* this._request(settings, (err, response) => {
             if (err) {
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
@@ -152,6 +164,22 @@ module.exports = class Model extends EventEmitter {
               }
               _callback(error, data, status);
             });
+          });*/
+
+          this._request(settings).then(response => {
+            return this.handleResponse(response, (error, data, status) => {
+              if (error) {
+                error.headers = response.headers;
+              }
+              _callback(error, data, status);
+            });
+          }).catch((err, response) => {
+            if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
+              err.message = 'Connection timed out';
+              err.status = 504;
+            }
+            err.status = err.status || (response && response.statusCode) || 503;
+            return _callback(err, null, err.status);
           });
         });
       });
