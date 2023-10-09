@@ -2,7 +2,8 @@
 'use strict';
 
 const _ = require('lodash');
-const axios = require('axios');
+// const axios = require('axios');
+const request = require('request');
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -30,7 +31,7 @@ module.exports = class Model extends EventEmitter {
     this.set(attributes, {
       silent: true
     });
-    this._request = axios;
+    this._request = request;
     // console.log('this : ', this);
   }
 
