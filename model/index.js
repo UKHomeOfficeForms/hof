@@ -31,7 +31,7 @@ module.exports = class Model extends EventEmitter {
     this.set(attributes, {
       silent: true
     });
-    this._request = request;
+    this._request = axios;
     // console.log('this : ', this);
   }
 
