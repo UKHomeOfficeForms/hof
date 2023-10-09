@@ -21,9 +21,9 @@ const urlKeys = Object.keys(url.parse(''));
 
 module.exports = class Model extends EventEmitter {
   constructor(attributes, options) {
-    console.log('Under Model');
-    console.log('attributes : ', attributes);
-    console.log('options : ', options);
+   // console.log('Under Model');
+   // console.log('attributes : ', attributes);
+   // console.log('options : ', options);
     super(attributes, options);
     this.options = options || {};
     this.attributes = {};
@@ -31,7 +31,7 @@ module.exports = class Model extends EventEmitter {
       silent: true
     });
     this._request = axios;
-    console.log('this : ', this);
+   // console.log('this : ', this);
   }
 
   save(options, callback) {
