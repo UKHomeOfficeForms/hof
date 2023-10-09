@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('axios').res;
+module.exports = require('reqres').res;

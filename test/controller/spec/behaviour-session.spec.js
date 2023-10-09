@@ -3,8 +3,8 @@
 const SessionsBehaviour = require('../../../controller/behaviour-session');
 const Controller = require('../../../controller');
 const Model = require('../../../model');
-const request = require('axios').request;
-const response = require('axios').respose;
+const request = require('reqres').req;
+const response = require('reqres').res;
 const Sessions = SessionsBehaviour(Controller);
 
 describe('Sessions Behaviour', () => {
