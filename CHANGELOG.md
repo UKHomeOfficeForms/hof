@@ -1,3 +1,8 @@
+## 2024-07-22, Version 21.0.0 (Stable), @Rhodine-orleans-lindsay
+* Replaces deprecated request module with axios
+  - refactors the hof model and apis to use axios instead of request
+*  Updates patch and minor dependency versions
+
 ## 2024-04-24, Version 20.5.0 (Stable), @mislam987
 * Add hint property to checkboxes to align with govuk design guidelines
 
