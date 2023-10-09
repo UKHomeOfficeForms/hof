@@ -31,7 +31,7 @@ module.exports = class BaseController extends EventEmitter {
   requestHandler() {
     ['get', 'post', 'put', 'delete'].forEach(method => {
       if (typeof this[method] === 'function') {
-        console.log('**********inside requestHandler************');
+        // console.log('**********inside requestHandler************');
         this.router[method]('*', this[method].bind(this));
       } else {
         this.router[method]('*', (req, res, next) => {

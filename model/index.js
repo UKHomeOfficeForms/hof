@@ -21,9 +21,9 @@ const urlKeys = Object.keys(url.parse(''));
 
 module.exports = class Model extends EventEmitter {
   constructor(attributes, options) {
-   // console.log('Under Model');
-   // console.log('attributes : ', attributes);
-   // console.log('options : ', options);
+    // console.log('Under Model');
+    // console.log('attributes : ', attributes);
+    // console.log('options : ', options);
     super(attributes, options);
     this.options = options || {};
     this.attributes = {};
@@ -31,7 +31,7 @@ module.exports = class Model extends EventEmitter {
       silent: true
     });
     this._request = axios;
-   // console.log('this : ', this);
+    // console.log('this : ', this);
   }
 
   save(options, callback) {
@@ -51,9 +51,9 @@ module.exports = class Model extends EventEmitter {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(data)
       }, reqConf.headers || {});
-      console.log('reqConf : ', reqConf);
-      console.log('data : ', data);
-      console.log('callback : ', callback);
+      // console.log('reqConf : ', reqConf);
+      // console.log('data : ', data);
+      // console.log('callback : ', callback);
       return this.request(reqConf, data, callback);
     });
   }
@@ -67,8 +67,8 @@ module.exports = class Model extends EventEmitter {
     }
     const reqConf = this.requestConfig(options);
     reqConf.method = options.method || 'GET';
-    console.log('reqConf : ', reqConf);
-    console.log('callback : ', callback);
+    // console.log('reqConf : ', reqConf);
+    // console.log('callback : ', callback);
     return this.request(reqConf, callback);
   }
 
@@ -81,8 +81,8 @@ module.exports = class Model extends EventEmitter {
     }
     const reqConf = this.requestConfig(options);
     reqConf.method = options.method || 'DELETE';
-    console.log('reqConf : ', reqConf);
-    console.log('callback : ', callback);
+    // console.log('reqConf : ', reqConf);
+    // console.log('callback : ', callback);
     return this.request(reqConf, callback);
   }
 
