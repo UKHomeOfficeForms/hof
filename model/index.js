@@ -97,7 +97,7 @@ module.exports = class Model extends EventEmitter {
   }
 
   request(originalSettings, body, callback) {
-    console.log('Inside request::');
+    // console.log('Inside request::');
     if (typeof body === 'function' && arguments.length === 2) {
       callback = body;
       body = undefined;
