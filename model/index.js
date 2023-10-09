@@ -2,7 +2,7 @@
 'use strict';
 
 const _ = require('lodash');
-const request = require('request');
+const axios = require('axios');
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -21,13 +21,17 @@ const urlKeys = Object.keys(url.parse(''));
 
 module.exports = class Model extends EventEmitter {
   constructor(attributes, options) {
+    console.log('Under Model');
+    console.log('attributes : ', attributes);
+    console.log('options : ', options);
     super(attributes, options);
     this.options = options || {};
     this.attributes = {};
     this.set(attributes, {
       silent: true
     });
-    this._request = request;
+    this._request = axios;
+    console.log('this : ', this);
   }
 
   save(options, callback) {
@@ -47,7 +51,9 @@ module.exports = class Model extends EventEmitter {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(data)
       }, reqConf.headers || {});
-
+      console.log('reqConf : ', reqConf);
+      console.log('data : ', data);
+      console.log('callback : ', callback);
       return this.request(reqConf, data, callback);
     });
   }
@@ -61,6 +67,8 @@ module.exports = class Model extends EventEmitter {
     }
     const reqConf = this.requestConfig(options);
     reqConf.method = options.method || 'GET';
+    console.log('reqConf : ', reqConf);
+    console.log('callback : ', callback);
     return this.request(reqConf, callback);
   }
 
@@ -73,6 +81,8 @@ module.exports = class Model extends EventEmitter {
     }
     const reqConf = this.requestConfig(options);
     reqConf.method = options.method || 'DELETE';
+    console.log('reqConf : ', reqConf);
+    console.log('callback : ', callback);
     return this.request(reqConf, callback);
   }
 
@@ -87,6 +97,7 @@ module.exports = class Model extends EventEmitter {
   }
 
   request(originalSettings, body, callback) {
+    console.log('Inside request::');
     if (typeof body === 'function' && arguments.length === 2) {
       callback = body;
       body = undefined;
