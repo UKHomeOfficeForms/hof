@@ -160,23 +160,23 @@ describe('tests', () => {
         app.close();
       });
 
-      it('redirects to the address substep on a failed lookup', () => browser.url('/address-default-one')
+      it('redirects to the address substep on a failed lookup', (done) => browser.url('/address-default-one')
         .$('input')
         .setValue('BN25 1XY')
         .submitForm('form')
         .getUrl()
         .then(url => {
           assert.ok(url.includes('step=address'));
-        }));
+        }).catch(done));
 
-      it('redirects to the lookup step on a successful lookup', () => browser.url('/address-default-one')
+      it('redirects to the lookup step on a successful lookup', (done) => browser.url('/address-default-one')
         .$('input')
         .setValue('CR0 2EU')
         .submitForm('form')
         .getUrl()
         .then(url => {
           assert.ok(url.includes('step=lookup'));
-        }));
+        }).catch(done));
 
       it('fails on an invalid postcode', () => browser.url('/address-default-one')
         .$('input')
