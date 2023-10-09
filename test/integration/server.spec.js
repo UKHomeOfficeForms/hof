@@ -327,7 +327,7 @@ describe('hof server', () => {
         port: '8002'
       }).then(() => {
         bs.stop().then(() => {
-          require('request')('http://localhost:8002', err => {
+          require('axios').request('http://localhost:8002').catch(err => {
             err.should.be.instanceof(Error);
             err.code.should.equal('ECONNREFUSED');
             done();
