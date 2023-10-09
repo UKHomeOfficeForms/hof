@@ -2,7 +2,8 @@
 'use strict';
 
 const _ = require('lodash');
-const request = require('request');
+// const request = require('request');
+const axios = require('axios').default;
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -27,10 +28,12 @@ module.exports = class Model extends EventEmitter {
     this.set(attributes, {
       silent: true
     });
-    this._request = request;
+    this._request = axios;
+    // this._request = request;
   }
 
   save(options, callback) {
+    // console.log("*******Save*******");
     if (typeof options === 'function' && arguments.length === 1) {
       callback = options;
       options = {};
@@ -47,7 +50,7 @@ module.exports = class Model extends EventEmitter {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(data)
       }, reqConf.headers || {});
-
+      // console.log("*******Save2*******");
       return this.request(reqConf, data, callback);
     });
   }
@@ -87,6 +90,7 @@ module.exports = class Model extends EventEmitter {
   }
 
   request(originalSettings, body, callback) {
+    console.log('*******Save3*******');
     if (typeof body === 'function' && arguments.length === 2) {
       callback = body;
       body = undefined;
@@ -96,11 +100,12 @@ module.exports = class Model extends EventEmitter {
     settings.timeout = settings.timeout || this.options.timeout;
     settings.uri = settings.uri || settings.url || url.format(settings);
     settings.body = settings.body || body || settings.data;
-
+    console.log('settings: ', settings);
     settings = _.omit(settings, urlKeys, 'data', 'url');
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
+      console.log('*******Save4*******');
       settings.auth = authData;
       if (typeof settings.auth === 'string') {
         const auth = settings.auth.split(':');
@@ -112,10 +117,12 @@ module.exports = class Model extends EventEmitter {
       }
     })
       .then(() => {
+        // console.log("*******Save5*******");
         const startTime = process.hrtime();
         let timeoutTimer;
 
         return new Promise((resolve, reject) => {
+          // console.log("*******Save6*******");
           const _callback = (err, data, statusCode) => {
             if (timeoutTimer) {
               clearTimeout(timeoutTimer);
@@ -124,20 +131,28 @@ module.exports = class Model extends EventEmitter {
 
             const endTime = process.hrtime();
             const responseTime = timeDiff(startTime, endTime);
-
+            // console.log("*******Save10*******");
             if (err) {
+              // console.log("*******Save11*******");
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
+              // console.log("*******Save12*******");
               this.emit('success', data, originalSettings, statusCode, responseTime);
             }
             if (err) {
+              // console.log("*******Save13*******");
               reject(err);
             } else {
+              // console.log("*******Save14*******");
               resolve(data);
             }
           };
 
+
+          /* console.log("*******Save8*******");
+          console.log("settings: ", settings);
           this._request(settings, (err, response) => {
+            console.log("*******Save9*******");
             if (err) {
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
@@ -147,12 +162,43 @@ module.exports = class Model extends EventEmitter {
               return _callback(err, null, err.status);
             }
             return this.handleResponse(response, (error, data, status) => {
+              console.log("*****Response******");
               if (error) {
                 error.headers = response.headers;
               }
               _callback(error, data, status);
             });
           });
+*/
+
+
+          // console.log('*******Save8*******');
+          // console.log("settings: ", settings);
+          settings = Object.assign({}, settings, {url: settings.uri});
+          // console.log("settings: ", settings);
+          // console.log("axios.request: ", axios.request);
+          // console.log("axios: ", axios);
+          this._request.request(settings)
+            .then(response => {
+            // console.log("*******Save9*******");
+              return this.handleResponse(response, (error, data, status) => {
+              // console.log("*****Response******");
+                if (error) {
+                  error.headers = response.headers;
+                }
+                _callback(error, data, status);
+              });
+            }).catch(err => {
+            // console.log("*****Error******");
+              if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
+                err.message = 'Connection timed out';
+                err.status = 504;
+              }
+              err.status = err.status || 503;
+              // console.log("Error:: ", err);
+              // console.log("Error Status::", err.status);
+              return _callback(err, null, err.status);
+            });
         });
       });
 
@@ -163,12 +209,16 @@ module.exports = class Model extends EventEmitter {
   }
 
   handleResponse(response, callback) {
+    // console.log("*****HandleResponse******");
     let data = {};
     try {
       data = JSON.parse(response.body || '{}');
+      // console.log('Data:: ', data);
     } catch (err) {
       err.status = response.statusCode;
       err.body = response.body;
+      // console.log('err.status:: ', err.status);
+      // console.log('err.body:: ', err.body);
       return callback(err, null, response.statusCode);
     }
     return this.parseResponse(response.statusCode, data, callback);
@@ -176,13 +226,18 @@ module.exports = class Model extends EventEmitter {
 
   parseResponse(statusCode, data, callback) {
     if (statusCode < 400) {
+      // console.log('*******parseResponse*******');
       try {
         data = this.parse(data);
+        // console.log('Data::', data);
         callback(null, data, statusCode);
       } catch (err) {
+        // console.log('err::', err);
+        // console.log('statusCode:', statusCode);
         callback(err, null, statusCode);
       }
     } else {
+      // console.log("parseError:", this.parseError(statusCode, data));
       callback(this.parseError(statusCode, data), data, statusCode);
     }
   }
