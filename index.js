@@ -45,7 +45,7 @@ const loadRoutes = (app, config) => {
       route,
       sharedViews: app.get('views')
     });
-    console.log('LoadRoutes');
+    // console.log('LoadRoutes');
     app.use(route.baseUrl || '/', router(routeConfig));
   });
 };
@@ -140,13 +140,13 @@ function bootstrap(options) {
   const app = express();
   const userMiddleware = express.Router();
 
-  console.log('***************');
+  // console.log('***************');
 
   app.use(helmet());
 
   // Add common locals all pages can access
   app.use((req, res, next) => {
-    console.log('111111111');
+    // console.log('111111111');
     res.locals.nonce = crypto.randomBytes(16).toString('hex');
     res.locals.appName = config.appName;
     res.locals.htmlLang = config.htmlLang;
@@ -156,7 +156,7 @@ function bootstrap(options) {
 
   if (config.csp !== false && !config.csp.disabled) {
     app.use((req, res, next) => {
-      console.log('222222222');
+      // console.log('222222222');
       helmet.contentSecurityPolicy({
         directives: getContentSecurityPolicy(config, res)
       })(req, res, next);
@@ -166,7 +166,7 @@ function bootstrap(options) {
   app.use(helmet.noSniff());
 
   if (config.noCache && config.noCache !== 'false') {
-    console.log('3333333333');
+    // console.log('3333333333');
     app.use((req, res, next) => {
       res.setHeader('cache-control', ['no-store', 'no-cache', 'must-revalidate', 'proxy-revalidate']);
       res.setHeader('pragma', 'no-cache');
@@ -185,7 +185,7 @@ function bootstrap(options) {
   });
 
   if (config.middleware) {
-    console.log('444444444444');
+    // console.log('444444444444');
     config.middleware.forEach(middleware => app.use(middleware));
   }
 
@@ -203,10 +203,10 @@ function bootstrap(options) {
   }));
 
   serveStatic(app, config);
-  console.log('config :: ', config);
+  // console.log('config :: ', config);
   settings(app, config);
   gaTagSetup(app, config);
-  console.log('app :: ', app);
+  // console.log('app :: ', app);
   const sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
 
@@ -221,7 +221,7 @@ function bootstrap(options) {
     path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
   }));
   app.use(mixins());
-  console.log('555555555555');
+  // console.log('555555555555');
   app.use(markdown(config.markdown));
   // rate limits have to be loaded before all routes so it is applied to them
   if (config.rateLimits.requests.active) {
@@ -232,7 +232,7 @@ function bootstrap(options) {
   app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
 
   if (config.getAccessibility === true) {
-    console.log('66666666666');
+    // console.log('66666666666');
     deprecate(
       '`getAccessibility` option is deprecated and may be removed in future versions.',
       'Use `pages` to define static cookies page.'
@@ -243,7 +243,7 @@ function bootstrap(options) {
     });
   }
   if (config.getCookies === true) {
-    console.log('77777777777');
+    // console.log('77777777777');
     deprecate(
       '`getCookies` option is deprecated and may be removed in future versions.',
       'Use `pages` to define static cookies page.'
@@ -254,7 +254,7 @@ function bootstrap(options) {
     });
   }
   if (config.getTerms === true) {
-    console.log('88888888888');
+    // console.log('88888888888');
     deprecate(
       '`getTerms` option is deprecated and may be removed in future versions.',
       'Use `pages` to define static terms and conditions page.'
