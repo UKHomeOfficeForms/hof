@@ -149,7 +149,7 @@ module.exports = class Model extends EventEmitter {
             }
           };
 
-          this._request(settings, (err, response) => {
+          /* this._request(settings, (err, response) => {
             if (err) {
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
@@ -164,6 +164,22 @@ module.exports = class Model extends EventEmitter {
               }
               _callback(error, data, status);
             });
+          });*/
+
+          this._request(settings).then(response => {
+            return this.handleResponse(response, (error, data, status) => {
+              if (error) {
+                error.headers = response.headers;
+              }
+              _callback(error, data, status);
+            });
+          }).catch((err, response) => {
+            if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
+              err.message = 'Connection timed out';
+              err.status = 504;
+            }
+            err.status = err.status || (response && response.statusCode) || 503;
+            return _callback(err, null, err.status);
           });
         });
       });
