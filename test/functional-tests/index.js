@@ -149,7 +149,7 @@ describe('tests', () => {
     });
   });
 
-  describe('#Address-Lookup', async() => {
+  describe('#Address-Lookup', () => {
     describe('default address lookup behaviour', () => {
       before(() => {
         app = App(require('./apps/address-lookup-default')({ port })).listen(port);
@@ -160,7 +160,7 @@ describe('tests', () => {
         app.close();
       });
 
-      it('redirects to the address substep on a failed lookup', async() => browser.url('/address-default-one')
+      it('redirects to the address substep on a failed lookup', () => browser.url('/address-default-one')
         .$('input')
         .setValue('BN25 1XY')
         .submitForm('form')
@@ -169,7 +169,7 @@ describe('tests', () => {
           assert.ok(url.includes('step=address'));
         }));
 
-      it('redirects to the lookup step on a successful lookup', async() => browser.url('/address-default-one')
+      it('redirects to the lookup step on a successful lookup', () => browser.url('/address-default-one')
         .$('input')
         .setValue('CR0 2EU')
         .submitForm('form')
@@ -178,7 +178,7 @@ describe('tests', () => {
           assert.ok(url.includes('step=lookup'));
         }));
 
-      it('fails on an invalid postcode', async() => browser.url('/address-default-one')
+      it('fails on an invalid postcode', () => browser.url('/address-default-one')
         .$('input')
         .setValue('INVALID')
         .submitForm('form')
@@ -187,7 +187,7 @@ describe('tests', () => {
           assert.ok(url.includes('/address-default-one'));
         }));
 
-      it('fails on a non-English postcode', async() => browser.url('/address-default-one')
+      it('fails on a non-English postcode', () => browser.url('/address-default-one')
         .$('input')
         .setValue('CH5 1AB')
         .submitForm('form')
@@ -196,7 +196,7 @@ describe('tests', () => {
           assert.ok(url.includes('/address-default-one'));
         }));
 
-      it('redirects to next step when an address is selected', async() => browser.url('/address-default-one')
+      it('redirects to next step when an address is selected', () => browser.url('/address-default-one')
         .$('input')
         .setValue('CR0 2EU')
         .submitForm('form')
@@ -207,7 +207,7 @@ describe('tests', () => {
           assert.ok(url.includes('/address-default-two'));
         }));
 
-      it('redirects back to postcode step if change link is clicked', async() => browser.url('/address-default-one')
+      it('redirects back to postcode step if change link is clicked', () => browser.url('/address-default-one')
         .$('input')
         .setValue('CR0 2EU')
         .submitForm('form')
@@ -222,7 +222,7 @@ describe('tests', () => {
           assert.ok(url.includes('/address-default-one'));
         }));
 
-      it('redirects to manual step if cant-find link is clicked', async() => browser.url('/address-default-one')
+      it('redirects to manual step if cant-find link is clicked', () => browser.url('/address-default-one')
         .$('input')
         .setValue('CR0 2EU')
         .submitForm('form')
