@@ -32,6 +32,7 @@ const setUpAuth = (app, config) => {
     console.log(`uiProfile=${JSON.stringify(uiProfile, null, 2)}`);
     console.log(`profile=${JSON.stringify(profile, null, 2)}`);
     console.log(`idToken=${JSON.stringify(idToken, null, 2)}`);
+    console.log(`token=${parseJwt(accessToken)}`);
     
     profile.idToken = idToken
     profile.roles = uiProfile?._json?.roles
@@ -42,6 +43,7 @@ const setUpAuth = (app, config) => {
     profile.email = jwtClaims?.email
     profile.groups = jwtClaims?.groups
     profile.roles = parseJwt(accessToken)["realm_access"]["roles"]
+    profile.parsedToken = parseJwt(accessToken)
 
     return cb(null, profile)
   }));

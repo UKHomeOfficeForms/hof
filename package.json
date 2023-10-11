@@ -60,6 +60,7 @@
     "govuk-frontend": "3.14",
     "govuk_template_mustache": "^0.26.0",
     "helmet": "^3.22.0",
+    "hof": "file:.yalc/hof",
     "hogan-express-strict": "^0.5.4",
     "hogan.js": "^3.0.2",
     "homeoffice-countries": "^0.1.0",
