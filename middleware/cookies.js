@@ -22,6 +22,8 @@ module.exports = options => {
     const reqIsCookieCheckRedirect = req.query[paramName] !== undefined;
 
     if (reqIncludesCookies || isHealthcheckUrl(req.path, healthcheckUrls)) {
+      const prefs = 'cookie_preferences' in req.cookies ? JSON.parse(req.cookies.cookie_preferences) : {}
+      res.locals.cookiesAccepted = Boolean(prefs.usage)
       next();
     } else if (req.cookies === undefined || (!Object.keys(req.cookies).length && reqIsCookieCheckRedirect)) {
       const err = new Error('Cookies required');
