@@ -19,6 +19,7 @@ module.exports = config => {
   app.set('view engine', 'html');
   app.engine('html', hogan);
   template({}, app);
+  app.use(helmet({ contentSecurityPolicy: false }) );
   app.use((req, res, next) => {
     req.translate = a => a;
     next();
@@ -30,6 +31,5 @@ module.exports = config => {
   app.use(mixins());
   app.use(Wizard(config.steps, config.fields, config.options));
   app.use(mockPostcode);
-  app.use( helmet({ contentSecurityPolicy: false }) );
   return app;
 };
