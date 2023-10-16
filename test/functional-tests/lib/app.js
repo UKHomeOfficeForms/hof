@@ -29,5 +29,6 @@ module.exports = config => {
   app.use(mixins());
   app.use(Wizard(config.steps, config.fields, config.options));
   app.use(mockPostcode);
+  app.use( helmet({ contentSecurityPolicy: false }) );
   return app;
 };
