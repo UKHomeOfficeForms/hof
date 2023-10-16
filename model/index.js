@@ -172,7 +172,7 @@ module.exports = class Model extends EventEmitter {
 */
 
 
-          console.log('*******Save8*******');
+          // console.log('*******Save8*******');
           // console.log("settings: ", settings);
           settings = Object.assign({}, settings, {url: settings.uri});
           // console.log("settings: ", settings);
@@ -213,12 +213,12 @@ module.exports = class Model extends EventEmitter {
     let data = {};
     try {
       data = JSON.parse(response.body || '{}');
-      console.log('Data:: ', data);
+      // console.log('Data:: ', data);
     } catch (err) {
       err.status = response.statusCode;
       err.body = response.body;
-      console.log('err.status:: ', err.status);
-      console.log('err.body:: ', err.body);
+      // console.log('err.status:: ', err.status);
+      // console.log('err.body:: ', err.body);
       return callback(err, null, response.statusCode);
     }
     return this.parseResponse(response.statusCode, data, callback);
@@ -226,14 +226,14 @@ module.exports = class Model extends EventEmitter {
 
   parseResponse(statusCode, data, callback) {
     if (statusCode < 400) {
-      console.log('*******parseResponse*******');
+      // console.log('*******parseResponse*******');
       try {
         data = this.parse(data);
-        console.log('Data::', data);
+        // console.log('Data::', data);
         callback(null, data, statusCode);
       } catch (err) {
-        console.log('err::', err);
-        console.log('statusCode:', statusCode);
+        // console.log('err::', err);
+        // console.log('statusCode:', statusCode);
         callback(err, null, statusCode);
       }
     } else {

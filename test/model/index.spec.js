@@ -16,9 +16,9 @@ describe('Model', () => {
 
   const sandbox = (assertions, done) => function () {
     try {
-      console.log('this ::', this);
-      console.log('assertions ::', assertions);
-      console.log('arguments ::', arguments);
+      // console.log('this ::', this);
+      // console.log('assertions ::', assertions);
+      // console.log('arguments ::', arguments);
       assertions.apply(this, arguments);
       done();
     } catch (err) {
