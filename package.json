@@ -32,7 +32,8 @@
     "test:acceptance_browser": "ACCEPTANCE_WITH_BROWSER=true TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
     "test:cucumber": "cucumber-js -f @cucumber/pretty-formatter \"sandbox/test/_features/**/*.feature\" --require sandbox/test/_features/test.setup.js --require \"sandbox/test/_features/step_definitions/**/*.js\" --tags $TAGS",
     "ci": "travis-conditions",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "test-single":"mocha"
   },
   "dependencies": {
     "aliasify": "^2.1.0",
