@@ -153,6 +153,14 @@ describe('tests', () => {
     describe('default address lookup behaviour', () => {
       before(() => {
         app = App(require('./apps/address-lookup-default')({ port })).listen(port);
+        app.use(helmet());
+        app.use((req, res, next) => {
+          helmet.contentSecurityPolicy({
+            directives: {
+              defaultSrc: ["'unsafe-eval'"]
+            }
+          })(req, res, next);
+        });
         port = app.address().port;
       });
 
@@ -162,7 +170,7 @@ describe('tests', () => {
 
       it('redirects to the address substep on a failed lookup', () => browser.url('/address-default-one')
         .$('input')
-        .setValue('BN251XY')
+        .setValue('BN25 1XY')
         .submitForm('form')
         .getUrl()
         .then(url => {
