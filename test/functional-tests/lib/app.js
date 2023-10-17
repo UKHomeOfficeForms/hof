@@ -30,11 +30,7 @@ module.exports = config => {
   app.use((req, res, next) => {
     helmet.contentSecurityPolicy({
       directives: {
-        defaultSrc: ["'unsafe-eval'"],
-        styleSrc: ["'self'"],
-        imgSrc: ["'self'"],
-        fontSrc: ["'self'", 'data:', 'https://design-system.service.gov.uk'],
-        'frame-ancestors': ["'none'"]
+        defaultSrc: ["'unsafe-eval'"]
       }
     })(req, res, next);
   });
