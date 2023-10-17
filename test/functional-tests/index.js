@@ -162,7 +162,7 @@ describe('tests', () => {
 
       it('redirects to the address substep on a failed lookup', () => browser.url('/address-default-one')
         .$('input')
-        .setValue('BN25 1XY')
+        .setValue('BN251XY')
         .submitForm('form')
         .getUrl()
         .then(url => {
