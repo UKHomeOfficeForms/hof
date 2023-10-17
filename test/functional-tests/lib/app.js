@@ -27,13 +27,13 @@ module.exports = config => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser('not a secret'));
   app.use(session({ secret: 'not a secret', resave: true, saveUninitialized: false }));
-  app.use((req, res, next) => {
-    helmet.contentSecurityPolicy({
-      directives: {
-        defaultSrc: ["'unsafe-eval'"]
-      }
-    })(req, res, next);
-  });
+  // app.use((req, res, next) => {
+  //   helmet.contentSecurityPolicy({
+  //     directives: {
+  //       defaultSrc: ["'unsafe-eval'"]
+  //     }
+  //   })(req, res, next);
+  // });
   app.use(partials(app));
   app.use(mixins());
   app.use(Wizard(config.steps, config.fields, config.options));
