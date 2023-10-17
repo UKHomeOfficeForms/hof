@@ -90,7 +90,7 @@ module.exports = class Model extends EventEmitter {
   }
 
   request(originalSettings, body, callback) {
-    // console.log("*******Save3*******");
+    console.log('*******Save3*******');
     if (typeof body === 'function' && arguments.length === 2) {
       callback = body;
       body = undefined;
@@ -100,12 +100,12 @@ module.exports = class Model extends EventEmitter {
     settings.timeout = settings.timeout || this.options.timeout;
     settings.uri = settings.uri || settings.url || url.format(settings);
     settings.body = settings.body || body || settings.data;
-    // console.log("settings: ", settings);
+    console.log('settings: ', settings);
     settings = _.omit(settings, urlKeys, 'data', 'url');
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
-      // console.log("*******Save4*******");
+      console.log('*******Save4*******');
       settings.auth = authData;
       if (typeof settings.auth === 'string') {
         const auth = settings.auth.split(':');
