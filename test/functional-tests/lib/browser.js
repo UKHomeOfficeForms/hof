@@ -8,9 +8,8 @@ const options = {
   }
 };
 
-const client = webdriverio
-  .remote(options);
+const client = webdriverio.remote(options);
 
-client.addCommand('goto', require('../../../utilities').autofill(client));
+client.addCommand('goto', () => require('../../../utilities').autofill(client));
 
 module.exports = () => client.init();
