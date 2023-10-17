@@ -4,6 +4,7 @@
 const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
+const helmet = require('helmet');
 
 describe('tests', () => {
   let browser;
