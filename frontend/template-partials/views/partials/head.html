@@ -1,5 +1,6 @@
 {{#gtmTagId}}
 {{#cookiesAccepted}}
+{{#isETA}}
 <!-- Google Tag Manager Data Layer for ETA -->
 <script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
   var dataLayer = window.dataLayer || [];
@@ -11,8 +12,9 @@
   });
 </script>
 <!-- End Google Tag Manager Data Layer for ETA -->
+{{/isETA}}
 
-<!-- Google Tag Manager for ETA -->
+<!-- Google Tag Manager -->
 <script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -20,7 +22,7 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','{{gtmTagId}}');
 </script>
-<!-- End Google Tag Manager for ETA -->
+<!-- End Google Tag Manager -->
 {{/cookiesAccepted}}
 {{/gtmTagId}}
 
