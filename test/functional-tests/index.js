@@ -4,7 +4,6 @@
 const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
-const helmet = require('helmet');
 
 describe('tests', () => {
   let browser;
@@ -154,14 +153,6 @@ describe('tests', () => {
     describe('default address lookup behaviour', () => {
       before(() => {
         app = App(require('./apps/address-lookup-default')({ port })).listen(port);
-        app.use(helmet());
-        app.use((req, res, next) => {
-          helmet.contentSecurityPolicy({
-            directives: {
-              defaultSrc: ["'unsafe-eval'"]
-            }
-          })(req, res, next);
-        });
         port = app.address().port;
       });
 
