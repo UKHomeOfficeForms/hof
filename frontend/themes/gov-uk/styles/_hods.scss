@@ -1,0 +1,33 @@
+$govuk-page-width: 1160px;
+$govuk-link-colour: #005ea5;
+$govuk-link-hover-colour: #003078;
+$govuk-link-visited-colour: #4c2c92;
+$govuk-link-active-colour: #0b0c0c;
+
+$govuk-secondary-button-colour: #f8f8f8;
+
+@import './_fonts.scss';
+@import "govuk-frontend";
+
+.hods-width-container {
+  @include govuk-width-container($govuk-page-width);
+}
+.govuk-link,
+.govuk-link:link {
+  color: $govuk-link-colour;
+}
+
+.govuk-button {
+  padding: 8px 16px 9px;
+  border: none;
+  margin-right: 30px;
+  &--secondary {
+    padding: 8px 15px;
+    border: 1px solid govuk-colour('black');
+    box-sizing: border-box;
+    box-shadow: 0px 1px 0px govuk-colour('black');
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+}
