@@ -100,7 +100,7 @@ module.exports = class Model extends EventEmitter {
     settings.timeout = settings.timeout || this.options.timeout;
     settings.uri = settings.uri || settings.url || url.format(settings);
     settings.body = settings.body || body || settings.data;
-    console.log('settings: ', settings);
+    //console.log('settings: ', settings);
     settings = _.omit(settings, urlKeys, 'data', 'url');
     this.emit('sync', originalSettings);
 
@@ -117,12 +117,12 @@ module.exports = class Model extends EventEmitter {
       }
     })
       .then(() => {
-        // console.log("*******Save5*******");
+         console.log("*******Save5*******");
         const startTime = process.hrtime();
         let timeoutTimer;
 
         return new Promise((resolve, reject) => {
-          // console.log("*******Save6*******");
+           console.log("*******Save6*******");
           const _callback = (err, data, statusCode) => {
             if (timeoutTimer) {
               clearTimeout(timeoutTimer);
@@ -131,19 +131,19 @@ module.exports = class Model extends EventEmitter {
 
             const endTime = process.hrtime();
             const responseTime = timeDiff(startTime, endTime);
-            // console.log("*******Save10*******");
+             console.log("*******Save10*******");
             if (err) {
-              // console.log("*******Save11*******");
+               console.log("*******Save11*******");
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
-              // console.log("*******Save12*******");
+               console.log("*******Save12*******");
               this.emit('success', data, originalSettings, statusCode, responseTime);
             }
             if (err) {
-              // console.log("*******Save13*******");
+               console.log("*******Save13*******");
               reject(err);
             } else {
-              // console.log("*******Save14*******");
+               console.log("*******Save14*******");
               resolve(data);
             }
           };
@@ -175,12 +175,12 @@ module.exports = class Model extends EventEmitter {
           // console.log('*******Save8*******');
           // console.log("settings: ", settings);
           settings = Object.assign({}, settings, {url: settings.uri});
-          // console.log("settings: ", settings);
+          console.log("settings: ", settings);
           // console.log("axios.request: ", axios.request);
           // console.log("axios: ", axios);
-          this._request.request(settings)
+          this._request(settings.url,settings)
             .then(response => {
-            // console.log("*******Save9*******");
+             console.log("*******Save9*******");
               return this.handleResponse(response, (error, data, status) => {
               // console.log("*****Response******");
                 if (error) {
@@ -189,14 +189,14 @@ module.exports = class Model extends EventEmitter {
                 _callback(error, data, status);
               });
             }).catch(err => {
-            // console.log("*****Error******");
+             console.log("*****Error******");
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
                 err.status = 504;
               }
               err.status = err.status || 503;
-              // console.log("Error:: ", err);
-              // console.log("Error Status::", err.status);
+               console.log("Error:: ", err);
+               console.log("Error Status::", err.status);
               return _callback(err, null, err.status);
             });
         });
