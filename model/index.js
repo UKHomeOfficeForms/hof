@@ -3,7 +3,7 @@
 
 const _ = require('lodash');
 // const request = require('request');
-const axios = require('axios').default;
+const axios = require('axios');
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -174,11 +174,11 @@ module.exports = class Model extends EventEmitter {
 
           // console.log('*******Save8*******');
           // console.log("settings: ", settings);
-          settings = Object.assign({}, settings, {url: settings.uri});
+          //settings = Object.assign({}, settings, {url: settings.uri});
           console.log("settings: ", settings);
           // console.log("axios.request: ", axios.request);
           // console.log("axios: ", axios);
-          this._request(settings.url,settings)
+          this._request(settings)
             .then(response => {
              console.log("*******Save9*******");
               return this.handleResponse(response, (error, data, status) => {
@@ -199,6 +199,30 @@ module.exports = class Model extends EventEmitter {
                console.log("Error Status::", err.status);
               return _callback(err, null, err.status);
             });
+/*
+         settings = Object.assign({}, settings, {url: settings.uri});
+         try{
+          let response = this._request(settings);
+          console.log("*******Save9*******");
+          return this.handleResponse(response.data, (error, data, status) => {
+          // console.log("*****Response******");
+            if (error) {
+              error.headers = response.headers;
+            }
+            _callback(error, data, status);
+          });
+         } catch(err) {
+          if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
+            err.message = 'Connection timed out';
+            err.status = 504;
+          }
+          err.status = err.status || 503;
+           console.log("Error:: ", err);
+           console.log("Error Status::", err.status);
+          return _callback(err, null, err.status);
+        }
+*/
+
         });
       });
 
