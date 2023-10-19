@@ -3,7 +3,7 @@
 
 const _ = require('lodash');
 // const request = require('request');
-const axios = require('axios');
+const axios = require('axios').default;
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -171,14 +171,13 @@ module.exports = class Model extends EventEmitter {
           });
 */
 
-
           // console.log('*******Save8*******');
           // console.log("settings: ", settings);
-          //settings = Object.assign({}, settings, {url: settings.uri});
+          settings = Object.assign({}, settings, {url: settings.uri});
           console.log("settings: ", settings);
           // console.log("axios.request: ", axios.request);
           // console.log("axios: ", axios);
-          this._request(settings)
+          this._request.request(settings)
             .then(response => {
              console.log("*******Save9*******");
               return this.handleResponse(response, (error, data, status) => {
@@ -199,6 +198,7 @@ module.exports = class Model extends EventEmitter {
                console.log("Error Status::", err.status);
               return _callback(err, null, err.status);
             });
+            
 /*
          settings = Object.assign({}, settings, {url: settings.uri});
          try{
