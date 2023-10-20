@@ -3,7 +3,7 @@
 
 const _ = require('lodash');
 // const request = require('request');
-const axios = require('axios').default;
+const axios = require('axios');
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -48,7 +48,7 @@ module.exports = class Model extends EventEmitter {
 
       reqConf.headers = Object.assign({
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data)
+        'Content-Length': Buffer.byteLength(data),
       }, reqConf.headers || {});
       // console.log("*******Save2*******");
       return this.request(reqConf, data, callback);
@@ -97,11 +97,11 @@ module.exports = class Model extends EventEmitter {
     }
 
     let settings = Object.assign({}, originalSettings);
-    settings.timeout = settings.timeout || this.options.timeout;
-    settings.uri = settings.uri || settings.url || url.format(settings);
+    settings.timeout = settings.timeout || this.options.timeout || 8000;
+    settings.url = settings.uri || settings.url || url.format(settings);
     settings.body = settings.body || body || settings.data;
     //console.log('settings: ', settings);
-    settings = _.omit(settings, urlKeys, 'data', 'url');
+    settings = _.omit(settings, urlKeys, 'data');
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
@@ -173,11 +173,27 @@ module.exports = class Model extends EventEmitter {
 
           // console.log('*******Save8*******');
           // console.log("settings: ", settings);
-          settings = Object.assign({}, settings, {url: settings.uri});
+          // settings = Object.assign({}, settings);
           console.log("settings: ", settings);
           // console.log("axios.request: ", axios.request);
           // console.log("axios: ", axios);
-          this._request.request(settings)
+          
+          
+          /*
+          this._request.default.interceptors.request.use(
+            config => {
+                  delete config.headers;
+                  return config;
+              },
+              error => {
+                  return Promise.reject(error);
+              }
+          );
+          
+*/
+
+
+          this._request.default.request(settings)
             .then(response => {
              console.log("*******Save9*******");
               return this.handleResponse(response, (error, data, status) => {
