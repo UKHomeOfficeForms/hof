@@ -208,7 +208,7 @@ module.exports = class Model extends EventEmitter {
                 //console.log("*******Save9-status*******", status);
                 // console.log("*****Response******");
                 if (error) {
-                  console.log("*******Save9-response.headers*******", response.headers);
+                 // console.log("*******Save9-response.headers*******", response.headers);
                   error.headers = response.headers;
                 }
                 _callback(error, data, status);
@@ -279,17 +279,17 @@ module.exports = class Model extends EventEmitter {
 
   parseResponse(statusCode, data, callback) {
     if (statusCode < 400) {
-      console.log('*******parseResponse*******');
       try {
+        console.log("***********data**********", data);
         data = this.parse(data);
-        //console.log('Data::', data);
+        console.log("***********parse data**********", data);
         callback(null, data, statusCode);
       } catch (err) {
-        //console.log('err::', err);
-        //console.log('statusCode:', statusCode);
+        console.log("***********err **********", err);
         callback(err, null, statusCode);
       }
     } else {
+      console.log("***********parse erro data**********", this.parseError(statusCode, data));
       callback(this.parseError(statusCode, data), data, statusCode);
     }
   }
