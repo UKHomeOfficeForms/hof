@@ -3,7 +3,7 @@
 
 const _ = require('lodash');
 // const request = require('request');
-const axios = require('axios');
+const axios = require('axios').default;
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
@@ -99,9 +99,11 @@ module.exports = class Model extends EventEmitter {
     let settings = Object.assign({}, originalSettings);
     settings.timeout = settings.timeout || this.options.timeout || 8000;
     settings.url = settings.uri || settings.url || url.format(settings);
-    settings.body = settings.body || body || settings.data;
-    //console.log('settings: ', settings);
-    settings = _.omit(settings, urlKeys, 'data');
+    settings.baseUrl = `${settings.protocol}//${settings.host}`;
+    //settings.url = settings.pathname || settings.path;
+    settings.data = settings.body || body || settings.data;
+    console.log('settings 55555 : ', settings);
+    settings = _.omit(settings, urlKeys);
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
@@ -123,7 +125,10 @@ module.exports = class Model extends EventEmitter {
 
         return new Promise((resolve, reject) => {
            console.log("*******Save6*******");
-          const _callback = (err, data, statusCode) => {
+           const _callback = (err, data, statusCode) => {
+           //console.log("*******Save6-err*******", err);
+           //console.log("*******Save6-data*******",data);
+           //console.log("*******Save6-statusCode*******",statusCode);
             if (timeoutTimer) {
               clearTimeout(timeoutTimer);
               timeoutTimer = null;
@@ -134,6 +139,7 @@ module.exports = class Model extends EventEmitter {
              console.log("*******Save10*******");
             if (err) {
                console.log("*******Save11*******");
+               //console.log("*******err*******", err);
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
                console.log("*******Save12*******");
@@ -174,7 +180,7 @@ module.exports = class Model extends EventEmitter {
           // console.log('*******Save8*******');
           // console.log("settings: ", settings);
           // settings = Object.assign({}, settings);
-          console.log("settings: ", settings);
+          //console.log("settings: ", settings);
           // console.log("axios.request: ", axios.request);
           // console.log("axios: ", axios);
           
@@ -193,12 +199,16 @@ module.exports = class Model extends EventEmitter {
 */
 
 
-          this._request.default.request(settings)
+          this._request(settings)
             .then(response => {
              console.log("*******Save9*******");
               return this.handleResponse(response, (error, data, status) => {
-              // console.log("*****Response******");
+                //console.log("*******Save9-err*******", error);
+                //console.log("*******Save9-data*******", data);
+                //console.log("*******Save9-status*******", status);
+                // console.log("*****Response******");
                 if (error) {
+                  console.log("*******Save9-response.headers*******", response.headers);
                   error.headers = response.headers;
                 }
                 _callback(error, data, status);
@@ -210,8 +220,8 @@ module.exports = class Model extends EventEmitter {
                 err.status = 504;
               }
               err.status = err.status || 503;
-               console.log("Error:: ", err);
-               console.log("Error Status::", err.status);
+               //console.log("Error:: ", err);
+              // console.log("Error Status::", err.status);
               return _callback(err, null, err.status);
             });
             
@@ -249,35 +259,37 @@ module.exports = class Model extends EventEmitter {
   }
 
   handleResponse(response, callback) {
-    // console.log("*****HandleResponse******");
+    console.log("*****HandleResponse******");
     let data = {};
     try {
-      data = JSON.parse(response.body || '{}');
-      // console.log('Data:: ', data);
+      data = JSON.parse(response.data || '{}');
+      console.log("*****HandleResponse - 1******");
+     // console.log('Data:: ', data);
     } catch (err) {
       err.status = response.statusCode;
-      err.body = response.body;
-      // console.log('err.status:: ', err.status);
-      // console.log('err.body:: ', err.body);
+      err.body = response.data;
+      //console.log('err.status:: ', err.status);
+      //console.log('err.body:: ', err.body);
+      console.log("*****HandleResponse - 2******");
       return callback(err, null, response.statusCode);
     }
+   // console.log("response.statusCode ::", response.statusCode);
     return this.parseResponse(response.statusCode, data, callback);
   }
 
   parseResponse(statusCode, data, callback) {
     if (statusCode < 400) {
-      // console.log('*******parseResponse*******');
+      console.log('*******parseResponse*******');
       try {
         data = this.parse(data);
-        // console.log('Data::', data);
+        //console.log('Data::', data);
         callback(null, data, statusCode);
       } catch (err) {
-        // console.log('err::', err);
-        // console.log('statusCode:', statusCode);
+        //console.log('err::', err);
+        //console.log('statusCode:', statusCode);
         callback(err, null, statusCode);
       }
     } else {
-      // console.log("parseError:", this.parseError(statusCode, data));
       callback(this.parseError(statusCode, data), data, statusCode);
     }
   }
