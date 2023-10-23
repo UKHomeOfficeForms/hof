@@ -49,6 +49,7 @@ module.exports = class Model extends EventEmitter {
       reqConf.headers = Object.assign({
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(data),
+        'responseType': 'arraybuffer',
       }, reqConf.headers || {});
       // console.log("*******Save2*******");
       return this.request(reqConf, data, callback);
