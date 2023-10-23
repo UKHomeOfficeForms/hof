@@ -96,7 +96,7 @@ module.exports = class Model extends EventEmitter {
       callback = body;
       body = undefined;
     }
-
+    console.log('originalSettings : ', originalSettings);
     let settings = Object.assign({}, originalSettings);
     settings.timeout = settings.timeout || this.options.timeout || 8000;
     settings.url = settings.uri || settings.url || url.format(settings);
@@ -110,6 +110,7 @@ module.exports = class Model extends EventEmitter {
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
       console.log('*******Save4*******');
       settings.auth = authData;
+      console.log('settings.auth 1: ', settings.auth);
       if (typeof settings.auth === 'string') {
         const auth = settings.auth.split(':');
         settings.auth = {
@@ -117,6 +118,10 @@ module.exports = class Model extends EventEmitter {
           pass: auth.join(':'),
           sendImmediately: true
         };
+        console.log('settings.auth 2: ', settings.auth);
+      }
+      if(settings.auth){
+        settings.headers = Object.assign({}, settings.headers, {'Authorization':`Basic ${settings.auth}`});
       }
     })
       .then(() => {
@@ -199,7 +204,7 @@ module.exports = class Model extends EventEmitter {
           
 */
 
-
+          console.log('settings 66666 : ', settings);
           this._request(settings)
             .then(response => {
              console.log("*******Save9*******");
