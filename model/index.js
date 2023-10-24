@@ -49,7 +49,7 @@ module.exports = class Model extends EventEmitter {
       reqConf.headers = Object.assign({
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(data),
-        'responseType': 'arraybuffer',
+        //'responseType': 'arraybuffer',
       }, reqConf.headers || {});
       // console.log("*******Save2*******");
       return this.request(reqConf, data, callback);
@@ -100,7 +100,7 @@ module.exports = class Model extends EventEmitter {
     let settings = Object.assign({}, originalSettings);
     settings.timeout = settings.timeout || this.options.timeout || 8000;
     settings.url = settings.uri || settings.url || url.format(settings);
-    settings.baseUrl = `${settings.protocol}//${settings.host}`;
+    //settings.baseUrl = `${settings.protocol}//${settings.host}`;
     //settings.url = settings.pathname || settings.path;
     settings.data = settings.body || body || settings.data;
     console.log('settings 55555 : ', settings);
@@ -109,19 +109,20 @@ module.exports = class Model extends EventEmitter {
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
       console.log('*******Save4*******');
-      settings.auth = authData;
-      console.log('settings.auth 1: ', settings.auth);
-      if (typeof settings.auth === 'string') {
-        const auth = settings.auth.split(':');
-        settings.auth = {
+      //settings.auth = authData;
+      let authVal = authData;
+      console.log('settings.auth 1: ', authVal);
+      if (typeof authVal === 'string') {
+        const auth = authVal.split(':');
+        authVal = {
           user: auth.shift(),
           pass: auth.join(':'),
           sendImmediately: true
         };
-        console.log('settings.auth 2: ', settings.auth);
+        console.log('settings.auth 2: ', authVal);
       }
-      if(settings.auth){
-        settings.headers = Object.assign({}, settings.headers, {'Authorization':`Basic ${settings.auth}`});
+      if(authVal){
+        settings.headers = Object.assign({}, settings.headers, {Authorization: `Bearer ${authVal.bearer}`});
       }
     })
       .then(() => {
@@ -145,7 +146,7 @@ module.exports = class Model extends EventEmitter {
              console.log("*******Save10*******");
             if (err) {
                console.log("*******Save11*******");
-               //console.log("*******err*******", err);
+               console.log("*******err*******", err);
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
                console.log("*******Save12*******");
@@ -209,10 +210,10 @@ module.exports = class Model extends EventEmitter {
             .then(response => {
              console.log("*******Save9*******");
               return this.handleResponse(response, (error, data, status) => {
-                //console.log("*******Save9-err*******", error);
-                //console.log("*******Save9-data*******", data);
-                //console.log("*******Save9-status*******", status);
-                // console.log("*****Response******");
+                console.log("*******Save9-err*******", error);
+                console.log("*******Save9-data*******", data);
+                console.log("*******Save9-status*******", status);
+                console.log("*****Response******");
                 if (error) {
                  // console.log("*******Save9-response.headers*******", response.headers);
                   error.headers = response.headers;
