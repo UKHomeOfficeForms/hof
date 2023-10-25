@@ -2,7 +2,6 @@
 'use strict';
 
 const _ = require('lodash');
-// const request = require('request');
 const axios = require('axios').default;
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
@@ -29,11 +28,9 @@ module.exports = class Model extends EventEmitter {
       silent: true
     });
     this._request = axios;
-    // this._request = request;
   }
 
   save(options, callback) {
-    // console.log("*******Save*******");
     if (typeof options === 'function' && arguments.length === 1) {
       callback = options;
       options = {};
@@ -48,10 +45,8 @@ module.exports = class Model extends EventEmitter {
 
       reqConf.headers = Object.assign({
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(data),
-        //'responseType': 'arraybuffer',
+        'Content-Length': Buffer.byteLength(data)
       }, reqConf.headers || {});
-      // console.log("*******Save2*******");
       return this.request(reqConf, data, callback);
     });
   }
@@ -91,27 +86,19 @@ module.exports = class Model extends EventEmitter {
   }
 
   request(originalSettings, body, callback) {
-    console.log('*******Save3*******');
     if (typeof body === 'function' && arguments.length === 2) {
       callback = body;
       body = undefined;
     }
-    console.log('originalSettings : ', originalSettings);
     let settings = Object.assign({}, originalSettings);
-    settings.timeout = settings.timeout || this.options.timeout || 8000;
+    settings.timeout = settings.timeout || this.options.timeout;
     settings.url = settings.uri || settings.url || url.format(settings);
-    //settings.baseUrl = `${settings.protocol}//${settings.host}`;
-    //settings.url = settings.pathname || settings.path;
     settings.data = settings.body || body || settings.data;
-    console.log('settings 55555 : ', settings);
     settings = _.omit(settings, urlKeys);
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
-      console.log('*******Save4*******');
-      //settings.auth = authData;
       let authVal = authData;
-      console.log('settings.auth 1: ', authVal);
       if (typeof authVal === 'string') {
         const auth = authVal.split(':');
         authVal = {
@@ -119,23 +106,17 @@ module.exports = class Model extends EventEmitter {
           pass: auth.join(':'),
           sendImmediately: true
         };
-        console.log('settings.auth 2: ', authVal);
       }
-      if(authVal){
+      if(authVal) {
         settings.headers = Object.assign({}, settings.headers, {Authorization: `Bearer ${authVal.bearer}`});
       }
     })
       .then(() => {
-         console.log("*******Save5*******");
         const startTime = process.hrtime();
         let timeoutTimer;
 
         return new Promise((resolve, reject) => {
-           console.log("*******Save6*******");
-           const _callback = (err, data, statusCode) => {
-           //console.log("*******Save6-err*******", err);
-           //console.log("*******Save6-data*******",data);
-           //console.log("*******Save6-statusCode*******",statusCode);
+          const _callback = (err, data, statusCode) => {
             if (timeoutTimer) {
               clearTimeout(timeoutTimer);
               timeoutTimer = null;
@@ -143,119 +124,34 @@ module.exports = class Model extends EventEmitter {
 
             const endTime = process.hrtime();
             const responseTime = timeDiff(startTime, endTime);
-             console.log("*******Save10*******");
             if (err) {
-               console.log("*******Save11*******");
-               console.log("*******err*******", err);
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
-               console.log("*******Save12*******");
               this.emit('success', data, originalSettings, statusCode, responseTime);
             }
             if (err) {
-               console.log("*******Save13*******");
               reject(err);
             } else {
-               console.log("*******Save14*******");
               resolve(data);
             }
           };
 
-
-          /* console.log("*******Save8*******");
-          console.log("settings: ", settings);
-          this._request(settings, (err, response) => {
-            console.log("*******Save9*******");
-            if (err) {
-              if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
-                err.message = 'Connection timed out';
-                err.status = 504;
-              }
-              err.status = err.status || (response && response.statusCode) || 503;
-              return _callback(err, null, err.status);
-            }
-            return this.handleResponse(response, (error, data, status) => {
-              console.log("*****Response******");
-              if (error) {
-                error.headers = response.headers;
-              }
-              _callback(error, data, status);
-            });
-          });
-*/
-
-          // console.log('*******Save8*******');
-          // console.log("settings: ", settings);
-          // settings = Object.assign({}, settings);
-          //console.log("settings: ", settings);
-          // console.log("axios.request: ", axios.request);
-          // console.log("axios: ", axios);
-          
-          
-          /*
-          this._request.default.interceptors.request.use(
-            config => {
-                  delete config.headers;
-                  return config;
-              },
-              error => {
-                  return Promise.reject(error);
-              }
-          );
-          
-*/
-
-          console.log('settings 66666 : ', settings);
           this._request(settings)
             .then(response => {
-             console.log("*******Save9*******");
               return this.handleResponse(response, (error, data, status) => {
-                console.log("*******Save9-err*******", error);
-                console.log("*******Save9-data*******", data);
-                console.log("*******Save9-status*******", status);
-                console.log("*****Response******");
                 if (error) {
-                 // console.log("*******Save9-response.headers*******", response.headers);
                   error.headers = response.headers;
                 }
                 _callback(error, data, status);
               });
             }).catch(err => {
-             console.log("*****Error******");
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
                 err.status = 504;
               }
               err.status = err.status || 503;
-               //console.log("Error:: ", err);
-              // console.log("Error Status::", err.status);
               return _callback(err, null, err.status);
             });
-            
-/*
-         settings = Object.assign({}, settings, {url: settings.uri});
-         try{
-          let response = this._request(settings);
-          console.log("*******Save9*******");
-          return this.handleResponse(response.data, (error, data, status) => {
-          // console.log("*****Response******");
-            if (error) {
-              error.headers = response.headers;
-            }
-            _callback(error, data, status);
-          });
-         } catch(err) {
-          if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
-            err.message = 'Connection timed out';
-            err.status = 504;
-          }
-          err.status = err.status || 503;
-           console.log("Error:: ", err);
-           console.log("Error Status::", err.status);
-          return _callback(err, null, err.status);
-        }
-*/
-
         });
       });
 
@@ -266,37 +162,26 @@ module.exports = class Model extends EventEmitter {
   }
 
   handleResponse(response, callback) {
-    console.log("*****HandleResponse******");
     let data = {};
     try {
-      data = JSON.parse(response.data || '{}');
-      console.log("*****HandleResponse - 1******");
-     // console.log('Data:: ', data);
+      data = typeof response.data === 'object' ? response.data : JSON.parse(response.data || '{}');
     } catch (err) {
-      err.status = response.statusCode;
+      err.status = response.status;
       err.body = response.data;
-      //console.log('err.status:: ', err.status);
-      //console.log('err.body:: ', err.body);
-      console.log("*****HandleResponse - 2******");
-      return callback(err, null, response.statusCode);
+      return callback(err, null, response.status);
     }
-   // console.log("response.statusCode ::", response.statusCode);
-    return this.parseResponse(response.statusCode, data, callback);
+    return this.parseResponse(response.status, data, callback);
   }
 
   parseResponse(statusCode, data, callback) {
     if (statusCode < 400) {
       try {
-        console.log("***********data**********", data);
         data = this.parse(data);
-        console.log("***********parse data**********", data);
         callback(null, data, statusCode);
       } catch (err) {
-        console.log("***********err **********", err);
         callback(err, null, statusCode);
       }
     } else {
-      console.log("***********parse erro data**********", this.parseError(statusCode, data));
       callback(this.parseError(statusCode, data), data, statusCode);
     }
   }
