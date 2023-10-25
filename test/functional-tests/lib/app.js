@@ -9,7 +9,6 @@ const partials = require('express-partial-templates');
 const template = require('../../../frontend').govUKTemplate;
 const cookieParser = require('cookie-parser');
 const mockPostcode = require('./mock-postcode');
-const helmet = require('helmet');
 
 const Wizard = require('../../../wizard');
 

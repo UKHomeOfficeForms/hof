@@ -198,7 +198,7 @@ function bootstrap(options) {
   serveStatic(app, config);
   settings(app, config);
   gaTagSetup(app, config);
-  
+
   const sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
 
