@@ -25,7 +25,7 @@
     "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\" \"sandbox/test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha \"test/**/*.spec.js\" \"sandbox/test/**/*.spec.js\"",
     "test:lint": "eslint . --config ./node_modules/eslint-config-hof/default.js",
-    "test:functional": "funkie mocha ./test/functional-tests --timeout 200000 --exit",
+    "test:functional": "funkie mocha ./test/functional-tests --timeout 20000 --exit",
     "test:client": "karma start test/frontend/toolkit/karma.conf.js",
     "test:cookie-banner": "jest test/frontend/jest",
     "test:acceptance": "TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",

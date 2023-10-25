@@ -45,7 +45,6 @@ const loadRoutes = (app, config) => {
       route,
       sharedViews: app.get('views')
     });
-    // console.log('LoadRoutes');
     app.use(route.baseUrl || '/', router(routeConfig));
   });
 };
@@ -199,6 +198,7 @@ function bootstrap(options) {
   serveStatic(app, config);
   settings(app, config);
   gaTagSetup(app, config);
+  
   const sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
 
