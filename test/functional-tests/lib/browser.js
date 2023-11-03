@@ -11,6 +11,6 @@ const options = {
 const client = webdriverio
   .remote(options);
 
-client.addCommand('goto', require('../../../utilities').autofill(client));
+client.addCommand('goto', require('../../../utilities').autofill(client), false);
 
 module.exports = () => client.init();
