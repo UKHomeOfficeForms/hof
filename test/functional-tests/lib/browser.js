@@ -19,11 +19,6 @@ let browser;
   })
 
   browser.addCommand('goto', require('../../../utilities').autofill(client));
-})
+})()
 
-/* const client = webdriverio
-  .remote(options);*/
-
-
-
-module.exports = browser;
+module.exports = { browser };
