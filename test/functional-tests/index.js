@@ -15,7 +15,7 @@ describe('tests', () => {
   beforeEach(async () => {
     browser = await remote({
       deprecationWarnings: false,
-      capabilities: {
+      desiredCapabilities: {
         browserName: 'chrome'
       }
     });
