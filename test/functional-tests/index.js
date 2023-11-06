@@ -13,13 +13,14 @@ describe('tests', () => {
   let port = 8080;
 
   beforeEach(async () => {
+    console.log('==111111==');
     browser = await remote({
       deprecationWarnings: false,
       desiredCapabilities: {
         browserName: 'chrome'
       }
     });
-    console.log('==111111==');
+    console.log('==111111.5==');
     console.log('browser ', browser);
     browser.addCommand('goto', require('../../utilities').autofill(browser));
     browser.url(`http://localhost:${port}`);
