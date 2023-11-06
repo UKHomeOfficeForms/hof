@@ -38,6 +38,7 @@ describe('tests', async () => {
     it('can return to a looping step to edit', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
       .getUrl()
       .then(url => {
+        console.log('url===', url);
         assert.ok(url.includes('/confirm'));
       })
       .url(`http://localhost:${port}/two/edit`)
