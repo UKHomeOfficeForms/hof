@@ -7,11 +7,11 @@ const assert = require('assert');
 const { remote } = require('webdriverio');
 
 console.log('==0000000==');
-describe('tests', async () => {
+describe('tests', () => {
   // let browser;
   let app;
   let port = 8080;
-  const browser = await remote({
+  const browser = remote({
     deprecationWarnings: false,
     capabilities: {
       browserName: 'chrome'
