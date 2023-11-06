@@ -17,8 +17,8 @@ describe('tests', async () => {
   });
   Browser.addCommand('goto', require('../../utilities').autofill(client));
 
-  beforeEach(async () => {
-    browser = await Browser.init().url(`http://localhost:${port}`);
+  beforeEach(() => {
+    browser = Browser.url(`http://localhost:${port}`);
     return browser;
   });
 
