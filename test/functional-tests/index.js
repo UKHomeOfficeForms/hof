@@ -15,12 +15,8 @@ describe('tests', () => {
   beforeEach(async () => {
     console.log('==111111==');
     browser = await remote({
-      deprecationWarnings: false,
       capabilities: {
-        browserName: 'chrome',
-        'wdio:devtoolsOptions': {
-          headless: true
-        }
+        browserName: 'chrome'
       }
     });
     console.log('==111111.5==');
