@@ -1,17 +1,25 @@
 /* eslint-disable max-len */
 'use strict';
 
-const Browser = require('./lib/browser');
+// const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
 
-describe('tests', () => {
+const { remote } = require('webdriverio');
+
+describe('tests', async () => {
   let browser;
   let app;
   let port = 8080;
 
   beforeEach(async () => {
-    browser = await Browser().url(`http://localhost:${port}`);
+    const Browser = await remote({
+      logLevel: 'trace',
+      capabilities: {
+        browserName: 'chrome'
+      }
+    });
+    browser = await Browser.url(`http://localhost:${port}`);
     return browser;
   });
 
