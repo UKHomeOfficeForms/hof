@@ -5,13 +5,13 @@ const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
 
-describe('tests', async () => {
+describe('tests', () => {
   let browser;
   let app;
   let port = 8080;
 
   beforeEach(() => {
-    browser = Browser.url(`http://localhost:${port}`);
+    browser = Browser().url(`http://localhost:${port}`);
     return browser;
   });
 
