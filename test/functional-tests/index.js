@@ -11,14 +11,13 @@ describe('tests', async () => {
   let browser;
   let app;
   let port = 8080;
-
+  const Browser = await remote({
+    capabilities: {
+      browserName: 'chrome'
+    }
+  });
   beforeEach(async () => {
-    const Browser = await remote({
-      capabilities: {
-        browserName: 'chrome'
-      }
-    });
-    browser = await Browser.url(`http://localhost:${port}`);
+    browser = await Browser.init().url(`http://localhost:${port}`);
     return browser;
   });
 
