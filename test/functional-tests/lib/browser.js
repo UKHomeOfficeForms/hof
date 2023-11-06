@@ -27,4 +27,4 @@ let browser;
   browser.addCommand('goto', require('../../../utilities').autofill(client));
 })().catch(e => console.error(e));
 
-module.exports = () => client.init();
+module.exports = () => browser.init();
