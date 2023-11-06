@@ -8,7 +8,7 @@ const webdriverio = require('webdriverio');
   }
 }; */
 
-const client = await webdriverio.remote({
+const client = webdriverio.remote({
   capabilities: {
     browserName: 'chrome'
   }
