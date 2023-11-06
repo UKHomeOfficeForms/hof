@@ -6,7 +6,7 @@ const App = require('./lib/app');
 const assert = require('assert');
 const { remote } = require('webdriverio');
 
-
+console.log('==0000000==');
 describe('tests', async () => {
   // let browser;
   let app;
