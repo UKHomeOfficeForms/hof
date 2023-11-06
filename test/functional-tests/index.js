@@ -6,17 +6,17 @@ const App = require('./lib/app');
 const assert = require('assert');
 const { remote } = require('webdriverio');
 
-const browser = await remote({
-  deprecationWarnings: false,
-  capabilities: {
-    browserName: 'chrome'
-  }
-});
 
-describe('tests', () => {
+describe('tests', async () => {
   // let browser;
   let app;
   let port = 8080;
+  const browser = await remote({
+    deprecationWarnings: false,
+    capabilities: {
+      browserName: 'chrome'
+    }
+  });
   browser.addCommand('goto', require('../../utilities').autofill(client));
   beforeEach(() => {
     browser.url(`http://localhost:${port}`);
