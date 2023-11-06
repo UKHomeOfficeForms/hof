@@ -1,15 +1,23 @@
 /* eslint-disable max-len */
 'use strict';
 
-const { browser } = require('./lib/browser');
+// const { browser } = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
+const { remote } = require('webdriverio');
+
+const browser = await remote({
+  deprecationWarnings: false,
+  capabilities: {
+    browserName: 'chrome'
+  }
+});
 
 describe('tests', () => {
-  //let browser;
+  // let browser;
   let app;
   let port = 8080;
-
+  browser.addCommand('goto', require('../../utilities').autofill(client));
   beforeEach(() => {
     browser.url(`http://localhost:${port}`);
     return browser;

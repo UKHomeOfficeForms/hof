@@ -14,11 +14,11 @@ let browser;
   browser = await remote({
     deprecationWarnings: false,
     capabilities: {
-    browserName: 'chrome'
-  }
-  })
+      browserName: 'chrome'
+    }
+  });
 
   browser.addCommand('goto', require('../../../utilities').autofill(client));
-})()
+})();
 
 module.exports = { browser };
