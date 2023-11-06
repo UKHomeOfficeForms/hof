@@ -16,14 +16,17 @@ describe('tests', () => {
     console.log('==111111==');
     browser = await remote({
       deprecationWarnings: false,
-      desiredCapabilities: {
-        browserName: 'chrome'
+      capabilities: {
+        browserName: 'chrome',
+        'wdio:devtoolsOptions': {
+          headless: true
+        }
       }
     });
     console.log('==111111.5==');
     console.log('browser ', browser);
-    browser.addCommand('goto', require('../../utilities').autofill(browser));
-    browser.url(`http://localhost:${port}`);
+    await browser.addCommand('goto', require('../../utilities').autofill(browser));
+    await browser.url(`http://localhost:${port}`);
     console.log('==22222==');
     return browser;
   });
