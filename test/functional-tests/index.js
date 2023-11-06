@@ -19,7 +19,7 @@ describe('tests', () => {
   });
   console.log('==111111==');
   console.log('browser ', browser);
-  browser.addCommand('goto', require('../../utilities').autofill(client));
+  browser.addCommand('goto', require('../../utilities').autofill(browser));
   beforeEach(() => {
     browser.url(`http://localhost:${port}`);
     console.log('==22222==');
