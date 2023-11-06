@@ -14,7 +14,6 @@ describe('tests', async () => {
 
   beforeEach(async () => {
     const Browser = await remote({
-      logLevel: 'trace',
       capabilities: {
         browserName: 'chrome'
       }
