@@ -7,9 +7,9 @@ const { remote } = require('webdriverio');
     browserName: 'chrome'
   }
 }; */
-
+let browser;
 (async () => {
-  const browser = await remote({
+  browser = await remote({
     capabilities: {
       browserName: 'chrome'
     }
@@ -20,5 +20,5 @@ const { remote } = require('webdriverio');
   .remote(options); */
 
   browser.addCommand('goto', require('../../../utilities').autofill(client));
-  module.exports = () => browser.init();
 })().catch(e => console.error(e));
+module.exports = () => browser.init();
