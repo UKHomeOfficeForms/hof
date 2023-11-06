@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 'use strict';
 
-// const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
 
@@ -16,6 +15,8 @@ describe('tests', async () => {
       browserName: 'chrome'
     }
   });
+  Browser.addCommand('goto', require('../../utilities').autofill(client));
+
   beforeEach(async () => {
     browser = await Browser.init().url(`http://localhost:${port}`);
     return browser;
