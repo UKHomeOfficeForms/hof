@@ -1,22 +1,18 @@
 /* eslint-disable max-len */
 'use strict';
 
-const browser = require('./lib/browser');
+const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
 
 describe('tests', () => {
-  // let browser;
+  let browser;
   let app;
   let port = 8080;
 
-  /* beforeEach(async() => {
-    browser = await browser.url(`http://localhost:${port}`);
-    return browser;
-  });*/
-
   beforeEach(async () => {
-    return await browser.url(`http://localhost:${port}`);
+    browser = await Browser().url(`http://localhost:${port}`);
+    return browser;
   });
 
   afterEach(() => browser.end());
