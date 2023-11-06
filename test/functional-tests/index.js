@@ -11,16 +11,17 @@ describe('tests', () => {
   // let browser;
   let app;
   let port = 8080;
-  const browser = remote({
-    deprecationWarnings: false,
-    capabilities: {
-      browserName: 'chrome'
-    }
-  });
-  console.log('==111111==');
-  console.log('browser ', browser);
-  browser.addCommand('goto', require('../../utilities').autofill(browser));
-  beforeEach(() => {
+
+  beforeEach(async () => {
+    const browser = await remote({
+      deprecationWarnings: false,
+      capabilities: {
+        browserName: 'chrome'
+      }
+    });
+    console.log('==111111==');
+    console.log('browser ', browser);
+    browser.addCommand('goto', require('../../utilities').autofill(browser));
     browser.url(`http://localhost:${port}`);
     console.log('==22222==');
     return browser;
