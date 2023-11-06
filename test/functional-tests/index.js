@@ -17,13 +17,19 @@ describe('tests', async () => {
       browserName: 'chrome'
     }
   });
+  console.log('==111111==');
+  console.log('browser ', browser);
   browser.addCommand('goto', require('../../utilities').autofill(client));
   beforeEach(() => {
     browser.url(`http://localhost:${port}`);
+    console.log('==22222==');
     return browser;
   });
-
-  afterEach(() => browser.end());
+  console.log('==3333333==');
+  afterEach(() => {
+    console.log('==44444==');
+    browser.end();
+  });
 
   describe('#Looping-Behaviour', () => {
     before(() => {
