@@ -1,16 +1,29 @@
 'use strict';
 
-const webdriverio = require('webdriverio');
-const options = {
+const { remote } = require('webdriverio');
+/* const options = {
   deprecationWarnings: false,
   desiredCapabilities: {
     browserName: 'chrome'
   }
-};
+};*/
 
-const client = webdriverio
-  .remote(options);
+let browser;
 
-client.addCommand('goto', require('../../../utilities').autofill(client));
+(async () => {
+  browser = await remote({
+    deprecationWarnings: false,
+    capabilities: {
+    browserName: 'chrome'
+  }
+  })
 
-module.exports = () => client.init();
+  browser.addCommand('goto', require('../../../utilities').autofill(client));
+})
+
+/* const client = webdriverio
+  .remote(options);*/
+
+
+
+module.exports = browser;

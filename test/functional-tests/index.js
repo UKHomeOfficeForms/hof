@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use strict';
 
-const Browser = require('./lib/browser');
+const browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
 
