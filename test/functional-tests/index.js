@@ -8,21 +8,25 @@ const { remote } = require('webdriverio');
 
 console.log('==0000000==');
 describe('tests', () => {
-  // let browser;
+  let browser;
   let app;
   let port = 8080;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     console.log('==111111==');
-    const browser = await remote({
-      capabilities: {
-        browserName: 'chrome'
-      }
-    });
-    console.log('==111111.5==');
-    console.log('browser ', browser);
-    await browser.addCommand('goto', require('../../utilities').autofill(browser));
-    await browser.url(`http://localhost:${port}`);
+    (async () => {
+      browser = await remote({
+        deprecationWarnings: false,
+        capabilities: {
+          browserName: 'chrome'
+        }
+      });
+      console.log('==111111.5==');
+      console.log('browser ', browser);
+      browser.addCommand('goto', require('../../utilities').autofill(browser));
+      await browser.url(`http://localhost:${port}`);
+    })();
+
     console.log('==22222==');
     return browser;
   });
