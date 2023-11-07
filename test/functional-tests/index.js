@@ -25,7 +25,7 @@ describe('tests', () => {
             args: process.env.CI ? ['headless', 'disable-gpu'] : []
           }
         }
-      });
+      }).init();
     }catch (err) {
       console.log('err==', err);
     }
