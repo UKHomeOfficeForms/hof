@@ -16,11 +16,15 @@ describe('tests', () => {
     console.log('==111111==');
     (async () => {
       console.log('==222222==');
-      browser = await remote({
-        capabilities: {
-          browserName: 'chrome'
-        }
-      });
+      try {
+        browser = await remote({
+          capabilities: {
+            browserName: 'chrome'
+          }
+        });
+      }catch (err) {
+        console.log('err==', err);
+      }
       console.log('==333333==');
       console.log('browser ', browser);
       browser.addCommand('goto', require('../../utilities').autofill(browser));
