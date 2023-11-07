@@ -4,20 +4,19 @@
 // const { browser } = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
-const webdriverio = require('webdriverio');
+const remote = require('webdriverio').remote;
 
 console.log('==0000000==');
 describe('tests', () => {
   let browser;
   let app;
   let port = 8080;
-
-  beforeEach( async () => {
+  (async () => {
     console.log('==111111==');
 
     console.log('==222222==');
     try {
-      browser = await webdriverio.remote({
+      browser = await remote({
         deprecationWarnings: false,
         capabilities: {
           browserName: 'chrome',
@@ -31,12 +30,15 @@ describe('tests', () => {
     }
     console.log('==333333==');
     console.log('browser ', browser);
+  })().catch(err => {
+    console.error(err);
+    return browser.deleteSession();
+  });
+  beforeEach( async () => {
     browser.addCommand('goto', require('../../utilities').autofill(browser));
     await browser.url(`http://localhost:${port}`);
-
-
     console.log('==444444==');
-    // return browser;
+    return browser;
   });
   console.log('==555555==');
   afterEach(async () => {
