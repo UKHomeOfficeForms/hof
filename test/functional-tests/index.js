@@ -15,23 +15,24 @@ describe('tests', () => {
   beforeEach(() => {
     console.log('==111111==');
     (async () => {
+      console.log('==222222==');
       browser = await webdriverio.remote({
         capabilities: {
           browserName: 'chrome'
         }
       });
-      console.log('==111111.5==');
+      console.log('==333333==');
       console.log('browser ', browser);
       browser.addCommand('goto', require('../../utilities').autofill(browser));
       await browser.url(`http://localhost:${port}`);
     })();
 
-    console.log('==22222==');
+    console.log('==444444==');
     return browser;
   });
-  console.log('==3333333==');
+  console.log('==555555==');
   afterEach(async () => {
-    console.log('==44444==');
+    console.log('==666666==');
     await browser.deleteSession();
   });
 
