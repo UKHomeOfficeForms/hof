@@ -15,15 +15,18 @@ describe('tests', () => {
     console.log('==111111==');
 
     console.log('==222222==');
-    browser = await remote({
-      deprecationWarnings: false,
-      capabilities: {
-        browserName: 'chrome',
-        'goog:chromeOptions': {
-          args: process.env.CI ? ['headless', 'disable-gpu'] : []
+    try{
+      browser = await remote({
+        capabilities: {
+          browserName: 'chrome',
+          'goog:chromeOptions': {
+            args: process.env.CI ? ['headless', 'disable-gpu'] : []
+          }
         }
-      }
-    });
+      });
+    }catch(err) {
+      console.error('err====', err);
+    }
 
     console.log('==333333==');
     console.log('browser ', browser);
