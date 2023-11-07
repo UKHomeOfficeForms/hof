@@ -19,7 +19,7 @@ describe('tests', () => {
     try {
       browser = await webdriverio.remote({
         deprecationWarnings: false,
-        desiredCapabilities: {
+        capabilities: {
           browserName: 'chrome'
         }
       });
