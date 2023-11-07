@@ -15,23 +15,20 @@ describe('tests', () => {
     console.log('==111111==');
 
     console.log('==222222==');
-    try {
-      browser = await remote({
-        deprecationWarnings: false,
-        capabilities: {
-          browserName: 'chrome',
-          'goog:chromeOptions': {
-            args: process.env.CI ? ['headless', 'disable-gpu'] : []
-          }
+    browser = await remote({
+      deprecationWarnings: false,
+      capabilities: {
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+          args: process.env.CI ? ['headless', 'disable-gpu'] : []
         }
-      });
-    }catch (err) {
-      console.log('err==', err);
-    }
+      }
+    });
+
     console.log('==333333==');
     console.log('browser ', browser);
   })().catch(err => {
-    console.error(err);
+    console.error('err====', err);
     return browser.deleteSession();
   });
   beforeEach( async () => {
