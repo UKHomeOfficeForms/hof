@@ -11,12 +11,14 @@ describe('tests', () => {
   let browser;
   let app;
   let port = 8080;
-  (async () => {
+
+  beforeEach( async () => {
     console.log('==111111==');
 
     console.log('==222222==');
-    try{
+    try {
       browser = await remote({
+        deprecationWarnings: false,
         capabilities: {
           browserName: 'chrome',
           'goog:chromeOptions': {
@@ -24,21 +26,17 @@ describe('tests', () => {
           }
         }
       });
-    }catch(err) {
-      console.error('err====', err);
+    }catch (err) {
+      console.log('err==', err);
     }
-
     console.log('==333333==');
     console.log('browser ', browser);
-  })().catch(err => {
-    console.error('err====', err);
-    return browser.deleteSession();
-  });
-  beforeEach( async () => {
     browser.addCommand('goto', require('../../utilities').autofill(browser));
     await browser.url(`http://localhost:${port}`);
+
+
     console.log('==444444==');
-    return browser;
+    // return browser;
   });
   console.log('==555555==');
   afterEach(async () => {
