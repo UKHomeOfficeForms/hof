@@ -20,7 +20,10 @@ describe('tests', () => {
       browser = await webdriverio.remote({
         deprecationWarnings: false,
         capabilities: {
-          browserName: 'chrome'
+          browserName: 'chrome',
+          'goog:chromeOptions': {
+            args: process.env.CI ? ['headless', 'disable-gpu'] : []
+          }
         }
       });
     }catch (err) {
