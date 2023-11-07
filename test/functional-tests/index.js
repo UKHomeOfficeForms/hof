@@ -12,27 +12,27 @@ describe('tests', () => {
   let app;
   let port = 8080;
 
-  beforeEach(() => {
+  beforeEach( async () => {
     console.log('==111111==');
-    (async () => {
-      console.log('==222222==');
-      try {
-        browser = await remote({
-          capabilities: {
-            browserName: 'chrome'
-          }
-        });
-      }catch (err) {
-        console.log('err==', err);
-      }
-      console.log('==333333==');
-      console.log('browser ', browser);
-      browser.addCommand('goto', require('../../utilities').autofill(browser));
-      await browser.url(`http://localhost:${port}`);
-    })();
+
+    console.log('==222222==');
+    try {
+      browser = await remote({
+        capabilities: {
+          browserName: 'chrome'
+        }
+      });
+    }catch (err) {
+      console.log('err==', err);
+    }
+    console.log('==333333==');
+    console.log('browser ', browser);
+    browser.addCommand('goto', require('../../utilities').autofill(browser));
+    await browser.url(`http://localhost:${port}`);
+
 
     console.log('==444444==');
-    return browser;
+    // return browser;
   });
   console.log('==555555==');
   afterEach(async () => {
