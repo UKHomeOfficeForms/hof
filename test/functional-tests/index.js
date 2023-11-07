@@ -4,7 +4,7 @@
 // const { browser } = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
-const { webdriverio } = require('webdriverio');
+const { remote } = require('webdriverio');
 
 console.log('==0000000==');
 describe('tests', () => {
@@ -16,7 +16,7 @@ describe('tests', () => {
     console.log('==111111==');
     (async () => {
       console.log('==222222==');
-      browser = await webdriverio.remote({
+      browser = await remote({
         capabilities: {
           browserName: 'chrome'
         }
