@@ -16,9 +16,15 @@ describe('tests', () => {
     console.log('==111111==');
     (async () => {
       browser = await remote({
-        deprecationWarnings: false,
         capabilities: {
-          browserName: 'chrome'
+          browserName: 'chrome',
+          'goog:chromeOptions': {
+            args: [
+              'disable-web-security',
+              'allow-running-insecure-content',
+              'profile-directory=Profile 27'
+            ]
+          }
         }
       });
       console.log('==111111.5==');
@@ -31,9 +37,9 @@ describe('tests', () => {
     return browser;
   });
   console.log('==3333333==');
-  afterEach(() => {
+  afterEach(async () => {
     console.log('==44444==');
-    browser.end();
+    await browser.deleteSession();
   });
 
   describe('#Looping-Behaviour', () => {
