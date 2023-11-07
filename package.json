@@ -101,6 +101,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^7.1.1",
     "chai-subset": "^1.6.0",
+    "chromedriver": "^119.0.0",
     "concat-stream": "^1.4.7",
     "csv": "^5.3.2",
     "eslint": "^7.30.0",

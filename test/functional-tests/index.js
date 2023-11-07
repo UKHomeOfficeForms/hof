@@ -5,6 +5,8 @@
 const App = require('./lib/app');
 const assert = require('assert');
 const remote = require('webdriverio').remote;
+const chromedriver = require('chromedriver');
+
 
 console.log('==0000000==');
 describe('tests', () => {
@@ -16,16 +18,19 @@ describe('tests', () => {
     console.log('==111111==');
 
     console.log('==222222==');
+    chromedriver.start([
+      '--url-base=wd/hub',
+      `--port=${port}`,
+      '--verbose'
+    ]);
+
     try {
       browser = await remote({
         deprecationWarnings: false,
         capabilities: {
-          browserName: 'chrome',
-          'goog:chromeOptions': {
-            args: process.env.CI ? ['headless', 'disable-gpu'] : []
-          }
+          browserName: 'chrome'
         }
-      }).init();
+      });
     }catch (err) {
       console.log('err==', err);
     }
@@ -41,6 +46,7 @@ describe('tests', () => {
   console.log('==555555==');
   afterEach(async () => {
     console.log('==666666==');
+    chromedriver.stop();
     await browser.deleteSession();
   });
 
