@@ -18,8 +18,10 @@ describe('tests', () => {
     console.log('==222222==');
     try {
       browser = await remote({
+        logLevel: 'debug',
         capabilities: {
-          browserName: 'chrome'
+          browserName: 'chrome',
+          maxInstances: 5
         }
       });
     }catch (err) {
