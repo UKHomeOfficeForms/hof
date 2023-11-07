@@ -4,7 +4,7 @@
 // const { browser } = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
-const { webdriverio } = require('webdriverio');
+const webdriverio = require('webdriverio');
 
 console.log('==0000000==');
 describe('tests', () => {
