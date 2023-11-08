@@ -96,7 +96,6 @@
     "@cucumber/cucumber": "^7.3.0",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@types/jest": "^26.0.14",
-    "@wdio/cli": "^8.21.0",
     "@xmldom/xmldom": "~0.8.4",
     "chai": "^3.5.0",
     "chai-as-promised": "^7.1.1",
@@ -130,8 +129,7 @@
     "sinon-chai": "^3.7.0",
     "supertest": "^3.0.0",
     "travis-conditions": "0.0.0",
-    "watchify": "^4.0.0",
-    "webdriverio": "^8.21.0"
+    "watchify": "^4.0.0"
   },
   "mocha": {
     "reporter": "spec",
