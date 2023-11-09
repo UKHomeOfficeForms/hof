@@ -1,45 +1,24 @@
 /* eslint-disable max-len */
 'use strict';
 
-// const { browser } = require('./lib/browser');
+//const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
-// const { remote } = require('webdriverio');
 
-
-console.log('==0000000==');
 describe('tests', () => {
-  // let browser;
+  //let browser;
   let app;
   let port = 8080;
 
-  beforeEach( async () => {
-    console.log('==111111==');
-
-    console.log('==222222==');
-
-    /* try {
-      browser = await remote({
-        deprecationWarnings: false,
-        capabilities: {
-          browserName: 'chrome'
-        }
-      });
-    }catch (err) {
-      console.log('err==', err);
-    }*/
-    console.log('==333333==');
-    console.log('browser ', browser);
-    browser.addCommand('goto', require('../../utilities').autofill(browser));
+  beforeEach(async() => {
+    //browser = await Browser().url(`http://localhost:${port}`);
+    //console.log("browser=", browser);
+    //browser.addCommand('goto', require('../../../utilities').autofill(browser));
     await browser.url(`http://localhost:${port}`);
-    console.log('==444444==');
-    return browser;
+    // await browser.url('http://beta.webdriver.io');
   });
-  console.log('==555555==');
-  afterEach(async () => {
-    console.log('==666666==');
-    await browser.deleteSession();
-  });
+
+  //afterEach(() => browser.deleteSession());
 
   describe('#Looping-Behaviour', () => {
     before(() => {
@@ -51,31 +30,42 @@ describe('tests', () => {
       app.close();
     });
 
-    it('can return to a looping step to edit', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
-      .getUrl()
-      .then(url => {
-        console.log('url===', url);
-        assert.ok(url.includes('/confirm'));
-      })
-      .url(`http://localhost:${port}/two/edit`)
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('/two/edit'));
-      }));
+    it('can return to a looping step to edit', async() => {
+      //const result = await browser.goto('/confirm', { loop: 'no', fork: 'no' });
+      var title = await browser.getTitle();
+      const inputs = await $$('input');
+      inputs.forEach(input => console.log(input.getText()))
+      console.log("title === ", title)
+      assert.strictEqual(title, '– GOV.UK');
+    });
 
-    it('prevents accessing a looping step once the loop has been started', () => browser.goto('/two')
-      .$('input[name="loop"][value="yes"]').click()
-      .submitForm('form')
-      .submitForm('form')
-      .getUrl()
-      .then(url => {
-        assert.ok(url.includes('/one-a'));
+    it.only('can return to a looping step to edit', async () => {
+      await browser.goto('/confirm', { loop: 'no', fork: 'no' })
+      .then(result => {
+        console.log("result===", result);
+        assert.ok(result.url.includes('/confirm'));
+        result.url(`http://localhost:${port}/two/edit`);
       })
-      .url(`http://localhost:${port}/two`)
-      .getUrl()
-      .then(url => {
-        assert.ok(!url.includes('/two'));
-        assert.ok(url.includes('/one'));
+      .then(result => {
+        console.log("result===", result);
+        assert.ok(result.url.includes('/two/edit11111'));
+      })
+    });
+
+    it('prevents accessing a looping step once the loop has been started', async () => browser.goto('/two')
+      .then(result => {
+      //console.log("result===", result);
+      result.$('input[name="loop"][value="yes"]').click()
+       })
+      .submitForm('form')
+      .submitForm('form')
+      .then(result => {
+        assert.ok(result.url.includes('/one-a'));
+        result.url(`http://localhost:${port}/two`)
+      })
+      .then(result => {
+        assert.ok(!result.url.includes('/two'));
+        assert.ok(result.url.includes('/one'));
       }));
 
     it('cannot go back to confirm page after editing a fork', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })

@@ -23,7 +23,7 @@ exports.config = {
   //
   specs: [
     // ToDo: define location for spec files here
-    './test/functional-tests'
+    './test/functional-tests/index.js'
   ],
   // Patterns to exclude.
   exclude: [
@@ -52,7 +52,9 @@ exports.config = {
   // https://saucelabs.com/platform/platform-configurator
   //
   capabilities: [{
-    browserName: 'chrome'
+    maxInstances: 10,
+    browserName: 'chrome',
+    acceptInsecureCerts: true
   }],
 
   //
@@ -131,8 +133,9 @@ exports.config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: 'bdd',
-    timeout: 60000
-  }
+    timeout: 60000,
+    retries: 2,
+  },
 
   //
   // =====
@@ -186,8 +189,11 @@ exports.config = {
      * @param {Array.<String>} specs        List of spec file paths that are to be run
      * @param {object}         browser      instance of created browser/device session
      */
-  // before: function (capabilities, specs) {
-  // },
+     before: function (capabilities, specs) {
+      require('@babel/register');
+      browser.addCommand('goto', require('./utilities').autofill(browser));
+      //browser.url(`http://localhost:8080`);
+     },
   /**
      * Runs before a WebdriverIO command gets executed.
      * @param {string} commandName hook command name
@@ -254,8 +260,9 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {Array.<String>} specs List of spec file paths that ran
      */
-  // after: function (result, capabilities, specs) {
-  // },
+   //after: function (result, capabilities, specs) {
+    //  browser.deleteSession();
+   //},
   /**
      * Gets executed right after terminating the webdriver session.
      * @param {object} config wdio configuration object

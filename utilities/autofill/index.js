@@ -4,12 +4,13 @@
 const url = require('url');
 const Inputs = require('./inputs');
 const Promise = require('bluebird');
+const $ = require('@wdio/globals')
 
 const debug = require('debug')('hof:util:autofill');
 
 const MAX_LOOPS = 3;
 
-module.exports = browser => (target, input, opts) => {
+module.exports = browserVal => (target, input, opts) => {
   const options = opts || {};
   options.maxLoops = options.maxLoops || MAX_LOOPS;
 
@@ -21,7 +22,7 @@ module.exports = browser => (target, input, opts) => {
   function completeTextField(element, name) {
     const value = getValue(name, 'text');
     debug(`Filling field: ${name} with value: ${value}`);
-    return browser
+    return browserVal
       .elementIdClear(element)
       .elementIdValue(element, value)
       .catch(() => {
@@ -34,10 +35,10 @@ module.exports = browser => (target, input, opts) => {
     const value = getValue(name, 'file');
     if (value) {
       debug(`Uploading file: ${value}`);
-      return browser.uploadFile(value)
+      return browserVal.uploadFile(value)
         .then(response => {
           debug(`Uploaded file: ${value} - remote path ${response.value}`);
-          return browser
+          return browserVal
             .addValue(`input[name="${name}"]`, response.value);
         });
     }
@@ -47,26 +48,26 @@ module.exports = browser => (target, input, opts) => {
   function completeRadio(element, name) {
     const value = getValue(name, 'radio');
     if (!value) {
-      return browser.elements(`input[type="radio"][name="${name}"]`)
+      return browserVal.elements(`input[type="radio"][name="${name}"]`)
         .then(radios => {
           debug(`Checking random radio: ${name}`);
           const index = 1 + Math.floor(Math.random() * (radios.value.length - 1));
-          return browser.elementIdClick(radios.value[index].ELEMENT);
+          return browserVal.elementIdClick(radios.value[index].ELEMENT);
         });
     }
-    return browser.elementIdAttribute(element, 'value')
+    return browserVal.elementIdAttribute(element, 'value')
       .then(val => {
         if (val.value === value) {
           debug(`Checking radio: ${name} with value: ${val.value}`);
-          browser.elementIdClick(element);
+          browserVal.elementIdClick(element);
         }
       });
   }
 
   function completeCheckbox(element, name) {
     const value = getValue(name, 'checkbox');
-    return browser.elementIdAttribute(element, 'value')
-      .then(val => browser.elementIdAttribute(element, 'checked')
+    return browserVal.elementIdAttribute(element, 'value')
+      .then(val => browserVal.elementIdAttribute(element, 'checked')
         .then(checked => {
           if (value === null) {
             if (!checked.value) {
@@ -74,17 +75,17 @@ module.exports = browser => (target, input, opts) => {
               return;
             }
             debug(`Unchecking checkbox: ${name}`);
-            return browser.elementIdClick(element);
+            return browserVal.elementIdClick(element);
           }
           if (!value && !checked.value) {
             debug(`Checking checkbox: ${name} with value: ${val.value}`);
-            return browser.elementIdClick(element);
+            return browserVal.elementIdClick(element);
           } else if (value && value.indexOf(val.value) > -1 && !checked.value) {
             debug(`Checking checkbox: ${name} with value: ${val.value}`);
-            return browser.elementIdClick(element);
+            return browserVal.elementIdClick(element);
           } else if (value && value.indexOf(val.value) === -1 && checked.value) {
             debug(`Unchecking checkbox: ${name} with value: ${val.value}`);
-            return browser.elementIdClick(element);
+            return browserVal.elementIdClick(element);
           }
           debug(`Ignoring checkbox: ${name} with value: ${val.value} - looking for ${value}`);
         }));
@@ -93,25 +94,34 @@ module.exports = browser => (target, input, opts) => {
   function completeSelectElement(element, name) {
     const value = getValue(name, 'select');
     if (!value) {
-      return browser.elementIdElements(element, 'option')
+      return browserVal.elementIdElements(element, 'option')
         .then(o => {
           const index = 1 + Math.floor(Math.random() * (o.value.length - 1));
           debug(`Selecting option: ${index} from select box: ${name}`);
-          return browser.selectByIndex(`select[name="${name}"]`, index);
+          return browserVal.selectByIndex(`select[name="${name}"]`, index);
         });
     }
     debug(`Selecting options: ${value} from select box: ${name}`);
-    return browser.selectByValue(`select[name="${name}"]`, value);
+    return browserVal.selectByValue(`select[name="${name}"]`, value);
   }
 
   function completeStep(path) {
-    return browser
-      .elements('input')
+    console.log("path====", path);
+    return $$('input')
       .then(fields => {
-        debug(`Found ${fields.value.length} <input> elements`);
-        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'type')
-          .then(type => browser.elementIdAttribute(field.ELEMENT, 'name')
+        console.log("fields == ",fields);
+        console.log("fields.value.length == ",fields.length);
+        console.log("fields.values == ",fields.values);
+        debug(`Found ${fields.length} <input> elements`);
+        return Promise.map(fields, field => {
+          console.log("*******Inside Promise.map*****");
+          console.log("fields == ",fields);
+          console.log("field == ",field);
+          console.log("field.ELEMENT == ",field.ELEMENT);
+          browserVal.elementIdAttribute(field.ELEMENT, 'type')
+          .then(type => browserVal.elementIdAttribute(field.ELEMENT, 'name')
             .then(name => {
+              console.log("name==", name);
               if (type.value === 'radio') {
                 return completeRadio(field.ELEMENT, name.value);
               } else if (type.value === 'checkbox') {
@@ -122,31 +132,32 @@ module.exports = browser => (target, input, opts) => {
                 return completeTextField(field.ELEMENT, name.value);
               }
               debug(`Ignoring field of type ${type.value}`);
-            })), {concurrency: 1});
+            }))}, {concurrency: 1});
       })
-      .elements('select')
+      .$$('select')
       .then(fields => {
+
         debug(`Found ${fields.value.length} <select> elements`);
-        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'name')
+        return Promise.map(fields.value, field => browserVal.elementIdAttribute(field.ELEMENT, 'name')
           .then(name => completeSelectElement(field.ELEMENT, name.value)));
       })
-      .elements('textarea')
+      .$$('textarea')
       .then(fields => {
         debug(`Found ${fields.value.length} <textarea> elements`);
-        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'name')
+        return Promise.map(fields.value, field => browserVal.elementIdAttribute(field.ELEMENT, 'name')
           .then(name => completeTextField(field.ELEMENT, name.value)));
       })
       .then(() => {
         if (options.screenshots) {
           const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.pre-submit.png');
-          return browser.saveScreenshot(screenshot);
+          return browserVal.saveScreenshot(screenshot);
         }
       })
       .then(() => {
         debug('Submitting form');
-        return browser.$('input[type="submit"]').click();
+        return browserVal.$('input[type="submit"]').click();
       })
-      .then(() => browser.getUrl()
+      .then(() => browserVal.getUrl()
         .then(p => {
           const u = url.parse(p);
           debug(`New page is: ${u.path}`);
@@ -158,7 +169,7 @@ module.exports = browser => (target, input, opts) => {
               if (count === options.maxLoops) {
                 if (options.screenshots) {
                   const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.debug.png');
-                  return browser.saveScreenshot(screenshot)
+                  return browserVal.saveScreenshot(screenshot)
                     .then(() => {
                       throw new Error(`Progress stuck at ${u.path} - screenshot saved to ${screenshot}`);
                     });
@@ -173,7 +184,7 @@ module.exports = browser => (target, input, opts) => {
           }
           debug(`Arrived at ${path}. Done.`);
         }))
-      .catch(e => browser.getText('#content')
+      .catch(e => browserVal.getText('#content')
         .then(text => {
           debug('PAGE CONTENT >>>>>>');
           debug(text);
@@ -184,6 +195,5 @@ module.exports = browser => (target, input, opts) => {
           throw e;
         }));
   }
-
   return completeStep(target);
 };
