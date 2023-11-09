@@ -18,10 +18,10 @@
         <textarea name="{{id}}" id="{{id}}"
             class="govuk-textarea {{#isMaxlengthOrMaxword}}govuk-js-character-count{{/isMaxlengthOrMaxword}} {{#className}}{{className}}{{/className}} {{#error}}govuk-input--error{{/error}}"
             {{#isMaxlengthOrMaxword}}
-            aria-describedby="{{id}}-info"
+            aria-describedby="{{id}}-hint {{id}}-info"
             {{/isMaxlengthOrMaxword}}
-            {{#attributes}} 
-                {{attribute}}="{{value}}" 
+            {{#attributes}}
+                {{attribute}}="{{value}}"
             {{/attributes}}
             {{^error}}{{#hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint {{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
             {{^error}}{{#hintId}}{{^maxlength}} aria-describedby="{{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
