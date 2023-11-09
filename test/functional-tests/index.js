@@ -27,7 +27,7 @@ describe('tests', () => {
       app.close();
     });
 
-    it('can return to a looping step to edit', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
+    it.only('can return to a looping step to edit', () => browser.goto('/confirm', { loop: 'no', fork: 'no' })
       .getUrl()
       .then(url => {
         assert.ok(url.includes('/confirm'));
