@@ -25,14 +25,15 @@
     "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\" \"sandbox/test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha \"test/**/*.spec.js\" \"sandbox/test/**/*.spec.js\"",
     "test:lint": "eslint . --config ./node_modules/eslint-config-hof/default.js",
-    "test:functional": "funkie mocha ./test/functional-tests --timeout 20000 --exit",
+    "test:functional": "yarn wdio run wdio.conf.js --timeout 20000 --exit",
     "test:client": "karma start test/frontend/toolkit/karma.conf.js",
     "test:cookie-banner": "jest test/frontend/jest",
     "test:acceptance": "TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
     "test:acceptance_browser": "ACCEPTANCE_WITH_BROWSER=true TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
     "test:cucumber": "cucumber-js -f @cucumber/pretty-formatter \"sandbox/test/_features/**/*.feature\" --require sandbox/test/_features/test.setup.js --require \"sandbox/test/_features/step_definitions/**/*.js\" --tags $TAGS",
     "ci": "travis-conditions",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "wdio": "wdio run ./wdio.conf.js"
   },
   "dependencies": {
     "aliasify": "^2.1.0",
@@ -93,9 +94,17 @@
     "winston": "^3.7.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/preset-env": "^7.23.2",
+    "@babel/register": "^7.22.15",
     "@cucumber/cucumber": "^7.3.0",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@types/jest": "^26.0.14",
+    "@wdio/allure-reporter": "^8.21.0",
+    "@wdio/cli": "^8.22.1",
+    "@wdio/local-runner": "^8.22.1",
+    "@wdio/mocha-framework": "^8.22.0",
+    "@wdio/spec-reporter": "^8.21.0",
     "@xmldom/xmldom": "~0.8.4",
     "chai": "^3.5.0",
     "chai-as-promised": "^7.1.1",
@@ -129,7 +138,8 @@
     "sinon-chai": "^3.7.0",
     "supertest": "^3.0.0",
     "travis-conditions": "0.0.0",
-    "watchify": "^4.0.0"
+    "watchify": "^4.0.0",
+    "wdio-chromedriver-service": "^8.1.1"
   },
   "mocha": {
     "reporter": "spec",

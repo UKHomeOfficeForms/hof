@@ -4,12 +4,12 @@
 // const { browser } = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
-const { remote } = require('webdriverio');
+// const { remote } = require('webdriverio');
 
 
 console.log('==0000000==');
 describe('tests', () => {
-  let browser;
+  // let browser;
   let app;
   let port = 8080;
 
@@ -18,7 +18,7 @@ describe('tests', () => {
 
     console.log('==222222==');
 
-    try {
+    /* try {
       browser = await remote({
         deprecationWarnings: false,
         capabilities: {
@@ -27,13 +27,11 @@ describe('tests', () => {
       });
     }catch (err) {
       console.log('err==', err);
-    }
+    }*/
     console.log('==333333==');
     console.log('browser ', browser);
     browser.addCommand('goto', require('../../utilities').autofill(browser));
     await browser.url(`http://localhost:${port}`);
-
-
     console.log('==444444==');
     return browser;
   });
