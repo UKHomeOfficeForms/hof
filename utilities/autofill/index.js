@@ -108,21 +108,36 @@ module.exports = browser => (target, input, opts) => {
     return browser
       .elements('input')
       .then(fields => {
+        console.log('fields====', fields);
+        console.log('fields.value.length====', fields.value.length);
+        console.log('fields.value====', fields.value);
         debug(`Found ${fields.value.length} <input> elements`);
-        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'type')
-          .then(type => browser.elementIdAttribute(field.ELEMENT, 'name')
-            .then(name => {
-              if (type.value === 'radio') {
-                return completeRadio(field.ELEMENT, name.value);
-              } else if (type.value === 'checkbox') {
-                return completeCheckbox(field.ELEMENT, name.value);
-              } else if (type.value === 'file') {
-                return completeFileField(field.ELEMENT, name.value);
-              } else if (type.value === 'text') {
-                return completeTextField(field.ELEMENT, name.value);
-              }
-              debug(`Ignoring field of type ${type.value}`);
-            })), {concurrency: 1});
+        return Promise.map(fields.value, field => {
+          console.log('======Promise.map======');
+          console.log('fields.value====', fields.value);
+          console.log('field====', field);
+          console.log('field.ELEMENT====', field.ELEMENT);
+          browser.elementIdAttribute(field.ELEMENT, 'type')
+            .then(type => {
+              console.log('type====', type);
+              console.log('type.value====', type.value);
+              browser.elementIdAttribute(field.ELEMENT, 'name')
+                .then(name => {
+                  console.log('name====', name);
+                  console.log('name.value====', name.value);
+                  if (type.value === 'radio') {
+                    return completeRadio(field.ELEMENT, name.value);
+                  } else if (type.value === 'checkbox') {
+                    return completeCheckbox(field.ELEMENT, name.value);
+                  } else if (type.value === 'file') {
+                    return completeFileField(field.ELEMENT, name.value);
+                  } else if (type.value === 'text') {
+                    return completeTextField(field.ELEMENT, name.value);
+                  }
+                  debug(`Ignoring field of type ${type.value}`);
+                });
+            });
+        }, {concurrency: 1});
       })
       .elements('select')
       .then(fields => {
