@@ -106,7 +106,7 @@ module.exports = browser => (target, input, opts) => {
 
   function completeStep(path) {
     console.log('=====completeStep====');
-    let count = 1;
+    const count = 1;
     return browser
       .elements('input')
       .then(async fields => {
