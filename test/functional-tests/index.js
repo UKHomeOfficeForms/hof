@@ -30,8 +30,7 @@ describe('tests', () => {
       app.close();
     });
 
-    it('can return to a looping step to edit', async() => {
-      //const result = await browser.goto('/confirm', { loop: 'no', fork: 'no' });
+    it.only('can open the brower and test the title', async() => {
       var title = await browser.getTitle();
       const inputs = await $$('input');
       inputs.forEach(input => console.log(input.getText()))
@@ -39,7 +38,7 @@ describe('tests', () => {
       assert.strictEqual(title, '– GOV.UK');
     });
 
-    it.only('can return to a looping step to edit', async() => {
+    it('can return to a looping step to edit', async() => {
       await browser.goto('/confirm', { loop: 'no', fork: 'no' })
       .then(result => {
         console.log("result===", result);
