@@ -6,6 +6,8 @@ const axios = require('axios').default;
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
 
+const axiosSetting = require('./apis/axios-settings')
+
 const REFERENCE = /^\$ref:/;
 
 function timeDiff(from, to, d) {
@@ -90,10 +92,10 @@ module.exports = class Model extends EventEmitter {
       callback = body;
       body = undefined;
     }
+
     let settings = Object.assign({}, originalSettings);
     settings.timeout = settings.timeout || this.options.timeout;
-    settings.url = settings.uri || settings.url || url.format(settings);
-    settings.data = settings.body || body || settings.data;
+    settings = axiosSetting(settings, body)
     settings = _.omit(settings, urlKeys);
     this.emit('sync', originalSettings);
 
@@ -135,7 +137,7 @@ module.exports = class Model extends EventEmitter {
               resolve(data);
             }
           };
-
+          console.log("settings ::", settings);
           this._request(settings)
             .then(response => {
               return this.handleResponse(response, (error, data, status) => {

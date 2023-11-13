@@ -33,7 +33,7 @@
     "test:cucumber": "cucumber-js -f @cucumber/pretty-formatter \"sandbox/test/_features/**/*.feature\" --require sandbox/test/_features/test.setup.js --require \"sandbox/test/_features/step_definitions/**/*.js\" --tags $TAGS",
     "ci": "travis-conditions",
     "postversion": "git push && git push --tags",
-    "test-single":"mocha"
+    "test-single": "mocha"
   },
   "dependencies": {
     "aliasify": "^2.1.0",
@@ -82,6 +82,7 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemailer-stub-transport": "^1.1.0",
     "notifications-node-client": "^6.0.0",
+    "object-mapper": "^6.2.0",
     "redis": "^3.1.2",
     "reqres": "^3.0.1",
     "rimraf": "^3.0.2",
