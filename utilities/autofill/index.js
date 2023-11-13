@@ -4,7 +4,6 @@
 const url = require('url');
 const Inputs = require('./inputs');
 const Promise = require('bluebird');
-const $ = require('@wdio/globals')
 
 const debug = require('debug')('hof:util:autofill');
 
@@ -20,6 +19,7 @@ module.exports = browserVal => (target, input, opts) => {
   let count = 0;
 
   function completeTextField(element, name) {
+    console.log("======55555555=======");
     const value = getValue(name, 'text');
     debug(`Filling field: ${name} with value: ${value}`);
     return browserVal
@@ -32,6 +32,7 @@ module.exports = browserVal => (target, input, opts) => {
   }
 
   function completeFileField(element, name) {
+    console.log("======4444444=======");
     const value = getValue(name, 'file');
     if (value) {
       debug(`Uploading file: ${value}`);
@@ -46,6 +47,7 @@ module.exports = browserVal => (target, input, opts) => {
   }
 
   function completeRadio(element, name) {
+    console.log("======111111=======");
     const value = getValue(name, 'radio');
     if (!value) {
       return browserVal.elements(`input[type="radio"][name="${name}"]`)
@@ -65,6 +67,7 @@ module.exports = browserVal => (target, input, opts) => {
   }
 
   function completeCheckbox(element, name) {
+    console.log("======2222222=======");
     const value = getValue(name, 'checkbox');
     return browserVal.elementIdAttribute(element, 'value')
       .then(val => browserVal.elementIdAttribute(element, 'checked')
@@ -92,6 +95,7 @@ module.exports = browserVal => (target, input, opts) => {
   }
 
   function completeSelectElement(element, name) {
+    console.log("======333333=======");
     const value = getValue(name, 'select');
     if (!value) {
       return browserVal.elementIdElements(element, 'option')
@@ -113,10 +117,11 @@ module.exports = browserVal => (target, input, opts) => {
         console.log("fields.value.length == ",fields.length);
         console.log("fields.values == ",fields.values);
         debug(`Found ${fields.length} <input> elements`);
-        return Promise.map(fields, field => {
+        return Promise.map(fields, async (field) => {
           console.log("*******Inside Promise.map*****");
           console.log("fields == ",fields);
           console.log("field == ",field);
+          //console.log("field element == ", await field.$('elementId'))
           //console.log("field.ELEMENT == ",field.$('elementId'));
           //browserVal.elementIdAttribute(field.ELEMENT, 'type')
           field.getAttribute('type')
@@ -142,7 +147,6 @@ module.exports = browserVal => (target, input, opts) => {
       })
       .$$('select')
       .then(fields => {
-
         debug(`Found ${fields.value.length} <select> elements`);
         return Promise.map(fields.value, field => browserVal.elementIdAttribute(field.ELEMENT, 'name')
           .then(name => completeSelectElement(field.ELEMENT, name.value)));
