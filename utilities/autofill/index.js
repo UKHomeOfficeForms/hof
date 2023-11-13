@@ -106,7 +106,6 @@ module.exports = browser => (target, input, opts) => {
 
   function completeStep(path) {
     console.log('=====completeStep====');
-    let count = 0;
     return browser
       .elements('input')
       .then(async fields => {
@@ -115,7 +114,7 @@ module.exports = browser => (target, input, opts) => {
         console.log('fields.value====', fields.value);
         debug(`Found ${fields.value.length} <input> elements`);
         return Promise.map(fields.value, field => {
-          console.log('======Promise.map======', count+=1);
+          console.log('======Promise.map======');
           console.log('fields.value====', fields.value);
           console.log('field====', field);
           console.log('field.ELEMENT====', field.ELEMENT);
