@@ -105,6 +105,7 @@ module.exports = browser => (target, input, opts) => {
   }
 
   function completeStep(path) {
+    console.log('=====completeStep====');
     return browser
       .elements('input')
       .then(fields => {
