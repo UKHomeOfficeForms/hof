@@ -119,12 +119,12 @@ module.exports = browser => (target, input, opts) => {
           console.log('field.ELEMENT====', field.ELEMENT);
           browser.elementIdAttribute(field.ELEMENT, 'type')
             .then(type => {
-              console.log('type====', type);
-              console.log('type.value====', type.value);
+              // console.log('type====', type);
+              // console.log('type.value====', type.value);
               browser.elementIdAttribute(field.ELEMENT, 'name')
                 .then(name => {
-                  console.log('name====', name);
-                  console.log('name.value====', name.value);
+                  // console.log('name====', name);
+                  // console.log('name.value====', name.value);
                   if (type.value === 'radio') {
                     return completeRadio(field.ELEMENT, name.value);
                   } else if (type.value === 'checkbox') {
