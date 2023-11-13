@@ -112,19 +112,21 @@ module.exports = browserVal => (target, input, opts) => {
   async function completeStep(path) {
     console.log("path====", path);
     return await $$('input')
-      .then(fields => {
+      .then(async   fields => {
         console.log("fields == ",fields);
         console.log("fields.value.length == ",fields.length);
         console.log("fields.values == ",fields.values);
         debug(`Found ${fields.length} <input> elements`);
-        return Promise.map(fields, async (field) => {
+        return await Promise.map(fields, async (field) => {
           console.log("*******Inside Promise.map*****");
-          console.log("fields == ",fields);
           console.log("field == ",field);
           //console.log("field element == ", await field.$('elementId'))
           //console.log("field.ELEMENT == ",field.$('elementId'));
           //browserVal.elementIdAttribute(field.ELEMENT, 'type')
+          //browserVal.getIdAttribute(field.value.ELEMENT,'type')
+          console.log("field.ELEMENT == ",field.elementId);
           field.getAttribute('type')
+          //field.getAttribute('type')
           .then(type => {
             console.log("type == ",type);
             console.log("type.value==", type);
@@ -134,24 +136,28 @@ module.exports = browserVal => (target, input, opts) => {
               console.log("name==", name);
               console.log("name.value==", name);
               if (type === 'radio') {
-                return completeRadio(field.ELEMENT, name);
+                console.log("*****1111111****");
+                return completeRadio(field.elementId, name);
               } else if (type === 'checkbox') {
-                return completeCheckbox(field.ELEMENT, name);
+                console.log("*****222222****");
+                return completeCheckbox(field.elementId, name);
               } else if (type === 'file') {
-                return completeFileField(field.ELEMENT, name);
+                console.log("*****333333****");
+                return completeFileField(field.elementId, name);
               } else if (type === 'text') {
-                return completeTextField(field.ELEMENT, name);
+                console.log("*****444444****");
+                return completeTextField(field.elementId, name);
               }
               debug(`Ignoring field of type ${type}`);
             })})}, {concurrency: 1});
       })
-      .$$('select')
+      .findElements('select')
       .then(fields => {
         debug(`Found ${fields.value.length} <select> elements`);
         return Promise.map(fields.value, field => browserVal.elementIdAttribute(field.ELEMENT, 'name')
           .then(name => completeSelectElement(field.ELEMENT, name.value)));
       })
-      .$$('textarea')
+      .findElements('textarea')
       .then(fields => {
         debug(`Found ${fields.value.length} <textarea> elements`);
         return Promise.map(fields.value, field => browserVal.elementIdAttribute(field.ELEMENT, 'name')
