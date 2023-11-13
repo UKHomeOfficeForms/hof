@@ -108,11 +108,37 @@ module.exports = browser => (target, input, opts) => {
     console.log('=====completeStep====');
     return browser
       .elements('input')
-      .then(fields => {
+      .then(async fields => {
         console.log('fields====', fields);
         console.log('fields.value.length====', fields.value.length);
         console.log('fields.value====', fields.value);
         debug(`Found ${fields.value.length} <input> elements`);
+        console.log('Promise == ', await Promise.map(fields.value, field => {
+          console.log('======Promise.map======');
+          console.log('fields.value====', fields.value);
+          console.log('field====', field);
+          console.log('field.ELEMENT====', field.ELEMENT);
+          browser.elementIdAttribute(field.ELEMENT, 'type')
+            .then(type => {
+              // console.log('type====', type);
+              // console.log('type.value====', type.value);
+              browser.elementIdAttribute(field.ELEMENT, 'name')
+                .then(name => {
+                  // console.log('name====', name);
+                  // console.log('name.value====', name.value);
+                  if (type.value === 'radio') {
+                    return completeRadio(field.ELEMENT, name.value);
+                  } else if (type.value === 'checkbox') {
+                    return completeCheckbox(field.ELEMENT, name.value);
+                  } else if (type.value === 'file') {
+                    return completeFileField(field.ELEMENT, name.value);
+                  } else if (type.value === 'text') {
+                    return completeTextField(field.ELEMENT, name.value);
+                  }
+                  debug(`Ignoring field of type ${type.value}`);
+                });
+            });
+        }, {concurrency: 1}));
         return Promise.map(fields.value, field => {
           console.log('======Promise.map======');
           console.log('fields.value====', fields.value);
