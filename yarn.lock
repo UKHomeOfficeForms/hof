@@ -5262,9 +5262,9 @@ expand-brackets@^2.1.4:
     to-regex "^3.0.1"
 
 expect-webdriverio@^4.2.5:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/expect-webdriverio/-/expect-webdriverio-4.5.0.tgz#99b6362b80cdb78487bae5b432d4cdd94ca8e50e"
-  integrity sha512-VYT1g73l28Akims7KKckvmBI3C7BjtmPF6vWcobJsO3PHLqpXzihzyQ7fYAdH5AhLACEDSC+WnWrvxc7h9mNlw==
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/expect-webdriverio/-/expect-webdriverio-4.5.1.tgz#4f36e63a4991581d0c857e8de343f36e5d5c0808"
+  integrity sha512-fwcMpPV/+e0bS+F7+bC1UoQsZYjJTcbA1XhU4VVB2pEZDhNmeuaPrCanA0tLVP8nDya75oegXK7LgPzP3zZR9w==
   dependencies:
     expect "^29.7.0"
     jest-matcher-utils "^29.7.0"
@@ -12915,7 +12915,6 @@ workerpool@6.2.1:
   integrity sha512-ILEIE97kDZvF9Wb9f6h5aXK4swSlKGUcOEGiIYb2OOu/IrDU9iwj0fD//SsA6E5ibwJxpEvhullJY4Sl4GcpAw==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
-  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

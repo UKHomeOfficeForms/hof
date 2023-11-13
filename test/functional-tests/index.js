@@ -39,7 +39,7 @@ describe('tests', () => {
       assert.strictEqual(title, '– GOV.UK');
     });
 
-    it.only('can return to a looping step to edit', async () => {
+    it.only('can return to a looping step to edit', async() => {
       await browser.goto('/confirm', { loop: 'no', fork: 'no' })
       .then(result => {
         console.log("result===", result);

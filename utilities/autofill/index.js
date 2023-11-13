@@ -105,9 +105,9 @@ module.exports = browserVal => (target, input, opts) => {
     return browserVal.selectByValue(`select[name="${name}"]`, value);
   }
 
-  function completeStep(path) {
+  async function completeStep(path) {
     console.log("path====", path);
-    return $$('input')
+    return await $$('input')
       .then(fields => {
         console.log("fields == ",fields);
         console.log("fields.value.length == ",fields.length);
@@ -117,22 +117,28 @@ module.exports = browserVal => (target, input, opts) => {
           console.log("*******Inside Promise.map*****");
           console.log("fields == ",fields);
           console.log("field == ",field);
-          console.log("field.ELEMENT == ",field.ELEMENT);
-          browserVal.elementIdAttribute(field.ELEMENT, 'type')
-          .then(type => browserVal.elementIdAttribute(field.ELEMENT, 'name')
+          //console.log("field.ELEMENT == ",field.$('elementId'));
+          //browserVal.elementIdAttribute(field.ELEMENT, 'type')
+          field.getAttribute('type')
+          .then(type => {
+            console.log("type == ",type);
+            console.log("type.value==", type);
+            //browserVal.elementIdAttribute(field.ELEMENT, 'name')
+            field.getAttribute('name')
             .then(name => {
               console.log("name==", name);
-              if (type.value === 'radio') {
-                return completeRadio(field.ELEMENT, name.value);
-              } else if (type.value === 'checkbox') {
-                return completeCheckbox(field.ELEMENT, name.value);
-              } else if (type.value === 'file') {
-                return completeFileField(field.ELEMENT, name.value);
-              } else if (type.value === 'text') {
-                return completeTextField(field.ELEMENT, name.value);
+              console.log("name.value==", name);
+              if (type === 'radio') {
+                return completeRadio(field.ELEMENT, name);
+              } else if (type === 'checkbox') {
+                return completeCheckbox(field.ELEMENT, name);
+              } else if (type === 'file') {
+                return completeFileField(field.ELEMENT, name);
+              } else if (type === 'text') {
+                return completeTextField(field.ELEMENT, name);
               }
-              debug(`Ignoring field of type ${type.value}`);
-            }))}, {concurrency: 1});
+              debug(`Ignoring field of type ${type}`);
+            })})}, {concurrency: 1});
       })
       .$$('select')
       .then(fields => {
