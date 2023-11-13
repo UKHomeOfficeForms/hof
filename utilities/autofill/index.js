@@ -127,12 +127,16 @@ module.exports = browser => (target, input, opts) => {
                   // console.log('name====', name);
                   // console.log('name.value====', name.value);
                   if (type.value === 'radio') {
+                    console.log('====radio====');
                     return completeRadio(field.ELEMENT, name.value);
                   } else if (type.value === 'checkbox') {
+                    console.log('====checkbox====');
                     return completeCheckbox(field.ELEMENT, name.value);
                   } else if (type.value === 'file') {
+                    console.log('====file====');
                     return completeFileField(field.ELEMENT, name.value);
                   } else if (type.value === 'text') {
+                    console.log('====text====');
                     return completeTextField(field.ELEMENT, name.value);
                   }
                   debug(`Ignoring field of type ${type.value}`);
