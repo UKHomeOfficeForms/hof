@@ -137,7 +137,7 @@ module.exports = class Model extends EventEmitter {
               resolve(data);
             }
           };
-          console.log("settings ::", settings);
+          console.log("settings---------------: ", settings);
           this._request(settings)
             .then(response => {
               return this.handleResponse(response, (error, data, status) => {
