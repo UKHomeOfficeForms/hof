@@ -2,9 +2,11 @@
 'use strict';
 
 const _ = require('lodash');
-const request = require('request');
+const axios = require('axios').default;
 const url = require('url');
 const EventEmitter = require('events').EventEmitter;
+
+const axiosSetting = require('./apis/axios-settings');
 
 const REFERENCE = /^\$ref:/;
 
@@ -27,7 +29,7 @@ module.exports = class Model extends EventEmitter {
     this.set(attributes, {
       silent: true
     });
-    this._request = request;
+    this._request = axios;
   }
 
   save(options, callback) {
@@ -47,7 +49,6 @@ module.exports = class Model extends EventEmitter {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(data)
       }, reqConf.headers || {});
-
       return this.request(reqConf, data, callback);
     });
   }
@@ -94,21 +95,22 @@ module.exports = class Model extends EventEmitter {
 
     let settings = Object.assign({}, originalSettings);
     settings.timeout = settings.timeout || this.options.timeout;
-    settings.uri = settings.uri || settings.url || url.format(settings);
-    settings.body = settings.body || body || settings.data;
-
-    settings = _.omit(settings, urlKeys, 'data', 'url');
+    settings = axiosSetting(settings, body);
+    settings = _.omit(settings, urlKeys);
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
-      settings.auth = authData;
-      if (typeof settings.auth === 'string') {
-        const auth = settings.auth.split(':');
-        settings.auth = {
+      let authVal = authData;
+      if (typeof authVal === 'string') {
+        const auth = authVal.split(':');
+        authVal = {
           user: auth.shift(),
           pass: auth.join(':'),
           sendImmediately: true
         };
+      }
+      if(authVal) {
+        settings.headers = Object.assign({}, settings.headers, {Authorization: `Bearer ${authVal.bearer}`});
       }
     })
       .then(() => {
@@ -124,7 +126,6 @@ module.exports = class Model extends EventEmitter {
 
             const endTime = process.hrtime();
             const responseTime = timeDiff(startTime, endTime);
-
             if (err) {
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
@@ -136,23 +137,23 @@ module.exports = class Model extends EventEmitter {
               resolve(data);
             }
           };
-
-          this._request(settings, (err, response) => {
-            if (err) {
+          console.log('settings ::', settings);
+          this._request(settings)
+            .then(response => {
+              return this.handleResponse(response, (error, data, status) => {
+                if (error) {
+                  error.headers = response.headers;
+                }
+                _callback(error, data, status);
+              });
+            }).catch(err => {
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
                 err.status = 504;
               }
-              err.status = err.status || (response && response.statusCode) || 503;
+              err.status = err.status || 503;
               return _callback(err, null, err.status);
-            }
-            return this.handleResponse(response, (error, data, status) => {
-              if (error) {
-                error.headers = response.headers;
-              }
-              _callback(error, data, status);
             });
-          });
         });
       });
 
@@ -165,13 +166,13 @@ module.exports = class Model extends EventEmitter {
   handleResponse(response, callback) {
     let data = {};
     try {
-      data = JSON.parse(response.body || '{}');
+      data = typeof response.data === 'object' ? response.data : JSON.parse(response.data || '{}');
     } catch (err) {
-      err.status = response.statusCode;
-      err.body = response.body;
-      return callback(err, null, response.statusCode);
+      err.status = response.status;
+      err.body = response.data;
+      return callback(err, null, response.status);
     }
-    return this.parseResponse(response.statusCode, data, callback);
+    return this.parseResponse(response.status, data, callback);
   }
 
   parseResponse(statusCode, data, callback) {
