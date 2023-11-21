@@ -9,7 +9,6 @@ module.exports = class PDFModel extends Model {
     const settings = super.requestConfig(options);
     settings.encoding = null;
     settings.rejectUnauthorized = false;
-    settings.responseType = 'arraybuffer';
     console.log("settings---------------: ", settings);
     return settings;
   }
