@@ -1,0 +1,155 @@
+
+.phase-banner {
+  @include phase-banner(beta);
+}
+
+.govuk-table {
+    margin-bottom: 30px;
+}
+
+.table-details {
+  width: 100%;
+  margin-bottom: 3em;
+
+  tbody {
+    tr.spacer {
+      height: 3em;
+    }
+
+    td:nth-child(1) {
+      width: 40%;
+    }
+    td:nth-child(2) {
+      width: 60%;
+    }
+    td:nth-child(3) {
+      text-align: right;
+      padding-right: 0;
+    }
+  }
+
+  .button {
+    margin: 0;
+    background: #dde0e1;
+    color: #000;
+  }
+}
+
+.form-textarea--revealed {
+  @media (max-width: 40.0525em) {
+    width: 100%;
+  }
+  @media (min-width: 40.0625em){
+    width: 95%;
+  }
+}
+
+button.govuk-link {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    font-size: arial, sans-serif;
+    /* color: #069; */
+    text-decoration: underline;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 1em;
+    color: #1d70b8;
+    font-size: 1em;
+}
+
+.govuk-font-weight-bold {
+  font-weight: 700!important;
+}
+
+.govuk-panel--confirmation {
+    color: #ffffff;
+    background: #00703c;
+}
+
+.govuk-panel {
+    font-family: "GDS Transport", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.25;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+    padding: 35px;
+    border: 5px solid transparent;
+    text-align: center;
+    @media (max-width: 40.0525em) {
+        padding: 25px;
+    }
+    @media (min-width: 40.0625em){
+        font-size: 19px;
+        font-size: 1.1875rem;
+        line-height: 1.31579;
+    }
+}
+
+.alert-complete {
+  @media (min-width: 40em) {
+    margin-left: 28.33%;
+    margin-right: -28.33%;
+  }
+}
+
+.action-col {
+    text-align: right;
+    vertical-align: top
+}
+
+.data-col {
+    min-width: 150px;
+    width: 300px;
+}
+
+details {
+    margin-top: 34px;
+}
+
+span.form-hint {
+  display: block;
+  padding-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.govuk-details__text {
+    padding: 15px;
+    padding-left: 20px;
+    border-left: 5px solid #b1b4b6;
+}
+
+.error-summary ul li a { color: #B00E1F; }
+
+// Check your answers page styles
+.confirm-label {
+  font-weight: bold;
+  width: 40%;
+}
+
+.confirm-value {
+  width: 60%;
+  word-break: break-word;
+}
+
+.confirm-row {
+  display: table-row;
+  > * {
+    border-bottom: 1px solid $grey-2;
+    display: table-cell;
+  }
+  .confirm-label, .confirm-value {
+    padding: 10px 20px 10px 0;
+  }
+}
+
+dl {
+  margin-bottom: 40px;
+  @media (min-width: 641px) {
+    margin-bottom: 60px;
+  }
+}

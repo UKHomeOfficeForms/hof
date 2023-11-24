@@ -18,7 +18,7 @@ const defaults = {
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,
   host: process.env.HOST || '0.0.0.0',
-  port: process.env.PORT || '8080',
+  port: process.env.PORT || '8081',
   env: process.env.NODE_ENV || 'development',
   gaTagId: process.env.GA_TAG || 'Test-GA-Tag',
   ga4TagId: process.env.GA_4_TAG,
@@ -32,8 +32,8 @@ const defaults = {
     tokenURL: process.env.TOKEN_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/token',
     userInfoURL: process.env.USER_INFO_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/userinfo',
     clientID: process.env.CLIENT_ID || 'sis',
-    clientSecret: process.env.CLIENT_SECRET || '',
-    callbackURL: process.env.CALLBACK_URL || 'http://localhost:8080/submit-immigration-intelligence/login/callback',
+    clientSecret: process.env.CLIENT_SECRET || 't8Ogzq4wQKc6gyKeTMrNvp8WbWTOmTRx',
+    callbackURL: process.env.CALLBACK_URL || 'http://localhost:8081/submit-immigration-intelligence/login/callback',
     loginRoute: process.env.LOGIN_ROUTE || '/login',
     // Must be added to valid redirect URI's in Keycloak admin console
     loginCallbackRoute: process.env.LOGIN_CALLBACK_ROUTE || '/login/callback'

@@ -1,0 +1,73 @@
+// ==========================================================================
+// Alerts
+// ==========================================================================
+
+
+%alert {
+  border-left: 4px solid $error-colour;
+  clear: both;
+  margin: 0 0 1.05263em;
+  padding: 1.05263em;
+}
+
+
+.alert-success {
+  @extend %alert;
+  border-color: $turquoise;
+}
+
+
+.alert-info {
+  @extend %alert;
+  border-color: $grey-2;
+}
+
+
+.alert-error {
+  @extend %alert;
+  border-color: $error-colour;
+}
+
+
+.alert-complete {
+  @extend %alert;
+  background-color: $turquoise;
+  border-color: $turquoise;
+  color: $white;
+  text-align: center;
+  padding: 4.5em 1em;
+}
+
+
+.alert-header {
+  @extend .bold-medium;
+  clear: both;
+  margin-bottom: .5em;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+
+.alert-number {
+  @extend .bold-xlarge;
+  float: left;
+  margin-right: .41666667em; /* 20px ÷ 48px font size */
+}
+
+
+.alert-message {
+  display: block;
+  overflow: hidden;
+
+  h1 {
+    margin-top: em(25);
+    margin-bottom: 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+  }
+
+}
+

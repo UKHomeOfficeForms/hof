@@ -1,0 +1,14 @@
+{
+  "name": "hmpo-govuk-template-example",
+  "description": "Example app for hmpo-govuk-template module",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.11.2",
+    "hof-govuk-template": "^2.1.0",
+    "hogan-express": "^0.5.2"
+  }
+}
