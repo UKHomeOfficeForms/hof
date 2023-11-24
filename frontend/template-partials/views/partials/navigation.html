@@ -1,8 +1,8 @@
 <div class="govuk-header__content">
   {{#startPageRedirectUrl}}
-    <a href="{{startPageRedirectUrl}}" class="hods-header__title__link hods-header__title__link--service-name" id="proposition-name">{{$journeyHeader}}{{/journeyHeader}}</a>
+    <a href="{{startPageRedirectUrl}}" class="govuk-header__link govuk-header__link--service-name" id="proposition-name">{{$journeyHeader}}{{/journeyHeader}}</a>
   {{/startPageRedirectUrl}}
   {{^startPageRedirectUrl}}
-    <a href="{{journeyHeaderURL}}" class="hods-header__title__link hods-header__title__link--service-name" id="proposition-name">{{$journeyHeader}}{{/journeyHeader}}</a>
+    <a href="{{journeyHeaderURL}}" class="govuk-header__link govuk-header__link--service-name" id="proposition-name">{{$journeyHeader}}{{/journeyHeader}}</a>
   {{/startPageRedirectUrl}}
 </div>
