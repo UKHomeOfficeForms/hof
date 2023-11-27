@@ -48,6 +48,7 @@ module.exports = class Model extends EventEmitter {
 
       reqConf.headers = Object.assign({
         'Content-Type': 'application/json',
+        'User-Agent': 'Axios 0.25.0',
         'Content-Length': Buffer.byteLength(data)
       }, reqConf.headers || {});
       return this.request(reqConf, data, callback);
@@ -142,6 +143,9 @@ module.exports = class Model extends EventEmitter {
               this.emit('success', data, originalSettings, statusCode, responseTime);
             }
             if (err) {
+              console.log("err11")
+              console.log(err)
+              console.log("err11")
               reject(err);
             } else {
               resolve(data);
