@@ -110,6 +110,7 @@ module.exports = class Model extends EventEmitter {
           sendImmediately: true
         };
       }
+      console.log("settings------+_+_+_+_---------: ", settings);
     })
       .then(() => {
         const startTime = process.hrtime();
@@ -118,6 +119,7 @@ module.exports = class Model extends EventEmitter {
         return new Promise((resolve, reject) => {
           const _callback = (err, data, statusCode) => {
             if (timeoutTimer) {
+              console.log("heerrererererer222")
               clearTimeout(timeoutTimer);
               timeoutTimer = null;
             }
@@ -126,18 +128,39 @@ module.exports = class Model extends EventEmitter {
             const responseTime = timeDiff(startTime, endTime);
 
             if (err) {
+              console.log("heerrererererer444")
+              console.log("d",data)
+              console.log("e",err)
+              console.log("os", originalSettings)
+              console.log("sc", statusCode)
+              console.log("rt", responseTime)
+              console.log("heerrererererer444")
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
+              console.log("heerrererererer394934")
+              console.log("d",data)
+              console.log("e",err)
+              console.log("os", originalSettings)
+              console.log("sc", statusCode)
+              console.log("rt", responseTime)
+              console.log("heerrererererer444")
               this.emit('success', data, originalSettings, statusCode, responseTime);
             }
             if (err) {
+              console.log("err11")
+              console.log(err)
+              console.log("err11")
               reject(err);
             } else {
+              console.log("noerr")
+              console.log(data)
+              console.log("noerr")
               resolve(data);
             }
           };
 
           this._request(settings, (err, response) => {
+            console.log("heeeeeeyyy123")
             if (err) {
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
@@ -147,6 +170,7 @@ module.exports = class Model extends EventEmitter {
               return _callback(err, null, err.status);
             }
             return this.handleResponse(response, (error, data, status) => {
+              console.log("heeeeeeyyy1222222222223")
               if (error) {
                 error.headers = response.headers;
               }
@@ -163,10 +187,13 @@ module.exports = class Model extends EventEmitter {
   }
 
   handleResponse(response, callback) {
+    console.log("handleresponse.....><<>")
     let data = {};
     try {
+      console.log("TRYhandleresponse.....><<>")
       data = JSON.parse(response.body || '{}');
     } catch (err) {
+      console.log("CATCHhandleresponse.....><<>")
       err.status = response.statusCode;
       err.body = response.body;
       return callback(err, null, response.statusCode);
@@ -188,6 +215,7 @@ module.exports = class Model extends EventEmitter {
   }
 
   prepare() {
+    console.log("prepare() promise")
     return Promise.resolve(this.toJSON());
   }
 
