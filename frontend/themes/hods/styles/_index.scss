@@ -1,8 +1,12 @@
 $govuk-page-width: 1160px;
+$govuk-page-width: 1160px;
 
-@import './_hods.scss';
+@import 'fonts';
+@import "govuk-frontend";
 
-@import '~formiojs/dist/formio.form.css';
+.hods-width-container {
+  @include govuk-width-container($govuk-page-width);
+}
 
 a {
   cursor: pointer;
