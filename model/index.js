@@ -41,7 +41,6 @@ module.exports = class Model extends EventEmitter {
     }
 
     return this.prepare().then(data => {
-      console.log("after prepare promise")
       data = JSON.stringify(data);
       const reqConf = this.requestConfig(options);
       reqConf.method = options.method || 'POST';
@@ -122,7 +121,6 @@ module.exports = class Model extends EventEmitter {
         return new Promise((resolve, reject) => {
           const _callback = (err, data, statusCode) => {
             if (timeoutTimer) {
-              console.log("heerrererererer222")
               clearTimeout(timeoutTimer);
               timeoutTimer = null;
             }
@@ -130,18 +128,14 @@ module.exports = class Model extends EventEmitter {
             const endTime = process.hrtime();
             const responseTime = timeDiff(startTime, endTime);
             if (err) {
-              console.log("heerrererererer444")
-              console.log("d",data)
-              console.log("e",err)
-              console.log("os", originalSettings)
-              console.log("sc", statusCode)
-              console.log("rt", responseTime)
-              console.log("heerrererererer444")
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
             } else {
-              console.log("heerrererererer555")
+              console.log("SUCCESS>>>>>>>>>>>>>>>")
               this.emit('success', data, originalSettings, statusCode, responseTime);
             }
+            console.log("*****ERRR********")
+            console.log(err)
+            console.log("*****ERRR********")
             if (err) {
               console.log("err11")
               console.log(err)
@@ -151,19 +145,15 @@ module.exports = class Model extends EventEmitter {
               resolve(data);
             }
           };
-          console.log("settings---------------: ", settings);
           this._request(settings)
             .then(response => {
-              console.log("heeeeeeyyy123")
               return this.handleResponse(response, (error, data, status) => {
-                console.log("heeeeeeyyyy912")
                 if (error) {
                   error.headers = response.headers;
                 }
                 _callback(error, data, status);
               });
             }).catch(err => {
-              console.log("heerrererererer111")
               if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKETTIMEDOUT') {
                 err.message = 'Connection timed out';
                 err.status = 504;
@@ -181,13 +171,10 @@ module.exports = class Model extends EventEmitter {
   }
 
   handleResponse(response, callback) {
-    console.log("handleresponse.....><<>")
     let data = {};
     try {
-      console.log("TRYhandleresponse.....><<>")
       data = typeof response.data === 'object' ? response.data : JSON.parse(response.data || '{}');
     } catch (err) {
-      console.log("CATCHhandleresponse.....><<>")
       err.status = response.status;
       err.body = response.data;
       return callback(err, null, response.status);
@@ -209,7 +196,6 @@ module.exports = class Model extends EventEmitter {
   }
 
   prepare() {
-    console.log("prepare() promise")
     return Promise.resolve(this.toJSON());
   }
 
