@@ -101,6 +101,10 @@ module.exports = class Model extends EventEmitter {
     this.emit('sync', originalSettings);
 
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
+      console.log("@@@@@@@@@@@@@@@@")
+      console.log(authData)
+      console.log(typeof authData)
+      console.log("@@@@@@@@@@@@@@@@")
       let authVal = authData;
       if (typeof authVal === 'string') {
         const auth = authVal.split(':');
