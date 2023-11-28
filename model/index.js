@@ -154,9 +154,15 @@ module.exports = class Model extends EventEmitter {
           this._request(settings)
             .then(response => {
               return this.handleResponse(response, (error, data, status) => {
+                console.log("$$$$$$$$$$4RESPONSE")
+                console.log(response.headers)
+                console.log("$$$$$$$$$$4RESPONSE")
                 if (error) {
                   error.headers = response.headers;
                 }
+                console.log("$$$$$$$$$$4RESPONSE")
+                console.log(response.headers)
+                console.log("$$$$$$$$$$4RESPONSE")
                 _callback(error, data, status);
               });
             }).catch(err => {
