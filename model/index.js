@@ -113,6 +113,9 @@ module.exports = class Model extends EventEmitter {
       if(authVal) {
         settings.headers = Object.assign({}, settings.headers, {Authorization: `Bearer ${authVal.bearer}`});
       }
+      console.log("SETTINGS ************")
+      console.log(settings)
+      console.log("SETTINGS ************")
     })
       .then(() => {
         const startTime = process.hrtime();
