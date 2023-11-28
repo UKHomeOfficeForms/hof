@@ -113,6 +113,7 @@ module.exports = class Model extends EventEmitter {
       if(authVal) {
         settings.headers = Object.assign({}, settings.headers, {Authorization: `Bearer ${authVal.bearer}`});
       }
+      settings.auth = undefined;
       console.log("SETTINGS ************")
       console.log(settings)
       console.log("SETTINGS ************")
