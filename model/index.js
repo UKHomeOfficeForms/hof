@@ -103,14 +103,15 @@ module.exports = class Model extends EventEmitter {
     const promise = Promise.resolve().then(() => this.auth()).then(authData => {
       console.log("@@@@@@@@@@@@@@@@")
       console.log(authData)
-      console.log(typeof authData)
       console.log("@@@@@@@@@@@@@@@@")
       let authVal = authData;
-      const auth = authVal.split(':');
-      authVal = {
-        username: auth.shift(),
-        password: auth.join(':')
-      };
+      if (typeof authVal === 'string') {
+        const auth = authVal.split(':');
+        authVal = {
+          username: auth.shift(),
+          password: auth.join(':')
+        };
+      }
       if(authVal) {
         settings.headers = Object.assign({}, settings.headers, {Authorization: `Bearer ${authVal.bearer}`});
       }
