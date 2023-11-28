@@ -44,6 +44,7 @@ const setUpAuth = (app, config) => {
     profile.groups = jwtClaims?.groups
     profile.roles = parseJwt(accessToken)["realm_access"]["roles"]
     profile.parsedToken = parseJwt(accessToken)
+    profile.accessToken = accessToken
 
     return cb(null, profile)
   }));
