@@ -144,14 +144,11 @@ module.exports = class Model extends EventEmitter {
               this.emit('success', data, originalSettings, statusCode, responseTime);
               resolve(data);
             }
-            // if (err) {
-            //   console.log("err11")
-            //   console.log(err)
-            //   console.log("err11")
-            //   reject(err);
-            // } else {
-            //   resolve(data);
-            // }
+            if (err) {
+              reject(err);
+            } else {
+              resolve(data);
+            }
           };
           this._request(settings)
             .then(response => {
