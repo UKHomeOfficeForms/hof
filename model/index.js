@@ -133,19 +133,17 @@ module.exports = class Model extends EventEmitter {
             const endTime = process.hrtime();
             const responseTime = timeDiff(startTime, endTime);
             if (err) {
-              console.log("*****ERRR********")
-              console.log(data)
-              console.log("*****ERRR********")
               this.emit('fail', err, data, originalSettings, statusCode, responseTime);
-              reject(err);
             } else {
-              console.log("SUCCESS>>>>>>>>>>>>>>>")
               this.emit('success', data, originalSettings, statusCode, responseTime);
-              resolve(data);
             }
             if (err) {
+              console.log("************************************************")
+              console.error(err?.response ? err.response : err)
+              console.log("************************************************")
               reject(err);
             } else {
+              console.log(data)
               resolve(data);
             }
           };
