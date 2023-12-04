@@ -3,7 +3,7 @@
     {{> partials-head}}
   {{/head}}
   {{$pageTitle}}
-    {{#errorlist.length}}{{#t}}errorlist.prefix{{/t}}{{/errorlist.length}}{{$header}}{{/header}} &ndash; {{#t}}journey.header{{/t}}
+    {{#errorlist.length}}{{#t}}errorlist.prefix{{/t}}{{/errorlist.length}}{{$header}}{{/header}} &ndash; {{$journeyHeader}}{{/journeyHeader}}
   {{/pageTitle}}
   {{$bodyStart}}
     <a href="#{{#skipToMain}}{{skipToMain}}{{/skipToMain}}{{^skipToMain}}main-content{{/skipToMain}}" class="govuk-skip-link" id="skip-to-main">Skip to main content</a>
