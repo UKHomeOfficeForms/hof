@@ -18,7 +18,7 @@ const defaults = {
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,
   host: process.env.HOST || '0.0.0.0',
-  port: process.env.PORT || '8081',
+  port: process.env.PORT || '8080',
   env: process.env.NODE_ENV || 'development',
   gaTagId: process.env.GA_TAG || 'Test-GA-Tag',
   ga4TagId: process.env.GA_4_TAG,
