@@ -311,7 +311,7 @@ my-application/translations/en/default.json
 }
 ```
 
-# HOF Controller
+#HOF Controller
 
 Implements a request pipeline for GET and POST of forms, with input cleaning/formatting and validation.
 
@@ -482,13 +482,13 @@ let error = new ErrorClass(this.missingDoB, {
 });
 ```
 
-## hof-behaviour-session
+##hof-behaviour-session
 
 HOF Behaviour for reading and writing to the session
 
-## Usage
+##Usage
 
-### With [mixwith.js](https://github.com/justinfagnani/mixwith.js)
+###With [mixwith.js](https://github.com/justinfagnani/mixwith.js)
 
 ```js
 const mix = require('mixwith').mix;
@@ -502,7 +502,7 @@ class MyController extends mix(BaseController).with(Session) {
 
 `MyController` now extends `hof-form-controller` and has `hof-behaviour-session` functionality mixed in.
 
-## Functionality
+##Functionality
 
 This mixin extends `hof-form-controller` by persisting the form data to the `sessionModel` - assuming the [session-model](https://github.com/UKHomeOfficeForms/hof-form-wizard/blob/master/lib/middleware/session-model.js) middleware has been applied.
 
@@ -516,13 +516,13 @@ The following form controller methods are used:
 - `missingPrereqHandler(req, res)` - Error handler called when a `MISSING_PREREQ` error is thrown from the [check-progress](https://github.com/UKHomeOfficeForms/hof-form-wizard/blob/master/lib/middleware/check-progress.js) middleware. This occurs if a step is visited out of sequence. This error handler causes the user to be redirected to the last completed step, or the first step if none have been completed.
 - `errorHandler(err, req, res, next)` - checks if `err.code` is `MISSING_PREREQ`, if so calls `missingPrereqHandler`, if not calls `super` to hand over to parent error handler.
 
-## behaviour-hooks
+##behaviour-hooks
 
 HOF Behaviour enabling lifecycle hooks for extending functionality in main form pipeline.
 
-## Usage
+##Usage
 
-### With [mixwith.js](https://github.com/justinfagnani/mixwith.js)
+###With [mixwith.js](https://github.com/justinfagnani/mixwith.js)
 
 ```js
 const mix = require('mixwith').mix;
@@ -536,25 +536,25 @@ class MyController extends mix(BaseController).with(Hooks) {
 
 `MyController` now extends `hof-form-controller` and has `hof-behaviour-hooks` functionality mixed in.
 
-## Functionality
+##Functionality
 
 The following hooks are currently supported, the methods are GET/POST pipeline methods from `hof-form-controller`:
 
-#### GET
+####GET
 
 - `_getErrors` - `'pre-getErrors', 'post-getErrors'`
 - `_getValues` - `'pre-getValues', 'post-getValues'`
 - `_locals` - `'pre-locals', 'post-locals'`
 - `render` - `'pre-render', 'post-render'`
 
-#### POST
+####POST
 
 - `_process` - `'pre-process', 'post-process'`
 - `_validate` - `'pre-validate', 'post-validate'`
 - `saveValues` - `'pre-saveValues', 'post-saveValues'`
 - `successHandler` - `'pre-successHandler', 'post-successHandler'`
 
-### In field config
+###In field config
 
 fields.js
 
@@ -1674,7 +1674,7 @@ It will also add the template as a mustache partial with a name of "govuk-templa
 ### To configure express middleware
 
 ```
-app.use(require('hof').frontend.govUKTemplate([options]));
+app.use(require('hof').frontend.govUKTemplate([options]);
 ```
 
 ### To use the mustache partial

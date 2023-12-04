@@ -25,31 +25,6 @@ const defaults = {
   gaCrossDomainTrackingTagId: process.env.GDS_CROSS_DOMAIN_GA_TAG,
   loglevel: process.env.LOG_LEVEL || 'info',
   ignoreMiddlewareLogs: ['/healthz'],
-  auth: process.env.AUTH || true,
-  // keycloak: {
-  //   issuer: process.env.AUTH_ISSUER || 'http://localhost:8180/realms/sis-local',
-  //   authorizationURL: process.env.AUTH_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/auth',
-  //   tokenURL: process.env.TOKEN_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/token',
-  //   userInfoURL: process.env.USER_INFO_URL || 'http://localhost:8180/realms/sis-local/protocol/openid-connect/userinfo',
-  //   clientID: process.env.CLIENT_ID || 'sis',
-  //   clientSecret: process.env.CLIENT_SECRET || 't8Ogzq4wQKc6gyKeTMrNvp8WbWTOmTRx',
-  //   callbackURL: process.env.CALLBACK_URL || 'http://localhost:8081/submit-immigration-intelligence/login/callback',
-  //   loginRoute: process.env.LOGIN_ROUTE || '/login',
-  //   // Must be added to valid redirect URI's in Keycloak admin console
-  //   loginCallbackRoute: process.env.LOGIN_CALLBACK_ROUTE || '/login/callback'
-  // },
-  keycloak: {
-    issuer: process.env.AUTH_ISSUER || 'https://sso-dev.notprod.homeoffice.gov.uk/auth/realms/cop-dev',
-    authorizationURL: process.env.AUTH_URL || 'https://sso-dev.notprod.homeoffice.gov.uk/auth/realms/cop-dev/protocol/openid-connect/auth',
-    tokenURL: process.env.TOKEN_URL || 'https://sso-dev.notprod.homeoffice.gov.uk/auth/realms/cop-dev/protocol/openid-connect/token',
-    userInfoURL: process.env.USER_INFO_URL || 'https://sso-dev.notprod.homeoffice.gov.uk/auth/realms/cop-dev/protocol/openid-connect/userinfo',
-    clientID: process.env.CLIENT_ID || 'cop',
-    clientSecret: process.env.CLIENT_SECRET || '',
-    callbackURL: process.env.CALLBACK_URL || 'http://localhost:8081/submit-immigration-intelligence/login/callback',
-    loginRoute: process.env.LOGIN_ROUTE || '/login',
-    // Must be added to valid redirect URI's in Keycloak admin console
-    loginCallbackRoute: process.env.LOGIN_CALLBACK_ROUTE || '/login/callback'
-  },
   redis: {
     port: process.env.REDIS_PORT || '6379',
     host: process.env.REDIS_HOST || '127.0.0.1'
