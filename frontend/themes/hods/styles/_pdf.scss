@@ -1,0 +1,42 @@
+.pdf {
+  #global-header,
+  footer,
+  #declaration-section,
+  #skiplink-container
+  {
+    display: none;
+  }
+
+  table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 30px;
+    margin-top: 20px;
+  }
+  img {
+    width: 240px;
+  }
+  table.table-details {
+    margin-bottom: 0;
+    border-top: 1px solid #000000;
+  }
+  table.table-details:first-of-type {
+    border-top: none;
+  }
+  table td:nth-child(2) {
+    word-wrap: break-word;
+  }
+  table td:nth-child(3) {
+    display: none;
+  }
+  table td {
+    padding: 10px 0;
+    border-bottom: 1px #ccc solid;
+  }
+  #content {
+    padding-bottom: 0;
+  }
+}

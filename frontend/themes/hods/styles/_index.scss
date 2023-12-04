@@ -1,0 +1,44 @@
+$govuk-page-width: 1160px;
+$govuk-page-width: 1160px;
+
+@import 'fonts';
+@import "govuk-frontend";
+
+.hods-width-container {
+  @include govuk-width-container($govuk-page-width);
+}
+
+a {
+  cursor: pointer;
+}
+
+body {
+  overscroll-behavior-y: none;
+  font-family: 'nta', Arial, sans-serif;
+  margin: 0px;
+  background-color: #f5f5f5;
+}
+
+.app-container {
+  min-height: calc(100vh - 190px);
+}
+
+.field-required:after {
+  content: ' *';
+  color: red;
+}
+
+.govuk-input:disabled,
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+.form-control {
+  background-color: #ffffff;
+}
+
+div[ref='input'] {
+  white-space: pre-wrap;
+}

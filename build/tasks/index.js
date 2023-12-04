@@ -4,5 +4,6 @@ module.exports = {
   browserify: require('./browserify'),
   sass: require('./sass'),
   translate: require('./translate'),
-  images: require('./images')
+  images: require('./images'),
+  fonts: require('./fonts')
 };

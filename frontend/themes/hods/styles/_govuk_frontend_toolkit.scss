@@ -1,0 +1,23 @@
+// GOV.UK front end toolkit
+// Sass variables, mixins and functions
+// https://github.com/alphagov/govuk_frontend_toolkit/tree/master/stylesheets
+
+// Settings (variables)
+@import "govuk_frontend_toolkit/stylesheets/colours";                                // Colour variables
+@import "govuk_frontend_toolkit/stylesheets/font_stack";                             // Font family variables
+@import "govuk_frontend_toolkit/stylesheets/measurements";                           // Widths and gutter variables
+
+// Mixins
+@import "govuk_frontend_toolkit/stylesheets/conditionals";                           // Media query mixin
+@import "govuk_frontend_toolkit/stylesheets/device-pixels";                          // Retina image mixin
+@import "govuk_frontend_toolkit/stylesheets/grid_layout";                            // Basic grid layout mixin
+@import "govuk_frontend_toolkit/stylesheets/typography";                             // Core bold and heading mixins, also external links
+@import "govuk_frontend_toolkit/stylesheets/shims";                                  // Inline block mixin, clearfix placeholder
+
+// Mixins to generate components (chunks of UI)
+@import "govuk_frontend_toolkit/stylesheets/design-patterns/alpha-beta";
+@import "govuk_frontend_toolkit/stylesheets/design-patterns/buttons";
+@import "govuk_frontend_toolkit/stylesheets/design-patterns/breadcrumbs";
+
+// Functions
+@import "govuk_frontend_toolkit/stylesheets/url-helpers";                            // Function to output image-url, or prefixed path (Rails and Compass only)

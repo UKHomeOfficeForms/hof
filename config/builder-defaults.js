@@ -27,6 +27,12 @@ module.exports = {
     match: 'assets/images/**/*',
     restart: false
   },
+  fonts: {
+    src: 'assets/fonts',
+    out: 'public',
+    match: 'assets/fonts/**/*',
+    restart: false
+  },
   server: {
     cmd: 'npm start',
     extensions: ['.js', '.json', '.html', '.md']

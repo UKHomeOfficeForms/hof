@@ -1,0 +1,33 @@
+#cookie-settings {
+  .js-enabled {
+    display: none;
+  }
+}
+
+#cookie-notification {
+  border: 4px solid $govuk-blue;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 15px 10px;
+  display: none;
+  .heading-medium {
+    margin-top: 0;
+  }
+  p {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  @media (min-width: 641px) {
+    border: 5px solid $govuk-blue;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 20px 15px 15px;
+    p {
+      font-size: 19px;
+    }
+  }
+}
+
+#cookie-notification:focus {
+  outline: 3px solid #ffbf47;
+}

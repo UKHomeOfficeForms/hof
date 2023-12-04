@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''), url('../fonts/Roboto-Regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''), url('../fonts/Roboto-Bold.woff') format('woff');
+}
+
+$govuk-font-family: 'Roboto', arial, sans-serif !important;
+
+body {
+  font-family: 'Roboto', arial, sans-serif !important;
+}
+
+[class*='govuk-'],
+[class*=' govuk-'],
+a {
+  font-family: $govuk-font-family;
+}
