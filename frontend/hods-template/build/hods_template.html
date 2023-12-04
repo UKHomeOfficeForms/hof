@@ -8,20 +8,18 @@
   <title>{{ pageTitle }}</title>
 
   <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="{{assetPath}}images/favicon.ico" type="image/x-icon">
-    <link rel="mask-icon" href="{{assetPath}}images/govuk-mask-icon.svg" color="#0b0c0c"> 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{assetPath}}images/govuk-apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="{{assetPath}}images/govuk-apple-touch-icon-167x167.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{assetPath}}images/govuk-apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" href="{{assetPath}}images/govuk-apple-touch-icon.png">
-  
-  
+  <link rel="mask-icon" href="{{assetPath}}images/govuk-mask-icon.svg" color="#0b0c0c">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{assetPath}}images/govuk-apple-touch-icon-180x180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="{{assetPath}}images/govuk-apple-touch-icon-167x167.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="{{assetPath}}images/govuk-apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" href="{{assetPath}}images/govuk-apple-touch-icon.png">
+
   <meta name="theme-color" content="#0b0c0c" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   {{{ head }}}
-  
-  
+
   <meta property="og:image" content="{{assetPath}}images/opengraph-image.png">
 </head>
 
@@ -95,15 +93,14 @@
               </g>
             </svg></a></div>
         <div class="hods-header__title"><a data-module="govuk-link" href="/submit-immigration-intelligence/"
-            class="hods-header__title__link hods-header__title__link--service-name">Submit immigration intelligence</a>
+            class="hods-header__title__link hods-header__title__link--service-name"> {{{ appTitle }}}
+          </a>
         </div>
       </div>
     </div>
   </header>
 
-
   {{{ afterHeader }}}
-
 
   {{{ content }}}
 
@@ -138,9 +135,7 @@
 
   <div id="global-app-error" class="app-error hidden"></div>
 
-
   {{{ bodyEnd }}}
-
 
   <script {{#nonce}}nonce="{{nonce}}"
     {{/nonce}}>if (typeof window.GOVUK === 'undefined') document.body.className = document.body.className.replace('js-enabled', '');</script>
