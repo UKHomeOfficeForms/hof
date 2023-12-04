@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "20.3.0",
+  "version": "20.4.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -96,6 +96,7 @@
     "@cucumber/cucumber": "^7.3.0",
     "@cucumber/pretty-formatter": "^1.0.0-alpha.1",
     "@types/jest": "^26.0.14",
+    "@xmldom/xmldom": "~0.8.4",
     "chai": "^3.5.0",
     "chai-as-promised": "^7.1.1",
     "chai-subset": "^1.6.0",
@@ -122,14 +123,13 @@
     "playwright": "^1.16.3",
     "postcode": "0.2.2",
     "proxyquire": "^1.7.11",
-    "release-it": "^14.10.0",
+    "release-it": "^16.2.1",
     "sinon": "^11.1.1",
     "sinon-chai": "^3.7.0",
     "supertest": "^3.0.0",
     "travis-conditions": "0.0.0",
     "watchify": "^4.0.0",
-    "webdriverio": "^4.14.4",
-    "xmldom": "^0.6.0"
+    "webdriverio": "^4.14.4"
   },
   "mocha": {
     "reporter": "spec",
