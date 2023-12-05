@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "20.3.4",
+  "version": "20.4.0-minimatch-vulnerability-beta",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -141,6 +141,7 @@
   "resolutions": {
     "underscore": "^1.12.1",
     "cached-path-relative": "^1.1.0",
-    "shell-quote": "^1.7.3"
+    "shell-quote": "^1.7.3",
+    "minimatch": "4.0.0"
   }
 }
