@@ -3,12 +3,9 @@
 <!-- Google Tag Manager Data Layer  -->
 <script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
   var dataLayer = window.dataLayer || [];
-  dataLayer.push({
-    'event': '{{pageEvent}}',
-    'pageName': '{{pageName}}',
-    'applicationType': '{{applicationType}}',
-    'environmentType': '{{environmentType}}'
-  });
+  dataLayer.push(
+    {{{gtmConfig}}}
+  );
 </script>
 <!-- End Google Tag Manager Data Layer  -->
 
