@@ -26,12 +26,8 @@ const defaults = {
   gtm: {
     tagId: process.env.GTM_TAG || false,
     config: {},
-    composePageName: function (page, convertPage, serviceName) {
-      switch (serviceName) {
-        // Add other services here...
-        default:
-          return convertPage(page);
-      }
+    composePageName: function (page, convertPage) {
+      return convertPage(page);
     }
   },
   gaCrossDomainTrackingTagId: process.env.GDS_CROSS_DOMAIN_GA_TAG,
