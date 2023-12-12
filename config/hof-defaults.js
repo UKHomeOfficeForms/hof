@@ -28,8 +28,6 @@ const defaults = {
     config: {},
     composePageName: function (page, convertPage, serviceName) {
       switch (serviceName) {
-        case 'ETA':
-          return 'ETA | Customer Contact | ' + convertPage(page);
         // Add other services here...
         default:
           return convertPage(page);
