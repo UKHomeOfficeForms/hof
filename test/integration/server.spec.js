@@ -4,8 +4,8 @@ const request = require('supertest');
 const _ = require('lodash');
 const redis = require('redis');
 
-const testGaTag = 'Test-GA-Tag';
-process.env.GA_TAG = testGaTag;
+const testTag = 'Test-GA-Tag';
+process.env.GA_TAG = testTag;
 
 const testGtmTag = 'Test-GTM-Tag';
 process.env.GTM_TAG = testGtmTag;
@@ -644,7 +644,7 @@ describe('hof server', () => {
           }]
         });
         bs.use((req, res) => {
-          res.json({respondedFromMiddleware: true});
+          res.json({ respondedFromMiddleware: true });
         });
         bs.start();
         return request(bs.server)
@@ -796,9 +796,6 @@ describe('hof server', () => {
       bs = bootstrap({
         port: 8888,
         fields: 'fields',
-        gtm: {
-          tagId: testGtmTag
-        },
         routes: [
           {
             views: `${root}/apps/app_1/views`,
@@ -824,6 +821,7 @@ describe('hof server', () => {
           }
         ]
       });
+
       bs.use((req, res) => {
         locals = res.locals;
         res.json({});
@@ -836,19 +834,18 @@ describe('hof server', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(() => {
-          locals.gaTagId.should.equal(testGaTag);
-          locals['ga-id'].should.equal(testGaTag);
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
           locals['ga-page'].should.equal('feedback');
-        })
-      );
+        }));
 
       it('adds ga-id and ga-page based on baseUrl only', () => request(bs.server)
         .get('/accept')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(() => {
-          locals.gaTagId.should.equal(testGaTag);
-          locals['ga-id'].should.equal(testGaTag);
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
           locals['ga-page'].should.equal('accept');
         }));
 
@@ -857,8 +854,8 @@ describe('hof server', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(() => {
-          locals.gaTagId.should.equal(testGaTag);
-          locals['ga-id'].should.equal(testGaTag);
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
           locals['ga-page'].should.equal('acceptConfirmPersonConfirmation');
         }));
 
@@ -867,8 +864,8 @@ describe('hof server', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(() => {
-          locals.gaTagId.should.equal(testGaTag);
-          locals['ga-id'].should.equal(testGaTag);
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
           locals['ga-page'].should.equal('applyIndexStart');
         }));
 
@@ -877,15 +874,15 @@ describe('hof server', () => {
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
         .expect(() => {
-          locals.gaTagId.should.equal(testGaTag);
-          locals['ga-id'].should.equal(testGaTag);
+          locals.gaTagId.should.equal(testTag);
+          locals['ga-id'].should.equal(testTag);
           locals['ga-page'].should.equal('applyConfirmEndSubmitEnd');
         }));
     });
 
     describe('with gtm-tag', () => {
       it('adds gtm tagId and gtm pageName based on root uri', () => {
-        let gtmApp = bootstrap({
+        const gtmApp = bootstrap({
           port: 8888,
           fields: 'fields',
           gtm: {
@@ -925,117 +922,117 @@ describe('hof server', () => {
           .set('Cookie', ['myCookie=1234'])
           .expect(200)
           .expect(() => {
-            locals.gtmTagId.should.equal(testGtmTag)
+            locals.gtmTagId.should.equal(testGtmTag);
             locals['ga-page'].should.equal('feedback');
           });
-      })
+      });
 
       it('pass custom gtm config for gtm data layer', () => {
-          let gtmApp = bootstrap({
-            port: 8888,
-            fields: 'fields',
-            gtm: {
-              tagId: testGtmTag,
-              config: {
-                event: 'pageLoad',
-                applicationType: 'Web',
-                environmentType: 'dev'
+        const gtmApp = bootstrap({
+          port: 8888,
+          fields: 'fields',
+          gtm: {
+            tagId: testGtmTag,
+            config: {
+              event: 'pageLoad',
+              applicationType: 'Web',
+              environmentType: 'dev'
+            }
+          },
+          routes: [
+            {
+              views: `${root}/apps/app_1/views`,
+              steps: {
+                '/feedback': {}
               }
             },
-            routes: [
-              {
-                views: `${root}/apps/app_1/views`,
-                steps: {
-                  '/feedback': {}
-                }
-              },
-              {
-                views: `${root}/apps/app_1/views`,
-                baseUrl: '/accept',
-                steps: {
-                  '/': {},
-                  '/confirm/person/confirmation': {}
-                }
-              },
-              {
-                views: `${root}/apps/app_1/views`,
-                baseUrl: '/apply',
-                steps: {
-                  '/index-start': {},
-                  '/confirm-end/submit-end': {}
-                }
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/accept',
+              steps: {
+                '/': {},
+                '/confirm/person/confirmation': {}
               }
-            ]
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/apply',
+              steps: {
+                '/index-start': {},
+                '/confirm-end/submit-end': {}
+              }
+            }
+          ]
+        });
+        gtmApp.use((req, res) => {
+          locals = res.locals;
+          res.json({});
+        });
+        return request(gtmApp.server)
+          .get('/feedback')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gtmTagId.should.equal(testGtmTag);
+            JSON.parse(locals.gtmConfig).pageName = 'Feedback';
+            JSON.parse(locals.gtmConfig).event = 'pageLoad';
+            JSON.parse(locals.gtmConfig).applicationType = 'Web';
+            JSON.parse(locals.gtmConfig).environmentType = 'dev';
           });
-          gtmApp.use((req, res) => {
-            locals = res.locals;
-            res.json({});
-          });
-          return request(gtmApp.server)
-            .get('/feedback')
-            .set('Cookie', ['myCookie=1234'])
-            .expect(200)
-            .expect(() => {
-              locals.gtmTagId.should.equal(testGtmTag)
-              JSON.parse(locals.gtmConfig)["pageName"] = "Feedback"
-              JSON.parse(locals.gtmConfig)["event"] = "pageLoad"
-              JSON.parse(locals.gtmConfig)["applicationType"] = "Web"
-              JSON.parse(locals.gtmConfig)["environmentType"] = "dev"
-            });
-        }
+      }
       );
 
       it('override composePageName function for generating custom pageName layouts', () => {
-          let gtmApp = bootstrap({
-            port: 8888,
-            fields: 'fields',
-            gtm: {
-              tagId: testGtmTag,
-              composePageName: function (page, convertPage) {
-                return "Custom Prefix" + convertPage(page)
+        const gtmApp = bootstrap({
+          port: 8888,
+          fields: 'fields',
+          gtm: {
+            tagId: testGtmTag,
+            composePageName: function (page, convertPage) {
+              return 'Custom Prefix' + convertPage(page);
+            }
+          },
+          routes: [
+            {
+              views: `${root}/apps/app_1/views`,
+              steps: {
+                '/feedback': {}
               }
             },
-            routes: [
-              {
-                views: `${root}/apps/app_1/views`,
-                steps: {
-                  '/feedback': {}
-                }
-              },
-              {
-                views: `${root}/apps/app_1/views`,
-                baseUrl: '/accept',
-                steps: {
-                  '/': {},
-                  '/confirm/person/confirmation': {}
-                }
-              },
-              {
-                views: `${root}/apps/app_1/views`,
-                baseUrl: '/apply',
-                steps: {
-                  '/index-start': {},
-                  '/confirm-end/submit-end': {}
-                }
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/accept',
+              steps: {
+                '/': {},
+                '/confirm/person/confirmation': {}
               }
-            ]
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/apply',
+              steps: {
+                '/index-start': {},
+                '/confirm-end/submit-end': {}
+              }
+            }
+          ]
+        });
+        gtmApp.use((req, res) => {
+          locals = res.locals;
+          res.json({});
+        });
+        return request(gtmApp.server)
+          .get('/feedback')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gtmTagId.should.equal(testGtmTag);
+            locals['ga-page'].should.equal('feedback');
+            JSON.parse(locals.gtmConfig).pageName = 'Custom Prefix Feedback';
           });
-          gtmApp.use((req, res) => {
-            locals = res.locals;
-            res.json({});
-          });
-          return request(gtmApp.server)
-            .get('/feedback')
-            .set('Cookie', ['myCookie=1234'])
-            .expect(200)
-            .expect(() => {
-              locals.gtmTagId.should.equal(testGtmTag)
-              locals['ga-page'].should.equal('feedback');
-              JSON.parse(locals.gtmConfig)["pageName"] = "Custom Prefix Feedback"
-            });
-        }
+      }
       );
-    })
+    });
 
     describe('with nonce values', () => {
       it('adds a 16 figure hex nonce value to locals', () => request(bs.server)
