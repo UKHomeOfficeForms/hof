@@ -1,18 +1,13 @@
 {{#gtmTagId}}
 {{#cookiesAccepted}}
-{{#isETA}}
-<!-- Google Tag Manager Data Layer for ETA -->
+<!-- Google Tag Manager Data Layer  -->
 <script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
   var dataLayer = window.dataLayer || [];
-  dataLayer.push({
-    'event': 'pageLoad',
-    'pageName': 'ETA | Customer Contact Webform | {{gtm-page}}',
-    'applicationType': 'ETA | Customer Contact',
-    'environmentType': '{{environmentType}}'
-  });
+  dataLayer.push(
+    {{{gtmConfig}}}
+  );
 </script>
-<!-- End Google Tag Manager Data Layer for ETA -->
-{{/isETA}}
+<!-- End Google Tag Manager Data Layer  -->
 
 <!-- Google Tag Manager -->
 <script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
