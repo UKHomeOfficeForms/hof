@@ -15,7 +15,7 @@
     }
   },
   "name": {
-    "label": "Full name"
+    "label": "What is your full name?"
   },
   "dateOfBirth": {
     "legend": "What is your date of birth?",
@@ -29,8 +29,8 @@
   },
   "townOrCity": {
     "label": "Town or city"
-   }, 
-  "postcode": { 
+   },
+  "postcode": {
     "label": "Postcode"
   },
   "incomeTypes" : {
@@ -66,11 +66,11 @@
       },
       "northernIreland": {
         "label": "Northern Ireland"
-      } 
-    } 
+      }
+    }
   },
   "email" : {
-    "label": "Email address"
+    "label": "Enter your email address"
   },
   "phone": {
     "label": "Phone number",

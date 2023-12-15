@@ -25,9 +25,11 @@ module.exports = (options, rateLimitType) => {
     }
 
     const closeConnection = async err => {
-      await redisClient.quit();
+      await redisClient.v4.QUIT();
       return next(err);
     };
+    redisClient.on('error', err => logger.log('error', err));
+    await redisClient.connect();
 
     try {
       // fetch records of current user using IP address, returns null when no record is found

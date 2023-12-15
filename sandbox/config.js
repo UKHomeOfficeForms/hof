@@ -2,6 +2,7 @@
 
 /* eslint no-process-env: 0 */
 module.exports = {
+  port: 8082,
   email: {
     caseworker: process.env.CASEWORKER_EMAIL || '',
     from: process.env.FROM_ADDRESS || '',
@@ -12,6 +13,6 @@ module.exports = {
     region: process.env.EMAIL_REGION || ''
   },
   hosts: {
-    acceptanceTests: process.env.ACCEPTANCE_HOST_NAME || `http://localhost:${process.env.PORT || 8080}`
+    acceptanceTests: process.env.ACCEPTANCE_HOST_NAME || `http://localhost:${process.env.PORT || 8082}`
   }
 };
