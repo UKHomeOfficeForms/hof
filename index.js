@@ -147,6 +147,7 @@ function bootstrap(options) {
     res.locals.appName = config.appName;
     res.locals.htmlLang = config.htmlLang;
     res.locals.cookieName = config.session.name;
+    res.locals.sessionTTL = config.session.ttl;
     next();
   });
 
