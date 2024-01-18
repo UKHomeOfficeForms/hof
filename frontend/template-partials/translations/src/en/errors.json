@@ -3,6 +3,10 @@
     "title": "Sorry, something went wrong",
     "message": "A server exception occurred. Please try again."
   },
+  "session-warning": {
+    "title": "Your page will time out soon",
+    "message": "To protect your information, this page will time out in 5 minutes.\n\nIf that happens, your progress will not be saved."
+  },
   "session": {
     "title": "Sorry, you'll have to start again",
     "message": "You haven't entered any details for 30 minutes, so we have cleared your information to keep it secure."
