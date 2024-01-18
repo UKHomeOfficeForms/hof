@@ -116,6 +116,7 @@ aria.KeyCode = {
     if (aria.OpenDialogList && aria.OpenDialogList.length) {
       return aria.OpenDialogList[aria.OpenDialogList.length - 1];
     }
+    return null;
   };
 
   aria.closeCurrentDialog = function () {
@@ -307,6 +308,7 @@ aria.KeyCode = {
     this.backdropNode.classList.remove('active');
 
     const focusAfterClosed = newFocusAfterClosed || this.focusAfterClosed;
+    // eslint-disable-next-line no-new
     new aria.Dialog(newDialogId, focusAfterClosed, newFocusFirst);
   }; // end replace
 
@@ -335,6 +337,7 @@ aria.KeyCode = {
   }; // end trapFocus
 
   window.openDialog = function (dialogId, focusAfterClosed, focusFirst) {
+    // eslint-disable-next-line no-new
     new aria.Dialog(dialogId, focusAfterClosed, focusFirst);
   };
 

@@ -1,12 +1,9 @@
 'use strict';
 
-const URI = require('urijs');
-
 module.exports = (options, timers) => {
   return (req, res, next) => {
     // eslint-disable-next-line no-console
-    console.log(req.url);
-    console.log('SESSION TIMOUT:', options.session);
+    console.log(req.url, 'SESSION TIMOUT:', options.session);
     if (timers.length >= 2) {
       // eslint-disable-next-line no-console
       console.log(timers);
