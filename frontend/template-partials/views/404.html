@@ -1,9 +1,25 @@
 {{<layout}}
-  {{$header}}
-    {{title}}
-  {{/header}}
+  
+  {{$header}}  {{title}}  {{/header}}
+  
   {{$content}}
-    <p>{{description}}</p>
-    <a href="/" class="button" role="button">{{#t}}buttons.start-again{{/t}}</a>
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">{{title}}</h1>
+              <p class="govuk-body">
+              {{paragraph1}}
+              </p>
+              <p class="govuk-body">
+                {{paragraph2}}
+              </p>
+              <p class="govuk-body">
+                {{paragraph3}} <a href="#" class="govuk-link">{{referencetag}}</a> {{paragraph3sub}}
+              </p>
+          </div>
+        </div>
+      </main>
+    </div>
   {{/content}}
 {{/layout}}
