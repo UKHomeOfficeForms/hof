@@ -3,14 +3,20 @@
 const getTranslations = translate => {
   const translations = {
     title: 'Not found',
-    description: 'There is nothing here'
+    description: 'There is nothing here',
+    paragraph1: 'If you typed the web address, check it is correct.',
+    paragraph2: 'If you pasted the web address, check you copied the entire address.',
+    paragraph3: 'If the web address is correct or you selected a link or button,',
+    paragraph3sub: 'if you need to contact us.'
   };
-
   if (translate) {
     translations.title = translate('errors.404.title');
     translations.description = translate('errors.404.description');
+    translations.paragraph1 = translate('errors.404.paragraph1');
+    translations.paragraph2 = translate('errors.404.paragraph2');
+    translations.paragraph3 = translate('errors.404.paragraph3');
+    translations.paragraph3sub = translate('errors.404.paragraph3sub');
   }
-
   return translations;
 };
 
@@ -25,10 +31,13 @@ module.exports = options => {
     if (logger && logger.warn) {
       logger.warn(`Cannot find: ${req.url}`);
     }
-
     res.status(404).render('404', {
       title: translations.title,
       description: translations.description,
+      paragraph1: translations.paragraph1,
+      paragraph2: translations.paragraph2,
+      paragraph3: translations.paragraph3,
+      paragraph3sub: translations.paragraph3sub,
       // Finds the first word in the path of the
       // url and removes the leading slash.
       // Where url is `/foo/bar`, this returns `foo`.
