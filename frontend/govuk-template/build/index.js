@@ -1,6 +1,6 @@
 'use strict';
 
-const Hogan = require('hogan.js');
+// const Hogan = require('hogan.js');
 const fs = require('fs');
 const path = require('path');
 const govukConfig = require('./config');
