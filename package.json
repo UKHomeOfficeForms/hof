@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "21-axios-beta-test",
+  "version": "21.0.20-axios-beta",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
