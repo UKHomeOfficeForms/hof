@@ -1,0 +1,26 @@
+<div class="govuk-warning-text">
+  <div id="dialog_layer" class="dialog_form">
+    <div role="dialog"
+         id="dialog1"
+         aria-labelledby="dialog1_label"
+         aria-modal="true"
+         class="hidden">
+      <h2 id="dialog1_label" class="govuk-heading-l">
+        Your page will time out soon
+      </h2>
+      <div class="govuk-heading-m">
+        <p>To protect your information, this page will time out in 5 minutes.</p>
+        <p>If that happens, your progress will not be saved.</p>
+      </div>
+      <div class="dialog_form_actions">
+        <a href="{{startLink}}" class="govuk-button" role="button">{{#t}}buttons.stay-on-page{{/t}}</a>
+      </div>
+    </div>
+  </div>
+  <script {{#nonce}}nonce="{{nonce}}"{{/nonce}} type="text/javascript">
+    console.log("onClick with Timeout")
+    setTimeout(function() {
+      openDialog('dialog1', this)
+    }, 5 * 1000)
+  </script>
+</div>

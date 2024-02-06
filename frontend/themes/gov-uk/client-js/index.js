@@ -11,6 +11,7 @@ var validation = toolkit.validation;
 var GOVUK = require('govuk-frontend');
 GOVUK.initAll();
 window.GOVUK = GOVUK;
+var dialog = require('./dialog');
 var skipToMain = require('./skip-to-main');
 var cookie = require('./govuk-cookies');
 var cookieSettings = require('./cookieSettings');
