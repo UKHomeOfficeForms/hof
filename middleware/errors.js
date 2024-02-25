@@ -8,7 +8,7 @@ const errorMsg = code => `There is a ${code}_ERROR`;
 // eslint-disable-next-line complexity
 const getContent = (err, translate) => {
   const content = {};
-
+  
   if (err.code === 'SESSION_TIMEOUT') {
     err.status = 401;
     err.template = 'session-timeout';
@@ -17,14 +17,14 @@ const getContent = (err, translate) => {
     content.title = (translate && translate('errors.session.title'));
     content.message = (translate && translate('errors.session.message'));
   }
-
+  
   if (err.code === 'NO_COOKIES') {
     err.status = 403;
     err.template = 'cookie-error';
     content.title = (translate && translate('errors.cookies-required.title'));
     content.message = (translate && translate('errors.cookies-required.message'));
   }
-
+  
   if (err.code === 'DDOS_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
@@ -39,7 +39,7 @@ const getContent = (err, translate) => {
     content.timeToWait = rateLimitsConfig.rateLimits.requests.windowSizeInMinutes;
     content.postTimeToWait = (translate && translate('errors.ddos-rate-limit.post-time-to-wait'));
   }
-
+  
   if (err.code === 'SUBMISSION_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
@@ -54,10 +54,25 @@ const getContent = (err, translate) => {
     content.timeToWait = rateLimitsConfig.rateLimits.submissions.windowSizeInMinutes;
     content.postTimeToWait = (translate && translate('errors.submission-rate-limit.post-time-to-wait'));
   }
-
-  err.code = err.code || 'UNKNOWN';
-  err.status = err.status || 500;
-
+  
+  if (err.code === 'INTERNAL_SERVER_ERROR' || err.code === 'UNKNOWN') {
+    err.status = err.status || 500;
+    err.template = '500';
+    err.title = (translate && translate('errors.500.title'));
+    err.message = (translate && translate('errors.500.description'));
+    err.header = (translate && translate('errors.500.header'));
+    err.paragraph1 = (translate && translate('errors.500.paragraph1'));
+    err.paragraph2 = (translate && translate('errors.500.paragraph2'));
+    err.paragraph3 = (translate && translate('errors.500.paragraph3'));
+    content.title = (translate && translate('errors.500.title'));
+    content.message = (translate && translate('errors.500.description'));
+    content.header = (translate && translate('errors.500.header'));
+    content.paragraph1 = (translate && translate('errors.500.paragraph1'));
+    content.paragraph2 = (translate && translate('errors.500.paragraph2'));
+    content.paragraph3 = (translate && translate('errors.500.paragraph3'));
+  }
+  
+  
   if (!content.title) {
     content.title = (translate && translate('errors.default.title')) || errorTitle(err.code);
   }

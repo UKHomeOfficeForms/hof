@@ -230,7 +230,7 @@ module.exports = config => {
                 }, req, res)
               };
             // cannot connect to validation service, skip api validation
-            } else if (err.status === 403 || err.status === 404) {
+            } else if (err.status === 403 || err.status === 404 || err.status === 500) {
               return super.validate(req, res, callback);
             }
             return callback(err);
