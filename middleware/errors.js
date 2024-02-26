@@ -55,12 +55,8 @@ const getContent = (err, translate) => {
     err.template = '500';
     err.title = (translate && translate('errors.500.title'));
     err.message = (translate && translate('errors.500.description'));
-    err.header = (translate && translate('errors.500.header'));
-    err.paragraph1 = (translate && translate('errors.500.paragraph1'));
     content.title = (translate && translate('errors.500.title'));
     content.message = (translate && translate('errors.500.description'));
-    content.header = (translate && translate('errors.500.header'));
-    content.paragraph1 = (translate && translate('errors.500.paragraph1'));
   }
   if (!content.title) {
     content.title = (translate && translate('errors.default.title')) || errorTitle(err.code);
@@ -83,7 +79,6 @@ module.exports = options => {
   const opts = options || {};
   const logger = opts.logger;
   const debug = opts.debug;
-
   return (err, req, res, next) => {
     const translate = opts.translate || req.translate;
     const content = getContent(err, translate);
