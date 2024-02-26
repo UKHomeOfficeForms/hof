@@ -15,9 +15,7 @@
     "title": "Internal Server Error",
     "description": "Server is down",
     "header": "Sorry, there is a problem with the service",
-    "paragraph1": "Try again later.",
-    "paragraph2": "We saved your answers. They will be available for 30 days.",
-    "paragraph3": "if you need to make changes to your claim or speak to someone about your application."
+    "paragraph1": "Try again later."
   },
   "cookies-required": {
     "title": "Cookies are required to use this service",

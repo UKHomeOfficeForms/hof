@@ -57,14 +57,10 @@ const getContent = (err, translate) => {
     err.message = (translate && translate('errors.500.description'));
     err.header = (translate && translate('errors.500.header'));
     err.paragraph1 = (translate && translate('errors.500.paragraph1'));
-    err.paragraph2 = (translate && translate('errors.500.paragraph2'));
-    err.paragraph3 = (translate && translate('errors.500.paragraph3'));
     content.title = (translate && translate('errors.500.title'));
     content.message = (translate && translate('errors.500.description'));
     content.header = (translate && translate('errors.500.header'));
     content.paragraph1 = (translate && translate('errors.500.paragraph1'));
-    content.paragraph2 = (translate && translate('errors.500.paragraph2'));
-    content.paragraph3 = (translate && translate('errors.500.paragraph3'));
   }
   if (!content.title) {
     content.title = (translate && translate('errors.default.title')) || errorTitle(err.code);
