@@ -121,14 +121,12 @@ describe('errors', () => {
         const err = {
           code: 'UNKNOWN'
         };
-        
         const locals = {
           content: {message: 'errors.500.description', title: 'errors.500.title'},
           error: err,
           showStack: false,
           startLink: '/'
         };
-
         middleware(err, req, res, next);
 
         res.status.should.have.been.calledWith(500);
@@ -171,7 +169,6 @@ describe('errors', () => {
           showStack: false,
           startLink: '/'
         };
-
         middleware(err, req, res, next);
 
         res.status.should.have.been.calledWith(403);
@@ -181,13 +178,9 @@ describe('errors', () => {
 
       it('renders the `500` template with `500` status for unknown errors', () => {
         res.render.withArgs('500').yields(null, html);
-        
-       // const err = new Error('UNKNOWN');
-       
-       const err = {
-        code: 'UNKNOWN'
-      };
-
+        const err = {
+          code: 'UNKNOWN'
+        };
         const locals = {
           content: {message: 'errors.500.description', title: 'errors.500.title'},
           error: err,
@@ -237,18 +230,12 @@ describe('errors', () => {
       });
 
       it('uses a default UNKNOWN title and message when error code is not SESSION_TIMEOUT or NO_COOKIES', () => {
-        //const err = new Error('Unknown');
-        
         const err = {
           code: 'UNKNOWN'
-        }
-        
-
+        };
         const locals = {
           content: {message: 'There is a UNKNOWN_ERROR', title: 'UNKNOWN_ERROR'}
-        // content: {message: 'Server is down', title: 'Internal Server Error'}
         };
-        
         middleware(err, req, res, next);
 
         res.render.should.have.been.calledWith('500', sinon.match(locals));
