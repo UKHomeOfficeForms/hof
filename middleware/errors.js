@@ -55,8 +55,8 @@ const getContent = (err, translate) => {
     content.postTimeToWait = (translate && translate('errors.submission-rate-limit.post-time-to-wait'));
   }
   
-  if (err.code === 'INTERNAL_SERVER_ERROR' || err.code === 'UNKNOWN') {
-    err.status = err.status || 500;
+  if (err.code === 'UNKNOWN' || err.code === 'INTERNAL_SERVER_ERROR') {
+    err.status = 500;
     err.template = '500';
     err.title = (translate && translate('errors.500.title'));
     err.message = (translate && translate('errors.500.description'));
