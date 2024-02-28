@@ -9,12 +9,7 @@
   },
   "404": {
     "title": "Page not found",
-    "description": "This page does not exist",
-    "paragraph1": "If you typed the web address, check it is correct.",
-    "paragraph2": "If you pasted the web address, check you copied the entire address.",
-    "paragraph3": "If the web address is correct or you selected a link or button,",
-    "paragraph3sub": "if you need to speak to someone about your tax credits.",
-    "referencetag": "contact the Tax Credits Helpline"
+    "description": "This page does not exist"
   },
   "cookies-required": {
     "title": "Cookies are required to use this service",
