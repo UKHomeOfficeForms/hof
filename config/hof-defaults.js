@@ -22,6 +22,14 @@ const defaults = {
   env: process.env.NODE_ENV || 'development',
   gaTagId: process.env.GA_TAG || 'Test-GA-Tag',
   ga4TagId: process.env.GA_4_TAG,
+  // added to allow support for multiple HOF forms using GTM to customize how they track page views
+  gtm: {
+    tagId: process.env.GTM_TAG || false,
+    config: {},
+    composePageName: function (page, convertPage) {
+      return convertPage(page);
+    }
+  },
   gaCrossDomainTrackingTagId: process.env.GDS_CROSS_DOMAIN_GA_TAG,
   loglevel: process.env.LOG_LEVEL || 'info',
   ignoreMiddlewareLogs: ['/healthz'],

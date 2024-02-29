@@ -7,6 +7,9 @@ const redis = require('redis');
 const testTag = 'Test-GA-Tag';
 process.env.GA_TAG = testTag;
 
+const testGtmTag = 'Test-GTM-Tag';
+process.env.GTM_TAG = testGtmTag;
+
 const bootstrap = require('../../');
 
 const path = require('path');
@@ -875,6 +878,160 @@ describe('hof server', () => {
           locals['ga-id'].should.equal(testTag);
           locals['ga-page'].should.equal('applyConfirmEndSubmitEnd');
         }));
+    });
+
+    describe('with gtm-tag', () => {
+      it('adds gtm tagId and gtm pageName based on root uri', () => {
+        const gtmApp = bootstrap({
+          port: 8888,
+          fields: 'fields',
+          gtm: {
+            tagId: testGtmTag
+          },
+          routes: [
+            {
+              views: `${root}/apps/app_1/views`,
+              steps: {
+                '/feedback': {}
+              }
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/accept',
+              steps: {
+                '/': {},
+                '/confirm/person/confirmation': {}
+              }
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/apply',
+              steps: {
+                '/index-start': {},
+                '/confirm-end/submit-end': {}
+              }
+            }
+          ]
+        });
+        gtmApp.use((req, res) => {
+          locals = res.locals;
+          res.json({});
+        });
+        return request(gtmApp.server)
+          .get('/feedback')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gtmTagId.should.equal(testGtmTag);
+            locals['ga-page'].should.equal('feedback');
+          });
+      });
+
+      it('pass custom gtm config for gtm data layer', () => {
+        const gtmApp = bootstrap({
+          port: 8888,
+          fields: 'fields',
+          gtm: {
+            tagId: testGtmTag,
+            config: {
+              event: 'pageLoad',
+              applicationType: 'Web',
+              environmentType: 'dev'
+            }
+          },
+          routes: [
+            {
+              views: `${root}/apps/app_1/views`,
+              steps: {
+                '/feedback': {}
+              }
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/accept',
+              steps: {
+                '/': {},
+                '/confirm/person/confirmation': {}
+              }
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/apply',
+              steps: {
+                '/index-start': {},
+                '/confirm-end/submit-end': {}
+              }
+            }
+          ]
+        });
+        gtmApp.use((req, res) => {
+          locals = res.locals;
+          res.json({});
+        });
+        return request(gtmApp.server)
+          .get('/feedback')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gtmTagId.should.equal(testGtmTag);
+            JSON.parse(locals.gtmConfig).pageName = 'Feedback';
+            JSON.parse(locals.gtmConfig).event = 'pageLoad';
+            JSON.parse(locals.gtmConfig).applicationType = 'Web';
+            JSON.parse(locals.gtmConfig).environmentType = 'dev';
+          });
+      }
+      );
+
+      it('override composePageName function for generating custom pageName layouts', () => {
+        const gtmApp = bootstrap({
+          port: 8888,
+          fields: 'fields',
+          gtm: {
+            tagId: testGtmTag,
+            composePageName: function (page, convertPage) {
+              return 'Custom Prefix' + convertPage(page);
+            }
+          },
+          routes: [
+            {
+              views: `${root}/apps/app_1/views`,
+              steps: {
+                '/feedback': {}
+              }
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/accept',
+              steps: {
+                '/': {},
+                '/confirm/person/confirmation': {}
+              }
+            },
+            {
+              views: `${root}/apps/app_1/views`,
+              baseUrl: '/apply',
+              steps: {
+                '/index-start': {},
+                '/confirm-end/submit-end': {}
+              }
+            }
+          ]
+        });
+        gtmApp.use((req, res) => {
+          locals = res.locals;
+          res.json({});
+        });
+        return request(gtmApp.server)
+          .get('/feedback')
+          .set('Cookie', ['myCookie=1234'])
+          .expect(200)
+          .expect(() => {
+            locals.gtmTagId.should.equal(testGtmTag);
+            locals['ga-page'].should.equal('feedback');
+            JSON.parse(locals.gtmConfig).pageName = 'Custom Prefix Feedback';
+          });
+      }
+      );
     });
 
     describe('with nonce values', () => {

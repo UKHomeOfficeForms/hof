@@ -4,6 +4,9 @@
 const testTag = 'Test-GA-Tag';
 process.env.GA_TAG = testTag;
 
+const testGtmTag = 'Test-GTM-Tag';
+process.env.GTM_TAG = testGtmTag;
+
 const bootstrap = require('../../');
 
 const path = require('path');
