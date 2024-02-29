@@ -1,3 +1,16 @@
+## 2024-02-29, Version 20.4.0 (Stable), @sulthan-ahmed
+* Update version of govuk-frontend to 3.15
+- this adds the new crown for the King
+- this supports a lot of changes from the govuk design system
+* Adds support for Google tag manager
+* Fixes accessibility issues
+* Sandbox area for testing hof changes
+* Updates patch and minor versions including
+- libphonenumber to 1.9.44
+- nodemailer to 6.9.9
+- ip to 1.1.9
+- es5-ext to 0.10.63
+
 ## 2020-06-02, Version 16.0.0 (Stable), @andymoody
 * Update version of helmet to 3.22.0
 * Update version of i18n-future to 2.0.0
