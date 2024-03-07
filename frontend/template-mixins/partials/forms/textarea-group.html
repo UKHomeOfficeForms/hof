@@ -4,7 +4,7 @@
     <div id="{{id}}-group" class="govuk-form-group {{#formGroupClassName}}{{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
         {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}
             <label for="{{id}}"
-                class="{{labelClassName}}{{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
+                class="{{labelClassName}} {{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
                 {{{label}}}
                 {{#error}}
                 <p id="{{id}}-error" class="govuk-error-message">
