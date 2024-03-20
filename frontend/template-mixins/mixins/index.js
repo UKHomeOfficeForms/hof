@@ -20,13 +20,14 @@ module.exports = (options, deprecated) => {
   options = options || {};
   options.fields = options.fields || {};
 
-  commonViews = [
-    path.resolve(path.dirname(require.resolve('hmpo-components')), 'components'),
-    path.resolve(path.dirname(require.resolve('govuk-frontend')), '..'),
-  ];
+  // commonViews = [
+  //   path.resolve(path.dirname(require.resolve('hmpo-components')), 'components'),
+  //   path.resolve(path.dirname(require.resolve('govuk-frontend')), '..'),
+  // ];
+  // options.viewsDirectory = commonViews || options.viewsDirectory || path.resolve(__dirname, '../');
 
-  options.viewsDirectory = commonViews || options.viewsDirectory || path.resolve(__dirname, '../');
-  
+  options.viewsDirectory = options.viewsDirectory || path.resolve(__dirname, '../');
+
   options.viewEngine = options.viewEngine || 'html';
   options.sharedTranslationsKey = options.sharedTranslationsKey || '';
 
