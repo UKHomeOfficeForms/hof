@@ -3,6 +3,7 @@
 
 const url = require('url');
 const Model = require('../../model');
+const axios = require('axios');
 
 describe('Model', () => {
   let model;
@@ -28,21 +29,21 @@ describe('Model', () => {
     error = new Error('An Error');
     error.status = 500;
     success = {
-      statusCode: 200,
-      body: '{ "message": "success" }'
+      status: 200,
+      data: '{ "message": "success" }'
     };
     empty = {
-      statusCode: 200,
-      body: ''
+      status: 200,
+      data: ''
     };
     fail = {
-      statusCode: 500,
-      body: '{ "message": "error" }',
+      status: 500,
+      data: '{ "message": "error" }',
       headers: { error: 'fail' }
     };
     invalid = {
-      statusCode: 200,
-      body: 'invalid',
+      status: 200,
+      data: 'invalid',
       headers: { error: 'invalid' }
     };
     sinon.stub(model, '_request').returns(apiRequest);
@@ -98,7 +99,7 @@ describe('Model', () => {
     });
 
     it('sends an http POST request to requested url with data in settings', done => {
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       settings.data = bodyData;
 
       model.request(settings, sandbox(() => {
@@ -106,38 +107,38 @@ describe('Model', () => {
 
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        options.body.should.equal('{"name":"Test name"}');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
       }, done));
     });
 
     it('sends an http POST request to requested url with data passed as argument', done => {
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
 
       model.request(settings, bodyData, sandbox(() => {
         model._request.should.have.been.calledOnce;
 
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        options.body.should.equal('{"name":"Test name"}');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
       }, done));
     });
 
     it('sends an http POST request to requested url with data passed as argument and no callback given', done => {
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
 
       model.request(settings, bodyData, sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        options.body.should.equal('{"name":"Test name"}');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
       }, done));
     });
 
     it('sends an http GET request to requested url and no callback given', done => {
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       settings = url.parse('http://example.com:3002/foo/bar');
       settings.method = 'GET';
 
@@ -145,39 +146,36 @@ describe('Model', () => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('GET');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        expect(options.body).to.not.be.ok;
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        expect(options.data).to.not.be.ok;
       }, done));
     });
 
     it('can parse failiure when no callback given', done => {
-      model._request.yieldsAsync(fail);
-
+      model._request.resolves(Promise.resolve(fail));
       model.request(settings, bodyData, sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        options.body.should.equal('{"name":"Test name"}');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
       }, done));
     });
 
     it('can parse failiure when no data or callback given', done => {
-      model._request.yieldsAsync(fail);
-
+      model._request.resolves(Promise.resolve(fail));
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        expect(options.body).to.not.be.ok;
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        expect(options.data).to.not.be.ok;
       }, done));
     });
 
     it('sets the timeout from model options', done => {
       model.options.timeout = 100;
-      model._request.yieldsAsync(success);
-
+      model._request.resolves(Promise.resolve(success));
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
@@ -187,8 +185,7 @@ describe('Model', () => {
 
     it('sets the timeout from request options', done => {
       settings.timeout = 100;
-      model._request.yieldsAsync(success);
-
+      model._request.resolves(Promise.resolve(success));
       model.request(settings, sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
@@ -208,45 +205,42 @@ describe('Model', () => {
     });
 
     it('sends an http POST request to configured url containing model attributes as body', done => {
-      model._request.yieldsAsync(success);
-
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        options.body.should.equal('{"name":"Test name"}');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
       }, done));
     });
 
     it('sends an https POST request if configured url is `https`', done => {
       model.url = () => 'https://secure-example.com/foo/bar';
-      model._request.yieldsAsync(success);
-
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('POST');
-        options.uri.should.equal('https://secure-example.com/foo/bar');
-        options.body.should.equal('{"name":"Test name"}');
+        options.url.should.equal('https://secure-example.com/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
       }, done));
     });
 
     it('sends an http PUT request if method option is "PUT"', done => {
-      model._request.yieldsAsync(success);
-
+      sinon.stub(axios, 'post').resolves(Promise.resolve(success));
       model.save({ method: 'PUT' }, sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('PUT');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
-        options.body.should.equal('{"name":"Test name"}');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
       }, done));
     });
 
     it('adds content type and length headers to request', done => {
       model.set('name', 'Test name - ハセマペヨ');
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
 
       model.save(sandbox(() => {
         model._request.should.have.been.calledOnce;
@@ -257,21 +251,21 @@ describe('Model', () => {
     });
 
     it('calls callback with an error if API response returns an error code', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       model.save(sandbox(e => {
         e.should.eql({ status: 500, message: 'error', headers: { error: 'fail' } });
       }, done));
     });
 
     it('calls callback with an error if request throws error event', done => {
-      model._request.yieldsAsync(error);
+      model._request.resolves(Promise.reject(error));
       model.save(sandbox(e => {
         e.should.eql(error);
       }, done));
     });
 
     it('calls callback with no error and json data if response has success code', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox((err, data) => {
         expect(err).to.be.null;
         data.should.eql({ message: 'success' });
@@ -280,7 +274,7 @@ describe('Model', () => {
 
     it('passes returned data through parse method on success', done => {
       sinon.stub(model, 'parse').returns({ parsed: 'message' });
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox((err, data) => {
         expect(err).to.be.null;
         model.parse.should.have.been.calledOnce;
@@ -290,7 +284,7 @@ describe('Model', () => {
     });
 
     it('does not parse response on error', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
       model.save(sandbox(err => {
         model.parse.should.not.have.been.called;
@@ -299,7 +293,7 @@ describe('Model', () => {
     });
 
     it('calls parseError on error to extract error status from response', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parseError').returns({ error: 'parsed' });
       model.save(sandbox(err => {
         model.parseError.should.have.been.calledOnce;
@@ -309,7 +303,7 @@ describe('Model', () => {
     });
 
     it('calls callback with error if response is not valid json', done => {
-      model._request.yieldsAsync(null, invalid);
+      model._request.resolves(Promise.resolve(invalid));
       model.save(sandbox((err, data) => {
         err.should.be.an.instanceOf(Error);
         err.status.should.equal(200);
@@ -320,14 +314,14 @@ describe('Model', () => {
     });
 
     it('can handle optional options parameter', done => {
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.url = sinon.stub().returns('http://example.com/');
       model.save({ url: 'foo' }, () => done());
     });
 
     it('passes options to url method if provided', done => {
       model.url = sinon.stub().returns('http://example.com/');
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.save({ url: 'foo' }, sandbox(() => {
         model.url.should.have.been.calledOnce;
         model.url.should.have.been.calledWithExactly({ url: 'foo' });
@@ -342,10 +336,10 @@ describe('Model', () => {
         pathname: '/'
       };
       model.url = sinon.stub().returns(urlStub);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox(() => {
         model._request.should.have.been.called;
-        model._request.args[0][0].uri.should.equal('http://proxy-example.com:1234/');
+        model._request.args[0][0].url.should.equal('http://proxy-example.com:1234/');
       }, done));
     });
 
@@ -354,7 +348,7 @@ describe('Model', () => {
       model.parse = () => {
         throw err;
       };
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox(e => {
         e.should.equal(err);
       }, done));
@@ -368,7 +362,7 @@ describe('Model', () => {
         }
       };
       model.url = sinon.stub().returns(endPoint);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.save(options, sandbox(() => {
         model._request.args[0][0].headers['Content-Type'].should.equal('application/json');
         model._request.args[0][0].headers['User-Agent'].should.equal('Example');
@@ -381,7 +375,7 @@ describe('Model', () => {
         Host: url.parse('http://example.com/').host
       };
       model.url = sinon.stub().returns(endPoint);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox(() => {
         model._request.args[0][0].headers['Content-Type'].should.equal('application/json');
         model._request.args[0][0].headers.Host.should.equal('example.com');
@@ -395,32 +389,30 @@ describe('Model', () => {
           'User-Agent': 'Example'
         }
       };
-      const instance = new Model({}, options);
-      instance.url = sinon.stub().returns(endPoint);
-      instance._request = sinon.stub().yieldsAsync(success);
-      instance.save(sandbox(() => {
-        instance._request.args[0][0].headers['Content-Type'].should.equal('application/json');
-        instance._request.args[0][0].headers['User-Agent'].should.equal('Example');
+      model.url = sinon.stub().returns(endPoint);
+      model._request.resolves(Promise.resolve(success));
+      model.save(options, sandbox(() => {
+        model._request.args[0][0].headers['Content-Type'].should.equal('application/json');
+        model._request.args[0][0].headers['User-Agent'].should.equal('Example');
       }, done));
     });
 
     it('includes auth setting if defined', done => {
-      model.auth = sinon.stub().returns('user:pass');
-      model._request.yieldsAsync(success);
-
-      model.save(sandbox(() => {
-        model._request.args[0][0].auth.should.deep.equal({
-          user: 'user',
-          pass: 'pass',
-          sendImmediately: true
-        });
+      const options = {
+        headers: {
+          Authorization: 'Bearer abc123'
+        }
+      };
+      model._request.resolves(Promise.resolve(success));
+      model.save(options, sandbox(() => {
+        model._request.args[0][0].headers.Authorization.should.deep.equal('Bearer abc123');
       }, done));
     });
 
     it('emits a "sync" event', done => {
       const sync = sinon.stub();
       model.on('sync', sync);
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.save(sandbox(() => {
         sync.should.have.been.calledOnce;
         sync.should.have.been.calledWith(sinon.match({ method: 'POST' }));
@@ -428,7 +420,7 @@ describe('Model', () => {
     });
 
     it('emits a "fail" event on error', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       model.on('fail', sandbox((err, data, settings, statusCode, responseTime) => {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
         data.should.eql({ message: 'error' });
@@ -440,7 +432,7 @@ describe('Model', () => {
     });
 
     it('emits a "success" event on success', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.on('success', (data, settings, statusCode, responseTime) => {
         data.should.eql({ message: 'success' });
         settings.method.should.equal('POST');
@@ -452,7 +444,7 @@ describe('Model', () => {
     });
 
     it('allows an empty response body', done => {
-      model._request.yieldsAsync(null, empty);
+      model._request.resolves(Promise.resolve(empty));
       model.save(sandbox((err, data) => {
         expect(err).to.be.null;
         data.should.eql({});
@@ -460,7 +452,7 @@ describe('Model', () => {
     });
 
     it('passes statusCode, response body and callback to `parseResponse`', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.save(() => {
         model.parseResponse.should.have.been.calledWith(200, { message: 'success' }, sinon.match.func);
         done();
@@ -468,14 +460,14 @@ describe('Model', () => {
     });
 
     it('ignores callback if one is not given on success', () => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       expect(() => {
         model.save();
       }).to.not.throw();
     });
 
     it('ignores callback if one is not given if API response returns an error code', () => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       expect(() => {
         model.save();
       }).to.not.throw();
@@ -486,14 +478,14 @@ describe('Model', () => {
     });
 
     it('resolves with response data', () => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       return model.save().then(data => {
         data.should.eql({ message: 'success' });
       });
     });
 
     it('rejects with error on failure', () => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       return model.save().catch(err => {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
       });
@@ -509,32 +501,32 @@ describe('Model', () => {
     });
 
     it('sends an http GET request to API server', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
 
       model.fetch(sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('GET');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
       }, done));
     });
 
     it('calls callback with an error if API response returns an error code', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       model.fetch(sandbox(e => {
         e.should.eql({ status: 500, message: 'error', headers: { error: 'fail' } });
       }, done));
     });
 
     it('calls callback with an error if model._request throws error event', done => {
-      model._request.yieldsAsync(error, fail);
+      model._request.resolves(Promise.reject(error));
       model.fetch(sandbox(e => {
         e.should.eql(error);
       }, done));
     });
 
     it('calls callback with no error and json data if response has success code', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.fetch(sandbox((err, data) => {
         expect(err).to.be.null;
         data.should.eql({ message: 'success' });
@@ -543,7 +535,7 @@ describe('Model', () => {
 
     it('passes returned data through parse method on success', done => {
       sinon.stub(model, 'parse').returns({ parsed: 'message' });
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.fetch(sandbox((err, data) => {
         expect(err).to.be.null;
         model.parse.should.have.been.calledOnce;
@@ -553,7 +545,7 @@ describe('Model', () => {
     });
 
     it('does not parse response on error', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
       model.fetch(sandbox(err => {
         model.parse.should.not.have.been.called;
@@ -562,7 +554,7 @@ describe('Model', () => {
     });
 
     it('calls callback with error if response is not valid json', done => {
-      model._request.yieldsAsync(null, invalid);
+      model._request.resolves(Promise.resolve(invalid));
       model.fetch(sandbox((err, data) => {
         err.should.be.an.instanceOf(Error);
         err.status.should.equal(200);
@@ -587,10 +579,10 @@ describe('Model', () => {
         pathname: '/'
       };
       model.url = sinon.stub().returns(urlStub);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.fetch(sandbox(() => {
         model._request.should.have.been.called;
-        model._request.args[0][0].uri.should.equal('http://proxy-example.com:1234/');
+        model._request.args[0][0].url.should.equal('http://proxy-example.com:1234/');
       }, done));
     });
 
@@ -602,7 +594,7 @@ describe('Model', () => {
         }
       };
       model.url = sinon.stub().returns(endPoint);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.fetch(options, sandbox(() => {
         model._request.args[0][0].headers['User-Agent'].should.equal('Example');
       }, done));
@@ -614,7 +606,7 @@ describe('Model', () => {
         Host: url.parse('http://example.com/').host
       };
       model.url = sinon.stub().returns(endPoint);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.fetch(sandbox(() => {
         model._request.args[0][0].headers.Host.should.equal('example.com');
       }, done));
@@ -627,11 +619,11 @@ describe('Model', () => {
           'User-Agent': 'Example'
         }
       };
-      const instance = new Model({}, options);
-      instance.url = sinon.stub().returns(endPoint);
-      instance._request = sinon.stub().yieldsAsync(success);
-      instance.fetch(sandbox(() => {
-        instance._request.args[0][0].headers['User-Agent'].should.equal('Example');
+
+      model.url = sinon.stub().returns(endPoint);
+      model._request.resolves(Promise.resolve(success));
+      model.fetch(options, sandbox(() => {
+        model._request.args[0][0].headers['User-Agent'].should.equal('Example');
       }, done));
     });
 
@@ -640,21 +632,21 @@ describe('Model', () => {
       model.parse = () => {
         throw err;
       };
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.fetch(sandbox(e => {
         e.should.equal(err);
       }, done));
     });
 
     it('includes auth setting if defined', done => {
-      model.auth = sinon.stub().returns('user:pass');
-      model._request.yieldsAsync(success);
-      model.fetch(sandbox(() => {
-        model._request.args[0][0].auth.should.deep.equal({
-          user: 'user',
-          pass: 'pass',
-          sendImmediately: true
-        });
+      const options = {
+        headers: {
+          Authorization: 'Bearer abc123'
+        }
+      };
+      model._request.resolves(Promise.resolve(success));
+      model.fetch(options, sandbox(() => {
+        model._request.args[0][0].headers.Authorization.should.deep.equal('Bearer abc123');
       }, done));
     });
 
@@ -667,7 +659,7 @@ describe('Model', () => {
     });
 
     it('emits a "fail" event on failure', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       model.on('fail', (err, data, settings, statusCode, responseTime) => {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
         data.should.eql({ message: 'error' });
@@ -680,7 +672,7 @@ describe('Model', () => {
     });
 
     it('emits a "fail" event on error', done => {
-      model._request.yieldsAsync(error);
+      model._request.resolves(Promise.reject(error));
       model.on('fail', (err, data, settings, statusCode, responseTime) => {
         err.should.eql(error);
         expect(data).to.be.null;
@@ -693,7 +685,7 @@ describe('Model', () => {
     });
 
     it('emits a "success" event on success', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.on('success', (data, settings, statusCode, responseTime) => {
         data.should.eql({ message: 'success' });
         settings.method.should.equal('GET');
@@ -705,7 +697,7 @@ describe('Model', () => {
     });
 
     it('allows an empty response body', done => {
-      model._request.yieldsAsync(null, empty);
+      model._request.resolves(Promise.resolve(empty));
       model.fetch(sandbox((err, data) => {
         expect(err).to.be.null;
         data.should.eql({});
@@ -713,7 +705,7 @@ describe('Model', () => {
     });
 
     it('passes statusCode, response body and callback to `parseResponse`', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.fetch(() => {
         model.parseResponse.should.have.been.calledWith(200, { message: 'success' }, sinon.match.func);
         done();
@@ -721,14 +713,14 @@ describe('Model', () => {
     });
 
     it('ignores callback if one is not given on success', () => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       expect(() => {
         model.fetch();
       }).to.not.throw();
     });
 
     it('ignores callback if one not given if API response returns an error code', () => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       expect(() => {
         model.fetch();
       }).to.not.throw();
@@ -739,14 +731,14 @@ describe('Model', () => {
     });
 
     it('resolves with response data', () => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       return model.fetch().then(data => {
         data.should.eql({ message: 'success' });
       });
     });
 
     it('rejects with error on failure', () => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       return model.fetch().catch(err => {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
       });
@@ -762,32 +754,31 @@ describe('Model', () => {
     });
 
     it('sends an http DELETE request to API server', done => {
-      model._request.yieldsAsync(null, success);
-
+      model._request.resolves(Promise.resolve(success));
       model.delete(sandbox(() => {
         model._request.should.have.been.calledOnce;
         const options = model._request.args[0][0];
         options.method.should.equal('DELETE');
-        options.uri.should.equal('http://example.com:3002/foo/bar');
+        options.url.should.equal('http://example.com:3002/foo/bar');
       }, done));
     });
 
     it('calls callback with an error if API response returns an error code', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       model.delete(sandbox(e => {
         e.should.eql({ status: 500, message: 'error', headers: { error: 'fail' } });
       }, done));
     });
 
     it('calls callback with an error if model._request throws error event', done => {
-      model._request.yieldsAsync(error, fail);
+      model._request.resolves(Promise.reject(error));
       model.delete(sandbox(e => {
         e.should.eql(error);
       }, done));
     });
 
     it('calls callback with no error and json data if response has success code', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.delete(sandbox((err, data) => {
         expect(err).to.be.null;
         data.should.eql({ message: 'success' });
@@ -796,7 +787,7 @@ describe('Model', () => {
 
     it('passes returned data through parse method on success', done => {
       sinon.stub(model, 'parse').returns({ parsed: 'message' });
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.delete(sandbox((err, data) => {
         expect(err).to.be.null;
         model.parse.should.have.been.calledOnce;
@@ -806,7 +797,7 @@ describe('Model', () => {
     });
 
     it('does not parse response on error', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
       model.delete(sandbox(err => {
         model.parse.should.not.have.been.called;
@@ -815,7 +806,7 @@ describe('Model', () => {
     });
 
     it('calls callback with error if response is not valid json', done => {
-      model._request.yieldsAsync(null, invalid);
+      model._request.resolves(Promise.resolve(invalid));
       model.delete(sandbox((err, data) => {
         err.should.be.an.instanceOf(Error);
         err.status.should.equal(200);
@@ -840,10 +831,10 @@ describe('Model', () => {
         pathname: '/'
       };
       model.url = sinon.stub().returns(urlStub);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.delete(sandbox(() => {
         model._request.should.have.been.called;
-        model._request.args[0][0].uri.should.equal('http://proxy-example.com:1234/');
+        model._request.args[0][0].url.should.equal('http://proxy-example.com:1234/');
       }, done));
     });
 
@@ -855,7 +846,7 @@ describe('Model', () => {
         }
       };
       model.url = sinon.stub().returns(endPoint);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
       model.delete(options, sandbox(() => {
         model._request.args[0][0].headers['User-Agent'].should.equal('Example');
       }, done));
@@ -867,7 +858,8 @@ describe('Model', () => {
         Host: url.parse('http://example.com/').host
       };
       model.url = sinon.stub().returns(endPoint);
-      model._request.yieldsAsync(success);
+      model._request.resolves(Promise.resolve(success));
+
       model.delete(sandbox(() => {
         model._request.args[0][0].headers.Host.should.equal('example.com');
       }, done));
@@ -880,11 +872,10 @@ describe('Model', () => {
           'User-Agent': 'Example'
         }
       };
-      const instance = new Model({}, options);
-      instance.url = sinon.stub().returns(endPoint);
-      instance._request = sinon.stub().yieldsAsync(success);
-      instance.delete(sandbox(() => {
-        instance._request.args[0][0].headers['User-Agent'].should.equal('Example');
+      model.url = sinon.stub().returns(endPoint);
+      model._request.resolves(Promise.resolve(success));
+      model.delete(options, sandbox(() => {
+        model._request.args[0][0].headers['User-Agent'].should.equal('Example');
       }, done));
     });
 
@@ -893,7 +884,7 @@ describe('Model', () => {
       model.parse = () => {
         throw err;
       };
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.delete(sandbox(e => {
         e.should.equal(err);
       }, done));
@@ -908,7 +899,7 @@ describe('Model', () => {
     });
 
     it('emits a "fail" event on error', done => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       model.on('fail', (err, data, settings, statusCode, responseTime) => {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
         data.should.eql({ message: 'error' });
@@ -921,7 +912,7 @@ describe('Model', () => {
     });
 
     it('emits a "success" event on success', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.on('success', (data, settings, statusCode, responseTime) => {
         data.should.eql({ message: 'success' });
         settings.method.should.equal('DELETE');
@@ -933,7 +924,7 @@ describe('Model', () => {
     });
 
     it('allows an empty response body', done => {
-      model._request.yieldsAsync(null, empty);
+      model._request.resolves(Promise.resolve(empty));
       model.delete(sandbox((err, data) => {
         expect(err).to.be.null;
         data.should.eql({});
@@ -941,7 +932,7 @@ describe('Model', () => {
     });
 
     it('passes statusCode, response body and callback to `parseResponse`', done => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       model.delete(() => {
         model.parseResponse.should.have.been.calledWith(200, { message: 'success' }, sinon.match.func);
         done();
@@ -949,14 +940,14 @@ describe('Model', () => {
     });
 
     it('ignores callback if one is not given on success', () => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       expect(() => {
         model.delete();
       }).to.not.throw();
     });
 
     it('ignores callback if one is not given if API response returns an error code', () => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       expect(() => {
         model.delete();
       }).to.not.throw();
@@ -967,14 +958,14 @@ describe('Model', () => {
     });
 
     it('resolves with response data', () => {
-      model._request.yieldsAsync(null, success);
+      model._request.resolves(Promise.resolve(success));
       return model.delete().then(data => {
         data.should.eql({ message: 'success' });
       });
     });
 
     it('rejects with error on failure', () => {
-      model._request.yieldsAsync(null, fail);
+      model._request.resolves(Promise.resolve(fail));
       return model.delete().catch(err => {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
       });
@@ -988,11 +979,11 @@ describe('Model', () => {
     });
 
     it('sends response bodies with "success" status codes to parse', done => {
-      model.parseResponse(200, { parsed: 'false' }, (err, data, statusCode) => {
+      model.parseResponse(200, { parsed: 'false' }, (err, data, status) => {
         expect(err).to.be.null;
         model.parse.should.have.been.calledWith({ parsed: 'false' });
         data.should.eql({ parsed: 'true' });
-        statusCode.should.equal(200);
+        status.should.equal(200);
         done();
       });
     });
