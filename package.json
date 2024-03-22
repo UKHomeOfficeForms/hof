@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "20.4.3",
+  "version": "20.5.0-beta-deindex-test",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
