@@ -14,6 +14,7 @@ const router = require('./lib/router');
 const health = require('./lib/health');
 const serveStatic = require('./lib/serve-static');
 const gaTagSetup = require('./lib/ga-tag');
+const deIndexer = require('./lib/deindex');
 const sessionStore = require('./lib/sessions');
 const settings = require('./lib/settings');
 const defaults = require('./config/hof-defaults');
@@ -198,6 +199,7 @@ function bootstrap(options) {
   serveStatic(app, config);
   settings(app, config);
   gaTagSetup(app, config);
+  deIndexer(app, config);
 
   const sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));

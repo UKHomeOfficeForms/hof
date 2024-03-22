@@ -30,6 +30,7 @@ const defaults = {
       return convertPage(page);
     }
   },
+  deIndexForm: process.env.DEINDEX_FORM || 'false',
   gaCrossDomainTrackingTagId: process.env.GDS_CROSS_DOMAIN_GA_TAG,
   loglevel: process.env.LOG_LEVEL || 'info',
   ignoreMiddlewareLogs: ['/healthz'],
