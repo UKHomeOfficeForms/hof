@@ -98,7 +98,7 @@ describe('errors', () => {
         res.render.should.have.been.calledWith('error', sinon.match(locals));
       });
 
-      it('renders the `error` template with `403` status', () => {
+      it('renders the `error` template with `432` status', () => {
         const err = {
           code: 'NO_COOKIES'
         };
@@ -112,8 +112,27 @@ describe('errors', () => {
 
         middleware(err, req, res, next);
 
-        res.status.should.have.been.calledWith(403);
+        res.status.should.have.been.calledWith(432);
         res.render.should.have.been.calledWith('cookie-error', sinon.match(locals));
+        res.render.should.have.been.calledWith('error', sinon.match(locals));
+      });
+
+      it('renders the `error` template with `403` status', () => {
+        const err = {
+          code: 'FORBIDDEN'
+        };
+
+        const locals = {
+          content: {message: 'errors.403.description', title: 'errors.403.title'},
+          error: err,
+          showStack: false,
+          startLink: '/'
+        };
+
+        middleware(err, req, res, next);
+
+        res.status.should.have.been.calledWith(403);
+        res.render.should.have.been.calledWith('403', sinon.match(locals));
         res.render.should.have.been.calledWith('error', sinon.match(locals));
       });
 
@@ -158,7 +177,7 @@ describe('errors', () => {
         res.send.should.have.been.calledWith(html);
       });
 
-      it('renders the `cookie-error` template with `403` status for cookie errors', () => {
+      it('renders the `cookie-error` template with `432` status for cookie errors', () => {
         res.render.withArgs('cookie-error').yields(null, html);
 
         const err = {
@@ -174,8 +193,26 @@ describe('errors', () => {
 
         middleware(err, req, res, next);
 
-        res.status.should.have.been.calledWith(403);
+        res.status.should.have.been.calledWith(432);
         res.render.should.have.been.calledWith('cookie-error', sinon.match(locals));
+        res.send.should.have.been.calledWith(html);
+      });
+      it('renders the `403` template with `403` status for forbidden', () => {
+        res.render.withArgs('403').yields(null, html);
+
+        const err = {
+          code: 'FORBIDDEN'
+        };
+
+        const locals = {
+          content: {message: 'errors.403.description', title: 'errors.403.title'},
+          error: err,
+          showStack: false,
+          startLink: '/'
+        };
+        middleware(err, req, res, next);
+        res.status.should.have.been.calledWith(403);
+        res.render.should.have.been.calledWith('403', sinon.match(locals));
         res.send.should.have.been.calledWith(html);
       });
 
