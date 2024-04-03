@@ -79,7 +79,7 @@
     "nodemailer-ses-transport": "^1.5.1",
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemailer-stub-transport": "^1.1.0",
-    "notifications-node-client": "^6.0.0",
+    "notifications-node-client": "8.0.0",
     "redis": "^3.1.2",
     "reqres": "^3.0.1",
     "request": "^2.79.0",
