@@ -6,6 +6,11 @@
             {{{label}}}
             {{#error}}<span class="visuallyhidden">{{error.message}}</span>{{/error}}
         </label>
+        {{#hint}}
+        <div id="{{key}}-hint" class="govuk-hint govuk-checkboxes__hint">
+          {{hint}}
+        </div>
+        {{/hint}}
     </div>
     {{#renderChild}}{{/renderChild}}
 </div>
