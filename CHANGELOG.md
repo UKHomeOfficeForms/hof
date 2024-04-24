@@ -1,3 +1,6 @@
+## 2024-04-24, Version 20.5.0 (Stable), @mislam987
+* Add hint property to checkboxes to align with govuk design guidelines
+
 ## 2024-02-29, Version 20.4.0 (Stable), @sulthan-ahmed
 * Update version of govuk-frontend to 3.15
 - this adds the new crown for the King
