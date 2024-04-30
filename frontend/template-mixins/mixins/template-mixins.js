@@ -319,6 +319,7 @@ module.exports = function (options) {
         error: this.errors && this.errors[key],
         invalid: this.errors && this.errors[key] && opts.required,
         label: t(fieldLabel || 'fields.' + key + '.label'),
+        hint: conditionalTranslate(getTranslationKey(field, key, 'hint')),
         selected: selected,
         className: classNames(field) || 'govuk-label govuk-checkboxes__label',
         child: field.child,
