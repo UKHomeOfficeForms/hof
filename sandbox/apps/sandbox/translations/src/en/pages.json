@@ -19,6 +19,11 @@
   "phone-number": {
     "header": "Enter your phone number"
   },
+  "save-and-exit": {
+    "header": "Your information has been saved",
+    "paragraph1": "You can log back into this service to manage your cases using the following email address: ",
+    "paragraph2": "You can return to your application at any time via the"
+  },
   "confirm": {
     "header": "Check your answers before submitting your application.",
     "sections": {
@@ -50,7 +55,7 @@
   },
   "confirmation": {
     "title": "Application sent",
-    "alert": "Application sent", 
+    "alert": "Application sent",
     "subheader": "What happens next",
     "content": "We’ll contact you with the decision of your application or if we need more information from you."
   }

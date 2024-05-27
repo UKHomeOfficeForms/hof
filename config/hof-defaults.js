@@ -46,7 +46,9 @@ const defaults = {
   apis: {
     pdfConverter: process.env.PDF_CONVERTER_URL
   },
-  serveStatic: process.env.SERVE_STATIC_FILES !== 'false'
+  serveStatic: process.env.SERVE_STATIC_FILES !== 'false',
+  sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300,
+  finalSessionTimeOutWarning: process.env.FINAL_SESSION_TIMEOUT_WARNING
 };
 
 module.exports = Object.assign({}, defaults, rateLimits);

@@ -1,0 +1,32 @@
+<dialog id="js-modal-dialog" data-session-timeout="{{sessionTimeOut}}" data-session-timeout-warning="{{sessionTimeOutWarning}}"
+  {{#finalSessionTimeOutWarning}}data-session-timeout-final-warning="{{finalSessionTimeOutWarning}}"{{/finalSessionTimeOutWarning}} data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
+  aria-live="polite" aria-labelledby="dialog-title" aria-describedby="at-timer">
+  <div class="modal-dialog__inner">
+    {{^showSaveAndExit}} 
+    <h2 id="dialog-title" class="govuk-heading-m">
+      Your page will time out soon
+    </h2>
+    <div class="modal-dialog__inner__text">
+      <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
+      <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
+      <p>If that happens, your progress will not be saved.</p>
+    </div>
+    <div class="modal-dialog__inner__block">
+      <button class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button">Stay on this page</button>
+    </div>
+    {{/showSaveAndExit}}
+    {{#showSaveAndExit}}
+    <h2 id="dialog-title" class="govuk-heading-m">
+      You will be signed out soon
+    </h2>
+    <div class="modal-dialog__inner__text">
+      <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
+      <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
+    </div>
+    <div class="modal-dialog__inner__block">
+      <button class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button">Stay signed in</button>
+      <a href="/save-and-exit" class="govuk-link dialog-sign-out-link" role="button">Sign out</a>
+    </div>
+    {{/showSaveAndExit}}
+  </div>
+</dialog>

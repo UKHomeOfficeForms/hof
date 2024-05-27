@@ -16,6 +16,10 @@
     {{<partials-form}}
       {{$form}}
         {{$page-content}}{{/page-content}}
+        {{> partials-session-timeout-popup}}
+        <noscript>
+          {{> partials-session-timeout-popup}}
+        </noscript>
       {{/form}}
     {{/partials-form}}
   {{/content}}

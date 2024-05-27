@@ -7,13 +7,14 @@ var progressiveReveal = toolkit.progressiveReveal;
 var formFocus = toolkit.formFocus;
 var characterCount = toolkit.characterCount;
 var validation = toolkit.validation;
-
 var GOVUK = require('govuk-frontend');
 GOVUK.initAll();
 window.GOVUK = GOVUK;
 var skipToMain = require('./skip-to-main');
 var cookie = require('./govuk-cookies');
 var cookieSettings = require('./cookieSettings');
+var sessionDialog = require('./session-dialog');
+GOVUK.sessionDialog.init();
 
 toolkit.detailsSummary();
 

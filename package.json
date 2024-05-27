@@ -48,6 +48,7 @@
     "csrf": "^3.1.0",
     "debug": "^4.3.1",
     "deprecate": "^1.0.0",
+    "dialog-polyfill": "^0.5.6",
     "dotenv": "^4.0.0",
     "duplexify": "^3.5.0",
     "express": "^4.17.1",
