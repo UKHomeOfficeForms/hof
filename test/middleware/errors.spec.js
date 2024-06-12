@@ -117,22 +117,20 @@ describe('errors', () => {
         res.render.should.have.been.calledWith('error', sinon.match(locals));
       });
 
-      it('renders the `error` template with `500` status', () => {
+      it('renders the `500` template with `500` status', () => {
         const err = {
           code: 'UNKNOWN'
         };
-
         const locals = {
-          content: {message: 'errors.default.message', title: 'errors.default.title'},
+          content: {message: 'errors.500.description', title: 'errors.500.title'},
           error: err,
           showStack: false,
           startLink: '/'
         };
-
         middleware(err, req, res, next);
 
         res.status.should.have.been.calledWith(500);
-        res.render.should.have.been.calledWith('error', sinon.match(locals));
+        res.render.should.have.been.calledWith('500', sinon.match(locals));
       });
     });
 
@@ -171,7 +169,6 @@ describe('errors', () => {
           showStack: false,
           startLink: '/'
         };
-
         middleware(err, req, res, next);
 
         res.status.should.have.been.calledWith(403);
@@ -179,13 +176,13 @@ describe('errors', () => {
         res.send.should.have.been.calledWith(html);
       });
 
-      it('renders the `error` template with `500` status for unknown errors', () => {
-        res.render.withArgs('error').yields(null, html);
-
-        const err = new Error('unknown');
-
+      it('renders the `500` template with `500` status for unknown errors', () => {
+        res.render.withArgs('500').yields(null, html);
+        const err = {
+          code: 'UNKNOWN'
+        };
         const locals = {
-          content: {message: 'errors.default.message', title: 'errors.default.title'},
+          content: {message: 'errors.500.description', title: 'errors.500.title'},
           error: err,
           showStack: false,
           startLink: '/'
@@ -194,7 +191,7 @@ describe('errors', () => {
         middleware(err, req, res, next);
 
         res.status.should.have.been.calledWith(500);
-        res.render.should.have.been.calledWith('error', sinon.match(locals));
+        res.render.should.have.been.calledWith('500', sinon.match(locals));
         res.send.should.have.been.calledWith(html);
       });
     });
@@ -233,15 +230,15 @@ describe('errors', () => {
       });
 
       it('uses a default UNKNOWN title and message when error code is not SESSION_TIMEOUT or NO_COOKIES', () => {
-        const err = new Error('unknown');
-
+        const err = {
+          code: 'UNKNOWN'
+        };
         const locals = {
           content: {message: 'There is a UNKNOWN_ERROR', title: 'UNKNOWN_ERROR'}
         };
-
         middleware(err, req, res, next);
 
-        res.render.should.have.been.calledWith('error', sinon.match(locals));
+        res.render.should.have.been.calledWith('500', sinon.match(locals));
       });
     });
   });

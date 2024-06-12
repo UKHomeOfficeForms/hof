@@ -239,7 +239,6 @@ module.exports = config => {
         return super.validate(req, res, callback);
       }
     }
-
     getBackLink(req, res) {
       let backLink = super.getBackLink(req, res);
       if (_.includes(['manual', 'address', 'lookup'], req.query.step)) {
