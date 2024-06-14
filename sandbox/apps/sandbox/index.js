@@ -30,6 +30,10 @@ module.exports = {
     },
     '/dob': {
       fields: ['dateOfBirth'],
+      next: '/time'
+    },
+    '/time': {
+      fields: ['time'],
       next: '/address'
     },
     '/address': {
