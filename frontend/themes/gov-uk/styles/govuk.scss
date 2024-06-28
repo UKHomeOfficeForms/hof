@@ -26,6 +26,7 @@ $path: "/public/images/" !default;
 @import "cookie-settings";
 @import "check_your_answers";
 @import "pdf";
+@import "session-timeout-dialog";
 
 // Modules
 @import "modules/validation";

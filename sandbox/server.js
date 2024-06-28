@@ -8,11 +8,16 @@ bootstrap({
   routes: [
     require('./apps/sandbox')
   ],
+  behaviours: [
+    require('../').components.sessionTimeoutWarning
+  ],
   rateLimits: {
     requests: {
       active: true
     }
   },
   getAccessibility: true,
+  sessionTimeoutWarningContent: true,
+  exitFormContent: true,
   "port": 8082
 });

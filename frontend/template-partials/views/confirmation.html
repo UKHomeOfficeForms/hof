@@ -1,6 +1,19 @@
-{{<partials-page}}
-  {{$page-content}}
+{{<layout}}
+  {{$journeyHeader}}
+  {{#t}}journey.header{{/t}}
+  {{/journeyHeader}}
+
+  {{$propositionHeader}}
+  {{> partials-navigation}}
+  {{/propositionHeader}}
+
+  {{$header}}
+    {{header}}
+  {{/header}}
+
+  {{$content}}
     {{>partials-confirmation-alert}}
     {{#markdown}}what-happens-next{{/markdown}}
-  {{/page-content}}
-{{/partials-page}}
+  {{/content}}
+{{/layout}}
+
