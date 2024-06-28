@@ -1,3 +1,13 @@
+## 2025-01-17, Version 22.0.0, @Rhodine-orleans-lindsay
+* Adds session timeout warning
+ - user can stay on page or exit form
+ - adds exit html
+ - updates confirmation html to a static page
+ - allows for customisation of session timeout warning dialog content and exit page content
+* Fixes accessibility issues
+* Sandbox area for testing hof changes
+* Updates patch and minor dependency versions
+
 ## 2024-07-22, Version 21.0.0 (Stable), @Rhodine-orleans-lindsay
 * Replaces deprecated request module with axios
   - refactors the hof model and apis to use axios instead of request

@@ -50,8 +50,17 @@
   },
   "confirmation": {
     "title": "Application sent",
-    "alert": "Application sent", 
+    "alert": "Application sent",
     "subheader": "What happens next",
     "content": "We’ll contact you with the decision of your application or if we need more information from you."
+  },
+  "exit": {
+    "message": "We have cleared your information to keep it secure. Your information has not been saved."
+  },
+  "session-timeout-warning": {
+    "dialog-title": "Your application will close soon",
+    "dialog-text": "If that happens, your progress will not be saved.",
+    "timeout-continue-button": "Stay on this page",
+    "dialog-exit-link": "Exit this form"
   }
 }

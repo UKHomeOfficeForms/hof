@@ -14,6 +14,7 @@ window.GOVUK = GOVUK;
 var skipToMain = require('./skip-to-main');
 var cookie = require('./govuk-cookies');
 var cookieSettings = require('./cookieSettings');
+var sessionDialog = require('./session-timeout-dialog');
 
 toolkit.detailsSummary();
 

@@ -1,0 +1,9 @@
+{{<layout}}
+  {{$header}}
+    {{header}}
+  {{/header}}
+  {{$content}}
+  <h2 class="govuk-heading-m">{{#exitFormContent}}{{#t}}pages.exit.message{{/t}}{{/exitFormContent}}{{^exitFormContent}}{{#t}}{{message}}{{/t}}{{/exitFormContent}}</h2>
+  <a href="/" class="govuk-button" role="button">{{#t}}buttons.start-again{{/t}}</a>
+  {{/content}}
+{{/layout}}
