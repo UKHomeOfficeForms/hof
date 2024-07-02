@@ -86,11 +86,10 @@
     "rimraf": "^3.0.2",
     "sass": "^1.56.2",
     "serve-static": "^1.14.1",
-    "uglify-js": "^3.14.3",
-    "underscore": "^1.13.6",
-    "urijs": "^1.19.11",
-    "uuid": "^8.3.2",
-    "winston": "^3.7.2"
+    "uglify-js": "^3.14.5",
+    "underscore": "^1.12.1",
+    "urijs": "^1.19.7",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.0",
