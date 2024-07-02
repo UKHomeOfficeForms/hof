@@ -90,7 +90,7 @@
     "underscore": "^1.13.6",
     "urijs": "^1.19.11",
     "uuid": "^8.3.2",
-    "winston": "^3.7.2"
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.0",
