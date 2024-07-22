@@ -29,28 +29,28 @@ describe('PDF Model', () => {
       const model = new Model();
       isPdf.returns(true);
       const res = {
-        statusCode: 200,
-        body: Buffer(100)
+        status: 200,
+        data: Buffer(100)
       };
       const callback = sinon.stub();
       model.handleResponse(res, callback);
-      expect(Model.prototype.parseResponse).to.have.been.calledWith(res.statusCode, res.body, callback);
+      expect(Model.prototype.parseResponse).to.have.been.calledWith(res.status, res.data, callback);
     });
 
     it('passes errors to the callback', done => {
       const model = new Model();
       isPdf.returns(false);
       const res = {
-        statusCode: 500,
-        body: JSON.stringify({
+        status: 500,
+        data: JSON.stringify({
           title: 'Error',
           message: 'There is an error'
         })
       };
-      model.handleResponse(res, (err, body, statusCode) => {
+      model.handleResponse(res, (err, data, status) => {
         expect(err).to.be.an('error');
-        expect(body).to.be.null;
-        expect(statusCode).to.equal(res.statusCode);
+        expect(data).to.be.null;
+        expect(status).to.equal(res.status);
         done();
       });
     });
@@ -59,18 +59,18 @@ describe('PDF Model', () => {
       const model = new Model();
       isPdf.returns(false);
       const res = {
-        statusCode: 400,
-        body: JSON.stringify({
+        status: 400,
+        data: JSON.stringify({
           code: 'ClientError',
           message: 'There is an error'
         })
       };
-      model.handleResponse(res, (err, body, statusCode) => {
+      model.handleResponse(res, (err, data, status) => {
         expect(err).to.be.an('error');
-        expect(err.title).to.equal(res.body.code);
-        expect(err.message).to.equal(res.body.message);
-        expect(body).to.be.null;
-        expect(statusCode).to.equal(400);
+        expect(err.title).to.equal(res.status);
+        expect(err.message).to.equal(res.statusText);
+        expect(data).to.be.null;
+        expect(status).to.equal(400);
         done();
       });
     });
