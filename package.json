@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "aliasify": "^2.1.0",
+    "axios": "^1.5.1",
     "bluebird": "^3.7.2",
     "body-parser": "^1.15.1",
     "browserify": "^17.0.0",
@@ -82,7 +83,6 @@
     "notifications-node-client": "^6.0.0",
     "redis": "^3.1.2",
     "reqres": "^3.0.1",
-    "request": "^2.79.0",
     "rimraf": "^3.0.2",
     "sass": "^1.56.2",
     "serve-static": "^1.14.1",
