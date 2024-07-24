@@ -22,6 +22,8 @@ const defaults = {
   env: process.env.NODE_ENV || 'development',
   gaTagId: process.env.GA_TAG || 'Test-GA-Tag',
   ga4TagId: process.env.GA_4_TAG,
+  urlEncodedLimitSize: process.env.URL_ENCODED_LIMIT_SIZE || '100kb',
+  jsonLimitSize: process.env.JSON_LIMIT_SIZE || '100kb',
   // added to allow support for multiple HOF forms using GTM to customize how they track page views
   gtm: {
     tagId: process.env.GTM_TAG || false,
