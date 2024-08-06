@@ -123,7 +123,8 @@ module.exports = class Controller extends BaseController {
       intro: this.getIntro(route, lookup, res.locals),
       backLink: this.getBackLink(req, res),
       nextPage: this.getNextStep(req, res),
-      errorLength: this.getErrorLength(req, res)
+      errorLength: this.getErrorLength(req, res),
+      showSaveAndExit: this.getShowSaveAndExit(req, res)
     }, stepLocals);
   }
 
@@ -241,5 +242,15 @@ module.exports = class Controller extends BaseController {
     return errorLength ? {
       [propName]: true
     } : undefined;
+  }
+  getShowSaveAndExit(req, res) {
+    const showSaveAndExit = res.locals.showSaveAndExit;
+    const leadingSlash = /^\/?\w+/.test(req.baseUrl) ? '' : '/';
+
+    if (!showSaveAndExit) {
+      return showSaveAndExit;
+    }
+
+    return `${leadingSlash}${showSaveAndExit}`;
   }
 };

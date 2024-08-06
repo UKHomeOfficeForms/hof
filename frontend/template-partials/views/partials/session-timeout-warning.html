@@ -8,6 +8,7 @@
 data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
   aria-live="polite" aria-labelledby="dialog-title" aria-describedby="at-timer">
   <div class="modal-dialog__inner">
+    {{^showSaveAndExit}} 
     <h1 id="dialog-title" class="govuk-heading-l">
       {{#dialogTitle}}{{#t}}pages.session-timeout-warning.dialog-title{{/t}}{{/dialogTitle}}{{^dialogTitle}}Your page will time out soon{{/dialogTitle}}
     </h1>
@@ -19,4 +20,19 @@ data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
       <button class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{{#timeoutContinueButton}}{{#t}}pages.session-timeout-warning.timeout-continue-button{{/t}}{{/timeoutContinueButton}}{{^timeoutContinueButton}}Stay on this page{{/timeoutContinueButton}}</button>
       <a href="/exit" class="govuk-link dialog-exit-link" role="button">{{#dialogExitLink}}{{#t}}pages.session-timeout-warning.dialog-exit-link{{/t}}{{/dialogExitLink}}{{^dialogExitLink}}Exit this form{{/dialogExitLink}}</a>
   </div>
+    {{/showSaveAndExit}}
+    {{#showSaveAndExit}}
+    <h1 id="dialog-title" class="govuk-heading-l">
+      You will be signed out soon
+    </h1>
+    <div class="modal-dialog__inner__text govuk-body">
+      <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
+      <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
+      <p class="dialog-text visually-hidden">{{#dialogText}}{{#t}}pages.session-timeout-warning.dialog-text{{/t}}{{/dialogText}}{{^dialogText}}If that happens, your progress will not be saved.{{/dialogText}}</p>
+    </div>
+    <div class="modal-dialog__inner__block">
+      <button class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{{#timeoutContinueButton}}{{#t}}pages.session-timeout-warning.timeout-continue-button{{/t}}{{/timeoutContinueButton}}{{^timeoutContinueButton}}Stay signed in {{/timeoutContinueButton}}</button>
+      <a href="/save-and-exit" class="govuk-link dialog-exit-link" role="button">{{#dialogExitLink}}{{#t}}pages.session-timeout-warning.dialog-exit-link{{/t}}{{/dialogExitLink}}{{^dialogExitLink}}Sign out{{/dialogExitLink}}</a>
+    </div>
+    {{/showSaveAndExit}}
 </dialog>

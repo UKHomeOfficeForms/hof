@@ -62,5 +62,10 @@
     "dialog-text": "If that happens, your progress will not be saved.",
     "timeout-continue-button": "Stay on this page",
     "dialog-exit-link": "Exit this form"
+  },
+  "save-and-exit": {
+    "header": "Your information has been saved",
+    "paragraph1": "You can log back into this service to manage your cases using the following email address: ",
+    "paragraph2": "You can return to your application at any time via the"
   }
 }
