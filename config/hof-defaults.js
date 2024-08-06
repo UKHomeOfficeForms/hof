@@ -14,6 +14,8 @@ const defaults = {
   getCookies: true,
   getTerms: true,
   getAccessibility: false,
+  sessionTimeoutWarningContent: false,
+  exitFormContent: false,
   viewEngine: 'html',
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,
@@ -46,7 +48,8 @@ const defaults = {
   apis: {
     pdfConverter: process.env.PDF_CONVERTER_URL
   },
-  serveStatic: process.env.SERVE_STATIC_FILES !== 'false'
+  serveStatic: process.env.SERVE_STATIC_FILES !== 'false',
+  sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300
 };
 
 module.exports = Object.assign({}, defaults, rateLimits);
