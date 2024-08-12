@@ -2,6 +2,7 @@
 
 module.exports = {
   addressLookup: require('./address-lookup'),
+  postcodeLookup: require('./postcode-lookup'),
   clearSession: require('./clear-session'),
   combineAndLoopFields: require('./combine-and-loop-fields'),
   date: require('./date'),

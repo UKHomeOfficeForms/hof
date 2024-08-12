@@ -5,6 +5,14 @@ const Browser = require('./lib/browser');
 const App = require('./lib/app');
 const assert = require('assert');
 
+// TO BE REVISITED FOR CREATING MOCK API CALL
+// const testConfigPostcodeLookup = {
+//   host: 'https://data-service.com',
+//   port: 3001
+// };
+
+// const postcodeLookupData = require('../data/postcode-lookup-data.json');
+
 describe('tests', () => {
   let browser;
   let app;
@@ -381,6 +389,120 @@ describe('tests', () => {
           expect(url).to.equal(`http://localhost:${port}/address-backlink-two`);
           expect(url).to.not.include('one');
         }));
+    });
+  });
+
+  describe('#Postcode-Lookup', () => {
+    describe('default postcode lookup behaviour', () => {
+      before(() => {
+        app = App(require('./apps/postcode-lookup-default')({ port })).listen(port);
+        port = app.address().port;
+      });
+
+      after(() => {
+        app.close();
+      });
+
+      it('stays on the postcode entry page if the postcode input is left as blank', () => browser.url('/postcode-default-one')
+        .$('input')
+        .setValue('')
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('postcode-default-one'));
+        }));
+
+      it('stays on the postcode entry page if the entered postcode is of an invalid format', () => browser.url('/postcode-default-one')
+        .$('input')
+        .setValue('abc123')
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('postcode-default-one'));
+        }));
+
+      it('redirects to the manual step if the enter address manually link is clicked', () => browser.url('/postcode-default-one')
+        .$('a[href*="step=manual"]')
+        .click()
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('step=manual'));
+        }));
+
+      it('redirects to the lookup step on a successful postcode lookup', () => browser.url('/postcode-default-one')
+        .$('input')
+        .setValue('SE1 9SG')
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('step=lookup'));
+        }));
+
+      it('stays on the lookup step if no radio button option is selected', () => browser.url('/postcode-default-one')
+        .$('input')
+        .setValue('SE1 9SG')
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('step=lookup'));
+        })
+        .submitForm('form')
+        .getUrl()
+        .then(secondUrl => {
+          assert.ok(secondUrl.includes('step=lookup'));
+        }));
+
+      it('redirects to the manual entry page if the cannot find address link is clicked', () => browser.url('/postcode-default-one')
+        .$('input')
+        .setValue('SE1 9SG')
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('step=lookup'));
+        })
+        .$('a[href*="step=manual"]')
+        .click()
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('step=manual'));
+        }));
+
+      it('redirects to the first postcode entry page if the change postcode link is clicked', () => browser.url('/postcode-default-one')
+        .$('input')
+        .setValue('SE1 9SG')
+        .submitForm('form')
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('step=lookup'));
+        })
+        .$('a[href*="step=postcode"]')
+        .click()
+        .getUrl()
+        .then(url => {
+          assert.ok(url.includes('step=postcode'));
+        }));
+
+      // REVISIT THIS TEST - ISSUE WITH CLICKING A RADIO BUTTON OPTION AND PROCEEDING
+      // it('redirects to the manual entry page if a radio button option is selected on the lookup page', () => browser.url('/postcode-default-one')
+      // .$('input')
+      // .setValue('EH1 2NG')
+      // .submitForm('form')
+      // .getUrl()
+      // .then(url => {
+      //   assert.ok(url.includes('step=lookup'));
+      // })
+      // .$('#address-one-select-HISTORIC SCOTLAND, EDINBURGH CASTLE, CASTLE HILL, EDINBURGH, EH1 2NG')
+      // .click()
+      // .$('#address-one-select-HISTORIC SCOTLAND, EDINBURGH CASTLE, CASTLE HILL, EDINBURGH, EH1 2NG')
+      // .isSelected()
+      // .then(selected => {
+      //   assert.ok(selected === true)
+      // })
+      // .submitForm('form')
+      // .getUrl()
+      // .then(secondURL => {
+      //   assert.ok(secondURL.includes('step=manual'));
+      // }));
     });
   });
 });

@@ -1,0 +1,28 @@
+{{<partials-page}}
+  {{$pageTitle}}{{addressLookupTitle}}{{/pageTitle}}
+  {{$page-content}}
+    {{#addressesExist}}
+      <h1 class="govuk-heading-l">{{addressLookupHeading}}</h1>
+    {{/addressesExist}}
+    {{^addressesExist}}
+      <h1 class="govuk-heading-l">{{noAddressHeading}}</h1>
+    {{/addressesExist}}
+    <div id="addressCountSection">
+      <label>{{addressCount}}</label>
+      <strong><span class="postcode">{{postcodeEntered}}</span></strong>
+      {{#input-submit}}continue{{/input-submit}}
+      <span class="changePostcodeButton">
+        <a class="change-postcode govuk-button govuk-button--secondary" href="{{#qs}}step=postcode{{/qs}}">{{editLink}}</a>
+      </span>
+    </div>
+    {{#fields}}
+      {{#renderField}}{{/renderField}}
+    {{/fields}}
+    {{#addressesExist}}
+      <p><span class="link"><a class="cant-find" href="{{#qs}}step=manual{{/qs}}">{{cantFind}}</a></span></p>
+    {{/addressesExist}}
+    {{^addressesExist}}
+      <p><span class="link"><a href="{{#qs}}step=manual{{/qs}}">{{enterManually}}</a></span></p>
+    {{/addressesExist}}
+  {{/page-content}}
+{{/partials-page}}
