@@ -22,6 +22,7 @@ describe('session timeout warning component', () => {
     req.sessionModel.reset = resetStub;
     next = sinon.stub();
   });
+
   describe("The 'configure' method ", () => {
     beforeEach(() => {
       sinon.stub(Base.prototype, 'configure').returns(req, res, next);
