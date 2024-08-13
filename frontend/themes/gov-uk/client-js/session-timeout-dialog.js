@@ -14,6 +14,7 @@ window.GOVUK.sessionDialog = {
   dialogIsOpenClass: 'dialog-is-open',
   timers: [],
   warningTextPrefix: 'To protect your information, this page will time out in ',
+  warningTextPrefix: $('.dialog-text').text(),
   warningTextSuffix: '.',
   warningText: $('.dialog-text').text(),
   warningTextExtra: '',

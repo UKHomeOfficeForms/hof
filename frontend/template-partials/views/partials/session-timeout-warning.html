@@ -28,7 +28,8 @@ data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
     <div class="modal-dialog__inner__text govuk-body">
       <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
       <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
-      <p class="dialog-text visually-hidden">{{#dialogText}}{{#t}}pages.session-timeout-warning.dialog-text{{/t}}{{/dialogText}}{{^dialogText}}If that happens, your progress will not be saved.{{/dialogText}}</p>
+      <p class="dialog-text1 visually-hidden">{{#dialogText}}{{#t}}pages.session-timeout-warning.dialog-text1{{/t}}{{/dialogText}}{{^dialogText}}You will be signed out of this service in{{/dialogText}}</p>
+      <p class="dialog-text visually-hidden">{{#dialogText}}{{#t}}pages.session-timeout-warning.dialog-text{{/t}}{{/dialogText}}{{^dialogText}}If that happens, If that happens, any answers you saved have not been affected but your progress on this page will not be saved.{{/dialogText}}</p>
     </div>
     <div class="modal-dialog__inner__block">
       <button class="govuk-button dialog-button modal-dialog__inner__button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{{#timeoutContinueButton}}{{#t}}pages.session-timeout-warning.timeout-continue-button{{/t}}{{/timeoutContinueButton}}{{^timeoutContinueButton}}Stay signed in {{/timeoutContinueButton}}</button>

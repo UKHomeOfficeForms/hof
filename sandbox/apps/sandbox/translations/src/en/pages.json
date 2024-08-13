@@ -63,9 +63,16 @@
     "timeout-continue-button": "Stay on this page",
     "dialog-exit-link": "Exit this form"
   },
+  "session-timeout-warning-save-exit": {
+    "dialog-title": "You will be signed out soon",
+    "dialog-text": "If that happens, any answers you saved have not been affected but your progress on this page will not be saved.",
+    "timeout-continue-button": "Stay signed in",
+    "dialog-exit-link": "Sign out"
+  },
   "save-and-exit": {
-    "header": "Your information has been saved",
-    "paragraph1": "You can log back into this service to manage your cases using the following email address: ",
-    "paragraph2": "You can return to your application at any time via the"
+    "header": "You have been signed out",
+    "paragraph-1": "Your form doesn’t appear to have been worked on for 30 minutes so we closed it for security. ",
+    "paragraph-2": "Any answers you saved have not been affected.",
+    "paragraph-3": "You can sign back in to your application at any time by returning to the"
   }
 }
