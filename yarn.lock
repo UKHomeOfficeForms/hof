@@ -4405,7 +4405,7 @@ express-healthcheck@^0.1.0:
   resolved "https://registry.yarnpkg.com/express-healthcheck/-/express-healthcheck-0.1.0.tgz#cabec78129c4cb90cd7fb894dfae21b82e27cb07"
   integrity sha512-FKQVgDo1FMSOYflEq4g6CvNk6stbpkuX0MWXmul8dSICuw/b+3JgoYOq/aiDcYid5k42jh/4HYLYC/M/qDBEuQ==
 
-express-partial-templates@^0.2.0:
+express-partial-templates@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/express-partial-templates/-/express-partial-templates-0.2.1.tgz#191075f1194402893ddbbc8163d38406015b765b"
   integrity sha512-S9i9wfVwYk6yASd/h2imS8a0W9eT+4CNWSSi2yXgyzFmOtc3pqsxcaE8ZCZOuIUkQRtQYemA2d7ddxtVHVQl5A==
@@ -8029,7 +8029,7 @@ normalize-url@^8.0.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-8.0.1.tgz#9b7d96af9836577c58f5883e939365fa15623a4a"
   integrity sha512-IO9QvjUMWxPQQhs60oOu10CRkWCiZzSUkzbXGGV9pviYl1fXYcvkzQ5jV9z8Y6un8ARoVRl4EtC6v6jNqbaJ/w==
 
-notifications-node-client@^8.0.0:
+notifications-node-client@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/notifications-node-client/-/notifications-node-client-8.2.0.tgz#1fe0814a0b5e6732939ca91c34b11e5c1176605f"
   integrity sha512-XGmW2f2CroEwIUrPaTyShpF8pLlu79rBnwWns1uPGs27LbZdzNPJF1BzPl3cG3Tsu3nVlaWeXJJYAE+ALryalA==
