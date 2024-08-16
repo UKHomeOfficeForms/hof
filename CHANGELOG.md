@@ -1,3 +1,7 @@
+## 2025-04-15, Version 22.5.0 (Stable), @shamiluwais
+### Changed
+- Refactors notify component to enable email attachments
+
 ## 2025-04-15, Version 22.4.0 (Stable), @Rhodine-orleans-lindsay
 ### Changed
 - Amends page title format to follow the govuk design system so that the service name is now included in the the title by setting the `header` or `serviceName` in journey.json.
