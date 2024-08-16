@@ -38,11 +38,13 @@ module.exports = config => {
           if (typeof settings.recipient !== 'string' || !settings.recipient.includes('@')) {
             throw new Error('hof-behaviour-emailer: invalid recipient');
           }
-
           if (typeof config.subject === 'function') {
             settings.subject = config.subject(req.sessionModel.toJSON(), req.translate);
           } else {
             settings.subject = config.subject;
+          }
+          if (config.attachment && config.attachment !== undefined) {
+            settings.attachment = config.attachment(req.sessionModel.toJSON(), req.translate);
           }
 
           return settings;
