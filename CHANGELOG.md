@@ -1,3 +1,12 @@
+## 2024, Version 22.1.0, @Rhodine-orleans-lindsay
+* Adds session timeout warning content for save and exit forms
+ - user can stay signed in page or save and exit form
+ - adds save-and-exit html
+ - allows for customisation of save-and-exit page content
+* Fixes accessibility issues
+* Sandbox area for testing hof changes
+* Updates patch and minor dependency versions
+
 ## 2024, Version 22.0.0, @Rhodine-orleans-lindsay
 * Adds session timeout warning
  - user can stay on page or exit form

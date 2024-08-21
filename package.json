@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "22.0.0",
+  "version": "22.1.0-timeout-warning-sign-in-beta.2",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
