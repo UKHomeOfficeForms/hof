@@ -1,12 +1,15 @@
 'use strict';
-/* eslint-disable no-console */
+
 const NotifyClient = require('notifications-node-client').NotifyClient;
 const { v4: uuidv4 } = require('uuid');
+const config = require('../../config/hof-defaults');
+const logger = require('../../lib/logger');
 
 module.exports = class Notify {
   constructor(opts) {
     const options = opts || {};
     this.options = options;
+    this.logger = logger(config);
     this.notifyClient =  new NotifyClient(options.notifyApiKey);
     this.notifyTemplate = options.notifyTemplate;
   }
@@ -18,12 +21,14 @@ module.exports = class Notify {
       await this.notifyClient.sendEmail(templateId, recipient, {
         personalisation: personalisation,
         reference });
+      this.logger.log('info', 'Email sent');
     } catch (error) {
-      console.error('Error sending email:', error.response ? error.response.data : error.message);
+      this.logger.log('error', error.response ? error.response.data : error.message);
+      throw new Error(error.response ? error.response.data : error.message);
     }
   }
 
-  send(email) {
+  async send(email) {
     let personalisation = {
       'email-subject': email.subject,
       'email-body': email.body
@@ -34,7 +39,12 @@ module.exports = class Notify {
         this.notifyClient.prepareUpload(email.attachment)}, personalisation);
     }
 
-    this.sendEmail(this.notifyTemplate, email.recipient, personalisation);
+    try {
+      await this.sendEmail(this.notifyTemplate, email.recipient, personalisation);
+    } catch (error) {
+      this.logger.log('error', error.response ? error.response.data : error.message);
+      throw new Error(error.response ? error.response.data : error.message);
+    }
   }
 };
 
