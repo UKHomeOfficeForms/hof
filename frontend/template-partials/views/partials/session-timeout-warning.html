@@ -19,7 +19,7 @@ data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
       <p class="dialog-text visually-hidden">{{#dialogText}}{{#t}}pages.session-timeout-warning.dialog-text{{/t}}{{/dialogText}}{{^dialogText}}If that happens, your progress will not be saved.{{/dialogText}}</p>
     </div>
       <button class="govuk-button dialog-button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{{#timeoutContinueButton}}{{#t}}pages.session-timeout-warning.timeout-continue-button{{/t}}{{/timeoutContinueButton}}{{^timeoutContinueButton}}Stay on this page{{/timeoutContinueButton}}</button>
-      <a href="/exit" class="govuk-link dialog-exit-link" role="button">{{#dialogExitLink}}{{#t}}pages.session-timeout-warning.dialog-exit-link{{/t}}{{/dialogExitLink}}{{^dialogExitLink}}Exit this form{{/dialogExitLink}}</a>
+      <a href="{{baseUrl}}/exit" class="govuk-link dialog-exit-link" role="button">{{#dialogExitLink}}{{#t}}pages.session-timeout-warning.dialog-exit-link{{/t}}{{/dialogExitLink}}{{^dialogExitLink}}Exit this form{{/dialogExitLink}}</a>
     {{/showSaveAndExit}}
     {{#showSaveAndExit}}
     <h2 id="dialog-title" class="govuk-heading-l">
