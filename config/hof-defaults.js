@@ -16,6 +16,7 @@ const defaults = {
   getAccessibility: false,
   sessionTimeoutWarningContent: false,
   exitFormContent: false,
+  saveExitFormContent: false,
   viewEngine: 'html',
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,

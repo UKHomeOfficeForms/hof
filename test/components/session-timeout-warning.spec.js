@@ -113,6 +113,30 @@ describe('session timeout warning component', () => {
       locals.should.have.property('message').and.deep.equal('exit.message');
     });
 
+    it('sets the custom content to true on the save-and-exit page if saveExitFormContent is set to true', () => {
+      config.saveExitFormContent = true;
+      req.form = {
+        options: {
+          route: '/save-and-exit'
+        }
+      };
+      const locals = instance.locals(req, res);
+      locals.should.have.property('saveExitFormContent').and.deep.equal(true);
+    });
+
+    it('does sets the default content on the save-and-exit page if saveExitFormContent is set to false', () => {
+      config.saveExitFormContent = false;
+      req.form = {
+        options: {
+          route: '/save-and-exit'
+        }
+      };
+      const locals = instance.locals(req, res);
+      locals.should.have.property('header').and.deep.equal('save-and-exit.header');
+      locals.should.have.property('title').and.deep.equal('save-and-exit.title');
+      locals.should.have.property('message').and.deep.equal('save-and-exit.message');
+    });
+
     afterEach(() => {
       Base.prototype.locals.restore();
     });
