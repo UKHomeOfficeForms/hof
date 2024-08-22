@@ -1276,6 +1276,7 @@ By default, the framework uses the standard content provided by HOF. If you wish
   ],
   sessionTimeoutWarningContent: true,
   exitFormContent: true
+  saveExitFormContent: true
 ```
 
 ### Customising content in `pages.json`
@@ -1291,10 +1292,13 @@ Once the variables are set, you can customize the session timeout warning and ex
    "timeout-continue-button": "Stay on this page",
    "dialog-exit-link": "Exit this form"
 }
+"save-and-exit": {
+  "message": "Any answers you saved have not been affected. You can sign back in to your application at any time by returning to the start page."
+},
 ```
 
-### Editing content on the Exit Page Header and Title
-To edit the exit page's header and title, create an `exit.json` file in your project and set the desired content:
+### Editing content on the Exit and Save-and-exit Page Header and Title
+To edit the exit or save-and-exit pages' header and title, create an `exit.json` or `save-and-exit.json` file in your project and set the desired content:
 ```json
 {
   "header": "You have left this form",
