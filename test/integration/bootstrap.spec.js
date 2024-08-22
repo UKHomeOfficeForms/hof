@@ -200,5 +200,39 @@ describe('bootstrap()', () => {
       });
       behaviourOptions.confirmStep.should.equal('/summary');
     });
+
+    it('can pass the exit step to controllers', () => {
+      bs = bootstrap({
+        fields: 'fields',
+        appConfig: appConfig,
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          exitStep: '/leave',
+          steps: {
+            '/one': {
+              behaviours: behaviour
+            }
+          }
+        }]
+      });
+      behaviourOptions.exitStep.should.equal('/leave');
+    });
+
+    it('can pass the exit step to controllers', () => {
+      bs = bootstrap({
+        fields: 'fields',
+        appConfig: appConfig,
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          saveAndExitStep: '/sign-out',
+          steps: {
+            '/one': {
+              behaviours: behaviour
+            }
+          }
+        }]
+      });
+      behaviourOptions.saveAndExitStep.should.equal('/sign-out');
+    });
   });
 });

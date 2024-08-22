@@ -1,0 +1,17 @@
+{{<layout}}
+  {{$journeyHeader}}
+  {{#t}}journey.header{{/t}}
+  {{/journeyHeader}}
+
+  {{$propositionHeader}}
+  {{> partials-navigation}}
+  {{/propositionHeader}}
+
+  {{$header}}
+    {{header}}
+  {{/header}}
+
+  {{$content}}
+   <p>{{#saveExitFormContent}}{{#t}}pages.save-and-exit.message{{/t}}{{/saveExitFormContent}}{{^saveExitFormContent}}{{{message}}}{{/saveExitFormContent}}</p>
+  {{/content}}
+{{/layout}}

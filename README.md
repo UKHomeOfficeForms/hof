@@ -1261,7 +1261,7 @@ This feature allows you to customise the content related to the session timeout 
 
 ### Usage
 
-To enable and customize the session timeout behavior, you need to set the component in your project's `hof.settings.json` file:
+To enable and customise the session timeout behavior, you need to set the component in your project's `hof.settings.json` file:
 ```js
  "behaviours": [
     "hof/components/session-timeout-warning"
@@ -1274,12 +1274,13 @@ By default, the framework uses the standard content provided by HOF. If you wish
  behaviours: [
     require('../').components.sessionTimeoutWarning
   ],
-  sessionTimeoutWarningContent: true,
-  exitFormContent: true
+  sessionTimeoutWarningContent: true, // allows you to customise the content in the session timeout dialog box
+  exitFormContent: true // allows you to customise the content on the exit page
+  saveExitFormContent: true // allows you to customise the content on the save-and-exit page
 ```
 
 ### Customising content in `pages.json`
-Once the variables are set, you can customize the session timeout warning and exit messages in your project's pages.json: 
+Once the variables are set, you can customise the session timeout warning and exit messages in your project's pages.json:
 
 ```json
 "exit": {
@@ -1291,14 +1292,50 @@ Once the variables are set, you can customize the session timeout warning and ex
    "timeout-continue-button": "Stay on this page",
    "dialog-exit-link": "Exit this form"
 }
+"save-and-exit": {
+  "message": "Any answers you saved have not been affected. You can sign back in to your application at any time by returning to the start page."
+},
 ```
 
-### Editing content on the Exit Page Header and Title
-To edit the exit page's header and title, create an `exit.json` file in your project and set the desired content:
+### Editing content on the Exit and Save-and-exit Page Header and Title
+To edit the exit or save-and-exit pages' header and title, create an `exit.json` or `save-and-exit.json` file in your project and set the desired content:
 ```json
 {
   "header": "You have left this form",
   "title": "You have left this form"
+}
+```
+
+### Customising exit and save-and-exit steps
+You can customise the `exit` and `save-and-exit` steps by setting the `exitStep` or `saveAndExitStep` properties in the `apps/<app_name>/index.js` to the desired path name:
+
+```js
+// customising exit step name
+module.exports = {
+  name: 'sandbox',
+  exitStep: '/leave',
+  steps: {
+    ...
+    '/leave': {
+      template: 'exit'
+    }
+  }
+  ...
+}
+```
+
+```js
+// customising save-and-exit step name
+module.exports = {
+  name: 'sandbox',
+  saveAndExitStep: '/sign-out',
+  steps: {
+    ...
+    '/sign-out': {
+      template: 'save-and-exit'
+    }
+  }
+  ...
 }
 ```
 

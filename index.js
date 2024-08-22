@@ -154,6 +154,7 @@ function bootstrap(options) {
     res.locals.sessionTimeOutWarning = config.sessionTimeOutWarning;
     res.locals.sessionTimeoutWarningContent = config.sessionTimeoutWarningContent;
     res.locals.exitFormContent = config.exitFormContent;
+    res.locals.saveExitFormContent = config.saveExitFormContent;
     next();
   });
 

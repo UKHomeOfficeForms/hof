@@ -58,9 +58,15 @@
     "message": "We have cleared your information to keep it secure. Your information has not been saved."
   },
   "session-timeout-warning": {
-    "dialog-title": "Your application will close soon",
-    "dialog-text": "If that happens, your progress will not be saved.",
-    "timeout-continue-button": "Stay on this page",
-    "dialog-exit-link": "Exit this form"
+    "dialog-title": "{{^showSaveAndExit}}Your application will close soon{{/showSaveAndExit}}{{#showSaveAndExit}}You will be signed out soon{{/showSaveAndExit}}",
+    "dialog-text": "{{^showSaveAndExit}}If that happens, your progress will not be saved.{{/showSaveAndExit}}{{#showSaveAndExit}}Any answers you have saved will not be affected, but your progress on this page will not be saved.{{/showSaveAndExit}}",
+    "timeout-continue-button": "{{^showSaveAndExit}}Stay on this page{{/showSaveAndExit}}{{#showSaveAndExit}}Stay signed in{{/showSaveAndExit}}",
+    "dialog-exit-link": "{{^showSaveAndExit}}Exit this form{{/showSaveAndExit}}{{#showSaveAndExit}}Sign out{{/showSaveAndExit}}"
+  },
+  "save-and-exit": {
+    "header": "You have been signed out",
+    "paragraph-1": "Your form doesn't appear to have been worked on for 30 minutes so we closed it for security.",
+    "paragraph-2": "Any answers you saved have not been affected.",
+    "paragraph-3": "You can sign back in to your application at any time by returning to the <a href='/' class='govuk-link'>start page</a>."
   }
 }
