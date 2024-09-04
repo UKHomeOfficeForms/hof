@@ -1,12 +1,13 @@
 /* eslint-disable func-names */
 'use strict';
 
-const axios = require('axios');
 const path = require('path');
 const querystring = require('querystring');
 const _ = require('lodash');
 
 const defaults = require('./defaults');
+
+const PostcodeLookup = require('./postcode-lookup');
 
 const conditionalTranslate = (key, t) => {
   let result = t(key);
@@ -82,10 +83,20 @@ const getConfig = key => ({
 
 module.exports = config => {
   let postcode = '';
-  const apiKey = config.apiKey;
-  const apiURL = config.apiURL;
-  const required = config.required;
-  const addressKey = config.addressKey;
+  let apiKey;
+  let apiURL;
+  let required;
+  let addressKey;
+
+  console.log("CONFIG.APIURL: " + config.apiURL);
+  console.log("AFTER FIRST CALL");
+  
+  if (config !== undefined) {
+    apiKey = config.apiKey;
+    apiURL = config.apiURL;
+    required = config.required;
+    addressKey = config.addressKey;
+  }
 
   return superclass => class extends superclass {
     configure(req, res, callback) {
@@ -253,13 +264,19 @@ module.exports = config => {
       });
     }
 
-    postcode(req, res, callback) {
+    // getAddresses(enteredPostcode, apiURL, apiKey) {
+    //   return axios.get(apiURL + "?postcode=" +  enteredPostcode + '&key=' + apiKey);
+    // }
+
+    async postcode(req, res, callback) {
       // Clear the value stored in the addresses radio button group
       req.sessionModel.set(`${addressKey}-select`, '');
       // Call OS Places API to return list of addresses by postcode
       const enteredPostcode = req.form.values[`${addressKey}-postcode`];
 
-      axios.get(apiURL + '?postcode=' +  enteredPostcode + '&key=' + apiKey)
+      // axios.get(apiURL + '?postcode=' +  enteredPostcode + '&key=' + apiKey)
+      // this.getAddresses(enteredPostcode, apiURL, apiKey)
+      await PostcodeLookup(enteredPostcode, apiURL, apiKey)
         .then(function (response) {
           const addressList = [];
           _.forOwn(response.data.results, function (value) {
@@ -303,6 +320,7 @@ module.exports = config => {
         return this.postcode(req, res, err => {
           if (err) {
             req.sessionModel.set('addresses', []);
+            console.log("API CALL RETURNED AN ERROR");
             return res.redirect(req.baseUrl + '/postcode?step=postcodeSearchIssue');
           }
           return super.saveValues(req, res, callback);
