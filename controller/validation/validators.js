@@ -176,6 +176,11 @@ module.exports = Validators = {
   postcode(value) {
     // eslint-disable-next-line max-len
     return value === '' || Validators.regex(value, /^(([GIR] ?0[A]{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2}))$/i);
+  },
+
+  postcodeValidation(value) {
+    // eslint-disable-next-line max-len
+    return Validators.regex(value, /^(([GIRgir] ?[ ]*0[ ]*[Aa]{2}[ ]*)|((([A-Za-z][ ]*[0-9]{1,2}[ ]*)|(([A-Za-z][ ]*[A-Ha-hJ-Yj-y][ ]*[0-9][ ]*[0-9]?)[ ]*|(([A-Za-z][ ]*[0-9][ ]*[A-Za-z][ ]*)|([A-Za-z][ ]*[A-Ha-hJ-Yj-y][ ]*[0-9]?[ ]*[A-Za-z][ ]*))))[-,. ]?[ ]*[0-9][ ]*[A-Za-z][ ]*[A-Za-z][ ]*))$/);
   }
 
 };

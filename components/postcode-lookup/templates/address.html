@@ -1,0 +1,27 @@
+{{<partials-page}}
+  {{$pageTitle}}{{addressDetailsTitle}}{{/pageTitle}}
+  {{$page-content}}
+    {{#postcode}}
+      <p class="govuk-body">
+        <label>{{postcodeEntered}}</label>
+        <strong><span class="postcode">{{postcode}}</span></strong>
+        <strong><span class="link"><a class="change-postcode" href="{{#qs}}step=postcode{{/qs}}">{{editLink}}</a></span></strong>
+      </p>
+    {{/postcode}}
+    {{#postcodeError}}
+      <div class="alert-info">
+        <span class="info-message">
+          {{postcodeError}}
+        </span>
+      </div>
+    {{/postcodeError}}
+    <h1 class="govuk-heading-l">{{manualAddressHeading}}</h1>
+    <p class="govuk-body">{{manualAddressParagraph}}</p>
+    {{#fields}}
+      {{#renderField}}{{/renderField}}
+    {{/fields}}
+    {{#input-submit}}continue{{/input-submit}}
+    <br />
+    <span class="link"><a class="change-postcode" href="{{#qs}}step=postcode{{/qs}}">{{searchByPostcodeLink}}</a></span>
+  {{/page-content}}
+{{/partials-page}}

@@ -1,0 +1,7 @@
+{{<partials-page}}
+  {{$pageTitle}}{{lookupProblemTitle}}{{/pageTitle}}
+  {{$page-content}}
+    <h1 class="govuk-heading-l">{{searchErrorHeading}}</h1>
+    <p><span class="link"><a class="govuk-button" href="{{#qs}}step=manual{{/qs}}">{{enterManually}}</a></span></p>
+  {{/page-content}}
+{{/partials-page}}

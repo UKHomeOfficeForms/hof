@@ -1,0 +1,13 @@
+{{<partials-page}}
+  {{$pageTitle}}{{postcodeSearchTitle}}{{/pageTitle}}
+  {{$page-content}}
+    <h1 class="govuk-heading-l">{{postcodeHeading}}</h1>
+    {{#fields}}
+      {{#hint}}
+        <span id="{{key}}-hint" class="govuk-hint">{{hint}}</span>
+      {{/hint}}
+      {{#renderField}}{{/renderField}}{{#input-submit}}find-address{{/input-submit}}
+    {{/fields}}
+    <p><span class="link"><a href="{{#qs}}step=manual{{/qs}}">{{enterManually}}</a></span></p>
+  {{/page-content}}
+{{/partials-page}}
