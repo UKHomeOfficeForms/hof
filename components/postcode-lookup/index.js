@@ -112,7 +112,6 @@ module.exports = config => {
       req.query.step = req.query.step || 'postcode';
       const subSteps = getConfig(addressFieldNamePrefix);
       const step = subSteps[req.query.step];
-      // console.log("REQ.TRANSLATE: " + req.translate);
       _.merge(req.form.options, {
         subSteps,
         addressKey: addressFieldNamePrefix,
@@ -253,7 +252,7 @@ module.exports = config => {
         manualAddressParagraph: conditionalTranslate('pages.address-lookup.manual-address-paragraph', req.translate) ||
           defaults.MANUAL_ADDRESS_PARAGRAPH,
         searchErrorHeading: conditionalTranslate('pages.postcode-search-problem.searchErrorHeading', req.translate) ||
-          defaults.SEARCH_ERROR_HEADING,
+          defaults.POSTCODE_ERROR['error-heading'],
         postcodeEntered: sessionPostcode,
         addressesExist: (req.sessionModel.get(`${addressFieldNamePrefix}-addresses`) !== undefined &&
         req.sessionModel.get(`${addressFieldNamePrefix}-addresses`).length > 0) ? true : false,
@@ -267,7 +266,7 @@ module.exports = config => {
         addressDetailsTitle: conditionalTranslate('pages.address-details.title', req.translate) ||
           defaults.ADDRESS_DETAILS_TITLE,
         lookupProblemTitle: conditionalTranslate('pages.address-lookup-problem.title', req.translate) ||
-          defaults.ADDRESS_LOOKUP_PROBLEM_TITLE,
+          defaults.POSTCODE_ERROR['lookup-problem-title'],
         route: this.options.route,
         editLink,
         cantFind,
@@ -276,18 +275,11 @@ module.exports = config => {
       });
     }
 
-    // getAddresses(enteredPostcode, apiURL, apiKey) {
-    //   return axios.get(apiURL + "?postcode=" +  enteredPostcode + '&key=' + apiKey);
-    // }
-
     async postcode(req, res, callback) {
       // Clear the value stored in the addresses radio button group
       req.sessionModel.set(`${addressFieldNamePrefix}-select`, '');
       // Call OS Places API to return list of addresses by postcode
       const enteredPostcode = req.form.values[`${addressFieldNamePrefix}-postcode`];
-
-      // axios.get(apiURL + '?postcode=' +  enteredPostcode + '&key=' + apiKey)
-      // this.getAddresses(enteredPostcode, apiURL, apiKey)
 
       await PostcodeLookup(enteredPostcode, apiURL, apiKey)
         .then(function (response) {

@@ -19,8 +19,8 @@ module.exports = {
   TOWN_OR_CITY_LABEL: 'Town or city',
   POSTCODE_MANUAL_LABEL: 'Postcode',
   POSTCODE_ERROR: {
-    'not-found': 'Sorry – we couldn’t find any addresses for that postcode, enter your address manually',
-    'cant-connect': 'Sorry – we couldn’t connect to the postcode lookup service at this time, enter your address manually'
+    'error-heading': 'Sorry, there is a problem with the postcode search',
+    'lookup-problem-title': 'Address lookup problem - GOV.UK'
   },
   NO_ADDRESS_HEADING: 'No address found',
   ENTER_MANUALLY: 'Enter address manually',
