@@ -3,6 +3,7 @@
 
 const dateComponent = require('../../../').components.date;
 const staticAppealStages = require('./lib/staticAppealStages');
+const timeComponent = require('../../../').components.time;
 
 module.exports = {
   'landing-page-radio': {
@@ -24,6 +25,14 @@ module.exports = {
       'required',
       'date',
       { type: 'after', arguments: ['1900'] }
+    ]
+  }),
+  time: timeComponent('time', {
+    mixin: 'input-time',
+    isPageHeading: 'true',
+    validate: [
+      'required',
+      'time'
     ]
   }),
   building: {

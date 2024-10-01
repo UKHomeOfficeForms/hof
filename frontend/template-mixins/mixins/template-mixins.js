@@ -13,6 +13,7 @@ const PANELMIXIN = 'partials/mixins/panel';
 const PARTIALS = [
   'partials/forms/input-text-group',
   'partials/forms/input-text-date',
+  'partials/forms/input-text-time',
   'partials/forms/input-submit',
   'partials/forms/select',
   'partials/forms/checkbox',
@@ -213,6 +214,7 @@ module.exports = function (options) {
         label: t(lKey),
         labelClassName: labelClassName ? `govuk-label ${labelClassName}` : 'govuk-label',
         formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'govuk-form-group',
+        timeInputItemClassName: 'time-input__item',
         hint: hint,
         hintId: extension.hintId || (hint ? key + '-hint' : null),
         error: this.errors && this.errors[key],
@@ -221,11 +223,12 @@ module.exports = function (options) {
         required: required,
         pattern: extension.pattern,
         date: extension.date,
+        time: extension.time,
         autocomplete: autocomplete,
         child: field.child,
         isPageHeading: field.isPageHeading,
         attributes: field.attributes,
-        isPrefixOrSuffix: _.map(field.attributes, item => {if (item.prefix || item.suffix !== undefined) return true;}),
+        isPrefixOrSuffix: _.map(field.attributes, item => { if (item.prefix || item.suffix !== undefined) return true; }),
         isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
         renderChild: renderChild.bind(this)
       });
@@ -466,6 +469,47 @@ module.exports = function (options) {
             const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { pattern: '[0-9]*', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
 
             return parts.concat(monthPart, yearPart).join('\n');
+          };
+        }
+      },
+      'input-time': {
+        handler: function () {
+          /**
+          * props: '[value] [id]'
+          */
+          return function (key) {
+            const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+            key = hoganRender(key, this);
+            // Exact unless there is a inexact property against the fields key.
+            const isExact = field.inexact !== true;
+
+            let autocomplete = field.autocomplete || {};
+            if (autocomplete === 'off') {
+              autocomplete = {
+                hour: 'off',
+                minute: 'off'
+              };
+            } else if (typeof autocomplete === 'string') {
+              autocomplete = {
+                hour: autocomplete + '-hour',
+                minute: autocomplete + '-minute'
+              };
+            }
+            const isThisRequired = field.validate ? field.validate.indexOf('required') > -1 : false;
+            const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
+            const classNameHour = (field.controlsClass && field.controlsClass.hour) ? field.controlsClass.hour : 'govuk-input--width-2';
+            const classNameMinute = (field.controlsClass && field.controlsClass.minute) ? field.controlsClass.minute : 'govuk-input--width-2';
+
+            const parts = [];
+
+            if (isExact) {
+              const hourPart = compiled['partials/forms/input-text-time'].render(inputText.call(this, key + '-hour', { pattern: '[0-9]*', min: 1, max: 24, maxlength: 2, hintId: key + '-hint', time: true, autocomplete: autocomplete.hour, formGroupClassName, className: classNameHour, isThisRequired }));
+              parts.push(hourPart);
+            }
+
+            const minutePart = compiled['partials/forms/input-text-time'].render(inputText.call(this, key + '-minute', { pattern: '[0-9]*', min: 0, max: 59, maxlength: 2, hintId: key + '-hint', time: true, autocomplete: autocomplete.minute, formGroupClassName, className: classNameMinute, isThisRequired }));
+
+            return parts.concat(minutePart).join('\n');
           };
         }
       }
