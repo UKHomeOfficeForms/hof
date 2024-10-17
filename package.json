@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "21.2.0-postcode-lookup-beta",
+  "version": "21.2.0-postcode-lookup-beta.7",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",

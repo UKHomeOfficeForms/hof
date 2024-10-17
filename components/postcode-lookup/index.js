@@ -1,4 +1,4 @@
-/* eslint-disable func-names */
+/* eslint-disable func-names, max-len */
 'use strict';
 
 const path = require('path');
@@ -222,7 +222,7 @@ module.exports = config => {
     locals(req, res, callback) {
       const isManualStep = req.query.step === 'manual';
       const locals = super.locals(req, res, callback);
-      const sessionPostcode = req.sessionModel.get(`${addressFieldNamePrefix}-postcode`);
+      const sessionPostcode = req.sessionModel.get(`${addressFieldNamePrefix}-postcode`)?.replace(/[^\w]+/g, '').replace(/^(.*)(\d)/, '$1 $2');
       const section = this.options.route.replace(/^\//, '');
       const editLink = conditionalTranslate('pages.address-lookup.edit', req.translate) || defaults.CHANGE;
       const searchByPostcodeLink = conditionalTranslate('pages.address.searchByPostcode', req.translate) ||
@@ -278,8 +278,8 @@ module.exports = config => {
     async postcode(req, res, callback) {
       // Clear the value stored in the addresses radio button group
       req.sessionModel.set(`${addressFieldNamePrefix}-select`, '');
-      // Call OS Places API to return list of addresses by postcode
-      const enteredPostcode = req.form.values[`${addressFieldNamePrefix}-postcode`];
+      // Replace punctuation in postcode and call OS Places API to return list of addresses
+      const enteredPostcode = req.form.values[`${addressFieldNamePrefix}-postcode`]?.replace(/[^\w]+/g, '').replace(/^(.*)(\d)/, '$1 $2');
 
       await PostcodeLookup(enteredPostcode, apiURL, apiKey)
         .then(function (response) {
@@ -343,7 +343,7 @@ module.exports = config => {
     saveValues(req, res, callback) {
       const step = req.query.step;
       if (step === 'postcode') {
-        postcode = req.form.values[`${addressFieldNamePrefix}-postcode`];
+        postcode = req.form.values[`${addressFieldNamePrefix}-postcode`]?.replace(/[^\w]+/g, '').replace(/^(.*)(\d)/, '$1 $2');
         this.clearAddressFieldValues(req);
         return this.postcode(req, res, err => {
           if (err) {

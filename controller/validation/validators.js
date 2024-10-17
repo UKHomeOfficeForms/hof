@@ -180,7 +180,7 @@ module.exports = Validators = {
 
   postcodeValidation(value) {
     // eslint-disable-next-line max-len
-    return Validators.regex(value, /^(([GIRgir] ?[ ]*0[ ]*[Aa]{2}[ ]*)|((([A-Za-z][ ]*[0-9]{1,2}[ ]*)|(([A-Za-z][ ]*[A-Ha-hJ-Yj-y][ ]*[0-9][ ]*[0-9]?)[ ]*|(([A-Za-z][ ]*[0-9][ ]*[A-Za-z][ ]*)|([A-Za-z][ ]*[A-Ha-hJ-Yj-y][ ]*[0-9]?[ ]*[A-Za-z][ ]*))))[-,. ]?[ ]*[0-9][ ]*[A-Za-z][ ]*[A-Za-z][ ]*))$/);
+    return Validators.regex(value, /^[^\w]*(([GIRgir] ?[ ]*0[ ]*[Aa]{2}[ ]*)|((([A-Za-z][ ]*[0-9]{1,2}[ ]*)|(([A-Za-z][^\w]*[ ]*[A-Ha-hJ-Yj-y][^\w]*[ ]*[0-9][^\w]*[ ]*[0-9]?)[ ]*|(([A-Za-z][ ]*[0-9][ ]*[A-Za-z][ ]*)|([A-Za-z][ ]*[A-Ha-hJ-Yj-y][ ]*[0-9]?[ ]*[A-Za-z][ ]*))))[^\w]*?[ ]*[0-9][^\w]*[ ]*[A-Za-z][^\w]*[ ]*[A-Za-z][ ]*)[^\w]*)$/);
   }
 
 };
