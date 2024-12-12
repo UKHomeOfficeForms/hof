@@ -109,7 +109,7 @@ module.exports = Validators = {
   },
 
   ukmobilephone(value) {
-    return value === '' || Validators.regex(value, /^(07)\d{9}$/);
+    return value === '' || Validators.regex(value, /^(?:\+447|07)\d{9}$/);
   },
 
   date(value) {
