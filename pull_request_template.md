@@ -12,5 +12,5 @@
 - [ ] I have created a JIRA number for my commit
 - [ ] I have followed the chris beams method for my commit https://cbea.ms/git-commit/
 here is an [example commit](https://github.com/UKHomeOfficeForms/hof/commit/810959f391187c7c4af6db262bcd143b50093a6e)
-- [ ] Ensure drone builds are green especially tests
+- [ ] Ensure workflow jobs are passing especially tests
 - [ ] I will squash the commits before merging

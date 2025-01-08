@@ -4,14 +4,14 @@ name: Automate_Tag
 on: [push]
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [20.x]
         redis-version: [4, 5, 6]
     steps:
-      - uses: actions/checkout@v2.2.0
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: Start Redis
@@ -25,16 +25,16 @@ jobs:
 
   auto-tag-patch:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: |
       startsWith(github.ref, 'refs/heads/master') &&
       !contains(github.event.head_commit.message, '[MAJOR]') &&
       !contains(github.event.head_commit.message, '[MINOR]')
     steps:
-      - uses: actions/checkout@v2.2.0
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
           registry-url: https://registry.npmjs.org/
       - run: |
           git config --local user.email "$(git log --format='%ae' HEAD^!)"
@@ -43,16 +43,16 @@ jobs:
 
   auto-tag-minor:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: |
       startsWith(github.ref, 'refs/heads/master') &&
       !contains(github.event.head_commit.message, '[MAJOR]') &&
       contains(github.event.head_commit.message, '[MINOR]')
     steps:
-      - uses: actions/checkout@v2.2.0
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
           registry-url: https://registry.npmjs.org/
       - run: |
           git config --local user.email "$(git log --format='%ae' HEAD^!)"
@@ -61,16 +61,16 @@ jobs:
 
   auto-tag-major:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: |
       startsWith(github.ref, 'refs/heads/master') &&
       contains(github.event.head_commit.message, '[MAJOR]') &&
       !contains(github.event.head_commit.message, '[MINOR]')
     steps:
-      - uses: actions/checkout@v2.2.0
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
           registry-url: https://registry.npmjs.org/
       - run: |
           git config --local user.email "$(git log --format='%ae' HEAD^!)"
