@@ -85,6 +85,7 @@ const getContentSecurityPolicy = (config, res) => {
       'www.google.co.uk/ads/ga-audiences'
     ],
     connectSrc: [
+      "'self'",
       'https://www.google-analytics.com',
       'https://region1.google-analytics.com',
       'https://region1.analytics.google.com'
@@ -148,6 +149,11 @@ function bootstrap(options) {
     res.locals.appName = config.appName;
     res.locals.htmlLang = config.htmlLang;
     res.locals.cookieName = config.session.name;
+    // session timeout warning configs
+    res.locals.sessionTimeOut = config.session.ttl;
+    res.locals.sessionTimeOutWarning = config.sessionTimeOutWarning;
+    res.locals.sessionTimeoutWarningContent = config.sessionTimeoutWarningContent;
+    res.locals.exitFormContent = config.exitFormContent;
     next();
   });
 
@@ -190,10 +196,10 @@ function bootstrap(options) {
   app.use(morgan('sessionId=:id ' + morgan.combined, {
     stream: config.logger.stream,
     skip: (req, res) => config.loglevel !== 'debug' &&
-        (
-          res.statusCode >= 300 || !_.get(req, 'session.id') ||
-          config.ignoreMiddlewareLogs.some(v => req.originalUrl.includes(v))
-        )
+      (
+        res.statusCode >= 300 || !_.get(req, 'session.id') ||
+        config.ignoreMiddlewareLogs.some(v => req.originalUrl.includes(v))
+      )
   }));
 
   serveStatic(app, config);
