@@ -396,7 +396,6 @@ describe('Validators', () => {
   describe('ukmobilephone', () => {
     describe('invalid values', () => {
       const inputs = [
-        '+447812123456',
         '+4407812123456',
         '+44(0)7812123456',
         '447812123456',
@@ -420,7 +419,8 @@ describe('Validators', () => {
     describe('valid values', () => {
       const inputs = [
         '',
-        '07812123456'
+        '07812123456',
+        '+447812123456'
       ];
       inputs.forEach(i => {
         it(testName(i), () => {
