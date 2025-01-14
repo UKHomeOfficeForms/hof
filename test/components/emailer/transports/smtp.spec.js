@@ -10,7 +10,7 @@ describe('transports/smtp', () => {
     nodemailerSmtpTransport = sinon.stub();
 
     smtpTransport = proxyquire('../../../../components/emailer/transports/smtp', {
-      'nodemailer-smtp-transport': nodemailerSmtpTransport
+      nodemailer: nodemailerSmtpTransport
     });
   });
 
