@@ -1,6 +1,6 @@
 'use strict';
 
-const smtp = require('nodemailer-smtp-transport');
+const smtp = require('nodemailer');
 
 module.exports = options => {
   if (!options.host) {
