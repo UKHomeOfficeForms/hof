@@ -67,6 +67,8 @@ const Wizard = (steps, fields, setts) => {
     options.route = route;
     options.appConfig = settings.appConfig;
     options.confirmStep = settings.confirmStep;
+    options.exitStep = settings.exitStep;
+    options.saveAndExitStep = settings.saveAndExitStep;
     options.clearSession = options.clearSession || false;
     options.fieldsConfig = _.cloneDeep(fields);
     options.sanitiseInputs = settings.sanitiseInputs;

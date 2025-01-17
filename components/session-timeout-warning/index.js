@@ -51,6 +51,17 @@ module.exports = superclass => class extends superclass {
       superLocals.message = req.translate('exit.message');
       return superLocals;
     }
+
+    // set the content on /save-and-exit page
+    if (req.form.options.route === '/save-and-exit' && config.saveExitFormContent === true) {
+      superLocals.saveExitFormContent = true;
+      return superLocals;
+    } else if (req.form.options.route === '/save-and-exit' && config.saveExitFormContent === false) {
+      superLocals.header = req.translate('save-and-exit.header');
+      superLocals.title = req.translate('save-and-exit.title');
+      superLocals.message = req.translate('save-and-exit.message');
+      return superLocals;
+    }
     return superLocals;
   }
 };

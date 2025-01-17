@@ -13,7 +13,7 @@ window.GOVUK.sessionDialog = {
   $fallBackElement: $('.govuk-timeout-warning-fallback'),
   dialogIsOpenClass: 'dialog-is-open',
   timers: [],
-  warningTextPrefix: 'To protect your information, this page will time out in ',
+  warningTextPrefix: $('.dialog-text-prefix').text(),
   warningTextSuffix: '.',
   warningText: $('.dialog-text').text(),
   warningTextExtra: '',
