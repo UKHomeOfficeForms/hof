@@ -945,11 +945,11 @@ Using the translation key `fields.field-name.label` will return different values
 
 # HOF Components
 
-## Date Component
+## Date Component
 
 A component for handling the rendering and processing of 3-input date fields used in HOF Applications.
 
-## Usage
+### Usage
 
 In your fields config:
 
@@ -965,7 +965,7 @@ module.exports = {
 
 The above example will create a new date component with the key `'date-field'` and will apply the validators `required` and `before` (before today).
 
-## Configuration
+### Configuration
 
 The following optional configuration options are supported:
 
@@ -974,7 +974,7 @@ The following optional configuration options are supported:
 - `dayOptional {Boolean}` - day defaults to `01` if omitted. Defaults to `false`
 - `monthOptional {Boolean}` - month defaults to `01` if omitted. If true then also forces `dayOptional` to be true. Defaults to `false`
 
-## Labels
+### Labels
 
 The three intermedate fields have fallback labels of Day, Month and Year, however custom labels can be used by including the translation at the following path:
 
@@ -998,13 +998,13 @@ fields.json
 }
 ```
 
-# Summary Page Component
+## Summary Page Component
 
 HOF behaviour for showing summary pages
 
 The behaviour mixin will create a set of "locals" data which is compatible with [the `confirm` view from `hof-template-partials`](https://github.com/UKHomeOfficeForms/hof-template-partials/blob/master/views/confirm.html).
 
-## Usage
+### Usage
 
 If no sections config is passed, then the mixin will create a section for each step that has fields, and a row within each section for each field on that step.
 
@@ -1043,11 +1043,11 @@ Alternatively, sections can be defined manually as follows:
 }
 ```
 
-## Configuration
+### Configuration
 
 The `sections` configuration should be a map of arrays, where the entries in the array are the fields that should be shown within that section.
 
-### Field configuration
+#### Field configuration
 
 Fields can be defined as simple strings of the field key, in which case all default configuration will be used.
 
@@ -1087,18 +1087,18 @@ The `location-addresses` field is one that the application has setup to aggregat
 
 This allows the creation of summary rows based on unknown dynamic user input, i.e. we can not predict in advance how many addresses a user wants to input, what the addresses are and how many categories the user wants to attach to each address. This allows you to easily list them this way.
 
-## Translations
+### Translations
 
 The content for section headings and field labels will be loaded from translation files based on the keys.
 
-### Section headings
+#### Section headings
 
 Translations for section headings are looked for in the following order:
 
 - `pages.confirm.sections.${key}.header`
 - `pages.${key}.header`
 
-### Field labels
+#### Field labels
 
 Translations for field labels are looked for in the following order:
 
@@ -1106,11 +1106,11 @@ Translations for field labels are looked for in the following order:
 - `fields.${key}.label`
 - `fields.${key}.legend`
 
-# Emailer Component
+## Emailer Component
 
 HOF behaviour to send emails
 
-## Usage
+### Usage
 
 ```js
 const EmailBehaviour = require('hof').components.emailer;
@@ -1140,7 +1140,7 @@ steps: {
 }
 ```
 
-## Options
+### Options
 
 In addition to the options passed to `hof-emailer`, the following options can be used:
 
@@ -1159,17 +1159,17 @@ const emailer = EmailBehaviour({
 });
 ```
 
-# HOF Emailer
+## HOF Emailer
 
 An emailer service for HOF applications.
 
-## Installation
+### Installation
 
 ```bash
 $ npm install hof-emailer --save
 ```
 
-## Usage
+### Usage
 
 ```js
 // first create an emailer instance
@@ -1192,22 +1192,22 @@ emailer.send(to, body, subject).then(() => {
 });
 ```
 
-## Options
+### Options
 
 - `from`: <String>: Address to send emails from. Required.
 - `transport`: <String>: Select what mechanism to use to send emails. Defaults: 'smtp'.
 - `transportOptions`: <Object>: Set the options for the chosen transport, as defined below. Required.
 - `layout`: <String>: Optional path to use a custom layout for email content.
 
-## Transports
+### Transports
 
 The following transport options are available:
 
-### `smtp`
+#### `smtp`
 
 [nodemailer-smtp-transport](https://github.com/andris9/nodemailer-smtp-transport)
 
-#### Options
+##### Options
 
 - `host` <String>: Address of the mailserver. Required.
 - `port` <String|Number>: Port of the mailserver. Required.
@@ -1216,11 +1216,11 @@ The following transport options are available:
 - `auth.user` <String>: Mailserver authorisation username.
 - `auth.pass` <String>: Mailserver authorisation password.
 
-### `ses`
+#### `ses`
 
 [nodemailer-ses-transport](https://github.com/andris9/nodemailer-ses-transport)
 
-#### Options
+##### Options
 
 - `accessKeyId` <String>: AWS accessKeyId. Required.
 - `secretAccessKey` <String>: AWS accessKeyId. Required.
@@ -1230,18 +1230,18 @@ The following transport options are available:
 - `rateLimit` <String>
 - `maxConnections` <String>
 
-### `debug`
+#### `debug`
 
 A development option to write the html content of the email to a file for inspection.
 
 `transport: 'debug'`
 
-#### debug options
+##### debug options
 
 - `dir` <String>: The location to save html to. Default: `./.emails`. This directory will be created if it does not exist.
 - `open` <Boolean>: If set to true, will automatically open the created html file in a browser.
 
-#### debug example
+##### debug example
 
 ```
 transport: 'debug'
@@ -1251,9 +1251,93 @@ transportOptions: {
 }
 ```
 
-### `stub`
+#### `stub`
 
 Disables sending email. No options are required.
+
+## Session Timeout Warning Component
+HOF component for customising session timeout related pages
+This feature allows you to customise the content related to the session timeout warning, including the messages displayed in the session timeout warning dialog and on the exit page after a user exits the form due to a session timeout.
+
+### Usage
+
+To enable and customise the session timeout behavior, you need to set the component in your project's `hof.settings.json` file:
+```js
+ "behaviours": [
+    "hof/components/session-timeout-warning"
+  ]
+```
+
+By default, the framework uses the standard content provided by HOF. If you wish to override this with custom content at the project level, you must set the following variables to `true` in `hof.settings.json`:
+
+```js
+ behaviours: [
+    require('../').components.sessionTimeoutWarning
+  ],
+  sessionTimeoutWarningContent: true, // allows you to customise the content in the session timeout dialog box
+  exitFormContent: true // allows you to customise the content on the exit page
+  saveExitFormContent: true // allows you to customise the content on the save-and-exit page
+```
+
+### Customising content in `pages.json`
+Once the variables are set, you can customise the session timeout warning and exit messages in your project's pages.json:
+
+```json
+"exit": {
+  "message": "We have cleared your information to keep it secure. Your information has not been saved."
+},
+"session-timeout-warning": {
+   "dialog-title": "Your application will close soon",
+   "dialog-text": "If that happens, your progress will not be saved.",
+   "timeout-continue-button": "Stay on this page",
+   "dialog-exit-link": "Exit this form"
+}
+"save-and-exit": {
+  "message": "Any answers you saved have not been affected. You can sign back in to your application at any time by returning to the start page."
+},
+```
+
+### Editing content on the Exit and Save-and-exit Page Header and Title
+To edit the exit or save-and-exit pages' header and title, create an `exit.json` or `save-and-exit.json` file in your project and set the desired content:
+```json
+{
+  "header": "You have left this form",
+  "title": "You have left this form"
+}
+```
+
+### Customising exit and save-and-exit steps
+You can customise the `exit` and `save-and-exit` steps by setting the `exitStep` or `saveAndExitStep` properties in the `apps/<app_name>/index.js` to the desired path name:
+
+```js
+// customising exit step name
+module.exports = {
+  name: 'sandbox',
+  exitStep: '/leave',
+  steps: {
+    ...
+    '/leave': {
+      template: 'exit'
+    }
+  }
+  ...
+}
+```
+
+```js
+// customising save-and-exit step name
+module.exports = {
+  name: 'sandbox',
+  saveAndExitStep: '/sign-out',
+  steps: {
+    ...
+    '/sign-out': {
+      template: 'save-and-exit'
+    }
+  }
+  ...
+}
+```
 
 # UTILITIES
 

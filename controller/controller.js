@@ -109,10 +109,14 @@ module.exports = class Controller extends BaseController {
     // only include fields that aren't dependents to mitigate duplicate fields on the page
     fields = fields.filter(field => !req.form.options.fields[field.key].dependent);
 
+    const exitStep = req.form.options.exitStep || '/exit';
+    const saveAndExitStep = req.form.options.saveAndExitStep || '/save-and-exit';
     return _.extend({}, locals, {
       fields,
       route,
       baseUrl: req.baseUrl,
+      exitStep,
+      saveAndExitStep,
       skipToMain: this.getFirstFormItem(req.form.options.fields),
       title: this.getTitle(route, lookup, req.form.options.fields, res.locals),
       journeyHeaderURL: this.getJourneyHeaderURL(req.baseUrl),

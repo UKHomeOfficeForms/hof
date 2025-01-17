@@ -8,5 +8,6 @@ module.exports = {
   emailer: require('./emailer'),
   homeOfficeCountries: require('./homeoffice-countries'),
   notify: require('./notify'),
-  summary: require('./summary')
+  summary: require('./summary'),
+  sessionTimeoutWarning: require('./session-timeout-warning')
 };

@@ -1,3 +1,16 @@
+## 2025-01-17, Version 22.0.0 (Stable), @Rhodine-orleans-lindsay
+* Adds session timeout warning
+  - user can stay on page or exit form
+  - adds exit html
+  - user can stay signed in or save and exit the form if the form is a save and exit form
+  - adds default save-and-exit html
+  - updates confirmation html to a static page
+  - allows for customisation of session timeout warning dialog content, exit and save-and-exit page content, and exit and save-and-exit steps
+  - Potential **_breaking change_**: Static pages should use the ```{{<layout}}...{{/layout}}``` tags instead of the ```{{<partials-page}}...{{/partials-page}}``` tags if the timeout warning should not be displayed.
+* Fixes accessibility issues
+* Sandbox area for testing hof changes
+* Updates patch and minor dependency versions
+
 ## 2024-07-22, Version 21.0.0 (Stable), @Rhodine-orleans-lindsay
 * Replaces deprecated request module with axios
   - refactors the hof model and apis to use axios instead of request

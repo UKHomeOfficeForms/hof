@@ -1,0 +1,121 @@
+.modal-dialog {
+  display: none;
+}
+
+.modal-dialog--no-js-persistent {
+  display: inline-block;
+}
+
+.js-enabled {
+  .modal-dialog--no-js-persistent {
+    display: none;
+
+    &[open], .dialog-button {
+      display: inline-block;
+    }
+  }
+
+  .modal-dialog[open] {
+    display: inline-block;
+  }
+}
+
+.modal-dialog[open] {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 90vh;
+  padding: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  position: fixed;
+  top: 50% !important;
+  -webkit-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+}
+
+@media (min-width: 641px) {
+  .modal-dialog[open] {
+    padding: 0;
+  }
+}
+
+.modal-dialog__inner {
+  padding: 20px;
+}
+
+.modal-dialog #dialog-title {
+  margin-top: 0;
+}
+
+.dialog-is-open {
+  overflow: hidden;
+}
+
+dialog {
+  left: 0;
+  right: 0;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: -webkit-fit-content;
+  height: fit-content;
+  margin: auto;
+  border: solid;
+  padding: 1em;
+  background: white;
+  color: black;
+  display: none;
+  border: 5px solid black;
+
+  + .backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  &[open] {
+    display: block;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 15px;
+    width: 90%;
+
+    + .backdrop, &::backdrop {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+}
+
+@media (min-width: 641px) {
+  dialog[open] {
+    padding: 30px;
+    margin: 30px auto;
+    max-width: 500px;
+  }
+}
+
+.js-enabled .govuk-timeout-warning-fallback {
+  display: none;
+}
+
+.tabular-numbers {
+  font-family: "ntatabularnumbers", "nta", Arial, sans-serif;
+}
+
+.dialog-exit-link {
+  @include govuk-font($size: 24);
+  display: inline-block;
+
+  @include govuk-media-query($from: tablet) {
+    @include govuk-font($size: 19);
+
+    position: relative;
+    padding: 0.526315em 0.789473em 0.263157em;
+    line-height: 1.5;
+  }
+}

@@ -12,8 +12,6 @@
   {{/header}}
 
   {{$content}}
-    {{>partials-confirmation-alert}}
-    {{#markdown}}what-happens-next{{/markdown}}
+   <p>{{#saveExitFormContent}}{{#t}}pages.save-and-exit.message{{/t}}{{/saveExitFormContent}}{{^saveExitFormContent}}{{{message}}}{{/saveExitFormContent}}</p>
   {{/content}}
 {{/layout}}
-

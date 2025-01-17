@@ -30,6 +30,7 @@ module.exports = {
     },
     '/dob': {
       fields: ['dateOfBirth'],
+      locals: { showSaveAndExit: true },
       next: '/address'
     },
     '/address': {
@@ -91,5 +92,8 @@ module.exports = {
       ],
       next: '/confirm'
     },
+    '/session-timeout': {},
+    '/exit': {},
+    '/save-and-exit': {}
   }
 };

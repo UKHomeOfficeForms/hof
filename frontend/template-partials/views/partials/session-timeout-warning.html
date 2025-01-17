@@ -1,0 +1,38 @@
+<div class="govuk-timeout-warning-fallback">
+  <p>We will reset your application if you do not complete the page and press continue
+  in 5 minutes.</p>
+  <p>We do this to keep your information secure.</p>
+</div>
+
+<dialog id="js-modal-dialog" data-session-timeout="{{sessionTimeOut}}" data-session-timeout-warning="{{sessionTimeOutWarning}}"
+data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
+  aria-live="polite" aria-labelledby="dialog-title" aria-describedby="at-timer">
+  <div class="modal-dialog__inner">
+  {{^showSaveAndExit}}
+    <h2 id="dialog-title" class="govuk-heading-l">
+      {{#dialogTitle}}{{#t}}pages.session-timeout-warning.dialog-title{{/t}}{{/dialogTitle}}{{^dialogTitle}}Your page will time out soon{{/dialogTitle}}
+    </h2>
+    <div class="govuk-body">
+      <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
+      <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
+      <p class="dialog-text-prefix visually-hidden">To protect your information, this page will time out in </p>
+      <p class="dialog-text visually-hidden">{{#dialogText}}{{#t}}pages.session-timeout-warning.dialog-text{{/t}}{{/dialogText}}{{^dialogText}}If that happens, your progress will not be saved.{{/dialogText}}</p>
+    </div>
+      <button class="govuk-button dialog-button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{{#timeoutContinueButton}}{{#t}}pages.session-timeout-warning.timeout-continue-button{{/t}}{{/timeoutContinueButton}}{{^timeoutContinueButton}}Stay on this page{{/timeoutContinueButton}}</button>
+      <a href="{{baseUrl}}{{exitStep}}" class="govuk-link dialog-exit-link" role="button">{{#dialogExitLink}}{{#t}}pages.session-timeout-warning.dialog-exit-link{{/t}}{{/dialogExitLink}}{{^dialogExitLink}}Exit this form{{/dialogExitLink}}</a>
+  {{/showSaveAndExit}}
+  {{#showSaveAndExit}}
+    <h2 id="dialog-title" class="govuk-heading-l">
+      {{#dialogTitle}}{{#t}}pages.session-timeout-warning.dialog-title{{/t}}{{/dialogTitle}}{{^dialogTitle}}You will be signed out soon{{/dialogTitle}}
+    </h2>
+    <div class="govuk-body">
+      <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
+      <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
+      <p class="dialog-text-prefix visually-hidden">To protect your information, you will be signed out in </p>
+      <p class="dialog-text visually-hidden">{{#dialogText}}{{#t}}pages.session-timeout-warning.dialog-text{{/t}}{{/dialogText}}{{^dialogText}}Any answers you have saved will not be affected, but your progress on this page will not be saved.{{/dialogText}}</p>
+    </div>
+      <button class="govuk-button dialog-button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{{#timeoutContinueButton}}{{#t}}pages.session-timeout-warning.timeout-continue-button{{/t}}{{/timeoutContinueButton}}{{^timeoutContinueButton}}Stay signed in{{/timeoutContinueButton}}</button>
+      <a href="{{baseUrl}}{{saveAndExitStep}}" class="govuk-link dialog-exit-link" role="button">{{#dialogExitLink}}{{#t}}pages.session-timeout-warning.dialog-exit-link{{/t}}{{/dialogExitLink}}{{^dialogExitLink}}Sign out{{/dialogExitLink}}</a>
+  {{/showSaveAndExit}}
+  </div>
+</dialog>
