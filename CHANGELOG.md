@@ -1,3 +1,9 @@
+## 2025-01-24, Version 22.1.0 (Stable), @sulthan-ahmed
+* ⛓️‍💥 **BREAKING CHANGE** : removed `nodemailer-smtp-transport` replaced with `nodemailer`. 
+  - The nodemailer-smtp-transport package has been removed due to a critical vulnerability, and its functionality has been consolidated under nodemailer.
+  - 👊 Impact : Any functions or configurations relying on nodemailer-smtp-transport must be updated to use nodemailer.
+  - 🎬 Action: Rewrite code to utilize nodemailer as the replacement, ensuring compatibility and security.
+
 ## 2025-01-17, Version 22.0.0 (Stable), @Rhodine-orleans-lindsay
 * Adds session timeout warning
   - user can stay on page or exit form
@@ -6,7 +12,7 @@
   - adds default save-and-exit html
   - updates confirmation html to a static page
   - allows for customisation of session timeout warning dialog content, exit and save-and-exit page content, and exit and save-and-exit steps
-  - Potential **_breaking change_**: Static pages should use the ```{{<layout}}...{{/layout}}``` tags instead of the ```{{<partials-page}}...{{/partials-page}}``` tags if the timeout warning should not be displayed.
+  - Potential **_breaking change_**: Static pages should use the `{{<layout}}...{{/layout}}` tags instead of the `{{<partials-page}}...{{/partials-page}}` tags if the timeout warning should not be displayed.
 * Fixes accessibility issues
 * Sandbox area for testing hof changes
 * Updates patch and minor dependency versions
@@ -14,23 +20,23 @@
 ## 2024-07-22, Version 21.0.0 (Stable), @Rhodine-orleans-lindsay
 * Replaces deprecated request module with axios
   - refactors the hof model and apis to use axios instead of request
-*  Updates patch and minor dependency versions
+* Updates patch and minor dependency versions
 
 ## 2024-04-24, Version 20.5.0 (Stable), @mislam987
 * Add hint property to checkboxes to align with govuk design guidelines
 
 ## 2024-02-29, Version 20.4.0 (Stable), @sulthan-ahmed
 * Update version of govuk-frontend to 3.15
-- this adds the new crown for the King
-- this supports a lot of changes from the govuk design system
+  - this adds the new crown for the King
+  - this supports a lot of changes from the govuk design system
 * Adds support for Google tag manager
 * Fixes accessibility issues
 * Sandbox area for testing hof changes
 * Updates patch and minor versions including
-- libphonenumber to 1.9.44
-- nodemailer to 6.9.9
-- ip to 1.1.9
-- es5-ext to 0.10.63
+  - libphonenumber to 1.9.44
+  - nodemailer to 6.9.9
+  - ip to 1.1.9
+  - es5-ext to 0.10.63
 
 ## 2020-06-02, Version 16.0.0 (Stable), @andymoody
 * Update version of helmet to 3.22.0
