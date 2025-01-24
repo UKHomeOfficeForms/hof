@@ -1205,7 +1205,7 @@ The following transport options are available:
 
 #### `smtp`
 
-[nodemailer-smtp-transport](https://github.com/andris9/nodemailer-smtp-transport)
+[nodemailer](https://github.com/nodemailer/nodemailer)
 
 ##### Options
 
