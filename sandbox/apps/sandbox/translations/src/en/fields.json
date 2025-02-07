@@ -21,6 +21,10 @@
     "legend": "What is your date of birth?",
     "hint": "For example, 31 10 1990"
   },
+  "time": {
+    "legend": "What is the current time?",
+    "hint": "For example, 12 40 "
+  },
   "building": {
     "label": "Building and street"
   },

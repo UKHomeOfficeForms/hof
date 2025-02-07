@@ -24,6 +24,13 @@ Feature: validations
     Then I enter a date of birth for a 30 year old
     Then I click the 'Continue' button
     Then I click the 'Continue' button
+    Then I should see the 'Enter a time in the correct format; for example, 12 40' error
+    Then I fill the time 'time' with '11:75'
+    Then I click the 'Continue' button
+    Then I should see the 'Enter a time in the correct format; for example, 12 40' error
+    Then I fill the time 'time' with '11:30'
+    Then I click the 'Continue' button
+    Then I click the 'Continue' button
     Then I should see the 'Enter details of your building and street' error
     Then I should see the 'Enter a town or city' error
     Then I should see the 'Enter your postcode' error
@@ -82,6 +89,13 @@ Feature: validations
     Then I click the 'Continue' button
     Then I should see the 'Enter a date that is in the past' error
     Then I enter a date of birth for a 30 year old
+    Then I click the 'Continue' button
+    Then I click the 'Continue' button
+    Then I should see the 'Enter a time in the correct format; for example, 12 40' error
+    Then I fill the time 'time' with '11:75'
+    Then I click the 'Continue' button
+    Then I should see the 'Enter a time in the correct format; for example, 12 40' error
+    Then I fill the time 'time' with '11:30'
     Then I click the 'Continue' button
     Then I click the 'Continue' button
     Then I should see the 'Enter details of your building and street' error

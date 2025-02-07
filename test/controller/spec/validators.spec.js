@@ -645,6 +645,100 @@ describe('Validators', () => {
     });
   });
 
+  describe('time', () => {
+    describe('invalid values', () => {
+      const inputs = [
+        'abc',
+        '11:75',
+        '12',
+        '56:89',
+        '59/3'
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators.time(i).should.not.be.ok;
+        });
+      });
+    });
+
+    describe('valid values', () => {
+      const inputs = [
+        '',
+        '12:30'
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators.time(i).should.be.ok;
+        });
+      });
+    });
+  });
+
+  describe('time-hour', () => {
+    describe('invalid values', () => {
+      const inputs = [
+        '',
+        'abc',
+        'ABC123',
+        '2oo5',
+        ':10',
+        75,
+        -10
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators['time-hour'](i).should.not.be.ok;
+        });
+      });
+    });
+
+    describe('valid values', () => {
+      const inputs = [
+        '12',
+        '13',
+        '05',
+        '20'
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators['time-hour'](i).should.be.ok;
+        });
+      });
+    });
+  });
+
+  describe('time-minute', () => {
+    describe('invalid values', () => {
+      const inputs = [
+        '',
+        '0',
+        '62',
+        'twelve',
+        '1',
+        '-1',
+        1,
+        -12
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators['time-minute'](i).should.not.be.ok;
+        });
+      });
+    });
+
+    describe('valid values', () => {
+      const inputs = [
+        '01',
+        '12'
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators['time-minute'](i).should.be.ok;
+        });
+      });
+    });
+  });
+
   describe('alphanum', () => {
     describe('invalid values', () => {
       const inputs = [

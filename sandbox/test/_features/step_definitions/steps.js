@@ -67,6 +67,18 @@ Then('I enter a {string} date of birth for a {int} year old', async function (fi
   await this.page.fill(`input[name="${field}DateOfBirth-year"]`, (now.getUTCFullYear() - years).toString());
 }.bind(World));
 
+Then('I fill the time {string} with {string}', async function (field, time) {
+  const timeArr = time.split(':');
+  await this.page.fill(`input[name="${field}-hour"]`, timeArr[0]);
+  await this.page.fill(`input[name="${field}-minute"]`, timeArr[1]);
+}.bind(World));
+
+Then('I enter a time for {int}:{int}', async function (hours, mins) {
+  const now = new Date(`July 7, 2025 ${hours}:${mins}:00`);
+  await this.page.fill('input[name="time-hour"]', now.getHours().toString());
+  await this.page.fill('input[name="time-minute"]', now.getMinutes().toString());
+}.bind(World));
+
 Then('I should be on the {string} page showing {string}', async function (uri, heading) {
   await this.page.waitForSelector('body', { timeout: 15000 });
   expect(new URL(await this.page.url()).pathname).to.eql(`${this.subApp}/${uri}`);

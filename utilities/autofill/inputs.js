@@ -34,7 +34,12 @@ module.exports = i => {
     if (name.indexOf('year') > -1) {
       return Data.number(1950, 1990).toString();
     }
-
+    if (name.indexOf('hour') > -1) {
+      return Data.number(1, 24).toString();
+    }
+    if (name.indexOf('minute') > -1) {
+      return Data.number(0, 59).toString();
+    }
     if (name.indexOf('email') > -1) {
       return Data.email;
     }

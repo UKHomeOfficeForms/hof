@@ -31,6 +31,10 @@ module.exports = {
     '/dob': {
       fields: ['dateOfBirth'],
       locals: { showSaveAndExit: true },
+      next: '/time'
+    },
+    '/time': {
+      fields: ['time'],
       next: '/address'
     },
     '/address': {

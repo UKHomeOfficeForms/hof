@@ -85,6 +85,10 @@ function formFocus() {
     document.getElementById(getElementFromSummaryLink + '-day').focus();
   }
 
+  if (document.getElementById(getElementFromSummaryLink + '-hour') && forms.length === 1 && editMode) {
+    document.getElementById(getElementFromSummaryLink + '-hour').focus();
+  }
+
   if (forms.length > 0) {
     labels = document.getElementsByTagName('label');
     if (labels) {
