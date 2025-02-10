@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "22.1.1",
+  "version": "22.1.2",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -68,6 +68,7 @@
     "i18n-future": "^2.0.0",
     "i18n-lookup": "^0.1.0",
     "is-pdf": "^1.0.0",
+    "jquery": "^3.6.0",
     "libphonenumber-js": "^1.9.44",
     "lodash": "^4.17.21",
     "markdown-it": "^12.3.2",
