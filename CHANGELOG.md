@@ -1,10 +1,16 @@
+## 2025-03-07, Version 22.3.0 (Stable), @robertdeniszczyc2 @sulthan-ahmed
+### Fixed
+- the validator `ukmobilephone` now accepts `+447 and 07`
+### Security
+- Updates minor dependencies for `axios`
+
 ## 2025-03-07, Version 22.2.0 (Stable), @Rhodine-orleans-lindsay
 ### Changed
 - Amends cookie config to allow limited changes to sameSite property during safe cross-origin navigations.
 ### Security
 - Updates patch and minor dependencies
   
-## 2025-01-24, Version 22.1.0 (Stable), @sulthan-ahmed
+## 2025-01-24, Version 22.1.0 (Stable), @robertdeniszczyc2 @sulthan-ahmed
 * ⛓️‍💥 **BREAKING CHANGE** : removed `nodemailer-smtp-transport` replaced with `nodemailer`. 
   - The nodemailer-smtp-transport package has been removed due to a critical vulnerability, and its functionality has been consolidated under nodemailer.
   - 👊 Impact : Any functions or configurations relying on nodemailer-smtp-transport must be updated to use nodemailer.
