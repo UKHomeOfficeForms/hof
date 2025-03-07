@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "aliasify": "^2.1.0",
-    "axios": "^1.5.1",
+    "axios": "^1.8.2",
     "bluebird": "^3.7.2",
     "body-parser": "^1.15.1",
     "browserify": "^17.0.0",
