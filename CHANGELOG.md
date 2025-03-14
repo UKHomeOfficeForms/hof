@@ -1,3 +1,9 @@
+## 2025-03-17, Version 22.3.2 (Stable), @Rhodine-orleans-lindsay
+### Fixed
+- Error message now shows above textarea field if label is hidden
+### Security
+- Updates patch and minor dependencies
+
 ## 2025-03-07, Version 22.3.0 (Stable), @robertdeniszczyc2 @sulthan-ahmed
 ### Fixed
 - the validator `ukmobilephone` now accepts `+447 and 07`

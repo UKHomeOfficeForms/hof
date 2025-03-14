@@ -6,14 +6,14 @@
             <label for="{{id}}"
                 class="{{labelClassName}} {{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
                 {{{label}}}
-                {{#error}}
-                <p id="{{id}}-error" class="govuk-error-message">
-                    <span id="{{id}}-error" class="govuk-visually-hidden">Error:</span>{{error.message}}
-                </p>
-                {{/error}}
             </label>
         {{#isPageHeading}}</h1>{{/isPageHeading}}
         {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</div>{{/hint}}
+        {{#error}}
+        <p id="{{id}}-error" class="govuk-error-message">
+            <span id="{{id}}-error" class="govuk-visually-hidden">Error:</span>{{error.message}}
+        </p>
+        {{/error}}
         {{#renderChild}}{{/renderChild}}
         <textarea name="{{id}}" id="{{id}}"
             class="govuk-textarea {{#isMaxlengthOrMaxword}}govuk-js-character-count{{/isMaxlengthOrMaxword}} {{#className}}{{className}}{{/className}} {{#error}}govuk-input--error{{/error}}"
