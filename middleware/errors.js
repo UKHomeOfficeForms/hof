@@ -10,7 +10,7 @@ const getContent = (err, translate) => {
   const content = {};
 
   if (err.code === 'SESSION_TIMEOUT') {
-    err.status = 401;
+    err.status = 408;
     err.template = 'session-timeout';
     err.title = (translate && translate('errors.session.title'));
     err.message = (translate && translate('errors.session.message'));
@@ -23,6 +23,14 @@ const getContent = (err, translate) => {
     err.template = 'cookie-error';
     content.title = (translate && translate('errors.cookies-required.title'));
     content.message = (translate && translate('errors.cookies-required.message'));
+  }
+  if (err.code === 'UNAUTHORISED') {
+    err.status = 401;
+    err.template = '401';
+    err.title = (translate && translate('errors.403.title'));
+    err.message = (translate && translate('errors.403.description'));
+    content.title = (translate && translate('errors.401.title'));
+    content.message = (translate && translate('errors.401.description'));
   }
 
   if (err.code === 'DDOS_RATE_LIMIT') {
