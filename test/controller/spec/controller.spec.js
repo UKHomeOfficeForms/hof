@@ -17,7 +17,7 @@ describe('controller', () => {
       './base-controller': BaseController
     });
     sinon.stub(BaseController.prototype, 'use');
-    sinon.stub(BaseController.prototype, 'locals').returns({foo: 'bar'});
+    sinon.stub(BaseController.prototype, 'locals').returns({ foo: 'bar' });
   });
 
   it('sets the correct error class to the instance', () => {
@@ -268,7 +268,7 @@ describe('controller', () => {
           reset: sinon.stub(),
           get: getStub
         };
-        controller = new Controller({template: 'foo'});
+        controller = new Controller({ template: 'foo' });
         BaseController.prototype.getNextStep.returns('/');
         BaseController.prototype.getValues = function (myReq, myRes, callback) {
           callback();
@@ -337,7 +337,7 @@ describe('controller', () => {
 
         describe('when the condition config is met by a historical form', () => {
           it('the next step is the fork target', () => {
-            req.form.historicalValues = {'example-radio': 'superman'};
+            req.form.historicalValues = { 'example-radio': 'superman' };
             req.form.options.forks = [{
               target: '/target-page',
               condition: {
@@ -365,7 +365,7 @@ describe('controller', () => {
 
         describe('when the condition config is not met by a historical form', () => {
           it('the next step is the original next target', () => {
-            req.form.historicalValues = {'example-radio': 'superman'};
+            req.form.historicalValues = { 'example-radio': 'superman' };
             req.form.options.forks = [{
               target: '/target-page',
               condition: {
@@ -605,7 +605,7 @@ describe('controller', () => {
       beforeEach(done => {
         sinon.stub(BaseController.prototype, 'getErrorStep').returns('/');
         req.params = {};
-        controller = new Controller({template: 'foo'});
+        controller = new Controller({ template: 'foo' });
         controller._configure(req, res, done);
       });
 
@@ -630,7 +630,7 @@ describe('controller', () => {
     describe('getHeader()', () => {
       let lookup;
       beforeEach(() => {
-        controller = new Controller({template: 'foo'});
+        controller = new Controller({ template: 'foo' });
         lookup = sinon.stub();
       });
 
@@ -647,10 +647,33 @@ describe('controller', () => {
       });
     });
 
+    describe('getServiceName()', () => {
+      let lookup;
+      beforeEach(() => {
+        controller = new Controller({ template: 'foo' });
+        lookup = sinon.stub();
+      });
+
+      it('calls lookup with the correct list of keys', () => {
+        const expected = [
+          'journey.serviceName',
+          'journey.header'
+        ];
+        controller.getServiceName(lookup);
+        lookup.firstCall.args[0].should.deep.equal(expected);
+      });
+
+      it('passes locals too lookup as second arg', () => {
+        const locals = {};
+        controller.getServiceName(lookup, locals);
+        lookup.firstCall.args[1].should.be.equal(locals);
+      });
+    });
+
     describe('getCaptionHeading()', () => {
       let lookup;
       beforeEach(() => {
-        controller = new Controller({template: 'foo'});
+        controller = new Controller({ template: 'foo' });
         lookup = sinon.stub();
       });
 
@@ -670,7 +693,7 @@ describe('controller', () => {
     describe('getSubHeading()', () => {
       let lookup;
       beforeEach(() => {
-        controller = new Controller({template: 'foo'});
+        controller = new Controller({ template: 'foo' });
         lookup = sinon.stub();
       });
 
@@ -691,7 +714,7 @@ describe('controller', () => {
       let lookup;
       let fields;
       beforeEach(() => {
-        controller = new Controller({template: 'foo'});
+        controller = new Controller({ template: 'foo' });
         lookup = sinon.stub();
         fields = {
           'field-one': {}
@@ -700,6 +723,7 @@ describe('controller', () => {
 
       it('calls lookup with the correct list of keys', () => {
         const expected = [
+          'pages.step-one.title',
           'pages.step-one.header',
           'fields.field-one.label',
           'fields.field-one.legend'
@@ -718,7 +742,7 @@ describe('controller', () => {
     describe('getIntro()', () => {
       let lookup;
       beforeEach(() => {
-        controller = new Controller({template: 'foo'});
+        controller = new Controller({ template: 'foo' });
         lookup = sinon.stub();
       });
 
