@@ -1,3 +1,10 @@
+## 2025-04-15, Version 22.4.0 (Stable), @Rhodine-orleans-lindsay
+### Changed
+- Amends page title format to follow the govuk design system so that the service name is now included in the the title by setting the `header` or `serviceName` in journey.json.
+- Where page titles need to be different from page headings, if `title` is set pages.json, it can be used in the page title instead of `header`.
+### Security
+- Updates patch and minor dependencies
+
 ## 2025-03-17, Version 22.3.2 (Stable), @Rhodine-orleans-lindsay
 ### Fixed
 - Error message now shows above textarea field if label is hidden

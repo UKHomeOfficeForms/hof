@@ -121,6 +121,7 @@ module.exports = class Controller extends BaseController {
       title: this.getTitle(route, lookup, req.form.options.fields, res.locals),
       journeyHeaderURL: this.getJourneyHeaderURL(req.baseUrl),
       header: this.getHeader(route, lookup, res.locals),
+      serviceName: this.getServiceName(lookup, res.locals),
       captionHeading: this.getCaptionHeading(route, lookup, res.locals),
       warning: this.getWarning(route, lookup, res.locals),
       subHeading: this.getSubHeading(route, lookup, res.locals),
@@ -147,6 +148,13 @@ module.exports = class Controller extends BaseController {
     return lookup(`pages.${route}.header`, locals);
   }
 
+  getServiceName(lookup, locals) {
+    return lookup([
+      'journey.serviceName',
+      'journey.header'
+    ], locals);
+  }
+
   getCaptionHeading(route, lookup, locals) {
     return lookup(`pages.${route}.captionHeading`, locals);
   }
@@ -165,6 +173,7 @@ module.exports = class Controller extends BaseController {
       fieldName = Object.keys(fields)[0];
     }
     return lookup([
+      `pages.${route}.title`,
       `pages.${route}.header`,
       `fields.${fieldName}.label`,
       `fields.${fieldName}.legend`
@@ -185,12 +194,12 @@ module.exports = class Controller extends BaseController {
           // get first option for radios and checkbox
           if (field.mixin === 'radio-group' || field.mixin === 'checkbox-group') {
             // get first option for radios and checkbox where there is a toggle
-            if(typeof field.options[0] === 'object') {
+            if (typeof field.options[0] === 'object') {
               req.form.errors[key].errorLinkId = key + '-' + field.options[0].value;
             } else {
               req.form.errors[key].errorLinkId = key + '-' + field.options[0];
             }
-          // eslint-disable-next-line brace-style
+            // eslint-disable-next-line brace-style
           }
           // get first field for date input control
           else if (field && field.mixin === 'input-date') {
