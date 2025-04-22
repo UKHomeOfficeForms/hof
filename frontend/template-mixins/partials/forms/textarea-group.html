@@ -8,7 +8,7 @@
                 {{{label}}}
             </label>
         {{#isPageHeading}}</h1>{{/isPageHeading}}
-        {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{hint}}</div>{{/hint}}
+        {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{{hint}}}</div>{{/hint}}
         {{#error}}
         <p id="{{id}}-error" class="govuk-error-message">
             <span id="{{id}}-error" class="govuk-visually-hidden">Error:</span>{{error.message}}

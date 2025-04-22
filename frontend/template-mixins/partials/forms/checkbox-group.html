@@ -14,7 +14,7 @@
             </strong>
           </div>
         {{/isWarning}}
-        {{#hint}}<div id="{{key}}-hint" class="govuk-hint">{{hint}}</div>{{/hint}}
+        {{#hint}}<div id="{{key}}-hint" class="govuk-hint">{{{hint}}}</div>{{/hint}}
         {{#error}}
         <p id="{{key}}-error" class="govuk-error-message">
             <span class="govuk-visually-hidden">Error:</span> {{error.message}}
