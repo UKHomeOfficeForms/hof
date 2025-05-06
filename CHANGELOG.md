@@ -1,3 +1,9 @@
+## 2025-05-06, Version 22.5.2 (Stable), @Rhodine-orleans-lindsay
+### Fixed
+- Hints for radio button options are now aligned correctly
+### Security
+- Updates patch and minor dependencies
+
 ## 2025-04-15, Version 22.5.0 (Stable), @shamiluwais
 ### Changed
 - Refactors notify component to enable email attachments
