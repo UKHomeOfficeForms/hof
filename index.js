@@ -51,6 +51,12 @@ const loadRoutes = (app, config) => {
 };
 
 const applyErrorMiddlewares = (app, config) => {
+  if (config.servicePaused === true || config.servicePaused === 'true') {
+    app.use(hofMiddleware.servicePaused({
+      logger: config.logger
+    }));
+  }
+
   app.use(hofMiddleware.notFound({
     logger: config.logger
   }));
@@ -155,6 +161,7 @@ function bootstrap(options) {
     res.locals.sessionTimeoutWarningContent = config.sessionTimeoutWarningContent;
     res.locals.exitFormContent = config.exitFormContent;
     res.locals.saveExitFormContent = config.saveExitFormContent;
+    res.locals.servicePaused = config.servicePaused;
     next();
   });
 
@@ -230,7 +237,15 @@ function bootstrap(options) {
 
   // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
   app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
-
+  // Check if service has been paused and redirect accordingly
+  if (config.servicePaused === true || config.servicePaused === 'true') {
+    app.use((req, res, next) => {
+      if (req.path !== '/service-paused') {
+        return res.redirect('/service-paused');
+      }
+      return next();
+    });
+  }
   if (config.getAccessibility === true) {
     deprecate(
       '`getAccessibility` option is deprecated and may be removed in future versions.',
