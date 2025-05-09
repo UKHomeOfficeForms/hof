@@ -1618,6 +1618,7 @@ To render a specific fields in your templates use the mixin name (matching those
 - `required`: Value applied to `aria-required` HTML attribute.
 - `hint`: This adds context to the label, which it is a part of, for input text, radio groups and textarea. It is used within the input by aria-describedby for screen readers.
 - `maxlength`: Applicable to text-based fields and mapped to the `maxlength` HTML attribute.
+- `maxlengthAttribute`: Applicable to text-based fields. When maxlengthAttribute is set to true, it activates conditional rendering for the maxlength HTML attribute.
 - `maxword`: Applicable to textarea fields.
 - `options`: Applicable to HTML `select` and `radio` controls and used to generate the items of either HTML element.
 - `selected`: Applicable to `select`, `checkbox`, and `radio` controls. Will render the selected HTML option/element selected or checked.
