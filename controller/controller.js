@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const i18nLookup = require('i18n-lookup');
-const Mustache = require('mustache');
 const BaseController = require('./base-controller');
 const Helpers = require('../utilities').helpers;
 
@@ -98,7 +97,6 @@ module.exports = class Controller extends BaseController {
   }
 
   locals(req, res) {
-    const lookup = i18nLookup(req.translate, Mustache.render);
     const route = req.form.options.route.replace(/^\//, '');
     const locals = super.locals(req, res);
     const stepLocals = req.form.options.locals || {};
@@ -238,7 +236,7 @@ module.exports = class Controller extends BaseController {
       legend: req.translate(`fields.${error.key}.legend`).toLowerCase()
     }, res.locals, getArgs(error));
 
-    return i18nLookup(req.translate, Mustache.render)(keys, context);
+    return i18nLookup(req.translate, nunjucksEnv.render)(keys, context);
   }
 
   // eslint-disable-next-line no-unused-vars

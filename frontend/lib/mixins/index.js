@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  frontend: require('./lib')
+  Date: require('./date')
 };

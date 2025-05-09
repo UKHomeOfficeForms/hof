@@ -1,0 +1,23 @@
+
+{% macro Submit(ctx, params, base) %}
+    {%- set params = getParams(ctx, params, base) %}
+
+    {%- set translate = ctx("translate") %}
+
+    {%- set args = {
+        name: params.id,
+        html: params.html if params.html else (translate("buttons." + (params.key or "next")) if not params.text),
+        text: params.text,
+        href: params.href,
+        type: params.type,
+        value: params.value
+        preventDoubleClick: params.preventDoubleClick | default(true),
+        isStartButton: params.isStartButton,
+        disabled: params.disabled,
+        classes: params.classes | default("button"),
+        attributes: getAttributes(ctx, params, { id: params.id }),
+    } %}
+
+    {%- from "govuk/components/button/macro.njk" import govukButton %}
+    {{- govukButton(args) }}
+{% endmacro %}

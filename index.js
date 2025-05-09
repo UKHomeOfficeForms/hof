@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const path = require('path');
 const http = require('http');
 const https = require('https');
-const mixins = require('./frontend').mixins;
+const frontend = require('./frontend').frontend;
 const hofMiddleware = require('./middleware');
 const markdown = require('./lib/markdown');
 const translate = require('i18n-future').middleware;
@@ -22,18 +22,13 @@ const logger = require('./lib/logger');
 const helmet = require('helmet');
 const _ = require('lodash');
 const deprecate = require('deprecate');
+const nunjucks = require('./middleware/nunjucks');
 
 const customConfig = {};
 
 const getConfig = function () {
   const args = [].slice.call(arguments);
   const config = _.merge.apply(_, [{}, defaults, customConfig].concat(args));
-
-  if (!config.theme) {
-    config.theme = require('./frontend').themes.govUK;
-  } else if (typeof config.theme === 'string') {
-    config.theme = require('./frontend').themes[config.theme];
-  }
 
   config.markdown = config.markdown || {};
 
@@ -207,6 +202,8 @@ function bootstrap(options) {
   settings(app, config);
   gaTagSetup(app, config);
   deIndexer(app, config);
+  const nunjucksEnv = nunjucks(app, config);
+  frontend.setup(app, nunjucksEnv);
 
   const sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
@@ -221,7 +218,6 @@ function bootstrap(options) {
     resources: config.theme.translations,
     path: path.resolve(config.root, config.translations) + '/__lng__/__ns__.json'
   }));
-  app.use(mixins());
   app.use(markdown(config.markdown));
   // rate limits have to be loaded before all routes so it is applied to them
   if (config.rateLimits.requests.active) {

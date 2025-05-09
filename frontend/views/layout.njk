@@ -1,0 +1,108 @@
+{% extends "govuk/template.njk" %}
+
+{% set pageKey = pageKey or (options.route | camelcase) or "default" %}
+{% set pageTitle = pageTitle or translate(pageTitleKey or "pages." + pageKey + ".title") %}
+{% set govukServiceName = translate(govukServiceNameKey or "govuk.serviceName" or "journey.serviceName")%}
+{% set assetPath = assetPath | default(assetPath) | default("/public") %}
+
+{% block head %}
+    <!--[if lte IE 8]><link href="{{assetPath}}/stylesheets/{{ applicationStyleSheetIE8 | default("application-ie8.css") }}" rel="stylesheet" type="text/css" /><![endif]-->
+    <!--[if gt IE 8]><!--><link href="{{assetPath}}/stylesheets/{{ applicationStyleSheet | default("application.css") }}" media="all" rel="stylesheet" type="text/css" /><!--<![endif]-->
+    {% include "gtm.njk"}
+{% enblock %}
+
+{% block pageTitle %}
+  {{ translate("govuk.error", { default: "Error" }) + ": ") if errorlist.length }}{{ pageTitle | safe }} {{ "– " + govukServiceName | safe if govukServiceName) }} - GOV.UK
+{% endblock %}
+
+{% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
+
+{% block skipLink %}
+  {{ govukSkipLink({
+      href: '#main-contnt'
+      text: translate("govuk.skipLink")
+  }) }}
+{% endblock %}
+
+{% block header %}
+    {% block cookieBanner %}
+    {% from "govuk/components/cookie-banner/macro.njk" import govukCookieBanner %}
+      {% set cookieHtml %}
+        <p class="govuk-body">We use some essential cookies to make this website work.</p>
+				<p class="govuk-body">We'd like to set additional cookies to understand how you use GOV.UK, remember your settings and improve government services.</p>
+				<p class="govuk-body">We also use cookies set by other sites to help us deliver content from their services.</p>
+      {% endset %}
+
+      {% set acceptCookieHtml %}
+          <p class="govuk-body">You’ve accepted analytics cookies. You can <a class="govuk-link" href="/cookies">change your cookie settings</a> at any time.</p>
+      {% endset %}
+      {% set rejectCookieHtml %}
+          <p class="govuk-body">You’ve rejected analytics cookies. You can <a class="govuk-link" href="/cookies">change your cookie settings</a> at any time.</p>
+      {% endset %}
+      {{ govukCookieBanner({
+          ariaLabel: "Cookies on {{govukServiceName}}",
+          messages: [{
+            headingText: "Cookies on {{govukServiceName}}"
+            html: cookieHtml,
+            actions: [{
+                text: "Accept analytical cookies",
+                type: "button"
+              }, {
+                text: "Reject analytics cookies",
+                type: "button"
+              } ,{
+                text: "View cookies",
+                href: "/cookies"
+              }
+            ]
+          },
+          {
+            html: acceptHtml,
+            role: "alert",
+            actions: [
+              {
+                text: "Hide cookie message",
+                type: "button"
+              }
+            ]
+          },
+          {
+            html: rejectHtml,
+            role: "alert",
+            hidden: true,
+            actions: [
+              {
+                text: "Hide cookie message",
+                type: "button"
+              }
+            ]
+          }
+        ]
+      }) }}
+    {% endblock %}
+{% endblock %}
+
+{% block footer %}
+  {% from "govuk/components/footer/macro.njk" import govukFooter %}
+  {{ govukFooter({
+    items: [
+      {
+        href: "/cookies",
+        text: translate("base.cookies")
+      },
+      {
+        href: "/terms-and-conditions",
+        text: translate("base.terms")
+      },
+      {
+        href: "/accessibility",
+        text: translate("base.accessibility")
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block bodyEnd %}
+    <script src="{{assetPath}}/javascripts/{{ applicationJavascript | default("bundle.js") }}"></script>
+    {% block scripts %}{% endblock %}
+{% endblock %}

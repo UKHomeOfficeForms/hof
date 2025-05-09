@@ -1,0 +1,15 @@
+{% from "../../../components/submit/macro.njk" import Submit %}
+
+{% set pageKey = "404" %}
+
+{% extends "./error-template.njk" %}
+
+{% block mainContent %}
+    {{ super( ) }}
+
+    {{ Submit(ctx, {
+        key: translate("buttons.start-again"),
+        href: "/"
+    }) }}
+
+{% endblock %}

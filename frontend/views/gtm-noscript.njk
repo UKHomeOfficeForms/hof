@@ -1,0 +1,10 @@
+{% if gtm.ga4Id %}
+    {% if enableGaCookies %}
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{gtm.ga4Id}}{% if gtm.ga4Preview %}&gtm_auth={{gtm.ga4Auth}}&gtm_preview={{gtm.ga4Preview}}&gtm_cookies_win=x{% endif %}"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+    {% endif %}
+{% endif %}
