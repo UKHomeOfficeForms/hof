@@ -216,6 +216,7 @@ module.exports = function (options) {
         hint: hint,
         hintId: extension.hintId || (hint ? key + '-hint' : null),
         error: this.errors && this.errors[key],
+        maxlengthAttribute: field.maxlengthAttribute === true,
         maxlength: maxlength(field) || extension.maxlength,
         maxword: maxword(field) || extension.maxword,
         required: required,

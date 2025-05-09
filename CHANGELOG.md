@@ -1,3 +1,7 @@
+## 2025-05-09, Version 22.6.0 (Stable), @vivekkumar-ho
+### Changed
+- Support for passing `maxlengthAttribute` property for input-text field. The HTML maxlength attribute is applied when `maxlengthAttribute: true` and the `maxlength` validator are specified in the field config
+
 ## 2025-05-06, Version 22.5.2 (Stable), @Rhodine-orleans-lindsay
 ### Fixed
 - Hints for radio button options are now aligned correctly
