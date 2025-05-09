@@ -25,7 +25,9 @@
             {{#value}} value="{{value}}"{{/value}}
             {{#min}} min="{{min}}"{{/min}}
             {{#max}} max="{{max}}"{{/max}}
-            {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
+            {{#maxlengthAttribute}}
+              {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
+            {{/maxlengthAttribute}}
             {{#pattern}} pattern="{{pattern}}"{{/pattern}}
             {{#hintId}} aria-describedby="{{hintId}}"{{/hintId}}
             {{#error}} aria-invalid="true"{{/error}}
