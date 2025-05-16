@@ -51,7 +51,8 @@ const defaults = {
     pdfConverter: process.env.PDF_CONVERTER_URL
   },
   serveStatic: process.env.SERVE_STATIC_FILES !== 'false',
-  sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300
+  sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300,
+  servicePaused: process.env.SERVICE_PAUSED || false
 };
 
 module.exports = Object.assign({}, defaults, rateLimits);

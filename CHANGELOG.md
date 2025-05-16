@@ -1,3 +1,14 @@
+## 2025-05-20, Version 22.7.0 (Stable), @Rhodine-orleans-lindsay
+### Added
+- Service paused funtionality that allows for services to redirect to a 'Service Unavailable' when there is a need to pause a service:
+  - Adds 'service paused' error middleware
+  - Includes default service paused html view
+  - Includes flag to set service paused config to true or false in order to enable page
+### Changed
+- Error pages can now show the service name in the title and journey header
+### Security
+- Updates patch and minor dependencies
+
 ## 2025-05-09, Version 22.6.0 (Stable), @vivekkumar-ho
 ### Changed
 - Support for passing `maxlengthAttribute` property for input-text field. The HTML maxlength attribute is applied when `maxlengthAttribute: true` and the `maxlength` validator are specified in the field config

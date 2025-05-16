@@ -12,8 +12,10 @@ const getContent = (err, translate) => {
   if (err.code === 'SESSION_TIMEOUT') {
     err.status = 401;
     err.template = 'session-timeout';
+    err.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
     err.title = (translate && translate('errors.session.title'));
     err.message = (translate && translate('errors.session.message'));
+    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
     content.title = (translate && translate('errors.session.title'));
     content.message = (translate && translate('errors.session.message'));
   }
@@ -21,6 +23,7 @@ const getContent = (err, translate) => {
   if (err.code === 'NO_COOKIES') {
     err.status = 403;
     err.template = 'cookie-error';
+    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
     content.title = (translate && translate('errors.cookies-required.title'));
     content.message = (translate && translate('errors.cookies-required.message'));
   }
@@ -28,12 +31,14 @@ const getContent = (err, translate) => {
   if (err.code === 'DDOS_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
+    err.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
     err.title = (translate && translate('errors.ddos-rate-limit.title'));
     err.message = (translate && translate('errors.ddos-rate-limit.message'));
     err.preTimeToWait = (translate && translate('errors.ddos-rate-limit.pre-time-to-wait'));
     err.timeToWait = rateLimitsConfig.rateLimits.requests.windowSizeInMinutes;
     err.postTimeToWait = (translate && translate('errors.ddos-rate-limit.post-time-to-wait'));
     content.title = (translate && translate('errors.ddos-rate-limit.title'));
+    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
     content.message = (translate && translate('errors.ddos-rate-limit.message'));
     content.preTimeToWait = (translate && translate('errors.ddos-rate-limit.pre-time-to-wait'));
     content.timeToWait = rateLimitsConfig.rateLimits.requests.windowSizeInMinutes;
@@ -43,11 +48,13 @@ const getContent = (err, translate) => {
   if (err.code === 'SUBMISSION_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
+    err.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
     err.title = (translate && translate('errors.submission-rate-limit.title'));
     err.message = (translate && translate('errors.submission-rate-limit.message'));
     err.preTimeToWait = (translate && translate('errors.submission-rate-limit.pre-time-to-wait'));
     err.timeToWait = rateLimitsConfig.rateLimits.submissions.windowSizeInMinutes;
     err.postTimeToWait = (translate && translate('errors.submission-rate-limit.post-time-to-wait'));
+    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
     content.title = (translate && translate('errors.submission-rate-limit.title'));
     content.message = (translate && translate('errors.submission-rate-limit.message'));
     content.preTimeToWait = (translate && translate('errors.submission-rate-limit.pre-time-to-wait'));
@@ -85,6 +92,7 @@ module.exports = options => {
     const content = getContent(err, translate);
     const locals = {
       error: err,
+      serviceName: content.serviceName,
       content: debug === true ? err : content,
       showStack: debug === true,
       startLink: returnBaseUrl(req.path),
