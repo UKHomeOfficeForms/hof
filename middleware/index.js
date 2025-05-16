@@ -5,5 +5,6 @@ module.exports = {
   errors: require('./errors'),
   notFound: require('./not-found'),
   deepTranslate: require('./deep-translate'),
-  rateLimiter: require('./rate-limiter')
+  rateLimiter: require('./rate-limiter'),
+  serviceDown: require('./service-down')
 };
