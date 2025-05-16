@@ -211,6 +211,9 @@ function bootstrap(options) {
   const sessions = sessionStore(app, config);
   app.use('/healthz', health(sessions));
 
+  // Default middleware for service maintenance page
+  app.use(require('./middleware/service-down'));
+
   app.use((req, res, next) => {
     const id = _.get(req, 'session.id', 'N/A');
     req.log = config.logger.logSession(id);
