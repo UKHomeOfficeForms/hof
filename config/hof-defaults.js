@@ -1,6 +1,7 @@
 'use strict';
 /* eslint no-process-env: "off" */
 const rateLimits = require('./rate-limits');
+const Helper = require('../utilities/helpers');
 
 const defaults = {
   appName: process.env.APP_NAME || 'HOF Application',
@@ -51,7 +52,8 @@ const defaults = {
     pdfConverter: process.env.PDF_CONVERTER_URL
   },
   serveStatic: process.env.SERVE_STATIC_FILES !== 'false',
-  sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300
+  sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300,
+  serviceUnavailable: Helper.getEnvBoolean(process.env.SERVICE_UNAVAILABLE, false, 'SERVICE_UNAVAILABLE')
 };
 
 module.exports = Object.assign({}, defaults, rateLimits);
