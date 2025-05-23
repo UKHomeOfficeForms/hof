@@ -1,0 +1,13 @@
+{{<error}}
+  {{$content}}
+   <h1 class="govuk-heading-l">{{title}}</h1>
+   <p class="govuk-body">{{message}}</p>
+   <p class="govuk-body">{{answers-saved}}</p>
+   {{#contact}}
+   <p class="govuk-body">{{contact}}</p>
+   {{/contact}}
+   {{#alternative}}
+   <p class="govuk-body">{{alternative}}</p>
+   {{/alternative}}
+  {{/content}}
+{{/error}}

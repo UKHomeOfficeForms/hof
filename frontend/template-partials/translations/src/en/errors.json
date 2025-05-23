@@ -26,5 +26,10 @@
     "message": "You have submitted too many applications in a short space of time.",
     "pre-time-to-wait": "Please try again in ",
     "post-time-to-wait": " minutes."
-  }
+  },
+  "service-unavailable": {
+    "title": "Sorry, the service is unavailable",
+    "message": "This service is temporarily unavailable.",
+    "answers-saved": "Your answers have not been saved."
+    }
 }

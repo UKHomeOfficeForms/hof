@@ -1,3 +1,14 @@
+## 2025-05-20, Version 22.7.0 (Stable), @Rhodine-orleans-lindsay @sulthan-ahmed
+### Added
+- 'Service Unavailable' functionality added which allows for services to redirect to a 'Service Unavailable' page when there is a need to pause a service for things like maintenance:
+  - Adds 'service unavailable' error middleware
+  - Includes default service unavailable html view
+  - Includes flag to set `SERVICE_UNAVAILABLE` config to true to enable the functionality
+### Changed
+- Error pages can now show the service name in the title and journey header
+### Security
+- Updates patch and minor dependencies
+
 ## 2025-05-09, Version 22.6.0 (Stable), @vivekkumar-ho
 ### Changed
 - Support for passing `maxlengthAttribute` property for input-text field. The HTML maxlength attribute is applied when `maxlengthAttribute: true` and the `maxlength` validator are specified in the field config
