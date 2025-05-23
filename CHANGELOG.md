@@ -1,4 +1,4 @@
-## 2025-05-20, Version 22.7.0 (Stable), @Rhodine-orleans-lindsay @sulthan-ahmed
+## 2025-05-28, Version 22.7.0 (Stable), @Rhodine-orleans-lindsay @sulthan-ahmed
 ### Added
 - 'Service Unavailable' functionality added which allows for services to redirect to a 'Service Unavailable' page when there is a need to pause a service for things like maintenance:
   - Adds 'service unavailable' error middleware

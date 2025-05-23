@@ -848,7 +848,9 @@ Kubernetes healthcheck URLs are provided as defaults if no overrides are supplie
 Allows a service to be paused when required and then resumed. It ensures that anyone using the service that lands on any part of the form is diverted to a "Service Unavailable" page which will communicate to the user that the service is not available at this time.
 
 ### Usage
-- Set the `SERVICE_PAUSED` env to `true` in your service.
+- Set the `SERVICE_UNAVAILABLE` env to `true` in your service.
+- Set the`ERROR_REDIRECT_CODES` env to `500 501 502 504` in your service to override the default nginx error page for error `503`.
+
 
 ### Page Content Customisation
 There is default text for this page. Default text can be overridden by setting the `message` and `answers-saved` properties in the `errors.json` file of the service. Note that information relating to who to contact and alternatives to using the form is optional and so there is no default text for these unless the properties `contact` and `alternative` are set in errors.json:
