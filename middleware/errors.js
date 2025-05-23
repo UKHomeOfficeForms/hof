@@ -5,71 +5,75 @@ const rateLimitsConfig = require('../config/rate-limits');
 
 const errorTitle = code => `${code}_ERROR`;
 const errorMsg = code => `There is a ${code}_ERROR`;
+
 // eslint-disable-next-line complexity
 const getContent = (err, translate) => {
   const content = {};
 
+  // Helper to safely call translate if it's a function
+  const t = key => (typeof translate === 'function' ? translate(key) : undefined);
+
   if (err.code === 'SESSION_TIMEOUT') {
     err.status = 401;
     err.template = 'session-timeout';
-    err.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
-    err.title = (translate && translate('errors.session.title'));
-    err.message = (translate && translate('errors.session.message'));
-    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
-    content.title = (translate && translate('errors.session.title'));
-    content.message = (translate && translate('errors.session.message'));
+    err.serviceName = t('journey.serviceName') || t('journey.header');
+    err.title = t('errors.session.title');
+    err.message = t('errors.session.message');
+    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.title = t('errors.session.title');
+    content.message = t('errors.session.message');
   }
 
   if (err.code === 'NO_COOKIES') {
     err.status = 403;
     err.template = 'cookie-error';
-    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
-    content.title = (translate && translate('errors.cookies-required.title'));
-    content.message = (translate && translate('errors.cookies-required.message'));
+    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.title = t('errors.cookies-required.title');
+    content.message = t('errors.cookies-required.message');
   }
 
   if (err.code === 'DDOS_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
-    err.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
-    err.title = (translate && translate('errors.ddos-rate-limit.title'));
-    err.message = (translate && translate('errors.ddos-rate-limit.message'));
-    err.preTimeToWait = (translate && translate('errors.ddos-rate-limit.pre-time-to-wait'));
+    err.serviceName = t('journey.serviceName') || t('journey.header');
+    err.title = t('errors.ddos-rate-limit.title');
+    err.message = t('errors.ddos-rate-limit.message');
+    err.preTimeToWait = t('errors.ddos-rate-limit.pre-time-to-wait');
     err.timeToWait = rateLimitsConfig.rateLimits.requests.windowSizeInMinutes;
-    err.postTimeToWait = (translate && translate('errors.ddos-rate-limit.post-time-to-wait'));
-    content.title = (translate && translate('errors.ddos-rate-limit.title'));
-    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
-    content.message = (translate && translate('errors.ddos-rate-limit.message'));
-    content.preTimeToWait = (translate && translate('errors.ddos-rate-limit.pre-time-to-wait'));
+    err.postTimeToWait = t('errors.ddos-rate-limit.post-time-to-wait');
+    content.title = t('errors.ddos-rate-limit.title');
+    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.message = t('errors.ddos-rate-limit.message');
+    content.preTimeToWait = t('errors.ddos-rate-limit.pre-time-to-wait');
     content.timeToWait = rateLimitsConfig.rateLimits.requests.windowSizeInMinutes;
-    content.postTimeToWait = (translate && translate('errors.ddos-rate-limit.post-time-to-wait'));
+    content.postTimeToWait = t('errors.ddos-rate-limit.post-time-to-wait');
   }
 
   if (err.code === 'SUBMISSION_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
-    err.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
-    err.title = (translate && translate('errors.submission-rate-limit.title'));
-    err.message = (translate && translate('errors.submission-rate-limit.message'));
-    err.preTimeToWait = (translate && translate('errors.submission-rate-limit.pre-time-to-wait'));
+    err.serviceName = t('journey.serviceName') || t('journey.header');
+    err.title = t('errors.submission-rate-limit.title');
+    err.message = t('errors.submission-rate-limit.message');
+    err.preTimeToWait = t('errors.submission-rate-limit.pre-time-to-wait');
     err.timeToWait = rateLimitsConfig.rateLimits.submissions.windowSizeInMinutes;
-    err.postTimeToWait = (translate && translate('errors.submission-rate-limit.post-time-to-wait'));
-    content.serviceName = (translate && translate('journey.serviceName') || translate('journey.header'));
-    content.title = (translate && translate('errors.submission-rate-limit.title'));
-    content.message = (translate && translate('errors.submission-rate-limit.message'));
-    content.preTimeToWait = (translate && translate('errors.submission-rate-limit.pre-time-to-wait'));
+    err.postTimeToWait = t('errors.submission-rate-limit.post-time-to-wait');
+    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.title = t('errors.submission-rate-limit.title');
+    content.message = t('errors.submission-rate-limit.message');
+    content.preTimeToWait = t('errors.submission-rate-limit.pre-time-to-wait');
     content.timeToWait = rateLimitsConfig.rateLimits.submissions.windowSizeInMinutes;
-    content.postTimeToWait = (translate && translate('errors.submission-rate-limit.post-time-to-wait'));
+    content.postTimeToWait = t('errors.submission-rate-limit.post-time-to-wait');
   }
 
   err.code = err.code || 'UNKNOWN';
   err.status = err.status || 500;
 
   if (!content.title) {
-    content.title = (translate && translate('errors.default.title')) || errorTitle(err.code);
+    content.title = t('errors.default.title') || errorTitle(err.code);
   }
   if (!content.message) {
-    content.message = (translate && translate('errors.default.message')) || errorMsg(err.code);
+    content.message = t('errors.default.message') || errorMsg(err.code);
   }
   return content;
 };

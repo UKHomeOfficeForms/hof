@@ -2,7 +2,7 @@ const Helpers = require('../../../../utilities/helpers');
 
 // Mock logger to capture warnings
 jest.mock('../../../../lib/logger', () => ({
-  warn: jest.fn(),
+  warn: jest.fn()
 }));
 
 const logger = require('../../../../lib/logger');

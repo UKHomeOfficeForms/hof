@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 'use strict';
 
 const getTranslations = translate => {
@@ -35,8 +36,8 @@ module.exports = options => {
   const logger = opts.logger;
   // These are paths that are allowed to bypass the "service unavailable" middleware.
   // When the service is unavailable (for example, for maintenance), all routes except those listed here
-  // will return a paused response, typically a maintenance page. 
-  // 
+  // will return a paused response, typically a maintenance page.
+  //
   // - '/assets': Static assets (CSS, JS, images) must still be served so the paused page displays correctly.
   // - '/readyz' and '/livez': Health check endpoints must remain available for Kubernetes or other orchestration
   //   systems to determine if the container is healthy, even during maintenance.

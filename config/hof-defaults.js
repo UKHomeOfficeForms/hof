@@ -13,12 +13,12 @@ const defaults = {
   csp: {
     disabled: parseBoolean(process.env.DISABLE_CSP, false, 'DISABLE_CSP')
   },
-  getCookies: parseBoolean(process.env.GET_COOKIES, true, 'GET_COOKIES'),
-  getTerms: parseBoolean(process.env.GET_TERMS, true, 'GET_TERMS'),
-  getAccessibility: parseBoolean(process.env.GET_ACCESSIBILITY, false, 'GET_ACCESSIBILITY'),
-  sessionTimeoutWarningContent: parseBoolean(process.env.SESSION_TIMEOUT_WARNING_CONTENT, false, 'SESSION_TIMEOUT_WARNING_CONTENT'),
-  exitFormContent: parseBoolean(process.env.EXIT_FORM_CONTENT, false, 'EXIT_FORM_CONTENT'),
-  saveExitFormContent: parseBoolean(process.env.SAVE_EXIT_FORM_CONTENT, false, 'SAVE_EXIT_FORM_CONTENT'),
+  getCookies: true,
+  getTerms: true,
+  getAccessibility: false,
+  sessionTimeoutWarningContent: false,
+  exitFormContent: false,
+  saveExitFormContent: false,
   viewEngine: 'html',
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,
@@ -52,7 +52,7 @@ const defaults = {
   apis: {
     pdfConverter: process.env.PDF_CONVERTER_URL
   },
-  serveStatic: parseBoolean(process.env.SERVE_STATIC_FILES, true, 'SERVE_STATIC_FILES'),
+  serveStatic: process.env.SERVE_STATIC_FILES !== 'false',
   sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300,
   serviceUnavailable: parseBoolean(process.env.SERVICE_UNAVAILABLE, false, 'SERVICE_UNAVAILABLE')
 };

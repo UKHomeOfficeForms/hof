@@ -174,7 +174,9 @@ module.exports = class Helpers {
         return false;
       }
       logger.warn(
-        `Invalid environment variable ${envVarName} value "${rawValue}" – must be "true" or "false"; defaulting to ${fallback}`
+        `Invalid environment variable ${envVarName} value "${rawValue}" ` +
+        '– must be "true" or "false"; defaulting to ' +
+        `${fallback}`
       );
       return fallback;
     }

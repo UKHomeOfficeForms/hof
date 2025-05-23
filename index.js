@@ -242,7 +242,7 @@ function bootstrap(options) {
 
   if (config.serviceUnavailable === true) {
     app.use((req, res, next) => {
-      if (!bypassPaths.some(path => req.path.startsWith(path))) {
+      if (!bypassPaths.some(bypassPath => req.path.startsWith(bypassPath))) {
         return res.redirect('/service-unavailable');
       }
       return next();
