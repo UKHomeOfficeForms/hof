@@ -6,5 +6,5 @@ module.exports = {
   notFound: require('./not-found'),
   deepTranslate: require('./deep-translate'),
   rateLimiter: require('./rate-limiter'),
-  servicePaused: require('./service-paused')
+  serviceUnavailable: require('./service-unavailable')
 };

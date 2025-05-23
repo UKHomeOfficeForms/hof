@@ -2,7 +2,7 @@
 
 const httpMock = require('node-mocks-http');
 
-describe.only('service-paused', () => {
+describe('service-unavailable', () => {
   let middleware;
   let req;
   let res;
@@ -21,11 +21,11 @@ describe.only('service-paused', () => {
   });
 
   describe('middleware', () => {
-    it('renders service-paused with a default title, message and answers-saved', () => {
-      middleware = require('../../middleware/').servicePaused();
+    it('renders service-unavailable with a default title, message and answers-saved', () => {
+      middleware = require('../../middleware').serviceUnavailable();
       middleware(req, res, next);
 
-      res.render.should.have.been.calledWith('service-paused', sinon.match({
+      res.render.should.have.been.calledWith('service-unavailable', sinon.match({
         title: 'Sorry, this service is unavailable',
         message: 'This service is temporarily unavailable',
         'answers-saved': 'Your answers have not been saved',
@@ -34,17 +34,17 @@ describe.only('service-paused', () => {
       }));
     });
 
-    it('renders a service-paused with a translated text when a translate function is provided', () => {
+    it('renders a service-unavailable with a translated text when a translate function is provided', () => {
       const translate = sinon.stub().returnsArg(0);
-      middleware = require('../../middleware/').servicePaused({translate: translate});
+      middleware = require('../../middleware').serviceUnavailable({translate: translate});
       middleware(req, res, next);
 
       translate.should.have.been.called;
 
-      res.render.should.have.been.calledWith('service-paused', sinon.match({
-        title: 'errors.service-paused.title',
-        message: 'errors.service-paused.message',
-        'answers-saved': 'errors.service-paused.answers-saved',
+      res.render.should.have.been.calledWith('service-unavailable', sinon.match({
+        title: 'errors.service-unavailable.title',
+        message: 'errors.service-unavailable.message',
+        'answers-saved': 'errors.service-unavailable.answers-saved',
         contact: '',
         alternative: ''
       }));
@@ -55,7 +55,7 @@ describe.only('service-paused', () => {
       const logger = {
         warn: sinon.stub().returnsArg(0)
       };
-      middleware = require('../../middleware/').servicePaused({translate: translate, logger: logger});
+      middleware = require('../../middleware').serviceUnavailable({translate: translate, logger: logger});
       middleware(req, res, next);
 
       logger.warn.should.have.been.calledWith('Service temporarily unavailable - service paused.');

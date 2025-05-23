@@ -27,7 +27,7 @@
     "pre-time-to-wait": "Please try again in ",
     "post-time-to-wait": " minutes."
   },
-  "service-paused": {
+  "service-unavailable": {
     "title": "Sorry, the service is unavailable",
     "message": "This service is temporarily unavailable.",
     "answers-saved": "Your answers have not been saved."

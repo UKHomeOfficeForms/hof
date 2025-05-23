@@ -51,8 +51,8 @@ const loadRoutes = (app, config) => {
 };
 
 const applyErrorMiddlewares = (app, config) => {
-  if (config.servicePaused === true || config.servicePaused === 'true') {
-    app.use(hofMiddleware.servicePaused({
+  if (config.serviceUnavailable === true) {
+    app.use(hofMiddleware.serviceUnavailable({
       logger: config.logger
     }));
   }
@@ -161,7 +161,7 @@ function bootstrap(options) {
     res.locals.sessionTimeoutWarningContent = config.sessionTimeoutWarningContent;
     res.locals.exitFormContent = config.exitFormContent;
     res.locals.saveExitFormContent = config.saveExitFormContent;
-    res.locals.servicePaused = config.servicePaused;
+    res.locals.serviceUnavailable = config.serviceUnavailable;
     next();
   });
 
@@ -238,10 +238,12 @@ function bootstrap(options) {
   // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
   app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
   // Check if service has been paused and redirect accordingly
-  if (config.servicePaused === true || config.servicePaused === 'true') {
+  const bypassPaths = ['/assets', '/healthcheck', '/service-unavailable'];
+
+  if (config.serviceUnavailable === true) {
     app.use((req, res, next) => {
-      if (req.path !== '/service-paused') {
-        return res.redirect('/service-paused');
+      if (!bypassPaths.some(path => req.path.startsWith(path))) {
+        return res.redirect('/service-unavailable');
       }
       return next();
     });
