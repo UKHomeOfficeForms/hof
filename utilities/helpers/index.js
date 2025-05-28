@@ -2,6 +2,7 @@
 'use strict';
 
 const _ = require('lodash');
+const logger = require('../../lib/logger');
 
 module.exports = class Helpers {
   /**
@@ -145,5 +146,44 @@ module.exports = class Helpers {
       condition.value === (req.form.values[condition.field] ||
       (!Object.keys(req.form.values).includes(condition.field) &&
       _.get(req, `form.historicalValues[${condition.field}]`)));
+  }
+
+  /**
+   * Read an environment variable and coerce it to boolean.
+   *
+   * @param {*}     rawValue    The raw value (e.g. process.env.FEATURE_FLAG)
+   * @param {boolean} [fallback=false]   Value to use if rawValue is null/undefined/invalid
+   * @param {string} [envVarName='ENV_VAR']  Name for log context
+   * @returns {boolean}
+   */
+  static getEnvBoolean(rawValue, fallback = false, envVarName = 'ENV_VAR') {
+    if (typeof rawValue === 'boolean') {
+      return rawValue;
+    }
+
+    if (rawValue === null || rawValue === undefined) {
+      return fallback;
+    }
+
+    if (typeof rawValue === 'string') {
+      const normalized = rawValue.trim().toLowerCase();
+      if (normalized === 'true') {
+        return true;
+      }
+      if (normalized === 'false') {
+        return false;
+      }
+      logger.warn(
+        `Invalid environment variable ${envVarName} value "${rawValue}" ` +
+        '– must be "true" or "false"; defaulting to ' +
+        `${fallback}`
+      );
+      return fallback;
+    }
+
+    logger.warn(
+      `Invalid environment variable ${envVarName} type (${typeof rawValue}); defaulting to ${fallback}`
+    );
+    return fallback;
   }
 };
