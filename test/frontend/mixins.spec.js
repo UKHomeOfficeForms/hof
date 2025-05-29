@@ -599,6 +599,145 @@ describe('Template Mixins', () => {
       });
     });
 
+    describe('maxlengthAttribute - input-text', () => {
+      beforeEach(() => {
+        render.resetHistory();
+      });
+
+      it('sets maxlengthAttribute to true when explicitly set to true in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: true
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: true
+          })
+        );
+      });
+
+      it('sets maxlengthAttribute to false when explicitly set to false in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: false
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+
+      it('defaults maxlengthAttribute to false when not defined in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {}
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+
+      it('sets maxlengthAttribute to false for string value in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: 'Test'
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+
+      it('sets maxlengthAttribute to false for null value in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: null
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+
+      it('sets maxlengthAttribute to false for undefined value in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: undefined
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+
+      it('sets maxlengthAttribute to false for number value in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: 1234
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+
+      it('sets maxlengthAttribute to false for object value in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: {}
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+
+      it('sets maxlengthAttribute to false for array value in field config', () => {
+        res.locals.options.fields = {
+          'field-name': {
+            maxlengthAttribute: ['test']
+          }
+        };
+        middleware(req, res, next);
+        res.locals['input-text']().call(res.locals, 'field-name');
+        render.should.have.been.calledWith(
+          sinon.match({
+            maxlengthAttribute: false
+          })
+        );
+      });
+    });
+
     describe('input-number', () => {
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
