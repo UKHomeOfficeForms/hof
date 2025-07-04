@@ -6,7 +6,8 @@ module.exports = {
     out: 'public/js/bundle.js',
     match: 'assets/js/**/*.js',
     restart: false,
-    compress: false
+    compress: false,
+    debug: false
   },
   sass: {
     src: 'assets/scss/app.scss',
@@ -14,7 +15,8 @@ module.exports = {
     match: 'assets/scss/**/*.scss',
     restart: false,
     quietDeps: false,
-    outputStyle: 'expanded'
+    outputStyle: 'expanded',
+    sourceMaps: false
   },
   translate: {
     src: 'apps/**/translations/src',
