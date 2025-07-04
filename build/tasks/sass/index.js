@@ -23,16 +23,43 @@ module.exports = config => {
         aliases.$$theme = `hof-theme-${config.theme}`;
       }
 
+      // Build source maps if we are not in production
+      const createSourceMaps = !config.production && config.sass.sourceMaps;
+
       sass.render({
         file: config.sass.src,
         importer: importer({ aliases }),
         aliases,
         outputStyle: config.sass.outputStyle,
-        quietDeps: config.sass.quietDeps
-      }, (err, result) => err ? reject(err) : resolve(result.css));
+        quietDeps: config.sass.quietDeps,
+        outFile: out,
+        sourceMap: createSourceMaps
+      }, (err, result) => err ? reject(err) : resolve(result));
     }))
-    .then(css => new Promise((resolve, reject) => {
-      fs.writeFile(out, css, err => err ? reject(err) : resolve());
-    }));
+    .then(result => {
+      // Write the compiled CSS to the output file
+      const writeCss = new Promise((resolve, reject) => {
+        fs.writeFile(out, result.css, err => err ? reject(err) : resolve());
+      });
+
+      // If a sourcemap was generated, write it to a separate file
+      if (result.map) {
+        const mapPath = `${out}.map`;
+        const writeMap = new Promise((resolve, reject) => {
+          fs.writeFile(mapPath, result.map, err => {
+            if (err) {
+              console.log('Failed to create sourcemap:', err);
+              reject(err);
+            } else {
+              console.log('Sourcemap created successfully:', mapPath);
+              resolve();
+            }
+          });
+        });
+        return Promise.all([writeCss, writeMap]);
+      }
+
+      return writeCss;
+    });
 };
 module.exports.task = 'compile sass';

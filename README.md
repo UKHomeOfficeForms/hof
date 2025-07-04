@@ -68,6 +68,21 @@ It is recommended to alias `hof-build` to an npm script in your package.json.
 Note: For SASS compilation it's possible to additionally configure the following options via the hof.settings file (see the configuration section below)
 - `outputStyle` - Controls whether the CSS output is compressed or not, expanded (default) = non compressed and compressed = compressed CSS output.
 - `quietDeps` - This controls whether you get deprecation warning shown in the console output, if set to false (default) SASS deprecation warnings will be shown in the console, if set to true then deprecation warnings will not be shown in the console output.
+- `sourceMaps` - This controls whether the build will output css sourcemaps to help with debugging. These will be output to the same directory as the css output as a .map file. This option is not currently available in production.
+
+For JavaScript compilation, browserify can be set to debug mode by setting the `debug` option to true. This will cause browserify to output JavaScript sourcemaps as a .js.map file to the same directory as the js bundle.
+
+Debugging example:
+```
+  "build": {
+    "sass": {
+      "sourceMaps": true
+    },
+    "browserify": {
+      "debug": true
+    }
+  }
+```
 
 ## Watch
 

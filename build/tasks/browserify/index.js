@@ -4,6 +4,7 @@ const browserify = require('browserify');
 const fs = require('fs');
 const path = require('path');
 const minify = require('./compress');
+const exorcist = require('exorcist');
 
 const mkdir = require('../../lib/mkdir');
 
@@ -14,9 +15,12 @@ module.exports = config => {
 
   const out = path.resolve(process.cwd(), config.browserify.out);
 
+  // Enable debug mode (builds source maps) only if not in production
+  const debugMode = !config.production && config.browserify.debug;
+
   return mkdir(out)
     .then(() => new Promise((resolve, reject) => {
-      const bundler = browserify(config.browserify.src);
+      const bundler = browserify(config.browserify.src, {debug: debugMode});
       if (config.theme) {
         bundler.transform(require('aliasify'), {
           aliases: {
@@ -28,6 +32,12 @@ module.exports = config => {
       if (config.browserify.compress || config.production) {
         stream = stream.pipe(minify());
       }
+
+      if (debugMode) {
+        // If debugging, use exorcist to extract a source map
+        stream = stream.pipe(exorcist(`${out}.map`));
+      }
+
       stream = stream.pipe(fs.createWriteStream(out));
 
       stream.on('finish', resolve).on('error', reject);
