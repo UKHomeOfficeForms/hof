@@ -1,3 +1,7 @@
+## 2025-07-09, Version 22.7.6 (Stable), @robertdeniszczyc2 @sulthan-ahmed
+### Changed
+- Updated SVG handling and related dependencies to address issues and improve compatibility. 
+
 ## 2025-05-29, Version 22.7.2 (Stable), @Rhodine-orleans-lindsay
 ### Fixed
 - Service unavailable text can now use html
