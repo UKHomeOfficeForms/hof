@@ -1,3 +1,7 @@
+## 2025-07-04, Version 22.7.3 (Stable), @gregaustinHO
+### Changed
+- Add support for source maps while debugging
+
 ## 2025-05-29, Version 22.7.2 (Stable), @Rhodine-orleans-lindsay
 ### Fixed
 - Service unavailable text can now use html
