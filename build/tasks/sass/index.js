@@ -6,6 +6,8 @@ const path = require('path');
 const sass = require('sass');
 const importer = require('../../helpers/importer');
 const mkdir = require('../../lib/mkdir');
+const hofConfig = require('../../../config/hof-defaults');
+const logger = require('../../../lib/logger')(hofConfig);
 
 module.exports = config => {
   if (!config.sass) {
@@ -44,14 +46,14 @@ module.exports = config => {
 
       // If a sourcemap was generated, write it to a separate file
       if (result.map) {
-        const mapPath = `${out}.map`;
+        const mapPath = path.join(path.dirname(out), path.basename(out) + '.map');
         const writeMap = new Promise((resolve, reject) => {
           fs.writeFile(mapPath, result.map, err => {
             if (err) {
-              console.log('Failed to create sourcemap:', err);
+              logger.error('Failed to create sourcemap:', err);
               reject(err);
             } else {
-              console.log('Sourcemap created successfully:', mapPath);
+              logger.info('Sourcemap created successfully:', mapPath);
               resolve();
             }
           });

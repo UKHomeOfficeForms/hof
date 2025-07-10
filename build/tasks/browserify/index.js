@@ -33,9 +33,10 @@ module.exports = config => {
         stream = stream.pipe(minify());
       }
 
+      // If debugging, use exorcist to extract a source map
       if (debugMode) {
-        // If debugging, use exorcist to extract a source map
-        stream = stream.pipe(exorcist(`${out}.map`));
+        const mapPath = path.join(path.dirname(out), path.basename(out) + '.map');
+        stream = stream.pipe(exorcist(mapPath));
       }
 
       stream = stream.pipe(fs.createWriteStream(out));

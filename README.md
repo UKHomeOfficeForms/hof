@@ -72,7 +72,7 @@ Note: For SASS compilation it's possible to additionally configure the following
 
 For JavaScript compilation, browserify can be set to debug mode by setting the `debug` option to true. This will cause browserify to output JavaScript sourcemaps as a .js.map file to the same directory as the js bundle.
 
-Debugging example:
+Debugging example (in hof.settings or your build config)
 ```
   "build": {
     "sass": {

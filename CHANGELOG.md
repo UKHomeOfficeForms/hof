@@ -1,5 +1,5 @@
-## 2025-07-04, Version 22.7.3 (Stable), @gregaustinHO
-### Changed
+## 2025-07-04, Version 22.8.0 (Stable), @gregaustinHO
+### Added
 - Add support for source maps while debugging
 
 ## 2025-05-29, Version 22.7.2 (Stable), @Rhodine-orleans-lindsay
