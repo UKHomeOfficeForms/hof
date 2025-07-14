@@ -53,12 +53,12 @@ describe('Sass Task with Source Maps', () => {
     sass.render.mockClear();
   });
 
-  it('Does not create run when no config provided', async () => {
+  it('does not execute the Sass task if no configuration is provided', async () => {
     await sassTask({});
     expect(fs.writeFile.mock.lastCall).toBe(undefined);
   });
 
-  it('writes CSS and sourcemap files and logs success', async () => {
+  it('writes both CSS and sourcemap files and logs a success message when source maps are enabled', async () => {
     await sassTask({
       sass: {
         src: 'assets/scss/app.scss',
@@ -86,7 +86,7 @@ describe('Sass Task with Source Maps', () => {
     ).toBe(0);
   });
 
-  it('Does not create sourcemap when option is disabled', async () => {
+  it('does not create sourcemap files when option is disabled in config', async () => {
     await sassTask({
       sass: {
         src: 'assets/scss/app.scss',
