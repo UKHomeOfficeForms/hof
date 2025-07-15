@@ -1,4 +1,4 @@
-## 2025-07-04, Version 22.8.0 (Stable), @gregaustinHO
+## 2025-07-04, Version 22.8.1 (Stable), @gregaustinHO
 ### Added
 - Add support for source maps while debugging
 
