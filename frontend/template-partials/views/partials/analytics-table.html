@@ -1,0 +1,25 @@
+<table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      {{#headers}}
+        <th scope="col" class="govuk-table__header app-custom-class">{{.}}</th>
+      {{/headers}}
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body"> 
+    {{#rows}}
+      <tr class="govuk-table__row">
+        {{#.}}
+          <td  class="govuk-table__cell">{{.}}</td>
+        {{/.}}
+      </tr>
+    {{/rows}}
+      <tr class="govuk-table__row">
+        {{#gaContainerId}}
+          <td>_ga_{{gaContainerId}}</td>
+          <td>{{containerIdPurpose}}</td>
+          <td>{{containerIdExpires}}</td>
+        {{/gaContainerId}}
+      </tr>
+  </tbody>
+</table>
