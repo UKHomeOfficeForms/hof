@@ -162,6 +162,7 @@ function bootstrap(options) {
     res.locals.exitFormContent = config.exitFormContent;
     res.locals.saveExitFormContent = config.saveExitFormContent;
     res.locals.serviceUnavailable = config.serviceUnavailable;
+    res.locals.gaContainerId = config.ga4TagId;
     next();
   });
 

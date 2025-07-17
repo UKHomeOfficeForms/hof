@@ -61,6 +61,8 @@
   },
   "no-identify": "No personal details are stored with this information, so you can’t be identified.",
   "analytics-table": {
+    "containerIdExpires": "2 years",
+    "containerIdPurpose": "Used to persist session state",
     "headers": [
       "Name",
       "Purpose",
