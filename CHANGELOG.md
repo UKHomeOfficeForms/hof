@@ -1,3 +1,7 @@
+## 2025-07-24, Version 22.8.4 (Stable), @vivekkumar-ho
+### Security
+- Upgraded axios version to address a security vulnerability
+
 ## 2025-07-16, Version 22.8.3 (Stable), @vivekkumar-ho
 ### Changed
 - Updated the cookies page to include the GA container ID, which corresponds to the Measurement ID.
