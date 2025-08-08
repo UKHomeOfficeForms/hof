@@ -166,7 +166,7 @@ module.exports = class Model extends EventEmitter {
       if (typeof callback === 'function') {
         callback(error);
       }
-      return error;
+      throw error;
     }
   }
 
