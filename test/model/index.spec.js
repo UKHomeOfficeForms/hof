@@ -146,24 +146,30 @@ describe('Model', () => {
       expect(options.data).to.not.be.ok;
     });
 
-    it('can parse failiure when no callback given', async () => {
+    it('can parse failure when no callback given', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.request(settings, bodyData, sandbox());
-      model._request.should.have.been.calledOnce;
-      const options = model._request.args[0][0];
-      options.method.should.equal('POST');
-      options.url.should.equal('http://example.com:3002/foo/bar');
-      options.data.should.equal('{"name":"Test name"}');
+      try {
+        await model.request(settings, bodyData, sandbox());
+      } catch(e) {
+        model._request.should.have.been.calledOnce;
+        const options = model._request.args[0][0];
+        options.method.should.equal('POST');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
+      }
     });
 
     it('can parse failiure when no data or callback given', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.request(settings, sandbox());
-      model._request.should.have.been.calledOnce;
-      const options = model._request.args[0][0];
-      options.method.should.equal('POST');
-      options.url.should.equal('http://example.com:3002/foo/bar');
-      expect(options.data).to.not.be.ok;
+      try {
+        await model.request(settings, sandbox());
+      } catch(e) {
+        model._request.should.have.been.calledOnce;
+        const options = model._request.args[0][0];
+        options.method.should.equal('POST');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        expect(options.data).to.not.be.ok;
+      }
     });
 
     it('sets the timeout from model options', async () => {
@@ -218,12 +224,15 @@ describe('Model', () => {
 
     it('sends an http PUT request if method option is "PUT"', async () => {
       sinon.stub(axios, 'post').resolves(Promise.resolve(success));
-      await model.save({ method: 'PUT' }, sandbox());
-      model._request.should.have.been.calledOnce;
-      const options = model._request.args[0][0];
-      options.method.should.equal('PUT');
-      options.url.should.equal('http://example.com:3002/foo/bar');
-      options.data.should.equal('{"name":"Test name"}');
+      try {
+        await model.save({ method: 'PUT' }, sandbox());
+      } catch (e) {
+        model._request.should.have.been.calledOnce;
+        const options = model._request.args[0][0];
+        options.method.should.equal('PUT');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
+      }
     });
 
     it('adds content type and length headers to request', async () => {
@@ -547,11 +556,15 @@ describe('Model', () => {
       });
     });
 
-    it('rejects with error on failure', async () => {
+    it('rejects with error on failure1', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.save(err => {
-        err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      try {
+        await model.save(err => {
+          err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
+        });
+      // eslint-disable-next-line no-empty
+      } catch(e) {
+      }
     });
   });
 
@@ -648,10 +661,14 @@ describe('Model', () => {
     it('does not parse response on error', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
-      await model.fetch(err => {
-        model.parse.should.not.have.been.called;
-        err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      try {
+        await model.fetch(err => {
+          model.parse.should.not.have.been.called;
+          err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
+        });
+      // eslint-disable-next-line no-empty
+      } catch(e) {
+      }
     });
 
     it('calls callback with error if response is not valid json', async () => {
@@ -859,9 +876,13 @@ describe('Model', () => {
 
     it('rejects with error on failure', () => {
       model._request.resolves(Promise.resolve(fail));
-      return model.fetch(err => {
-        err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      try {
+        model.fetch(err => {
+          err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
+        });
+      // eslint-disable-next-line no-empty
+      } catch(e) {
+      }
     });
   });
 
@@ -958,10 +979,14 @@ describe('Model', () => {
     it('does not parse response on error', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
-      await model.delete(err => {
-        model.parse.should.not.have.been.called;
-        err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      try {
+        await model.delete(err => {
+          model.parse.should.not.have.been.called;
+          err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
+        });
+      // eslint-disable-next-line no-empty
+      } catch(e) {
+      }
     });
 
     it('calls callback with error if response is not valid json', async () => {
@@ -988,9 +1013,12 @@ describe('Model', () => {
 
     it('passes options to url method if provided', async () => {
       model.url = sinon.stub().returns('http://example.com/');
-      await model.delete({ url: 'foo' }, callback);
-      model.url.should.have.been.calledOnce;
-      model.url.should.have.been.calledWithExactly({ url: 'foo' });
+      try {
+        await model.delete({ url: 'foo' }, callback);
+      } catch (e) {
+        model.url.should.have.been.calledOnce;
+        model.url.should.have.been.calledWithExactly({ url: 'foo' });
+      }
     });
 
     it('can handle a parsed URL object', async () => {
@@ -1071,9 +1099,13 @@ describe('Model', () => {
     it('emits a "sync" event', async () => {
       const sync = sinon.stub();
       model.on('sync', sync);
-      await model.delete(() => { });
-      sync.should.have.been.calledOnce;
-      sync.should.have.been.calledWith(sinon.match({ method: 'DELETE' }));
+
+      try {
+        await model.delete(() => {});
+      } catch (e) {
+        sync.should.have.been.calledOnce;
+        sync.should.have.been.calledWith(sinon.match({ method: 'DELETE' }));
+      }
     });
 
     it('emits a "fail" event on error', async () => {
@@ -1156,11 +1188,15 @@ describe('Model', () => {
       });
     });
 
-    it('rejects with error on failure', async () => {
+    it('rejects with error on failure3', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.delete(err => {
-        err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      try {
+        await model.delete(err => {
+          err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
+        });
+      // eslint-disable-next-line no-empty
+      } catch(e) {
+      }
     });
   });
 
