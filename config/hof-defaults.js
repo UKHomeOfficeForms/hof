@@ -25,8 +25,13 @@ const defaults = {
   host: process.env.HOST || '0.0.0.0',
   port: process.env.PORT || '8080',
   env: process.env.NODE_ENV || 'development',
-  gaTagId: process.env.GA_TAG || 'Test-GA-Tag',
+  gaTagId: process.env.GA_TAG,
   ga4TagId: process.env.GA_4_TAG,
+  showCookiesBanner: parseBoolean(
+    process.env.SHOW_COOKIES_BANNER,
+    Boolean(process.env.GA_TAG || process.env.GA_4_TAG),
+    'SHOW_COOKIES_BANNER'
+  ),
   // added to allow support for multiple HOF forms using GTM to customize how they track page views
   gtm: {
     tagId: process.env.GTM_TAG || false,

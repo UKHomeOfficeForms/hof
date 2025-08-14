@@ -1,3 +1,19 @@
+## 2025-09-01, Version 22.9.1 (Stable), @dk4g
+
+### Added
+- Added `showCookiesBanner` configuration flag to control cookie banner display
+  - Automatically shows banner when `GA_TAG` or `GA_4_TAG` environment variables are present
+  - Defaults to `false` when no Google Analytics is configured
+  - Can be explicitly controlled via `SHOW_COOKIES_BANNER` environment variable
+
+### Changed
+- Cookie banner now intelligently displays based on GA configuration
+- Improved cookie consent UX by hiding banner when GA is not enabled
+- **Layout template updated**: Projects that override the default `layout` template should update their custom templates to include the new `showCookiesBanner` logic. If you inherit from HOF's layout template, no action is required.
+
+### Migration Notes
+- **Custom Layout Templates**: If your project overrides the default HOF layout template, ensure your custom template includes the cookie banner conditional logic using the new `showCookiesBanner` configuration flag. Check the updated HOF layout template for reference implementation.
+
 ## 2025-08-28, Version 22.8.5 (Stable), @Rhodine-orleans-lindsay
 ### Fixed
 - Fixed bug where if `serviceName` had not been set in journey.json, the title tab on error pages did not default to the `header` in journey.json.
