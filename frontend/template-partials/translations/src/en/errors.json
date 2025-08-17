@@ -9,7 +9,11 @@
   },
   "404": {
     "title": "Page not found",
-    "description": "This page does not exist"
+    "description": "This page does not exist",
+    "paragraph1": "If you typed the web address, check it is correct.",
+    "paragraph2": "If you pasted the web address, check you copied the entire address.",
+    "paragraph3": "If the web address is correct or you selected a link or button,",
+    "paragraph3sub": "if you need to contact us"
   },
   "cookies-required": {
     "title": "Cookies are required to use this service",
