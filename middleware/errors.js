@@ -14,7 +14,7 @@ const getContent = (err, translate) => {
   const t = key => (typeof translate === 'function' ? translate(key) : undefined);
 
   if (err.code === 'SESSION_TIMEOUT') {
-    err.status = 401;
+    err.status = 408;
     err.template = 'session-timeout';
     err.serviceName = t('journey.serviceName') || t('journey.header');
     err.title = t('errors.session.title');
@@ -30,6 +30,14 @@ const getContent = (err, translate) => {
     content.serviceName = t('journey.serviceName') || t('journey.header');
     content.title = t('errors.cookies-required.title');
     content.message = t('errors.cookies-required.message');
+  }
+  if (err.code === 'UNAUTHORISED') {
+    err.status = 401;
+    err.template = '401';
+    err.title = (translate && translate('errors.403.title'));
+    err.message = (translate && translate('errors.403.description'));
+    content.title = (translate && translate('errors.401.title'));
+    content.message = (translate && translate('errors.401.description'));
   }
 
   if (err.code === 'DDOS_RATE_LIMIT') {

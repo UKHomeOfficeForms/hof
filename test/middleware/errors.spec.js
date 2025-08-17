@@ -76,7 +76,7 @@ describe('errors', () => {
         res.render.onCall(0).yields('error', html);
       });
 
-      it('renders the `error` template with `401` status', () => {
+      it('renders the `error` template with `408` status', () => {
         res.render = sinon.stub();
         res.render.onCall(0).yields('error', html);
 
@@ -93,7 +93,7 @@ describe('errors', () => {
 
         middleware(err, req, res, next);
 
-        res.status.should.have.been.calledWith(401);
+        res.status.should.have.been.calledWith(408);
         res.render.should.have.been.calledWith('session-timeout', sinon.match(locals));
         res.render.should.have.been.calledWith('error', sinon.match(locals));
       });
@@ -117,6 +117,24 @@ describe('errors', () => {
         res.render.should.have.been.calledWith('error', sinon.match(locals));
       });
 
+      it('renders the `error` template with `401` status', () => {
+        const err = {
+          code: 'UNAUTHORISED'
+        };
+
+        const locals = {
+          content: {message: 'errors.401.description', title: 'errors.401.title'},
+          error: err,
+          showStack: false,
+          startLink: '/'
+        };
+
+        middleware(err, req, res, next);
+        res.status.should.have.been.calledWith(401);
+        res.render.should.have.been.calledWith('401', sinon.match(locals));
+        res.render.should.have.been.calledWith('error', sinon.match(locals));
+      });
+
       it('renders the `error` template with `500` status', () => {
         const err = {
           code: 'UNKNOWN'
@@ -137,7 +155,7 @@ describe('errors', () => {
     });
 
     describe('when specific templates are available', () => {
-      it('renders the `session-timeout` template with `401` status for session timeouts', () => {
+      it('renders the `session-timeout` template with `408` status for session timeouts', () => {
         res.render.withArgs('session-timeout').yields(null, html);
 
         const err = {
@@ -153,7 +171,7 @@ describe('errors', () => {
 
         middleware(err, req, res, next);
 
-        res.status.should.have.been.calledWith(401);
+        res.status.should.have.been.calledWith(408);
         res.render.should.have.been.calledWith('session-timeout', sinon.match(locals));
         res.send.should.have.been.calledWith(html);
       });
@@ -171,14 +189,29 @@ describe('errors', () => {
           showStack: false,
           startLink: '/'
         };
-
         middleware(err, req, res, next);
-
         res.status.should.have.been.calledWith(403);
         res.render.should.have.been.calledWith('cookie-error', sinon.match(locals));
         res.send.should.have.been.calledWith(html);
       });
+      it('renders the `401` template with `401` status for unauthorised', () => {
+        res.render.withArgs('401').yields(null, html);
 
+        const err = {
+          code: 'UNAUTHORISED'
+        };
+
+        const locals = {
+          content: {message: 'errors.401.description', title: 'errors.401.title'},
+          error: err,
+          showStack: false,
+          startLink: '/'
+        };
+        middleware(err, req, res, next);
+        res.status.should.have.been.calledWith(401);
+        res.render.should.have.been.calledWith('401', sinon.match(locals));
+        res.send.should.have.been.calledWith(html);
+      });
       it('renders the `error` template with `500` status for unknown errors', () => {
         res.render.withArgs('error').yields(null, html);
 
