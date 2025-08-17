@@ -23,15 +23,21 @@ const getContent = (err, translate) => {
     content.title = t('errors.session.title');
     content.message = t('errors.session.message');
   }
-
   if (err.code === 'NO_COOKIES') {
-    err.status = 403;
+    err.status = 432;
     err.template = 'cookie-error';
     content.serviceName = t('journey.serviceName') || t('journey.header');
     content.title = t('errors.cookies-required.title');
     content.message = t('errors.cookies-required.message');
   }
-
+  if (err.code === 'FORBIDDEN') {
+    err.status = 403;
+    err.template = '403';
+    err.title = (translate && translate('errors.403.title'));
+    err.message = (translate && translate('errors.403.description'));
+    content.title = (translate && translate('errors.403.title'));
+    content.message = (translate && translate('errors.403.description'));
+  }
   if (err.code === 'DDOS_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
