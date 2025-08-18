@@ -247,18 +247,14 @@ describe('Model', () => {
 
     it('calls callback with an error if API response returns an error code', async () => {
       model._request.resolves(Promise.resolve(fail));
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      try {
+        await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await savePromise;
       } catch (e) {
         e.should.eql({ status: 500, message: 'error', headers: { error: 'fail' } });
       }
@@ -266,33 +262,26 @@ describe('Model', () => {
 
     it('calls callback with json data if response has success code', async () => {
       model._request.resolves(Promise.resolve(success));
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      const data = await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-      const data = await savePromise;
       data.should.eql({ message: 'success' });
     });
 
     it('passes returned data through parse method on success', async () => {
       sinon.stub(model, 'parse').returns({ parsed: 'message' });
       model._request.resolves(Promise.resolve(success));
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      const data = await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      const data = await savePromise;
       model.parse.should.have.been.calledOnce;
       model.parse.should.have.been.calledWithExactly({ message: 'success' });
       data.should.eql({ parsed: 'message' });
@@ -301,18 +290,14 @@ describe('Model', () => {
     it('does not parse response on error', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      try {
+        await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await savePromise;
       } catch (e) {
         model.parse.should.not.have.been.called;
         e.should.eql({ status: 500, message: 'error', headers: { error: 'fail' } });
@@ -322,18 +307,14 @@ describe('Model', () => {
     it('calls parseError on error to extract error status from response', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parseError').returns({ error: 'parsed' });
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      try {
+        await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await savePromise;
       } catch (err) {
         model.parseError.should.have.been.calledOnce;
         model.parseError.should.have.been.calledWithExactly(500, { message: 'error' });
@@ -343,19 +324,14 @@ describe('Model', () => {
 
     it('calls callback with error if response is not valid json', async () => {
       model._request.resolves(Promise.resolve(invalid));
-
-      const savePromise = new Promise((resolve, reject) => {
-        model.save((err, data) => {
+      try {
+        await model.save((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         });
-      });
-
-      try {
-        await savePromise;
       } catch (err) {
         err.should.be.an.instanceOf(Error);
         err.status.should.equal(200);
@@ -604,18 +580,14 @@ describe('Model', () => {
 
     it('calls callback with an error if model._request throws error event', async () => {
       model._request.resolves(Promise.reject(error));
-      const fetchPromise = new Promise((resolve, reject) => {
-        model.fetch(sandbox((err, data) => {
+      try {
+        await model.fetch(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await fetchPromise;
       } catch (e) {
         e.should.eql(error);
       }
@@ -623,17 +595,7 @@ describe('Model', () => {
 
     it('calls callback with json data if response has success code', async () => {
       model._request.resolves(Promise.resolve(success));
-      const fetchPromise = new Promise((resolve, reject) => {
-        model.fetch((err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        });
-      });
-
-      const data = await fetchPromise;
+      const data = await model.fetch();
       data.should.eql({ message: 'success' });
     });
 
