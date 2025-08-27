@@ -13,13 +13,24 @@ const getContent = (err, translate) => {
   // Helper to safely call translate if it's a function
   const t = key => (typeof translate === 'function' ? translate(key) : undefined);
 
+  // Check whether a service name has been set in the journey.json file
+  const getServiceName = () => {
+    const serviceName = t('journey.serviceName');
+    const header = t('journey.header');
+
+    // Return serviceName if it's translated, otherwise fallback to journey header
+    return serviceName && serviceName !== 'journey.serviceName' ? serviceName : header;
+  };
+
+  const serviceName = getServiceName();
+
   if (err.code === 'SESSION_TIMEOUT') {
     err.status = 401;
     err.template = 'session-timeout';
-    err.serviceName = t('journey.serviceName') || t('journey.header');
+    err.serviceName = serviceName;
     err.title = t('errors.session.title');
     err.message = t('errors.session.message');
-    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.serviceName = serviceName;
     content.title = t('errors.session.title');
     content.message = t('errors.session.message');
   }
@@ -27,7 +38,7 @@ const getContent = (err, translate) => {
   if (err.code === 'NO_COOKIES') {
     err.status = 403;
     err.template = 'cookie-error';
-    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.serviceName = serviceName;
     content.title = t('errors.cookies-required.title');
     content.message = t('errors.cookies-required.message');
   }
@@ -35,14 +46,14 @@ const getContent = (err, translate) => {
   if (err.code === 'DDOS_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
-    err.serviceName = t('journey.serviceName') || t('journey.header');
+    err.serviceName = serviceName;
     err.title = t('errors.ddos-rate-limit.title');
     err.message = t('errors.ddos-rate-limit.message');
     err.preTimeToWait = t('errors.ddos-rate-limit.pre-time-to-wait');
     err.timeToWait = rateLimitsConfig.rateLimits.requests.windowSizeInMinutes;
     err.postTimeToWait = t('errors.ddos-rate-limit.post-time-to-wait');
     content.title = t('errors.ddos-rate-limit.title');
-    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.serviceName = serviceName;
     content.message = t('errors.ddos-rate-limit.message');
     content.preTimeToWait = t('errors.ddos-rate-limit.pre-time-to-wait');
     content.timeToWait = rateLimitsConfig.rateLimits.requests.windowSizeInMinutes;
@@ -52,13 +63,13 @@ const getContent = (err, translate) => {
   if (err.code === 'SUBMISSION_RATE_LIMIT') {
     err.status = 429;
     err.template = 'rate-limit-error';
-    err.serviceName = t('journey.serviceName') || t('journey.header');
+    err.serviceName = serviceName;
     err.title = t('errors.submission-rate-limit.title');
     err.message = t('errors.submission-rate-limit.message');
     err.preTimeToWait = t('errors.submission-rate-limit.pre-time-to-wait');
     err.timeToWait = rateLimitsConfig.rateLimits.submissions.windowSizeInMinutes;
     err.postTimeToWait = t('errors.submission-rate-limit.post-time-to-wait');
-    content.serviceName = t('journey.serviceName') || t('journey.header');
+    content.serviceName = serviceName;
     content.title = t('errors.submission-rate-limit.title');
     content.message = t('errors.submission-rate-limit.message');
     content.preTimeToWait = t('errors.submission-rate-limit.pre-time-to-wait');

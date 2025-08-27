@@ -1,3 +1,7 @@
+## 2025-08-28, Version 22.8.5 (Stable), @Rhodine-orleans-lindsay
+### Fixed
+- Fixed bug where if `serviceName` had not been set in journey.json, the title tab on error pages did not default to the `header` in journey.json.
+
 ## 2025-07-24, Version 22.8.4 (Stable), @vivekkumar-ho
 ### Security
 - Upgraded axios version to address a security vulnerability
