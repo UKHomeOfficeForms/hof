@@ -3,9 +3,9 @@
   {{$propositionHeader}}{{/propositionHeader}}
 
   {{$validationSummary}}
-    {{#gaTagId}}
+    {{#hasGoogleAnalytics}}
       {{> partials-cookie-notification}}
-    {{/gaTagId}}
+    {{/hasGoogleAnalytics}}
   {{/validationSummary}}
 
   {{$header}}
@@ -14,7 +14,7 @@
 
   {{$content}}
     <p>{{intro}}</p>
-    {{^gaTagId}}
+    {{^hasGoogleAnalytics}}
       {{#intro-list}}
         {{> partials-bullet-list}}
       {{/intro-list}}
@@ -31,9 +31,9 @@
       {{#session-cookies-table}}
         {{> partials-session-cookies-table}}
       {{/session-cookies-table}}
-    {{/gaTagId}}
+    {{/hasGoogleAnalytics}}
 
-    {{#gaTagId}}
+    {{#hasGoogleAnalytics}}
       <div id="cookie-settings">
         {{#intro-list-ga-tag}}
           {{> partials-bullet-list}}
@@ -78,7 +78,7 @@
           </form>
         </div>
       </div>
-    {{/gaTagId}}
+    {{/hasGoogleAnalytics}}
 
   {{/content}}
 {{/layout}}

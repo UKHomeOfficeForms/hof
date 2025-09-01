@@ -32,6 +32,7 @@ const defaults = {
     Boolean(process.env.GA_TAG || process.env.GA_4_TAG),
     'SHOW_COOKIES_BANNER'
   ),
+  hasGoogleAnalytics: Boolean(process.env.GA_TAG || process.env.GA_4_TAG),
   // added to allow support for multiple HOF forms using GTM to customize how they track page views
   gtm: {
     tagId: process.env.GTM_TAG || false,

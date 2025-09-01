@@ -1,9 +1,47 @@
-logs
-*.log
-.idea/
-.DS_Store
-coverage
-node_modules
 docs
 example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Runtime and dependencies
+node_modules
+.npm
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE
+.idea/
+.vscode/
+*.sublime-*
+
+# Environment and config
+*.env
+.env.*
+.envrc
+
+# Coverage and testing
+coverage
+.nyc_output
 test
+
+# Development files
+.devcontainer
+.github
+.editorconfig
+.istanbul.yml
+.emails
+pull_request_template.md
+codeReviewChecklist.md
+
+# Build artifacts
+*.tgz
+*.tar.gz
