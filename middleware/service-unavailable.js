@@ -9,9 +9,12 @@ const getTranslations = translate => {
   };
 
   if (translate) {
+    // set const for checking whether a service name has been set in the journey.json file
+    const isServiceNameSet = translate('journey.serviceName') !== 'journey.serviceName';
+
     const contact = translate('errors.service-unavailable.contact');
     const alternative = translate('errors.service-unavailable.alternative');
-    translations.serviceName = translate('journey.serviceName') || translate('journey.header');
+    translations.serviceName = isServiceNameSet ? translate('journey.serviceName') : translate('journey.header');
     translations.title = translate('errors.service-unavailable.title');
     translations.message = translate('errors.service-unavailable.message');
     translations['answers-saved'] = translate('errors.service-unavailable.answers-saved');
