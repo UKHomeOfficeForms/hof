@@ -1,3 +1,12 @@
+## 2025-09-09, Version 22.9.0 (Stable), @Rhodine-orleans-lindsay
+### Fixed
+- Fixed bug where if text on session-timeout page was not being populated when the browser back button is used.
+### Changed
+- Session timeout page is now only available when there is a 'SESSION_TIMEOUT' error. If there is no such error and user navigates to '/session-timeout, the 'Page not found' error is shown.
+  - 👊 Impact : '/session-timeout' step can be removed from the steps array if it has been set in the project's apps/*/index.js file. This routing is now handled in the hof framework.
+### Security
+- Updates minor dependencies in sandbox
+
 ## 2025-08-28, Version 22.8.5 (Stable), @Rhodine-orleans-lindsay
 ### Fixed
 - Fixed bug where if `serviceName` had not been set in journey.json, the title tab on error pages did not default to the `header` in journey.json.
