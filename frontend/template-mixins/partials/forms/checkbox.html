@@ -1,5 +1,9 @@
 <div id="{{key}}-group" class="govuk-form-group {{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
-    {{#error}}<p class="govuk-error-message" aria-hidden="true">{{error.message}}</p>{{/error}}
+    {{#error}}
+    <p class="govuk-error-message" aria-hidden="true">
+        <span class="govuk-visually-hidden">Error:</span> {{error.message}}
+    </p>
+    {{/error}}
     <div class="govuk-checkboxes__item">
         <input class="govuk-checkboxes__input" type="checkbox" id="{{key}}" name="{{key}}" value="true" aria-required="{{required}}"{{#error}} aria-invalid="true"{{/error}}{{^error}}{{#toggle}} data-toggle="{{toggle}}"{{/toggle}}{{#selected}} checked="checked"{{/selected}}{{/error}}>
         <label for="{{key}}" class="{{#className}}{{className}} {{/className}}{{#invalid}}invalid-input{{/invalid}}">

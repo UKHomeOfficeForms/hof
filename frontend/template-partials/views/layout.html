@@ -6,7 +6,7 @@
     {{#errorlist.length}}{{#t}}errorlist.prefix{{/t}}{{/errorlist.length}}{{#title}}{{title}}{{/title}}{{^title}}{{$header}}{{/header}}{{/title}}{{#serviceName}} &ndash; {{serviceName}}{{/serviceName}} &ndash; GOV.UK
   {{/pageTitle}}
   {{$bodyStart}}
-    <a href="#{{#skipToMain}}{{skipToMain}}{{/skipToMain}}{{^skipToMain}}main-content{{/skipToMain}}" class="govuk-skip-link" id="skip-to-main">Skip to main content</a>
+    <a href="#{{#skipToMain}}{{skipToMain}}{{/skipToMain}}{{^skipToMain}}main-content{{/skipToMain}}" class="govuk-skip-link" data-module="govuk-skip-link" id="skip-to-main">Skip to main content</a>
   {{/bodyStart}}
   {{$headerClass}}govuk-header{{/headerClass}}
   {{$insideHeader}}{{/insideHeader}}
