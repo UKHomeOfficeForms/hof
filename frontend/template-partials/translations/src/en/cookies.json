@@ -1,7 +1,7 @@
 {
   "banner": {
-    "message": "GOV.UK uses cookies to make the site simpler.",
-    "link": "Find out more about cookies"
+    "message": "We use some essential cookies to make this website work.",
+    "link": "View cookies"
   },
   "header": "Cookies",
   "intro": "This service puts small files (known as ‘cookies’) onto your computer in order to:",
