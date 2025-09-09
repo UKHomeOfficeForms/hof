@@ -92,7 +92,6 @@ module.exports = {
       ],
       next: '/confirm'
     },
-    '/session-timeout': {},
     '/exit': {},
     '/save-and-exit': {}
   }

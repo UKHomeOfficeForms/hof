@@ -249,6 +249,30 @@ function bootstrap(options) {
       return next();
     });
   }
+
+  /**
+   * Handles requests to the session timeout page.
+   * - If the user has a session cookie but their session is missing or inactive,
+   *   this triggers a session timeout error handled by error middleware.
+   * - Otherwise, responds with a 404 "Page Not Found" error.
+   * This route ensures the timeout page only appears after an actual session expiry.
+  */
+  app.get('/session-timeout', (req, res, next) => {
+    if ((req.cookies['hof-wizard-sc']) && (!req.session || req.session.exists !== true)) {
+      const err = new Error('Session expired');
+      err.code = 'SESSION_TIMEOUT';
+      return next(err);
+    }
+    const err = new Error('Not Found');
+    err.status = 404;
+    const locals = Object.assign({}, req.translate('errors'));
+    if (locals && locals['404']) {
+      return res.status(404).render('404', locals['404']);
+    }
+    // Fallback: render a basic 404 page if translation is missing
+    return res.status(404).send('Page Not Found');
+  });
+
   if (config.getAccessibility === true) {
     deprecate(
       '`getAccessibility` option is deprecated and may be removed in future versions.',
