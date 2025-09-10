@@ -859,6 +859,36 @@ You can also provide an array of healthcheck URLs with `healthcheckUrls`,
 should you not want to throw a Cookies required error when requesting the app with specific URLs.
 Kubernetes healthcheck URLs are provided as defaults if no overrides are supplied.
 
+### Cookie Banner Control
+
+> **Available from version 22.9.1**
+
+| Variable | Description | Default | Example |
+|----------|-------------|---------|---------|
+| `SHOW_COOKIES_BANNER` | Controls whether the cookies banner is displayed | Auto-detected based on GA tags | `true`, `false` |
+
+**Behavior:**
+- If `SHOW_COOKIES_BANNER` is explicitly set, that value is used
+- If not set, banner is automatically shown when `GA_TAG` or `GA_4_TAG` is present
+- If no GA tags are configured, banner is hidden by default
+
+**Examples:**
+```bash
+# Explicitly show banner regardless of GA configuration
+SHOW_COOKIES_BANNER=true
+
+# Hide banner even when GA tags are present
+SHOW_COOKIES_BANNER=false
+GA_TAG=UA-12345678-1
+
+# Auto-detect (recommended) - shows banner when GA is configured
+GA_TAG=UA-12345678-1  # Banner will show
+GA_4_TAG=G-XXXXXXXXXX # Banner will show
+# (no GA tags)        # Banner will be hidden
+```
+
+**Note:** If you have a custom layout template that overrides the default HOF layout, you'll need to update it to include the new `showCookiesBanner` logic. Projects that inherit from the default HOF layout template will automatically receive this functionality.
+
 ## Service Unavailable
 Allows a service to be paused when required and then resumed. It ensures that anyone using the service that lands on any part of the form is diverted to a "Service Unavailable" page which will communicate to the user that the service is not available at this time.
 

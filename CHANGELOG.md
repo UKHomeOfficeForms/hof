@@ -1,3 +1,19 @@
+## 2025-09-10, Version 22.10.1 (Stable), @dk4g
+
+### Added
+- Added `showCookiesBanner` configuration flag to control cookie banner display
+  - Automatically shows banner when `GA_TAG` or `GA_4_TAG` environment variables are present
+  - Defaults to `false` when no Google Analytics is configured
+  - Can be explicitly controlled via `SHOW_COOKIES_BANNER` environment variable
+
+### Changed
+- Cookie banner now intelligently displays based on GA configuration
+- Improved cookie consent UX by hiding banner when GA is not enabled
+- **Layout template updated**: Projects that override the default `layout` template should update their custom templates to include the new `showCookiesBanner` logic. If you inherit from HOF's layout template, no action is required.
+
+### Migration Notes
+- **Custom Layout Templates**: If your project overrides the default HOF layout template, ensure your custom template includes the cookie banner conditional logic using the new `showCookiesBanner` configuration flag. Check the updated HOF layout template for reference implementation.
+
 ## 2025-09-09, Version 22.9.0 (Stable), @Rhodine-orleans-lindsay
 ### Fixed
 - Fixed bug where if text on session-timeout page was not being populated when the browser back button is used.

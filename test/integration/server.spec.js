@@ -795,6 +795,7 @@ describe('hof server', () => {
     before(() => {
       bs = bootstrap({
         port: 8888,
+        gaTagId: testTag,
         fields: 'fields',
         routes: [
           {
