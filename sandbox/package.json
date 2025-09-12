@@ -11,6 +11,7 @@
     "start:dev": "HOF_SANDBOX=true ../bin/hof-build watch",
     "dev": "yarn && GA_TAG=test nodemon server",
     "build": "HOF_SANDBOX=true ../bin/hof-build",
+    "build:vite": "vite",
     "postinstall": "yarn run build"
   },
   "author": "",
@@ -18,7 +19,8 @@
     "govuk-frontend": "3.14",
     "jquery": "^3.7.1",
     "sass": "^1.53.0",
-    "typeahead-aria": "^1.0.4"
+    "typeahead-aria": "^1.0.4",
+    "vite": "^7.1.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

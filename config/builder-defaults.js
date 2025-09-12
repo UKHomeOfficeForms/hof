@@ -1,14 +1,14 @@
 'use strict';
 
 module.exports = {
-  browserify: {
-    src: 'assets/js/index.js',
-    out: 'public/js/bundle.js',
-    match: 'assets/js/**/*.js',
-    restart: false,
-    compress: false,
-    debug: false
-  },
+  // browserify: {
+  //   src: 'assets/js/index.js',
+  //   out: 'public/js/bundle.js',
+  //   match: 'assets/js/**/*.js',
+  //   restart: false,
+  //   compress: false,
+  //   debug: false
+  // },
   sass: {
     src: 'assets/scss/app.scss',
     out: 'public/css/app.css',

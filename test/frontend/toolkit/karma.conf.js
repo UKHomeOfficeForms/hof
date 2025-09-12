@@ -3,9 +3,9 @@ module.exports = function (config) {
     browsers: [
       'PhantomJS'
     ],
-    frameworks: ['mocha', 'chai', 'browserify'],
+    frameworks: ['mocha', 'chai', 'vite'],
     preprocessors: {
-      './spec/index.js': ['browserify']
+      './spec/index.js': ['vite']
     },
     files: ['./spec/index.js'],
     singleRun: true
