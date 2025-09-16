@@ -1328,22 +1328,24 @@ This feature allows you to customise the content related to the session timeout 
 
 ### Usage
 
-To enable and customise the session timeout behavior, you need to set the component in your project's `hof.settings.json` file:
-```js
+To enable and customise the session timeout behavior, you need to set the component and translations in your project's `hof.settings.json` file:
+```json
  "behaviours": [
     "hof/components/session-timeout-warning"
-  ]
+  ],
+  "translations": "./apps/common/translations"
 ```
 
 By default, the framework uses the standard content provided by HOF. If you wish to override this with custom content at the project level, you must set the following variables to `true` in `hof.settings.json`:
 
-```js
- behaviours: [
-    require('../').components.sessionTimeoutWarning
+```json
+ "behaviours": [
+    "hof/components/session-timeout-warning"
   ],
-  sessionTimeoutWarningContent: true, // allows you to customise the content in the session timeout dialog box
-  exitFormContent: true // allows you to customise the content on the exit page
-  saveExitFormContent: true // allows you to customise the content on the save-and-exit page
+  "translations": "./apps/common/translations",
+  "sessionTimeoutWarningContent": true, // allows you to customise the content in the session timeout dialog box
+  "exitFormContent": true // allows you to customise the content on the exit page
+  "saveExitFormContent": true // allows you to customise the content on the save-and-exit page
 ```
 
 ### Customising content in `pages.json`
