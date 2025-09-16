@@ -3,14 +3,14 @@ import {resolve} from 'path';
 const __dirname = import.meta.dirname
 
 export default defineConfig({
-  root: './frontend',
+  root: '../../../frontend',
   build: {
     outDir: '../public/assets',
     emptyOutDir: true,
     rollupOptions: {
      input: {
-        index: resolve(__dirname, 'frontend/themes/gov-uk/client-js/index.js'),
-        styles: resolve(__dirname, 'frontend/themes/gov-uk/styles/govuk.scss')
+        index: resolve(__dirname, '../../../../hof/frontend/themes/gov-uk/client-js/index.js'),
+        styles: resolve(__dirname, '../../../../hof/frontend/themes/gov-uk/styles/govuk.scss')
       }
     },
     css: {
