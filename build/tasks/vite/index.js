@@ -1,33 +1,21 @@
 
 const vite = require('vite');
-// const {resolve} = require('path');
-// const viteConfig = require('../../../vite.config.js'); 
 const path = require('path');
+const viteConfig = path.resolve(__dirname, './vite.config.js');
 
-module.exports = () => {
-//   vite.defineConfig({
-//   root: '../../../frontend',
-//   build: {
-//     outDir: '../public/assets',
-//     emptyOutDir: true,
-//     rollupOptions: {
-//       input: {
-//         index: resolve(__dirname, '../../../../hof/frntend/themes/gov-uk/client-js/index.js'),
-//         styles: resolve(__dirname, '../../../../hof/frontend/themes/gov-uk/styles/govuk.scss')
-//       }
-//     },
-//     css: {
-//       preprocessorOptions: {
-//         scss: {
-//           includes: ['node_modules'],
-//         }
-//       }
-//   }
-// }
-// });
-return vite.build({
-  configFile: path.resolve(__dirname, './vite.config.js')
-});
-//return vite.build();
-}
+module.exports = (config) => {
+  // The Options.production’s value is set it up with a command flag in the package.json’s script. process.env.NODE_ENV);
+  console.log('Vite build - production:', config.production);
+  if (config.production === true) {
+    return vite.build({
+      configFile: viteConfig
+    });
+  } else {
+    process.env.NODE_ENV = 'development'; // TO DO make this dynamic to Ensure the environment is set to development for non-production builds
+  return vite.build({
+    configFile: viteConfig,
+    mode: 'development'
+  });
+}}
+
 module.exports.task = 'vite';
