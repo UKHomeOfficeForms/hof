@@ -1,3 +1,8 @@
+## 2025-10-02, Version 22.10.2 (Stable), @Rhodine-orleans-lindsay
+
+### Changed
+- Updated readme to clarify that translations must be set in hof.settings.json for session timeout to behave correctly.
+
 ## 2025-09-10, Version 22.10.1 (Stable), @dk4g
 
 ### Added
