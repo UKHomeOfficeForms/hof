@@ -1,3 +1,8 @@
+## 2025-10-08, Version 22.10.3 (Stable), @Rhodine-orleans-lindsay
+
+### Changed
+- Updated homeoffice-countries package to incorporate changes to the countries list.
+
 ## 2025-10-02, Version 22.10.2 (Stable), @Rhodine-orleans-lindsay
 
 ### Changed
