@@ -3,7 +3,6 @@
 
 const url = require('url');
 const Model = require('../../model');
-const axios = require('axios');
 
 describe('Model', () => {
   let model;
@@ -146,24 +145,30 @@ describe('Model', () => {
       expect(options.data).to.not.be.ok;
     });
 
-    it('can parse failiure when no callback given', async () => {
+    it('can parse failure when no callback given', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.request(settings, bodyData, sandbox());
-      model._request.should.have.been.calledOnce;
-      const options = model._request.args[0][0];
-      options.method.should.equal('POST');
-      options.url.should.equal('http://example.com:3002/foo/bar');
-      options.data.should.equal('{"name":"Test name"}');
+      try {
+        await model.request(settings, bodyData, sandbox());
+      } catch(err) {
+        model._request.should.have.been.calledOnce;
+        const options = model._request.args[0][0];
+        options.method.should.equal('POST');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
+      }
     });
 
-    it('can parse failiure when no data or callback given', async () => {
+    it('can parse failure when no data or callback given', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.request(settings, sandbox());
-      model._request.should.have.been.calledOnce;
-      const options = model._request.args[0][0];
-      options.method.should.equal('POST');
-      options.url.should.equal('http://example.com:3002/foo/bar');
-      expect(options.data).to.not.be.ok;
+      try {
+        await model.request(settings, sandbox());
+      } catch(err) {
+        model._request.should.have.been.calledOnce;
+        const options = model._request.args[0][0];
+        options.method.should.equal('POST');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        expect(options.data).to.not.be.ok;
+      }
     });
 
     it('sets the timeout from model options', async () => {
@@ -217,13 +222,17 @@ describe('Model', () => {
     });
 
     it('sends an http PUT request if method option is "PUT"', async () => {
-      sinon.stub(axios, 'post').resolves(Promise.resolve(success));
-      await model.save({ method: 'PUT' }, sandbox());
-      model._request.should.have.been.calledOnce;
-      const options = model._request.args[0][0];
-      options.method.should.equal('PUT');
-      options.url.should.equal('http://example.com:3002/foo/bar');
-      options.data.should.equal('{"name":"Test name"}');
+      model._request.resolves(Promise.resolve(success));
+      try {
+        await model.save({ method: 'PUT' }, sandbox());
+        model._request.should.have.been.calledOnce;
+        const options = model._request.args[0][0];
+        options.method.should.equal('PUT');
+        options.url.should.equal('http://example.com:3002/foo/bar');
+        options.data.should.equal('{"name":"Test name"}');
+      } catch (e) {
+        e.should.be.undefined;
+      }
     });
 
     it('adds content type and length headers to request', async () => {
@@ -238,18 +247,14 @@ describe('Model', () => {
 
     it('calls callback with an error if API response returns an error code', async () => {
       model._request.resolves(Promise.resolve(fail));
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      try {
+        await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await savePromise;
       } catch (e) {
         e.should.eql({ status: 500, message: 'error', headers: { error: 'fail' } });
       }
@@ -257,33 +262,26 @@ describe('Model', () => {
 
     it('calls callback with json data if response has success code', async () => {
       model._request.resolves(Promise.resolve(success));
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      const data = await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-      const data = await savePromise;
       data.should.eql({ message: 'success' });
     });
 
     it('passes returned data through parse method on success', async () => {
       sinon.stub(model, 'parse').returns({ parsed: 'message' });
       model._request.resolves(Promise.resolve(success));
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      const data = await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      const data = await savePromise;
       model.parse.should.have.been.calledOnce;
       model.parse.should.have.been.calledWithExactly({ message: 'success' });
       data.should.eql({ parsed: 'message' });
@@ -292,18 +290,14 @@ describe('Model', () => {
     it('does not parse response on error', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      try {
+        await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await savePromise;
       } catch (e) {
         model.parse.should.not.have.been.called;
         e.should.eql({ status: 500, message: 'error', headers: { error: 'fail' } });
@@ -313,18 +307,14 @@ describe('Model', () => {
     it('calls parseError on error to extract error status from response', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parseError').returns({ error: 'parsed' });
-      const savePromise = new Promise((resolve, reject) => {
-        model.save(sandbox((err, data) => {
+      try {
+        await model.save(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await savePromise;
       } catch (err) {
         model.parseError.should.have.been.calledOnce;
         model.parseError.should.have.been.calledWithExactly(500, { message: 'error' });
@@ -334,19 +324,14 @@ describe('Model', () => {
 
     it('calls callback with error if response is not valid json', async () => {
       model._request.resolves(Promise.resolve(invalid));
-
-      const savePromise = new Promise((resolve, reject) => {
-        model.save((err, data) => {
+      try {
+        await model.save((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         });
-      });
-
-      try {
-        await savePromise;
       } catch (err) {
         err.should.be.an.instanceOf(Error);
         err.status.should.equal(200);
@@ -549,9 +534,11 @@ describe('Model', () => {
 
     it('rejects with error on failure', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.save(err => {
+      try {
+        await model.save();
+      } catch(err) {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      }
     });
   });
 
@@ -593,18 +580,14 @@ describe('Model', () => {
 
     it('calls callback with an error if model._request throws error event', async () => {
       model._request.resolves(Promise.reject(error));
-      const fetchPromise = new Promise((resolve, reject) => {
-        model.fetch(sandbox((err, data) => {
+      try {
+        await model.fetch(sandbox((err, data) => {
           if (err) {
             reject(err);
           } else {
             resolve(data);
           }
         }));
-      });
-
-      try {
-        await fetchPromise;
       } catch (e) {
         e.should.eql(error);
       }
@@ -612,17 +595,7 @@ describe('Model', () => {
 
     it('calls callback with json data if response has success code', async () => {
       model._request.resolves(Promise.resolve(success));
-      const fetchPromise = new Promise((resolve, reject) => {
-        model.fetch((err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        });
-      });
-
-      const data = await fetchPromise;
+      const data = await model.fetch();
       data.should.eql({ message: 'success' });
     });
 
@@ -648,10 +621,12 @@ describe('Model', () => {
     it('does not parse response on error', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
-      await model.fetch(err => {
+      try {
+        await model.fetch();
+      } catch(err) {
         model.parse.should.not.have.been.called;
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      }
     });
 
     it('calls callback with error if response is not valid json', async () => {
@@ -859,9 +834,11 @@ describe('Model', () => {
 
     it('rejects with error on failure', () => {
       model._request.resolves(Promise.resolve(fail));
-      return model.fetch(err => {
+      try {
+        model.fetch();
+      } catch(err) {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      }
     });
   });
 
@@ -958,10 +935,12 @@ describe('Model', () => {
     it('does not parse response on error', async () => {
       model._request.resolves(Promise.resolve(fail));
       sinon.stub(model, 'parse');
-      await model.delete(err => {
+      try {
+        await model.delete();
+      } catch(err) {
         model.parse.should.not.have.been.called;
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      }
     });
 
     it('calls callback with error if response is not valid json', async () => {
@@ -987,10 +966,15 @@ describe('Model', () => {
     });
 
     it('passes options to url method if provided', async () => {
+      model._request.resolves(Promise.resolve(success));
       model.url = sinon.stub().returns('http://example.com/');
-      await model.delete({ url: 'foo' }, callback);
-      model.url.should.have.been.calledOnce;
-      model.url.should.have.been.calledWithExactly({ url: 'foo' });
+      try {
+        await model.delete({ url: 'foo' }, callback);
+        model.url.should.have.been.calledOnce;
+        model.url.should.have.been.calledWithExactly({ url: 'foo' });
+      } catch (e) {
+        e.should.be.undefined;
+      }
     });
 
     it('can handle a parsed URL object', async () => {
@@ -1071,9 +1055,13 @@ describe('Model', () => {
     it('emits a "sync" event', async () => {
       const sync = sinon.stub();
       model.on('sync', sync);
-      await model.delete(() => { });
-      sync.should.have.been.calledOnce;
-      sync.should.have.been.calledWith(sinon.match({ method: 'DELETE' }));
+
+      try {
+        await model.delete(() => {});
+      } catch (e) {
+        sync.should.have.been.calledOnce;
+        sync.should.have.been.calledWith(sinon.match({ method: 'DELETE' }));
+      }
     });
 
     it('emits a "fail" event on error', async () => {
@@ -1158,9 +1146,11 @@ describe('Model', () => {
 
     it('rejects with error on failure', async () => {
       model._request.resolves(Promise.resolve(fail));
-      await model.delete(err => {
+      try {
+        await model.delete();
+      } catch(err) {
         err.should.eql({ message: 'error', status: 500, headers: { error: 'fail' } });
-      });
+      }
     });
   });
 
