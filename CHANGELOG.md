@@ -1,3 +1,8 @@
+## 2025-10-10, Version 22.10.4 (Stable), @dk4g
+### Security
+- Upgraded axios version to address a security vulnerability
+- Updated version declarations to match installed packages
+
 ## 2025-10-08, Version 22.10.3 (Stable), @Rhodine-orleans-lindsay
 
 ### Changed
