@@ -8,12 +8,14 @@ const Hogan = require('hogan.js');
 const _ = require('underscore');
 
 const renderer = require('./render');
+const { amountWithUnitSelect } = require('../../../components');
 
 const PANELMIXIN = 'partials/mixins/panel';
 const PARTIALS = [
   'partials/forms/input-text-group',
   'partials/forms/input-text-date',
   'partials/forms/input-submit',
+  'partials/forms/input-text-amount-with-unit-select',
   'partials/forms/select',
   'partials/forms/checkbox',
   'partials/forms/textarea-group',
@@ -222,6 +224,7 @@ module.exports = function (options) {
         required: required,
         pattern: extension.pattern,
         date: extension.date,
+        amountWithUnitSelect: extension.amountWithUnitSelect,
         autocomplete: autocomplete,
         child: field.child,
         isPageHeading: field.isPageHeading,
@@ -467,6 +470,43 @@ module.exports = function (options) {
             const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { pattern: '[0-9]*', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
 
             return parts.concat(monthPart, yearPart).join('\n');
+          };
+        }
+      },
+      'input-amount-with-unit-select': {
+        handler: function () {
+          /**
+          * props: '[value] [id]'
+          */
+          return function (key) {
+            const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+            key = hoganRender(key, this);
+            // Exact unless there is a inexact property against the fields key.
+            const isExact = field.inexact !== true;
+
+            let autocomplete = field.autocomplete || {};
+            if (autocomplete === 'off') {
+              autocomplete = {
+                amount: 'off',
+                unit: 'off',
+              };
+            } else if (typeof autocomplete === 'string') {
+              autocomplete = {
+                amount: autocomplete + '-amount',
+                unit: autocomplete + '-unit',
+              };
+            }
+            const isThisRequired = field.validate ? field.validate.indexOf('required') > -1 : false;
+            const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
+            const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-2';
+            const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-2';
+
+            const parts = [];
+
+            const amountPart = compiled['partials/forms/input-text-amount-with-unit-select'].render(inputText.call(this, key + '-amount', { pattern: '[0-9]*', min: 1, hintId: key + '-hint', autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount, isThisRequired }));
+            const unitPart = compiled['partials/forms/input-text-amount-with-unit-select'].render(inputText.call(this, key + '-unit', { hintId: key + '-hint', autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit, isThisRequired }));
+
+            return parts.concat(amountPart, unitPart).join('\n');
           };
         }
       }
