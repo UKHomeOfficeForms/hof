@@ -16,3 +16,4 @@ coverage
 build/Release
 node_modules
 .emails
+.vscode/settings.json
