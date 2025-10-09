@@ -24,6 +24,16 @@ Feature: validations
     Then I enter a date of birth for a 30 year old
     Then I click the 'Continue' button
     Then I click the 'Continue' button
+    Then I should see the 'Enter the amount in the correct format; for example, 10 Litres' error
+    Then I fill the Amount and Unit field with '!' and 'Litres'
+    Then I click the 'Continue' button
+    Then I should see the 'A unit must be selected for the amount' error
+    Then I fill the Amount and Unit field with '1' and 'Select...'
+    Then I click the 'Continue' button
+    Then I should see the 'The amount must not contain any special characters' error
+    Then I fill the Amount and Unit field with '10' and 'Litre'
+    Then I click the 'Continue' button
+    Then I click the 'Continue' button
     Then I should see the 'Enter details of your building and street' error
     Then I should see the 'Enter a town or city' error
     Then I should see the 'Enter your postcode' error
@@ -82,6 +92,16 @@ Feature: validations
     Then I click the 'Continue' button
     Then I should see the 'Enter a date that is in the past' error
     Then I enter a date of birth for a 30 year old
+    Then I click the 'Continue' button
+    Then I click the 'Continue' button
+    Then I should see the 'Enter the amount in the correct format; for example, 10 Litres' error
+    Then I fill the Amount and Unit field with '!' and 'Litres'
+    Then I click the 'Continue' button
+    Then I fill the Amount and Unit field with '1' and 'Select...'
+    Then I click the 'Continue' button
+    Then I should see the 'A unit must be selected for the amount' error
+    Then I should see the 'The amount must not contain any special characters' error
+    Then I fill the Amount and Unit field with '10' and 'Litre'
     Then I click the 'Continue' button
     Then I click the 'Continue' button
     Then I should see the 'Enter details of your building and street' error

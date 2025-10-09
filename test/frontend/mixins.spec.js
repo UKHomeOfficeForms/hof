@@ -599,6 +599,149 @@ describe('Template Mixins', () => {
       });
     });
 
+    describe('input-amount-with-unit-select', () => {
+      it('adds a function to res.locals', () => {
+        middleware(req, res, next);
+        res.locals['input-amount-with-unit-select'].should.be.a('function');
+      });
+
+      it('returns a function', () => {
+        middleware(req, res, next);
+        res.locals['input-amount-with-unit-select']().should.be.a('function');
+      });
+
+      it('renders 6 times if the field is not marked as inexact', () => {
+        middleware(req, res, next);
+        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+        render.callCount.should.be.equal(6);
+      });
+
+      it('looks up field label', () => {
+        middleware(req, res, next);
+        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+        render.called;
+
+        const amountCall = render.getCall(1);
+
+        amountCall.should.have.been.calledWith(sinon.match({
+          label: 'fields.field-name-amount.label'
+        }));
+      });
+
+      it('govuk-form-group class is set in the amountWithUnitSelect fields by default', () => {
+        middleware(req, res, next);
+        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+        render.called;
+
+        const amountCall = render.getCall(1);
+        const unitCall = render.getCall(5);
+
+        amountCall.should.have.been.calledWith(sinon.match({
+          formGroupClassName: 'govuk-form-group'
+        }));
+
+        unitCall.should.have.been.calledWith(sinon.match({
+          formGroupClassName: 'govuk-form-group'
+        }));
+      });
+
+      describe('autocomplete', () => {
+        it('should have a suffix of -amount ', () => {
+          res.locals.options.fields = {
+            'field-name': {
+              autocomplete: 'amount-with-unit-select'
+            }
+          };
+          middleware(req, res, next);
+          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+          render.should.have.been.called;
+
+          const amountCall = render.getCall(1);
+
+          amountCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'amount-with-unit-select-amount'
+          }));
+        });
+
+        it('should be set as exact values if an object is given', () => {
+          res.locals.options.fields = {
+            'field-name': {
+              autocomplete: {
+                amount: 'amount-with-unit-select-amount'
+              }
+            }
+          };
+          middleware(req, res, next);
+          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+          render.called;
+
+          const amountCall = render.getCall(1);
+
+          amountCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'amount-with-unit-select-amount'
+          }));
+        });
+
+        it('should set autocomplete to off if off is specified', () => {
+          res.locals.options.fields = {
+            'field-name': {
+              autocomplete: 'off'
+            }
+          };
+          middleware(req, res, next);
+          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+          render.called;
+
+          const amountCall = render.getCall(1);
+
+          amountCall.should.have.been.calledWith(sinon.match({
+            autocomplete: 'off'
+          }));
+        });
+
+        it('should default to no attribute across all amountWithUnitSelect fields', () => {
+          middleware(req, res, next);
+          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+          render.called;
+
+          const amountCall = render.getCall(0);
+
+          amountCall.should.have.been.calledWith(sinon.match({
+            autocomplete: undefined
+          }));
+        });
+      });
+
+      it('prefixes translation lookup with namespace if provided', () => {
+        middleware = mixins({ sharedTranslationsKey: 'name.space' });
+        middleware(req, res, next);
+        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+        render.called;
+
+        const amountCall = render.getCall(1);
+
+        amountCall.should.have.been.calledWith(sinon.match({
+          label: 'name.space.fields.field-name-amount.label'
+        }));
+      });
+
+      it('sets a amountWithUnitSelect boolean to conditionally show input errors', () => {
+        middleware(req, res, next);
+        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+
+        render.getCall(1).should.have.been.calledWith(sinon.match({
+          amountWithUnitSelect: true
+        }));
+      });
+    });
+
     describe('maxlengthAttribute - input-text', () => {
       beforeEach(() => {
         render.resetHistory();

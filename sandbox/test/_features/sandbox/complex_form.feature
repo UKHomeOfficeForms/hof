@@ -13,6 +13,9 @@ Feature: Complex Form
     Then I should be on the 'dob' page showing 'What is your date of birth?'
     Then I enter a date of birth for a 30 year old
     Then I click the 'Continue' button
+    Then I should be on the 'amount-unit' page showing 'Enter An Amount'
+    Then I enter the Amount '10' and select the Unit 'Litre'
+    Then I click the 'Continue' button
     Then I should be on the 'address' page showing 'What is your address in the UK?'
     Then I fill 'building' with '10 Downing Street'
     Then I fill 'townOrCity' with 'London'
