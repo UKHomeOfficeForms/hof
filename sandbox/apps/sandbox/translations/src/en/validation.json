@@ -50,5 +50,17 @@
   },
   "appealStages": {
     "required": "Select an appeal stage from the list"
+  },
+  "amountWithUnitSelect": {
+    "default": "Enter the amount in the correct format; for example, 10 Litres",
+    "alphanum": "The amount must not contain any special characters",
+    "required": "Enter an amount and a unit value"
+  },
+  "amountWithUnitSelect-unit": {
+    "default": "A valid value must be selected as the amount unit",
+    "required": "A unit must be selected for the amount"
+  },
+  "amountWithUnitSelect-amount": {
+    "required": "An amount must be selected with the unit"
   }
 }

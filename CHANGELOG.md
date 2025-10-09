@@ -1,3 +1,18 @@
+## 2026-01-27, v22.14.0 (Stable), @rayhannurrohmanho
+
+### Added
+- Created the amountWithUnitSelect component.
+- Separated the amountWithUnitSelect component logic into into hooks, utils, and validators - all documented via JSDoc.
+- Created templates and partials for the amountWithUnitSelect component.
+- Configured template mixin for amountWithUnitSelect component.
+- Added sandbox example for the amountWithUnitSelect component.
+- Documented the amountWithUnitSelect component in readme.
+- Added tests for the amountWithUnitSelect components.
+
+### Changed
+- Added optional parent key ('pKey') parameter to the template-mixins.js 'optionGroup' function to allow the assignment of a group component's parent's properties.
+- Modified validation to check if a "groupedFieldsWithOptions" property exists (and is set to true) for a component with "options" before the "equals" validator is applied to the component. 
+
 ## 2025-12-09, Version 22.13.0 (Stable), @Rhodine-orleans-lindsay
 ### Changed
 - Updated cookie banner view to follow GOV.UK design system. Updated cookieSettings.js to allow for different confirmation text based on whether cookies were accepted or rejected
