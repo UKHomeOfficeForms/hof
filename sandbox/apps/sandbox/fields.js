@@ -2,6 +2,7 @@
 'use strict';
 
 const dateComponent = require('../../../').components.date;
+const amountWithUnitSelectComponent = require('../../../').components.amountWithUnitSelect;
 const staticAppealStages = require('./lib/staticAppealStages');
 
 module.exports = {
@@ -26,6 +27,9 @@ module.exports = {
       { type: 'after', arguments: ['1900'] }
     ]
   }),
+  //'amountWithUnitSelect' : amountWithUnitSelectComponent(amountWithUnitSelect, {
+    //mixin: 'input-amount-with-unit-select',
+  //}),
   building: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 100 }]
   },
@@ -124,5 +128,8 @@ module.exports = {
       value: '',
       label: 'fields.appealStages.options.null'
     }].concat(staticAppealStages.getstaticAppealStages())
+  },
+  amountWithUnitSelect: {
+    mixin: 'input-amount-with-unit-select'
   }
 }
