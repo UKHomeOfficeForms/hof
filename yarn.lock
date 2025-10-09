@@ -5501,10 +5501,10 @@ hogan.js@>=3.0.0, hogan.js@^3.0.2:
     mkdirp "0.3.0"
     nopt "1.0.10"
 
-homeoffice-countries@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/homeoffice-countries/-/homeoffice-countries-0.1.0.tgz#940d74b9067f13c7ee2037bb3bcfebc30fa9316e"
-  integrity sha512-7U3JLaBkL6AltQ2RdWVwAey/soiN2ktsLewo9A7UFIUf5mvrElAtrO43whsPc9EqUn4qDqnnFYpFwm435ar+cw==
+homeoffice-countries@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/homeoffice-countries/-/homeoffice-countries-0.2.0.tgz#c4c6c9bb12534d06556ae6f3ddcd7c589e0b2876"
+  integrity sha512-E3u4MDBVVmUvX6CYNniuxt4CSlLM8Wm450JOKXmx6PZiwcA6Jd5yNPTLEsvG0/uVtDixaSTrjfvkt7u8SvE2KA==
 
 hosted-git-info@^2.1.4:
   version "2.8.9"
