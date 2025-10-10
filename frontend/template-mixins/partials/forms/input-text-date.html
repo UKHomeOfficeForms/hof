@@ -3,7 +3,7 @@
       <label for="{{id}}" class="{{labelClassName}}">
           <span class="label-text">{{{label}}}</span>
       </label>
-      {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{{hint}}}</span>{{/hint}}
+      {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{{hint}}}</div>{{/hint}}
       {{#renderChild}}{{/renderChild}}
           {{#attributes}}
               {{#prefix}}
@@ -21,6 +21,7 @@
               {{#max}} max="{{max}}"{{/max}}
               {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
               {{#pattern}} pattern="{{pattern}}"{{/pattern}}
+              {{#inputmode}}inputmode="{{inputmode}}"{{/inputmode}}
               {{#hintId}} aria-describedby="{{hintId}}"{{/hintId}}
               {{#error}} aria-invalid="true"{{/error}}
               {{#autocomplete}} autocomplete="{{autocomplete}}"{{/autocomplete}}

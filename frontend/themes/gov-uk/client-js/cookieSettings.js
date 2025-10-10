@@ -1,22 +1,22 @@
-/* eslint-disable max-len, no-var, vars-on-top, no-undef */
+/* eslint-disable no-undef */
 'use strict';
 
 // TODO: update package.json(s)
 
 function hideFallbackContent(containerId) {
-  var container = document.getElementById(containerId);
+  const container = document.getElementById(containerId);
   if (container === null) return;
-  var fallbackContent = container.getElementsByClassName('js-disabled');
-  for (var i = 0; i < fallbackContent.length; i++) {
+  const fallbackContent = container.getElementsByClassName('js-disabled');
+  for (let i = 0; i < fallbackContent.length; i++) {
     fallbackContent[i].style.display = 'none';
   }
 }
 
 function showInteractiveContent(containerId) {
-  var container = document.getElementById(containerId);
+  const container = document.getElementById(containerId);
   if (container === null) return;
-  var interactiveContent = container.getElementsByClassName('js-enabled');
-  for (var i = 0; i < interactiveContent.length; i++) {
+  const interactiveContent = container.getElementsByClassName('js-enabled');
+  for (let i = 0; i < interactiveContent.length; i++) {
     interactiveContent[i].style.display = 'block';
   }
 }
@@ -34,12 +34,23 @@ function setCookiePreferences(preferences) {
 function showCookieBannerSubmitted() {
   document.getElementById('cookie-banner-info').style.display = 'none';
   document.getElementById('cookie-banner-actions').style.display = 'none';
-  var cookieBannerSubmitted = document.getElementById('cookie-banner-submitted');
+  let cookieBannerSubmitted;
+  const cookieBannerDiv = document.getElementById('cookie-banner-submitted-accepted');
+  if (cookieBannerDiv.dataset.acceptCookies === 'true') {
+    cookieBannerSubmitted = document.getElementById('cookie-banner-submitted-accepted');
+  } else {
+    cookieBannerSubmitted = document.getElementById('cookie-banner-submitted-rejected');
+  }
   cookieBannerSubmitted.style.display = 'block';
   cookieBannerSubmitted.focus();
 }
 
+function hideCookieBanner() {
+  document.getElementById('cookie-banner').style.display = 'none';
+}
+
 function initialiseBannerButtons() {
+  const acceptedCookieBannerDiv = document.getElementById('cookie-banner-submitted-accepted');
   document.getElementById('accept-cookies-button').addEventListener('click', function () {
     setCookiePreferences({essential: true, usage: true});
     showCookieBannerSubmitted();
@@ -48,27 +59,28 @@ function initialiseBannerButtons() {
   });
 
   document.getElementById('reject-cookies-button').addEventListener('click', function () {
-    setCookiePreferences({essential: true, usage: false});
+    setCookiePreferences({ essential: true, usage: false });
+    acceptedCookieBannerDiv.dataset.acceptCookies = 'false';
     showCookieBannerSubmitted();
   });
 
-  document.getElementById('hide-cookie-banner').addEventListener('click', function () {
-    document.getElementById('cookie-banner').style.display = 'none';
-  });
+  document.getElementById('hide-accept-cookie-banner').addEventListener('click', hideCookieBanner);
+
+  document.getElementById('hide-reject-cookie-banner').addEventListener('click', hideCookieBanner);
 }
 
 function initialiseCookieBanner() {
-  var preferences = GOVUK.cookie('cookie_preferences');
+  const preferences = GOVUK.cookie('cookie_preferences');
 
   if (preferences !== null) {
     return;
   }
 
   // the default cookie message container from hof-govuk-template
-  var bannerContainer = document.getElementById('global-cookie-message');
+  const bannerContainer = document.getElementById('global-cookie-message');
 
   // the cookie banner that will replace the container's default content if using google analytics
-  var cookieBanner = document.getElementById('cookie-banner');
+  const cookieBanner = document.getElementById('cookie-banner');
 
   if (bannerContainer !== null && cookieBanner !== null) {
     hideFallbackContent('global-cookie-message');
@@ -82,8 +94,8 @@ function handleSaveSettings(e) {
   e.preventDefault();
   setCookiePreferences({ essential: true, usage: document.getElementById('radio-1').checked });
 
-  var cookieNotification = document.getElementById('cookie-notification');
-  var cookieBanner = document.getElementById('cookie-banner');
+  const cookieNotification = document.getElementById('cookie-notification');
+  const cookieBanner = document.getElementById('cookie-banner');
 
   if (cookieBanner !== null) {
     cookieBanner.style.display = 'none';
@@ -96,8 +108,8 @@ function handleSaveSettings(e) {
 }
 
 function initialiseFormControls() {
-  var preferences = JSON.parse(GOVUK.cookie('cookie_preferences'));
-  var usage;
+  const preferences = JSON.parse(GOVUK.cookie('cookie_preferences'));
+  let usage;
 
   if (preferences !== null && preferences.usage !== undefined && typeof preferences.usage === 'boolean') {
     usage = preferences.usage;
@@ -111,7 +123,7 @@ function initialiseFormControls() {
 }
 
 function initialiseCookiePage() {
-  var shouldDisplayCookieControls = document.getElementById('cookie-settings') !== null;
+  const shouldDisplayCookieControls = document.getElementById('cookie-settings') !== null;
 
   if (shouldDisplayCookieControls) {
     hideFallbackContent('cookie-settings');
@@ -122,12 +134,12 @@ function initialiseCookiePage() {
 
 function onLoad() {
   window.onload = function () {
-    var reloading = sessionStorage.getItem('reloading');
+    const reloading = sessionStorage.getItem('reloading');
     if (reloading) {
       sessionStorage.removeItem('reloading');
 
-      var bannerContainer = document.getElementById('global-cookie-message');
-      var cookieBanner = document.getElementById('cookie-banner');
+      const bannerContainer = document.getElementById('global-cookie-message');
+      const cookieBanner = document.getElementById('cookie-banner');
 
       if (bannerContainer !== null && cookieBanner !== null) {
         bannerContainer.style.display = 'block';

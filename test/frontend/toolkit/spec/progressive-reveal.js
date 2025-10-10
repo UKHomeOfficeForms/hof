@@ -1,5 +1,5 @@
 /* eslint-disable max-len, no-var */
-var progressiveReveal = require('../../../../frontend/toolkit/assets/javascript/progressive-reveal');
+var progressiveReveal = require('../../../../frontend/toolkit/assets/rebrand/javascript/progressive-reveal');
 
 var $ = require('jquery');
 
