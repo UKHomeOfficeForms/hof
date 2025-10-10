@@ -77,7 +77,8 @@ const getContentSecurityPolicy = (config, res) => {
     imgSrc: ["'self'"],
     fontSrc: ["'self'", 'data:', 'https://design-system.service.gov.uk'],
     scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
-    'frame-ancestors': ["'none'"]
+    'frame-ancestors': ["'none'"],
+    manifestSrc: ["'self'"]
   };
   /* eslint-enable quotes */
 
@@ -95,7 +96,8 @@ const getContentSecurityPolicy = (config, res) => {
       'https://www.google-analytics.com',
       'https://region1.google-analytics.com',
       'https://region1.analytics.google.com'
-    ]
+    ],
+    manifestSrc: ["'self'"]
   };
 
   if (config.gaTagId) {
