@@ -14,7 +14,7 @@ describe('character-count', function () {
 
   describe('initialisation', function () {
     beforeEach(function () {
-      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="50"></textarea><span id="test-maxlength-hint" class="form-hint">50 maximum characters</span></div>'));
+      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="50"></textarea><div id="test-maxlength-hint" class="govuk-hint">50 maximum characters</div></div>'));
     });
 
     it('should change the static character count message if the textarea has a maxlength', function () {
@@ -31,7 +31,7 @@ describe('character-count', function () {
   describe('update on input', function () {
     beforeEach(function () {
       // textarea with 10 maximum characters
-      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><span id="test-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
+      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><div id="test-maxlength-hint" class="govuk-hint">10 maximum characters</div></div>'));
       characterCount();
     });
 
@@ -70,7 +70,7 @@ describe('character-count', function () {
 
   describe('high character counts', function () {
     beforeEach(function () {
-      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="2000"></textarea><span id="test-maxlength-hint" class="form-hint">2000 maximum characters</span></div>'));
+      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="2000"></textarea><div id="test-maxlength-hint" class="govuk-hint">2000 maximum characters</div></div>'));
       characterCount();
     });
 
@@ -81,7 +81,7 @@ describe('character-count', function () {
 
   describe('update on timer for assistive technologies', function () {
     beforeEach(function () {
-      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><span id="test-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
+      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><div id="test-maxlength-hint" class="govuk-hint">10 maximum characters</div></div>'));
       characterCount();
     });
 
@@ -105,8 +105,8 @@ describe('character-count', function () {
 
   describe('multiple textareas', function () {
     beforeEach(function () {
-      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><span id="test-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
-      $('form').append($('<div id="test2-group"><textarea name="test2" id="test2" class="maxlength" maxlength="10"></textarea><span id="test2-maxlength-hint" class="form-hint">10 maximum characters</span></div>'));
+      $('form').append($('<div id="test-group"><textarea name="test" id="test" class="maxlength" maxlength="10"></textarea><div id="test-maxlength-hint" class="govuk-hint">10 maximum characters</div></div>'));
+      $('form').append($('<div id="test2-group"><textarea name="test2" id="test2" class="maxlength" maxlength="10"></textarea><div id="test2-maxlength-hint" class="govuk-hint">10 maximum characters</div></div>'));
       characterCount();
     });
 

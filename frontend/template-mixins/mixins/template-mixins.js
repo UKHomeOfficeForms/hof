@@ -358,7 +358,8 @@ module.exports = function (options) {
         path: 'partials/forms/input-text-group',
         renderWith: inputText,
         options: {
-          maxlength: 18
+          maxlength: 18,
+          className: 'govuk-input'
         }
       },
       'input-file': {
@@ -459,12 +460,12 @@ module.exports = function (options) {
             const parts = [];
 
             if (isExact) {
-              const dayPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-day', { pattern: '[0-9]*', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
+              const dayPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-day', { inputmode: 'numeric', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
               parts.push(dayPart);
             }
 
-            const monthPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-month', { pattern: '[0-9]*', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
-            const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { pattern: '[0-9]*', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
+            const monthPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-month', { inputmode: 'numeric', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
+            const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { inputmode: 'numeric', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
 
             return parts.concat(monthPart, yearPart).join('\n');
           };

@@ -29,7 +29,7 @@
             {{#error}} aria-invalid="true" aria-describedby="{{id}}-error" {{/error}}
             >{{value}}</textarea>
         {{#isMaxlengthOrMaxword}}
-        <div id="{{id}}-info" class=" govuk-hint govuk-character-count__message" aria-live="polite">You have {{#maxlength}}{{maxlength}} characters{{/maxlength}}{{#maxword}}{{maxword}}
+        <div id="{{id}}-info" class=" govuk-hint govuk-character-count__message">You have {{#maxlength}}{{maxlength}} characters{{/maxlength}}{{#maxword}}{{maxword}}
             words{{/maxword}} remaining
         </div>
         {{/isMaxlengthOrMaxword}}
