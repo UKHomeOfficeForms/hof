@@ -10,12 +10,27 @@ module.exports = config => {
   if (!config.images) {
     return Promise.resolve();
   }
+  const imagesOutput = config.images.out;
 
-  return new Promise((resolve, reject) => {
-    fs.stat(config.images.src, err => err ? reject(err) : resolve());
-  })
-    .then(() => mkdir(config.images.out))
-    .then(() => spawn('cp', ['-r', config.images.src, config.images.out]))
+  // Due to govuk rebrand logo, images are copied from multiple sources & mapping can cause 'File exists' error.
+  // Remove if exists as a file
+  if (fs.existsSync(imagesOutput) && !fs.lstatSync(imagesOutput).isDirectory()) {
+    fs.unlinkSync(imagesOutput);
+  }
+  // Ensure directory exists
+  if (!fs.existsSync(imagesOutput)) {
+    fs.mkdirSync(imagesOutput, { recursive: true });
+  }
+  const srcs = Array.isArray(config.images.src) ? config.images.src : [config.images.src];
+
+  return Promise.all(srcs.map(src => {
+    if (!fs.existsSync(src)) {
+      console.log(`${chalk.yellow('warning')}: Skipping missing images folder: ${src}`);
+      return Promise.resolve();
+    }
+    return mkdir(imagesOutput)
+      .then(() => spawn('cp', ['-r', `${src}/.`, imagesOutput]));
+  }))
     .catch(e => {
       if (e.code !== 'ENOENT') {
         throw e;
