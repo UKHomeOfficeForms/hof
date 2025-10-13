@@ -1625,6 +1625,7 @@ currency
 select
 input-text
 input-date
+input-amount-with-unit-select
 input-text-compound
 input-text-code
 input-number

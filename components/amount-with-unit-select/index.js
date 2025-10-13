@@ -18,8 +18,8 @@ const getParts = (body, fields, key) =>
     fieldKey.replace(`${key}-`, '')
   );
 
-// accepts a amount-with-unit-select value in the format [Amount]-[Unit] and fields config,
-// returns a map of key: value pairs for the intermediate fields
+// accepts an amount-with-unit-select value in the format [Amount]-[Unit] and fields config,
+// returns a map of key:value pairs for the intermediate fields
 const getPartsFromAmountWithUnitSelect = (amount, fields) =>
   amount.split('-')
     .slice()
@@ -49,7 +49,7 @@ module.exports = (key, opts) => {
     TEMPLATE;
   const fields = getFields(key);
 
-  options.validate = _.uniq(options.validate ? ['amount-with-unit-select'].concat(options.validate) : ['amount-with-unit-select']);
+  //options.validate = _.uniq(options.validate ? ['amount-with-unit-select'].concat(options.validate) : ['amount-with-unit-select']);
 
   // take the 2 parts (amount and unit),
   // then create a amount-with-unit-select value in the format [Amount]-[Unit] (e.g. 5-Kilograms). 

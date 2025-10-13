@@ -204,6 +204,10 @@ module.exports = class Controller extends BaseController {
           // get first field for date input control
           else if (field && field.mixin === 'input-date') {
             req.form.errors[key].errorLinkId = key + '-day';
+          }
+          // get first field for amount-unit input control
+          else if (field && field.mixin === 'input-amount-with-unit-select') {
+            req.form.errors[key].errorLinkId = key + '-amount'; 
           } else {
             req.form.errors[key].errorLinkId = key;
           }

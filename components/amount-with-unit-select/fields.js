@@ -1,12 +1,11 @@
 'use strict';
 
 module.exports = key => ({
-  [`${key}-Amount`]: {
+  [`${key}-amount`]: {
     label: 'Amount',
-    autocomplete: 'amount-value' //controller/validation/validators.js ??
+    //autocomplete: 'amount-value' //controller/validation/validators.js ??
   },
-  [`${key}-Unit`]: {
+  [`${key}-unit`]: {
     label: 'Unit',
-    autocomplete: 'amount-value' //controller/validation/validators.js ??
   }
 });

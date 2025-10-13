@@ -8,14 +8,14 @@ const Hogan = require('hogan.js');
 const _ = require('underscore');
 
 const renderer = require('./render');
-const { amountWithUnitSelect } = require('../../../components');
 
 const PANELMIXIN = 'partials/mixins/panel';
 const PARTIALS = [
   'partials/forms/input-text-group',
   'partials/forms/input-text-date',
   'partials/forms/input-submit',
-  'partials/forms/input-text-amount-with-unit-select',
+  'partials/forms/grouped-inputs-select',
+  'partials/forms/grouped-inputs-text',
   'partials/forms/select',
   'partials/forms/checkbox',
   'partials/forms/textarea-group',
@@ -216,6 +216,7 @@ module.exports = function (options) {
         labelClassName: labelClassName ? `govuk-label ${labelClassName}` : 'govuk-label',
         formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'govuk-form-group',
         hint: hint,
+        amountWithUnitSelectItemClassName: 'grouped-inputs__item',
         hintId: extension.hintId || (hint ? key + '-hint' : null),
         error: this.errors && this.errors[key],
         maxlengthAttribute: field.maxlengthAttribute === true,
@@ -237,7 +238,7 @@ module.exports = function (options) {
 
     function optionGroup(key, opts) {
       opts = opts || {};
-      const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+      const field = Object.assign({}, this.options.fields[key] || options.fields[key]); //figure out how to get sandbox field opt into this
       const legend = field.legend;
       const detail = field.detail;
       const warningValue = 'fields.' + key + '.warning';
@@ -498,13 +499,13 @@ module.exports = function (options) {
             }
             const isThisRequired = field.validate ? field.validate.indexOf('required') > -1 : false;
             const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
-            const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-2';
-            const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-2';
+            const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
+            const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
 
             const parts = [];
 
-            const amountPart = compiled['partials/forms/input-text-amount-with-unit-select'].render(inputText.call(this, key + '-amount', { pattern: '[0-9]*', min: 1, hintId: key + '-hint', autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount, isThisRequired }));
-            const unitPart = compiled['partials/forms/input-text-amount-with-unit-select'].render(inputText.call(this, key + '-unit', { hintId: key + '-hint', autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit, isThisRequired }));
+            const amountPart = compiled['partials/forms/grouped-inputs-text'].render(inputText.call(this, key + '-amount', { pattern: '[0-9]*', min: 1, hintId: key + '-hint', autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount, isThisRequired }));
+            const unitPart = compiled['partials/forms/grouped-inputs-select'].render(optionGroup.call(this, key + '-unit', { hintId: key + '-hint', autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit, isThisRequired }));
 
             return parts.concat(amountPart, unitPart).join('\n');
           };

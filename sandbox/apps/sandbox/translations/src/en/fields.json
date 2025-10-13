@@ -21,6 +21,17 @@
     "legend": "What is your date of birth?",
     "hint": "For example, 31 10 1990"
   },
+  "amountWithUnitSelect-amount": {
+    "legend": "legend",
+    "label": "label",
+    "hint": ""
+  },
+    "amountWithUnitSelect-unit": {
+    "options": [
+      { "label": "oi 1", "value": "" },
+      { "label": "oi 2", "value": "" }
+    ]
+  },
   "building": {
     "label": "Building and street"
   },
