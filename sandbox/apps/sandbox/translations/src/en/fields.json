@@ -24,13 +24,13 @@
   "amountWithUnitSelect-amount": {
     "legend": "legend",
     "label": "label",
-    "hint": ""
+    "hint": "ree"
   },
     "amountWithUnitSelect-unit": {
-    "options": [
-      { "label": "oi 1", "value": "" },
-      { "label": "oi 2", "value": "" }
-    ]
+      "options": [
+        { "label": "trans option 1", "value": "" },
+        { "label": "trans option 2", "value": "" }
+      ]
   },
   "building": {
     "label": "Building and street"

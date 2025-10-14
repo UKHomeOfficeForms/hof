@@ -113,6 +113,9 @@ module.exports = (key, opts) => {
   // render the template to a string, assign the html output
   // to the amount-with-unit-select field in res.locals.fields
   const preRender = (req, res, next) => {
+    //Set unit options as either translations (if they exist) or default untranslated options
+    fields['amountWithUnitSelect-unit'].options = conditionalTranslate(`fields.${key}-unit.options`, req.translate) || options.options;
+
     Object.assign(req.form.options.fields, _.mapValues(fields, (v, k) => {
       const rawKey = k.replace(`${key}-`, '');
       const labelKey = `fields.${key}.parts.${rawKey}`;
