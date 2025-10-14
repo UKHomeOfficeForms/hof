@@ -239,7 +239,7 @@ function bootstrap(options) {
   }
 
   // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
-  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets/rebrand')));
   // Check if service has been paused and redirect accordingly
   const bypassPaths = ['/assets', '/healthcheck', '/service-unavailable'];
 
