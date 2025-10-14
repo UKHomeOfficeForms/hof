@@ -501,11 +501,12 @@ module.exports = function (options) {
             const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
             const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
             const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
+            //const unitOptions = this.options.fields[key].options; //options: unitOptions
 
             const parts = [];
 
-            const amountPart = compiled['partials/forms/grouped-inputs-text'].render(inputText.call(this, key + '-amount', { pattern: '[0-9]*', min: 1, hintId: key + '-hint', autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount, isThisRequired }));
-            const unitPart = compiled['partials/forms/grouped-inputs-select'].render(optionGroup.call(this, key + '-unit', { hintId: key + '-hint', autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit, isThisRequired }));
+            const amountPart = compiled['partials/forms/grouped-inputs-text'].render(inputText.call(this, key + '-amount', { autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount, isThisRequired }));
+            const unitPart = compiled['partials/forms/grouped-inputs-select'].render(optionGroup.call(this, key + '-unit', { autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit, isThisRequired }));
 
             return parts.concat(amountPart, unitPart).join('\n');
           };
