@@ -1,8 +1,7 @@
-<div id="{{id}}-group" class="{{amountWithUnitSelectItemClassName}} {{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
-    {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}<label for="{{id}}" class="{{labelClassName}} {{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
-        {{{label}}}
+<div id="{{id}}-group" class="{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}} {{amountWithUnitSelectItemClassName}}">
+    <label for="{{id}}" class="{{labelClassName}}">
+      <span class="label-text">{{{label}}}</span>
     </label>
-    {{#isPageHeading}}</h1>{{/isPageHeading}}
     {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{{hint}}}</div>{{/hint}}
     {{#error}}
       <p class="govuk-error-message">

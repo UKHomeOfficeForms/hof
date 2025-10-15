@@ -49,7 +49,8 @@ module.exports = (key, opts) => {
     TEMPLATE;
   const fields = getFields(key);
 
-  //options.validate = _.uniq(options.validate ? ['amount-with-unit-select'].concat(options.validate) : ['amount-with-unit-select']);
+  //Custom validation implemented in ./controller/validation/validators.js
+  options.validate = _.uniq(options.validate ? ['amount-with-unit-select'].concat(options.validate) : ['amount-with-unit-select']);
 
   // take the 2 parts (amount and unit),
   // then create a amount-with-unit-select value in the format [Amount]-[Unit] (e.g. 5-Kilograms). 
@@ -84,7 +85,7 @@ module.exports = (key, opts) => {
   };
 
   // if amount-with-unit-select field has any validation error, also add errors
-  // for the two child components. null type as we don't want to show
+  // for the two child components. we make them null type as we don't want to show
   // duplicate messages
   const postGetErrors = (req, res, next) => {
     const errors = req.sessionModel.get('errors');
