@@ -176,7 +176,11 @@ module.exports = Validators = {
   postcode(value) {
     // eslint-disable-next-line max-len
     return value === '' || Validators.regex(value, /^(([GIR] ?0[A]{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2}))$/i);
-  }
+  },
 
   //Validators Here
+  'amount-with-unit-select'(value) {
+    //return Validators.;
+    return value === '';
+  },
 };

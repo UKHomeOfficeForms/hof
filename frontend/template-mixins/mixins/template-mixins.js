@@ -236,12 +236,13 @@ module.exports = function (options) {
       });
     }
 
-    function optionGroup(key, opts) {
+    function optionGroup(key, opts, incLabel=false) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]); //figure out how to get sandbox field opt into this
       const legend = field.legend;
       const detail = field.detail;
       const warningValue = 'fields.' + key + '.warning';
+      const required = isRequired(field);
       let legendClassName;
       let legendValue = 'fields.' + key + '.legend';
       if (legend) {
@@ -252,7 +253,13 @@ module.exports = function (options) {
           legendValue = legend.value;
         }
       }
+      const lKey = incLabel ? getTranslationKey(field, key, 'label') : null;
+      const labelClassName = incLabel ? classNames(field, 'labelClassName') : "";
+
       return {
+        label: t(lKey),
+        required: required,
+        labelClassName: labelClassName ? `govuk-label ${labelClassName}` : 'govuk-label',
         key: key,
         error: this.errors && this.errors[key],
         legend: t(legendValue),
@@ -304,7 +311,8 @@ module.exports = function (options) {
           };
         }, this),
         className: classNames(field),
-        renderChild: renderChild.bind(this)
+        renderChild: renderChild.bind(this),
+        amountWithUnitSelectItemClassName: 'grouped-inputs__item'
       };
     }
 
@@ -436,6 +444,7 @@ module.exports = function (options) {
           */
           return function (key) {
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+            //Ray note: Why is key defined after, is this in case the function receives no key?
             key = hoganRender(key, this);
             // Exact unless there is a inexact property against the fields key.
             const isExact = field.inexact !== true;
@@ -476,15 +485,11 @@ module.exports = function (options) {
       },
       'input-amount-with-unit-select': {
         handler: function () {
-          /**
-          * props: '[value] [id]'
-          */
           return function (key) {
+            key = key || key === '' ? hoganRender(key, this) : key;
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
-            key = hoganRender(key, this);
-            // Exact unless there is a inexact property against the fields key.
-            const isExact = field.inexact !== true;
 
+            //What is this for?
             let autocomplete = field.autocomplete || {};
             if (autocomplete === 'off') {
               autocomplete = {
@@ -497,16 +502,15 @@ module.exports = function (options) {
                 unit: autocomplete + '-unit',
               };
             }
-            const isThisRequired = field.validate ? field.validate.indexOf('required') > -1 : false;
+            
             const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
             const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
             const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
-            //const unitOptions = this.options.fields[key].options; //options: unitOptions
 
             const parts = [];
 
-            const amountPart = compiled['partials/forms/grouped-inputs-text'].render(inputText.call(this, key + '-amount', { autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount, isThisRequired }));
-            const unitPart = compiled['partials/forms/grouped-inputs-select'].render(optionGroup.call(this, key + '-unit', { autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit, isThisRequired }));
+            const amountPart = compiled['partials/forms/grouped-inputs-text'].render(inputText.call(this, key + '-amount', { autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount}));
+            const unitPart = compiled['partials/forms/grouped-inputs-select'].render(optionGroup.call(this, key + '-unit', { autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit}, true));
 
             return parts.concat(amountPart, unitPart).join('\n');
           };

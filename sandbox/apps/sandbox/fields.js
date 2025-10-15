@@ -30,8 +30,8 @@ module.exports = {
   'amountWithUnitSelect' : amountWithUnitSelectComponent('amountWithUnitSelect', {
     mixin: 'input-amount-with-unit-select',
     "options": [
-        { "label": "non trans option 1", "value": "" },
-        { "label": "non trans option 2", "value": "" }
+        { "label": "non trans option 1", "value": "1" },
+        { "label": "non trans option 2", "value": "2" }
       ]
   }),
   building: {
