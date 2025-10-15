@@ -23,12 +23,6 @@ module.exports = {
     match: 'apps/**/translations/src/**/*.json',
     shared: 'apps/common/translations/src'
   },
-  // images: {
-  //   src: 'assets/rebrand/images',
-  //   out: 'public',
-  //   match: 'assets/rebrand/images/**/*',
-  //   restart: false
-  // },
    images: {
     src: ['assets/rebrand/images', '../frontend/toolkit/assets/rebrand/images' ],
     out: 'public',
