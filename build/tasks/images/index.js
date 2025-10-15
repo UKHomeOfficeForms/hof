@@ -10,12 +10,17 @@ module.exports = config => {
   if (!config.images) {
     return Promise.resolve();
   }
+const srcs = Array.isArray(config.images.src) ? config.images.src : [config.images.src];
 
-  return new Promise((resolve, reject) => {
-    fs.stat(config.images.src, err => err ? reject(err) : resolve());
-  })
-    .then(() => mkdir(config.images.out))
-    .then(() => spawn('cp', ['-r', config.images.src, config.images.out]))
+  return Promise.all(srcs.map(src =>
+    mkdir(config.images.out)
+      .then(() => spawn('cp', ['-r', src, config.images.out]))
+  ))
+  // return new Promise((resolve, reject) => {
+  //   fs.stat(config.images.src, err => err ? reject(err) : resolve());
+  // })
+  //   .then(() => mkdir(config.images.out))
+  //   .then(() => spawn('cp', ['-r', config.images.src, config.images.out]))
     .catch(e => {
       if (e.code !== 'ENOENT') {
         throw e;
