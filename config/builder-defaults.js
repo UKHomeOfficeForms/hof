@@ -1,4 +1,8 @@
 'use strict';
+const toolkitImages =
+  process.env.HOF_SANDBOX === 'true'
+    ? '../frontend/toolkit/assets/rebrand/images'
+    : 'node_modules/hof/frontend/toolkit/assets/rebrand/images';
 
 module.exports = {
   browserify: {
@@ -24,9 +28,9 @@ module.exports = {
     shared: 'apps/common/translations/src'
   },
    images: {
-    src: ['assets/rebrand/images', '../frontend/toolkit/assets/rebrand/images' ],
+    src: ['assets/rebrand/images', toolkitImages],
     out: 'public',
-    match: ['assets/rebrand/images/**/*', '../frontend/toolkit/assets/rebrand/images/**/*'],
+    match: ['assets/rebrand/images/**/*', `${toolkitImages}/**/*`],
     restart: false
   },
   server: {
