@@ -182,5 +182,5 @@ module.exports = Validators = {
   'amount-with-unit-select'(value) {
     //return Validators.;
     return value === '';
-  },
+  }
 };

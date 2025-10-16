@@ -8,7 +8,6 @@ module.exports = key => ({
   [`${key}-unit`]: {
     label: 'Unit',
     validate: ['required'],
-    //autocomplete: 'required',
     options: {}
   }
 });
