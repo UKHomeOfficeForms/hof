@@ -238,7 +238,7 @@ module.exports = function (options) {
 
     function optionGroup(key, opts) {
       opts = opts || {};
-      const field = Object.assign({}, this.options.fields[key] || options.fields[key]); //figure out how to get sandbox field opt into this
+      const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
       const detail = field.detail;
       const warningValue = 'fields.' + key + '.warning';
@@ -438,7 +438,6 @@ module.exports = function (options) {
           */
           return function (key) {
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
-            //Ray note: Why is key defined after, is this in case the function receives no key?
             key = hoganRender(key, this);
             // Exact unless there is a inexact property against the fields key.
             const isExact = field.inexact !== true;
@@ -482,20 +481,6 @@ module.exports = function (options) {
           return function (key) {
             key = key || key === '' ? hoganRender(key, this) : key;
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
-
-            //What is this for?
-            let autocomplete = field.autocomplete || {};
-            if (autocomplete === 'off') {
-              autocomplete = {
-                amount: 'off',
-                unit: 'off',
-              };
-            } else if (typeof autocomplete === 'string') {
-              autocomplete = {
-                amount: autocomplete + '-amount',
-                unit: autocomplete + '-unit',
-              };
-            }
             
             const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
             const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
@@ -505,9 +490,15 @@ module.exports = function (options) {
 
             //basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML 
             // and looks for a 'renderWith' and optional 'Options' method to use) 
-            const amountPart = compiled['partials/forms/grouped-inputs-text'].render(inputText.call(this, key + '-amount', { autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount}));
+            const amountPart = compiled['partials/forms/grouped-inputs-text']
+              .render(inputText.call(this, key + '-amount', 
+                { formGroupClassName, 
+                  className: classNameAmount }));
+                  
             const unitPart = compiled['partials/forms/grouped-inputs-select']
-              .render(inputText.call(this, key + '-unit', optionGroup.call(this, key + '-unit', { autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit})
+              .render(inputText.call(this, key + '-unit', optionGroup.call(this, key + '-unit', 
+                { formGroupClassName, 
+                  className: classNameUnit })
             ));
 
             return parts.concat(amountPart, unitPart).join('\n');

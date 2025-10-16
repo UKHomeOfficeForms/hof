@@ -23,14 +23,14 @@
   },
   "amountWithUnitSelect-amount": {
     "legend": "legend",
-    "label": "label",
+    "label": "trans label",
     "hint": "ree"
   },
-    "amountWithUnitSelect-unit": {
-      "options": [
-        { "label": "trans option 1", "value": "" },
-        { "label": "trans option 2", "value": "" }
-      ]
+  "amountWithUnitSelect": {
+    "options": [
+      { "label": "trans option 3", "value": "trans 5" },
+      { "label": "trans option 4", "value": "trans 6" } 
+    ]
   },
   "building": {
     "label": "Building and street"
