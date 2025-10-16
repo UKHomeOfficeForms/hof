@@ -25,7 +25,7 @@ module.exports = {
       template: 'form-guidance-link'
     },
     '/name': {
-      fields: ['amountWithUnitSelect', 'appealStages', 'dateOfBirth'],
+      fields: ['appealStages', 'dateOfBirth', 'amountWithUnitSelect'],
       next: '/dob'
     },
     '/dob': {

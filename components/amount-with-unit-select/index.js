@@ -6,12 +6,16 @@ const getFields = require('./fields');
 
 const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html')
 
-// utility function taking the req.body, fields and key,
+// utility function that, using the req.body (where the fields key:values like 'amountWithUnitSelect-amount = 12' 
+// are submitted in a request), fields (the set of fields we're concerned with - the ones defined in ./fields.js),
+// key (the parent name for the grouped fields - so 'amountWithUnitSelect in this' case)
 // returns a map of values in the format:
 // {
 //   amount: '1',
 //   unit: 'litres',
 // }
+// it does this by looking for the 'amountWithUnitSelect-amount' and 'amountWithUnitSelect-unit' fields in req.body
+// and making a new object that copies those 2 fields and values, and removing the 'amountWithUnitSelect-' suffix
 
 const getParts = (body, fields, key) =>
   _.mapKeys(_.pick(body, Object.keys(fields)), (value, fieldKey) =>
@@ -52,12 +56,14 @@ module.exports = (key, opts) => {
   //Custom validation implemented in ./controller/validation/validators.js
   options.validate = _.uniq(options.validate ? ['amount-with-unit-select'].concat(options.validate) : ['amount-with-unit-select']);
 
-  // take the 2 parts (amount and unit),
-  // then create a amount-with-unit-select value in the format [Amount]-[Unit] (e.g. 5-Kilograms). 
-  // Save to req.body for processing
+  // takes the 2 parts (amount and unit),
+  // then creates a amountWithUnitSelect value in the format [Amount]-[Unit] (e.g. 5-Kilograms). 
+  // and saves to req.body for processing
   const preProcess = (req, res, next) => {
     const parts = getParts(req.body, fields, key);
-      req.body[key] = `${parts.amount}-${parts.unit}`;
+    if (_.some(parts, part => part !== '')) {
+      req.body[key] = `${(parts.amount || '')}-${(parts.unit || '')}`;
+    }
     next();
   };
 

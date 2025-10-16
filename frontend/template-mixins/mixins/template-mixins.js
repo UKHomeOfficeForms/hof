@@ -236,7 +236,7 @@ module.exports = function (options) {
       });
     }
 
-    function optionGroup(key, opts, incLabel=false) {
+    function optionGroup(key, opts) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]); //figure out how to get sandbox field opt into this
       const legend = field.legend;
@@ -253,13 +253,8 @@ module.exports = function (options) {
           legendValue = legend.value;
         }
       }
-      const lKey = incLabel ? getTranslationKey(field, key, 'label') : null;
-      const labelClassName = incLabel ? classNames(field, 'labelClassName') : "";
 
       return {
-        label: t(lKey),
-        required: required,
-        labelClassName: labelClassName ? `govuk-label ${labelClassName}` : 'govuk-label',
         key: key,
         error: this.errors && this.errors[key],
         legend: t(legendValue),
@@ -311,8 +306,7 @@ module.exports = function (options) {
           };
         }, this),
         className: classNames(field),
-        renderChild: renderChild.bind(this),
-        amountWithUnitSelectItemClassName: 'grouped-inputs__item'
+        renderChild: renderChild.bind(this)
       };
     }
 
@@ -509,8 +503,12 @@ module.exports = function (options) {
 
             const parts = [];
 
+            //basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML 
+            // and looks for a 'renderWith' and optional 'Options' method to use) 
             const amountPart = compiled['partials/forms/grouped-inputs-text'].render(inputText.call(this, key + '-amount', { autocomplete: autocomplete.amount, formGroupClassName, className: classNameAmount}));
-            const unitPart = compiled['partials/forms/grouped-inputs-select'].render(optionGroup.call(this, key + '-unit', { autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit}, true));
+            const unitPart = compiled['partials/forms/grouped-inputs-select']
+              .render(inputText.call(this, key + '-unit', optionGroup.call(this, key + '-unit', { autocomplete: autocomplete.unit, formGroupClassName, className: classNameUnit})
+            ));
 
             return parts.concat(amountPart, unitPart).join('\n');
           };
