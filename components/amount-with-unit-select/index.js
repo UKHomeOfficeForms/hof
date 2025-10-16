@@ -27,7 +27,6 @@ const getParts = (body, fields, key) =>
 const getPartsFromAmountWithUnitSelect = (amount, fields) =>
   amount.split('-')
     .slice()
-    .reverse()
     .reduce((obj, value, index) => Object.assign({}, obj, {
       [fields[index]]: value
     }), {});
@@ -55,6 +54,11 @@ module.exports = (key, opts) => {
 
   //Custom validation implemented in ./controller/validation/validators.js
   options.validate = _.uniq(options.validate ? ['amount-with-unit-select'].concat(options.validate) : ['amount-with-unit-select']);
+
+  if(options.validate?.indexOf('required') != -1) {
+    fields[`${key}-amount`].validate.push['required']
+    fields[`${key}-unit`].validate.push['required']
+  }
 
   // takes the 2 parts (amount and unit),
   // then creates a amountWithUnitSelect value in the format [Amount]-[Unit] (e.g. 5-Kilograms). 
@@ -120,8 +124,25 @@ module.exports = (key, opts) => {
   // render the template to a string, assign the html output
   // to the amount-with-unit-select field in res.locals.fields
   const preRender = (req, res, next) => {
-    //Set unit options as either translations (if they exist) or default untranslated options
-    fields['amountWithUnitSelect-unit'].options = conditionalTranslate(`fields.${key}-unit.options`, req.translate) || options.options;
+    //Set unit options as either translations (if they exist) or default untranslated options 
+    fields[`${key}-unit`].options = 
+      conditionalTranslate(`fields.${key}-unit.options`, req.translate) || 
+      conditionalTranslate(`fields.${key}.options`, req.translate) || 
+      options.options;
+
+    // labels the fields either by using (depending on which exists)
+    // a specific sub-component translations label (translated amountWithUnitSelect-amount.label)
+    // or the component's translation label (translated amountWithUnitSelect.amountLabel)
+    // or the component's non-translated (amountWithUnitSelect.amountLabel)
+    // or the default label (which is 'Amount' or 'Unit')
+    fields[`${key}-amount`].label = conditionalTranslate(`fields.${key}-amount.label`, req.translate) || 
+      conditionalTranslate(`fields.${key}.amountLabel`, req.translate) || 
+      req.form.options.fields[`${key}`]?.amountLabel || 
+      fields[`${key}-amount`].label;
+    fields[`${key}-unit`].label = conditionalTranslate(`fields.${key}-unit.label`, req.translate) || 
+      conditionalTranslate(`fields.${key}.unitLabel`, req.translate) ||  
+      req.form.options.fields[`${key}`]?.unitLabel || 
+      fields[`${key}-unit`].label;
 
     Object.assign(req.form.options.fields, _.mapValues(fields, (v, k) => {
       const rawKey = k.replace(`${key}-`, '');
@@ -131,11 +152,13 @@ module.exports = (key, opts) => {
         label: label === labelKey ? v.label : label
       });
     }));
+
     const legend = conditionalTranslate(`fields.${key}.legend`, req.translate);
     const hint = conditionalTranslate(`fields.${key}.hint`, req.translate);
     const legendClassName = getLegendClassName(options);
     const isPageHeading = getIsPageHeading(options);
     const error = req.form.errors && req.form.errors[key];
+
     res.render(template, { key, legend, legendClassName, isPageHeading, hint, error }, (err, html) => {
       if (err) {
         next(err);

@@ -3,11 +3,11 @@
 module.exports = key => ({
   [`${key}-amount`]: {
     label: 'Amount',
-    validate: ['required']
+    validate: []
   },
   [`${key}-unit`]: {
     label: 'Unit',
-    validate: ['required'],
-    options: {}
+    options: {},
+    validate: []
   }
 });
