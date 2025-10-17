@@ -28,6 +28,7 @@
   },
   "amountWithUnitSelect": {
     "options": [
+      { "null": "Select..." },
       { "label": "trans option 3", "value": "trans 5" },
       { "label": "trans option 4", "value": "trans 6" } 
     ]

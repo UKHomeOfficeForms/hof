@@ -236,7 +236,7 @@ module.exports = function (options) {
       });
     }
 
-    function optionGroup(key, opts) {
+    function optionGroup(key, opts, pKey=key) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
@@ -276,19 +276,20 @@ module.exports = function (options) {
 
           if (typeof obj === 'string') {
             value = obj;
-            label = 'fields.' + key + '.options.' + obj + '.label';
-            optionHint = 'fields.' + key + '.options.' + obj + '.hint';
+            //pKey - optional param that demotes parent key for group components - set to key param val by default
+            label = 'fields.' + pKey + '.options.' + obj + '.label';
+            optionHint = 'fields.' + pKey + '.options.' + obj + '.hint';
           } else {
             value = obj.value;
-            label = obj.label || 'fields.' + key + '.options.' + obj.value + '.label';
+            label = obj.label || 'fields.' + pKey + '.options.' + obj.value + '.label';
             toggle = obj.toggle;
             child = obj.child;
             useHintText = obj.useHintText;
-            optionHint = obj.hint || 'fields.' + key + '.options.' + obj.value + '.hint';
+            optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
           }
 
-          if (this.values && this.values[key] !== undefined) {
-            const selectedValue = this.values[key];
+          if (this.values && this.values[pKey] !== undefined) {
+            const selectedValue = this.values[pKey];
             selected = Array.isArray(selectedValue)
               ? selectedValue.indexOf(value) > -1
               : selectedValue === value;
@@ -498,7 +499,7 @@ module.exports = function (options) {
             const unitPart = compiled['partials/forms/grouped-inputs-select']
               .render(inputText.call(this, key + '-unit', optionGroup.call(this, key + '-unit', 
                 { formGroupClassName, 
-                  className: classNameUnit })
+                  className: classNameUnit }, key)
             ));
 
             return parts.concat(amountPart, unitPart).join('\n');
