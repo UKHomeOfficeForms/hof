@@ -125,10 +125,14 @@ module.exports = (key, opts) => {
   // to the amount-with-unit-select field in res.locals.fields
   const preRender = (req, res, next) => {
     //Set unit options as either translations (if they exist) or default untranslated options 
-    fields[`${key}-unit`].options = 
-      conditionalTranslate(`fields.${key}-unit.options`, req.translate) || 
+    const optionsToDisplay = conditionalTranslate(`fields.${key}-unit.options`, req.translate) || 
       conditionalTranslate(`fields.${key}.options`, req.translate) || 
       options.options;
+
+    //Resolves null/default select value's label and value
+    const nullOptionLabel = optionsToDisplay.find((opt) => opt['null'] !== undefined && Object.keys(opt).length === 1);
+    const nonNullOptions = optionsToDisplay.filter((opt) => opt["null"] === undefined || Object.keys(opt).length !== 1);
+    fields[`${key}-unit`].options = [{label: (nullOptionLabel !== undefined ? nullOptionLabel['null'] : 'Select...'), value: ''}].concat(nonNullOptions);
 
     // labels the fields either by using (depending on which exists)
     // a specific sub-component translations label (translated amountWithUnitSelect-amount.label)
