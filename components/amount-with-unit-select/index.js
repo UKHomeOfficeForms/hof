@@ -22,10 +22,10 @@ const getParts = (body, fields, key) =>
     fieldKey.replace(`${key}-`, '')
   );
 
-// accepts an amount-with-unit-select value in the format [Amount]-[Unit] and fields config,
+// accepts an amountWithUnitSelect value in the format [Amount]-[Unit] and fields config,
 // returns a map of key:value pairs for the intermediate fields
-const getPartsFromAmountWithUnitSelect = (amount, fields) =>
-  amount.split('-')
+const getPartsFromAmountWithUnitSelect = (amountWithUnitSelectVal, fields) =>
+  amountWithUnitSelectVal.split('-')
     .slice()
     .reduce((obj, value, index) => Object.assign({}, obj, {
       [fields[index]]: value
@@ -39,8 +39,11 @@ const conditionalTranslate = (key, translate) => {
   return result;
 };
 
-const getLegendClassName = field => field && field.legend && field.legend.className || '';
-const getIsPageHeading = field => field && field.isPageHeading || '';
+const getLegendClassName = field => 
+  field && field.legend && field.legend.className || '';
+
+const getIsPageHeading = field => 
+  field && field.isPageHeading || '';
 
 module.exports = (key, opts) => {
   if (!key) {
@@ -60,14 +63,14 @@ module.exports = (key, opts) => {
     fields[`${key}-unit`].validate.push['required']
   }
 
-  // takes the 2 parts (amount and unit),
-  // then creates a amountWithUnitSelect value in the format [Amount]-[Unit] (e.g. 5-Kilograms). 
-  // and saves to req.body for processing
+  // takes the 2 parts (amount and unit), then creates a amountWithUnitSelect value 
+  // in the format [Amount]-[Unit] (e.g. 5-Kilograms) and saves to req.body for processing
   const preProcess = (req, res, next) => {
     const parts = getParts(req.body, fields, key);
     if (_.some(parts, part => part !== '')) {
       req.body[key] = `${(parts.amount || '')}-${(parts.unit || '')}`;
     }
+    req.form.options.fields[key].options = fields[`${key}-unit`].options || req.form.options.fields[key].options;
     next();
   };
 
@@ -157,8 +160,10 @@ module.exports = (key, opts) => {
       });
     }));
 
-    const legend = conditionalTranslate(`fields.${key}.legend`, req.translate);
-    const hint = conditionalTranslate(`fields.${key}.hint`, req.translate);
+    const legend = conditionalTranslate(`fields.${key}.legend`, req.translate) ||
+      req.form.options.fields[`${key}`]?.legend;
+    const hint = conditionalTranslate(`fields.${key}.hint`, req.translate) ||
+      req.form.options.fields[`${key}`]?.hint;
     const legendClassName = getLegendClassName(options);
     const isPageHeading = getIsPageHeading(options);
     const error = req.form.errors && req.form.errors[key];
@@ -182,7 +187,8 @@ module.exports = (key, opts) => {
       'pre-getErrors': preGetErrors,
       'post-getErrors': postGetErrors,
       'post-getValues': postGetValues,
-      'pre-render': preRender
+      'pre-render': preRender,
+      'pre-validate': preValidate
     }
   });
 };
