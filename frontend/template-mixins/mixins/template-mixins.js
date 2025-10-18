@@ -288,8 +288,8 @@ module.exports = function (options) {
             optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
           }
 
-          if (this.values && this.values[pKey] !== undefined) {
-            const selectedValue = this.values[pKey];
+          if (this.values && this.values[key] !== undefined) {
+            const selectedValue = this.values[key];
             selected = Array.isArray(selectedValue)
               ? selectedValue.indexOf(value) > -1
               : selectedValue === value;
@@ -492,15 +492,20 @@ module.exports = function (options) {
             //basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML 
             // and looks for a 'renderWith' and optional 'Options' method to use) 
             const amountPart = compiled['partials/forms/grouped-inputs-text']
-              .render(inputText.call(this, key + '-amount', 
-                { formGroupClassName, 
-                  className: classNameAmount }));
+              .render(inputText.call(this, 
+                key + '-amount', { 
+                  formGroupClassName, 
+                  className: classNameAmount }
+                ));
                   
             const unitPart = compiled['partials/forms/grouped-inputs-select']
-              .render(inputText.call(this, key + '-unit', optionGroup.call(this, key + '-unit', 
-                { formGroupClassName, 
-                  className: classNameUnit }, key)
-            ));
+              .render(inputText.call(this, key + '-unit', 
+                optionGroup.call(this, 
+                  key + '-unit', { 
+                  formGroupClassName, 
+                  className: classNameUnit }, 
+                  key
+                )));
 
             return parts.concat(amountPart, unitPart).join('\n');
           };

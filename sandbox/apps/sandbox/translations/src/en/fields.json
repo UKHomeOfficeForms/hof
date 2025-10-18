@@ -21,12 +21,9 @@
     "legend": "What is your date of birth?",
     "hint": "For example, 31 10 1990"
   },
-  "amountWithUnitSelect-amount": {
-    "legend": "legend",
-    "label": "trans label",
-    "hint": "ree"
-  },
+
   "amountWithUnitSelect": {
+    "amountLabel": "Amount~",
     "options": [
       { "null": "Select..." },
       { "label": "trans option 3", "value": "trans 5" },
