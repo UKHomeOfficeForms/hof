@@ -9,12 +9,12 @@
 
 <meta name="theme-color" content="#1d70b8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="icon" sizes="48x48" href="{{assetPath}}images/favicon.ico">
-<link rel="icon" sizes="any" href="{{assetPath}}images/favicon.svg" type="image/svg+xml">
-<link rel="mask-icon" href="{{assetPath}}images/govuk-icon-mask.svg" color="#1d70b8">
-<link rel="apple-touch-icon" href="{{assetPath}}images/govuk-icon-180.png">
-<link rel="manifest" href="{{assetPath}}manifest.json">
-<meta property="og:image" content="{{assetPath}}images/govuk-opengraph-image.png">
+<link rel="icon" sizes="48x48" href="{{assetRebrandPath}}images/favicon.ico">
+<link rel="icon" sizes="any" href="{{assetRebrandPath}}images/favicon.svg" type="image/svg+xml">
+<link rel="mask-icon" href="{{assetRebrandPath}}images/govuk-icon-mask.svg" color="#1d70b8">
+<link rel="apple-touch-icon" href="{{assetRebrandPath}}images/govuk-icon-180.png">
+<link rel="manifest" href="{{assetRebrandPath}}manifest.json">
+<meta property="og:image" content="{{assetRebrandPath}}images/govuk-opengraph-image.png">
   </head>
 
   <body class="{{ bodyClasses }} govuk-template__body  js-enabled" >
@@ -35,10 +35,9 @@
                 <!--[if gt IE 8]><!-->
                 <div id="govuk-header__logo"></div>
                 <img src="/public/images/govuk-logo-opt.svg" id="govuk-header__logo" alt="Logo" loading="lazy" />
-                <!-- <img src="/assets/images/gov-uk-logo-opt" class="govuk-header__logotype-crown-fallback-image" width="32" height="30" alt=""> -->
                   <!--<![endif]-->
                   <!--[if IE 8]>
-                  <img src="{{ assetPath }}images/govuk-logotype-tudor-crown.png" class="govuk-header__logotype-crown-fallback-image" width="32" height="30" alt="">
+                  <img src="{{ assetRebrandPath }}images/govuk-logotype-tudor-crown.png" class="govuk-header__logotype-crown-fallback-image" width="32" height="30" alt="">
                   <![endif]-->
             </a>
           </div>
