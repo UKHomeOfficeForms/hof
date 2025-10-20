@@ -3,8 +3,9 @@
 const _ = require('lodash');
 const path = require('path');
 const getFields = require('./fields');
+const { object } = require('underscore');
 
-const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html')
+const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html');
 
 // utility function that, using the req.body (where the fields key:values like 'amountWithUnitSelect-amount = 12' 
 // are submitted in a request), fields (the set of fields we're concerned with - the ones defined in ./fields.js),
@@ -16,7 +17,6 @@ const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.ht
 // }
 // it does this by looking for the 'amountWithUnitSelect-amount' and 'amountWithUnitSelect-unit' fields in req.body
 // and making a new object that copies those 2 fields and values, and removing the 'amountWithUnitSelect-' suffix
-
 const getParts = (body, fields, key) =>
   _.mapKeys(_.pick(body, Object.keys(fields)), (value, fieldKey) =>
     fieldKey.replace(`${key}-`, '')
@@ -47,21 +47,25 @@ const getIsPageHeading = field =>
 
 module.exports = (key, opts) => {
   if (!key) {
-    throw new Error('Key must be passed to amount-with-unit-select component');
+    throw new Error('Key must be passed to amountWithUnitSelect component');
   }
+  const fields = getFields(key);
+  
   const options = opts || {};
+  // creates and sets default equals validator for option components, but room to customise arguments
+  const amountWithUnitSelectValidator = [{
+    type: 'amount-with-unit-select', 
+    arguments: _.map(fields[`${key}-unit`].options, option =>
+      typeof option === 'string' ? option : 
+      option.value
+  )}];
+  options.validate = _.uniq(options.validate ? 
+    amountWithUnitSelectValidator.concat(options.validate) : 
+    amountWithUnitSelectValidator);
+
   const template = options.template ?
     path.resolve(__dirname, options.template) :
     TEMPLATE;
-  const fields = getFields(key);
-
-  //Custom validation implemented in ./controller/validation/validators.js
-  options.validate = _.uniq(options.validate ? ['amount-with-unit-select'].concat(options.validate) : ['amount-with-unit-select']);
-
-  if(options.validate?.indexOf('required') != -1) {
-    fields[`${key}-amount`].validate.push['required']
-    fields[`${key}-unit`].validate.push['required']
-  }
 
   // takes the 2 parts (amount and unit), then creates a amountWithUnitSelect value 
   // in the format [Amount]-[Unit] (e.g. 5-Kilograms) and saves to req.body for processing
@@ -70,18 +74,34 @@ module.exports = (key, opts) => {
     if (_.some(parts, part => part !== '')) {
       req.body[key] = `${(parts.amount || '')}-${(parts.unit || '')}`;
     }
-    req.form.options.fields[key].options = fields[`${key}-unit`].options || req.form.options.fields[key].options;
     next();
   };
 
   // defaultFormatters on the base controller replace '--' with '-' on the process step.
   // This ensures having the correct number of hyphens, so values do not jump from unit to amount.
-  // This should only be done on a partially completed amount-with-unit-select field otherwise the validation messages break.
+  // This should only be done on a partially completed amountWithUnitSelect field otherwise the validation messages break.
   const postProcess = (req, res, next) => {
     const value = req.form.values[key];
     if (value) {
       req.form.values[key] = req.body[key];
     }
+    next();
+  };
+
+  const preValidate = (req, res, next) => {
+    // prevent the 'equal' validator being applied to the grouped component by default
+    // this is so the validator can be added to the sub component instead of the group component
+    req.form.options.fields[key].groupedFieldsWithOptions = true;
+
+    // finds and edits validator arguments to pass a the list of translated options in the sub-component
+    const assignedEqualsValidatorIndex = options?.validate.findIndex(
+      (validator) => 
+        typeof validator === 'object' && 
+        'arguments' in validator);
+    options.validate[assignedEqualsValidatorIndex].arguments = assignedEqualsValidatorIndex >= 0 ? 
+      fields[`${key}-unit`].options :
+      options.validate[assignedEqualsValidatorIndex].arguments;
+
     next();
   };
 
