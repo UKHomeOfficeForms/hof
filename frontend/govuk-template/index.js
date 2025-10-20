@@ -10,9 +10,9 @@ const basedir = path.dirname(require.resolve('govuk-frontend/package.json'));
 const setup = (opts, router) => {
   buildTemplateLayout();
   const options = opts || {};
-  options.path = options.path || '/assets/rebrand';
+  options.path = options.path || '/assets';
 
-  router.use(options.path, servestatic(path.join(basedir, './govuk/assets/rebrand'), options));
+  router.use(options.path, servestatic(path.join(basedir, './govuk/assets'), options));
   router.use((req, res, next) => {
     res.locals.govukAssetPath = req.baseUrl + options.path + '/';
     res.locals.partials = res.locals.partials || {};
