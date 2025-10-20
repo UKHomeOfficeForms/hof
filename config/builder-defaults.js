@@ -29,7 +29,7 @@ module.exports = {
   },
    images: {
     src: ['assets/rebrand/images', toolkitImages],
-    out: 'public',
+    out: 'public/images',
     match: ['assets/rebrand/images/**/*', `${toolkitImages}/**/*`],
     restart: false
   },

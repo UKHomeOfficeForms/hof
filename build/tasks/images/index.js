@@ -14,7 +14,7 @@ module.exports = config => {
 
   return Promise.all(srcs.map(src =>
     mkdir(config.images.out)
-      .then(() => spawn('cp', ['-rf', src, config.images.out]))
+      .then(() => spawn('rsync', ['-a', `${src}/.`, config.images.out]))
   ))
     .catch(e => {
       if (e.code !== 'ENOENT') {
