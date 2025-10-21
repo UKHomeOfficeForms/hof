@@ -12,10 +12,14 @@ module.exports = config => {
   }
   const srcs = Array.isArray(config.images.src) ? config.images.src : [config.images.src];
 
-  return Promise.all(srcs.map(src =>
-    mkdir(config.images.out)
-      .then(() => spawn('rsync', ['-a', `${src}/.`, config.images.out]))
-  ))
+  return Promise.all(srcs.map(src => {
+    if (!fs.existsSync(src)) {
+      console.log(`${chalk.yellow('warning')}: Skipping missing images folder: ${src}`);
+      return Promise.resolve();
+    }
+    return mkdir(config.images.out)
+      .then(() => spawn('rsync', ['-a', `${src}/.`, config.images.out]));
+  }))
     .catch(e => {
       if (e.code !== 'ENOENT') {
         throw e;

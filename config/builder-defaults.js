@@ -27,7 +27,7 @@ module.exports = {
     match: 'apps/**/translations/src/**/*.json',
     shared: 'apps/common/translations/src'
   },
-   images: {
+  images: {
     src: ['assets/rebrand/images', toolkitImages],
     out: 'public/images',
     match: ['assets/rebrand/images/**/*', `${toolkitImages}/**/*`],
