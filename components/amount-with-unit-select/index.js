@@ -4,6 +4,8 @@ const _ = require('lodash');
 const path = require('path');
 const getFields = require('./fields');
 const { object } = require('underscore');
+const { amountWithUnitSelect } = require('..');
+const controller = require('../../controller/controller');
 
 const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html');
 
@@ -22,14 +24,23 @@ const getParts = (body, fields, key) =>
     fieldKey.replace(`${key}-`, '')
   );
 
+// accepts an amountWithUnitSelect value in the format [Amount]-[Unit]
+// returns array in format [amount, value]
+const getAmountWithUnitSelectValues = (amountWithUnitSelectVal) => {
+  const splitPointIndex = amountWithUnitSelectVal.lastIndexOf('-');
+  return splitPointIndex === -1 ? 
+    ['', ''] :
+    [amountWithUnitSelectVal.substring(0, splitPointIndex), amountWithUnitSelectVal.substring(splitPointIndex + 1)];
+}
+
 // accepts an amountWithUnitSelect value in the format [Amount]-[Unit] and fields config,
 // returns a map of key:value pairs for the intermediate fields
-const getPartsFromAmountWithUnitSelect = (amountWithUnitSelectVal, fields) =>
-  amountWithUnitSelectVal.split('-')
-    .slice()
-    .reduce((obj, value, index) => Object.assign({}, obj, {
-      [fields[index]]: value
-    }), {});
+const getPartsFromAmountWithUnitSelect = (amountWithUnitSelectVal, fields) => 
+  getAmountWithUnitSelectValues(amountWithUnitSelectVal).reduce(
+    (obj, value, index) => Object.assign({}, 
+      obj, 
+      {[fields[index]]: value }), 
+    {});
 
 const conditionalTranslate = (key, translate) => {
   let result = translate(key);
@@ -52,7 +63,7 @@ module.exports = (key, opts) => {
   const fields = getFields(key);
   
   const options = opts || {};
-  // creates and sets default equals validator for option components, but room to customise arguments
+  // creates and sets default equals validator for option components, but room to customize arguments
   const amountWithUnitSelectValidator = [{
     type: 'amount-with-unit-select', 
     arguments: _.map(fields[`${key}-unit`].options, option =>
@@ -88,6 +99,7 @@ module.exports = (key, opts) => {
     next();
   };
 
+  // modified request to include custom validation
   const preValidate = (req, res, next) => {
     // prevent the 'equal' validator being applied to the grouped component by default
     // this is so the validator can be added to the sub component instead of the group component
@@ -102,10 +114,48 @@ module.exports = (key, opts) => {
       fields[`${key}-unit`].options :
       options.validate[assignedEqualsValidatorIndex].arguments;
 
+    // Add required validators from parent component to child components
+    const isAmountValOptional = req.form.options.fields[key].amountOptional === 'true';
+    const isUnitValOptional = req.form.options.fields[key].unitOptional === 'true';
+    const parentIsRequired = options.validate?.indexOf('required') != -1;
+    if(!isAmountValOptional || parentIsRequired)
+      fields[`${key}-amount`].validate = _.uniq(fields[`${key}-amount`].validate.concat('required'));
+    if(!isUnitValOptional || parentIsRequired)
+      fields[`${key}-unit`].validate = _.uniq(fields[`${key}-unit`].validate.concat('required'));
+
+    // logic to deal with one of the 2 sub-fields being optionals
+    if(isAmountValOptional ^ isUnitValOptional) {
+      Object.assign(req.form.options.fields,
+        isAmountValOptional ?
+          { 'amountWithUnitSelect-amount' : fields[`${key}-amount`] } :
+          { 'amountWithUnitSelect-unit' : fields[`${key}-unit`] } 
+      );
+      const amountWithUnitSelectValues = getAmountWithUnitSelectValues(req.form.values['amountWithUnitSelect']);
+      Object.assign(req.form.values,
+        isAmountValOptional ?
+          { 'amountWithUnitSelect-amount' : amountWithUnitSelectValues[0] } :
+          { 'amountWithUnitSelect-unit' : amountWithUnitSelectValues[1] }
+      );
+    }
+
+    // left off here
+    _.remove(req.form.options.fields?.amountWithUnitSelect?.validate, (validator) => {
+      if(!((typeof validator === 'object' && 
+      (validator.type === 'amount-with-unit-select' || validator.type === 'equals' || validator.type === 'required')) ||
+      (typeof validator === 'string' && 
+      (validator.type === 'amount-with-unit-select' || validator.type === 'equals' || validator.type === 'required')))) {
+        req.form.options.fields['amountWithUnitSelect-amount']?.validate?.push(validator);
+        return true
+      }
+    });
+
+    // alternative
+    //req.form.values.amountWithUnitSelect = req.form.values['amountWithUnitSelect'].split('-')[0];
+
     next();
   };
 
-  // if amount-with-unit-select field is included in errorValues, extend
+  // if amountWithUnitSelect field is included in errorValues, extend
   // errorValues with the individual components
   const preGetErrors = (req, res, next) => {
     const errorValues = req.sessionModel.get('errorValues');
@@ -117,27 +167,63 @@ module.exports = (key, opts) => {
     next();
   };
 
-  // if amount-with-unit-select field has any validation error, also add errors
+  // if amountWithUnitSelect field has any validation error, also add errors
   // for the two child components. we make them null type as we don't want to show
   // duplicate messages
   const postGetErrors = (req, res, next) => {
     const errors = req.sessionModel.get('errors');
-    if (errors && errors[key]) {
+    // if there are errors recorded for the child components of the parent component
+    // the parent and child key:value pairs and stored in req.form.errors 
+    // to indicate an error for the whole component
+    if (errors && (errors[key] || errors[`${key}-amount`] || errors[`${key}-unit`])) {
       Object.assign(req.form.errors, Object.keys(fields).reduce((obj, field) =>
         Object.assign({}, obj, { [field]: { type: null } })
       , {}));
+    };
+
+    // populates amountWithUnitSelect sub-components/field errors into req.form.errors 
+    // so they can be reflected in the next steps (processing/rending the page)
+    if(errors && errors[`${key}-amount`] && req?.form?.errors && req.form.errors[`${key}-amount`]) {
+      req.form.errors[`${key}-amount`] = {
+        errorLinkId : `${key}-amount`,
+        key : errors[`${key}-amount`]?.key || `${key}-amount`,
+        type : errors[`${key}-amount`]?.type || null
+      };
+      req.form.errors[`${key}-amount`].message = 
+        controller.prototype.getErrorMessage(req.form.errors[`${key}-amount`], req, res) ||
+        controller.prototype.getErrorMessage({
+          errorLinkId : `${key}-amount`,
+          key : `${key}`,
+          type : errors[`${key}-amount`]?.type || null
+        }, req, res);;
     }
-    next();
+
+    if(errors && errors[`${key}-unit`] && req?.form?.errors && req.form.errors[`${key}-unit`]) {
+      req.form.errors[`${key}-unit`] = {
+        errorLinkId : `${key}-amount`,
+        key : errors[`${key}-unit`]?.key || `${key}-unit`,
+        type : errors[`${key}-unit`]?.type || null
+      };
+      req.form.errors[`${key}-unit`].message = 
+        controller.prototype.getErrorMessage(req.form.errors[`${key}-unit`], req, res) ||
+        controller.prototype.getErrorMessage({
+          errorLinkId : `${key}-amount`,
+          key : `${key}`,
+          type : errors[`${key}-unit`]?.type || null
+        }, req, res);
+    }
+
+     next();
   };
 
-  // if amount-with-unit-select value is set, split its parts and assign to req.form.values.
+  // if amountWithUnitSelect value is set, split its parts and assign to req.form.values.
   // This is extended with errorValues if they are present
   const postGetValues = (req, res, next) => {
-    const amount_with_unit_select = req.form.values[key];
-    if (amount_with_unit_select) {
+    const amountWithUnitSelect = req.form.values[key];
+    if (amountWithUnitSelect) {
       Object.assign(
         req.form.values,
-        getPartsFromAmountWithUnitSelect(amount_with_unit_select, Object.keys(fields)),
+        getPartsFromAmountWithUnitSelect(amountWithUnitSelect, Object.keys(fields)),
         req.sessionModel.get('errorValues') || {}
       );
     }

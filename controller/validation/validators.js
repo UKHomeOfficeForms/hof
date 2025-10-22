@@ -178,10 +178,10 @@ module.exports = Validators = {
     return value === '' || Validators.regex(value, /^(([GIR] ?0[A]{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2}))$/i);
   },
 
-  'amount-with-unit-select'(value) { 
-    const selectValue = [value.split('-')[1]];
+  'amount-with-unit-select'(value) {
+    const selectValue = [value.split('-').pop()];
     const selectOptions = [].slice.call(arguments, 1);
     const SelectOptionsValues = Array.from(selectOptions, (opt) => opt.value);
-    return Validators.equal.apply(null, selectValue.concat(SelectOptionsValues));
+    return Validators.equal.apply(null, selectValue.concat(SelectOptionsValues))
   }
 };

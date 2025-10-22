@@ -218,7 +218,7 @@ module.exports = function (options) {
         hint: hint,
         amountWithUnitSelectItemClassName: 'grouped-inputs__item',
         hintId: extension.hintId || (hint ? key + '-hint' : null),
-        error: this.errors && this.errors[key],
+        error: this.errors && this.errors[key], //error visuals ditermined here
         maxlengthAttribute: field.maxlengthAttribute === true,
         maxlength: maxlength(field) || extension.maxlength,
         maxword: maxword(field) || extension.maxword,
