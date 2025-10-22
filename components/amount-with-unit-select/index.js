@@ -110,9 +110,11 @@ module.exports = (key, opts) => {
       (validator) => 
         typeof validator === 'object' && 
         'arguments' in validator);
-    options.validate[assignedEqualsValidatorIndex].arguments = assignedEqualsValidatorIndex >= 0 ? 
-      fields[`${key}-unit`].options :
-      options.validate[assignedEqualsValidatorIndex].arguments;
+
+    if(req.form.options.fields[key]?.validate[assignedEqualsValidatorIndex] !== null)
+      req.form.options.fields[key].validate[assignedEqualsValidatorIndex].arguments = assignedEqualsValidatorIndex >= 0 ? 
+        fields[`${key}-unit`].options :
+        options.validate[assignedEqualsValidatorIndex].arguments;
 
     // Add required validators from parent component to child components
     const isAmountValOptional = req.form.options.fields[key].amountOptional === 'true';
@@ -124,33 +126,34 @@ module.exports = (key, opts) => {
       fields[`${key}-unit`].validate = _.uniq(fields[`${key}-unit`].validate.concat('required'));
 
     // logic to deal with one of the 2 sub-fields being optionals
-    if(isAmountValOptional ^ isUnitValOptional) {
-      Object.assign(req.form.options.fields,
-        isAmountValOptional ?
-          { 'amountWithUnitSelect-amount' : fields[`${key}-amount`] } :
-          { 'amountWithUnitSelect-unit' : fields[`${key}-unit`] } 
-      );
-      const amountWithUnitSelectValues = getAmountWithUnitSelectValues(req.form.values['amountWithUnitSelect']);
+    //if(isAmountValOptional ^ isUnitValOptional) {}
+    Object.assign(req.form.options.fields,
+      { 'amountWithUnitSelect-amount' : fields[`${key}-amount`] },
+      { 'amountWithUnitSelect-unit' : fields[`${key}-unit`] } 
+    );
+    // child component values are put into req.form.values so they can be validated if needed
+    const amountWithUnitSelectValues = getAmountWithUnitSelectValues(req.form.values['amountWithUnitSelect']);
       Object.assign(req.form.values,
-        isAmountValOptional ?
-          { 'amountWithUnitSelect-amount' : amountWithUnitSelectValues[0] } :
-          { 'amountWithUnitSelect-unit' : amountWithUnitSelectValues[1] }
+        { 'amountWithUnitSelect-amount' : amountWithUnitSelectValues[0] },
+        { 'amountWithUnitSelect-unit' : amountWithUnitSelectValues[1] }
       );
-    }
 
-    // left off here
+    // moves validation errors that do not apply to the group component to the amount sub-component
     _.remove(req.form.options.fields?.amountWithUnitSelect?.validate, (validator) => {
       if(!((typeof validator === 'object' && 
       (validator.type === 'amount-with-unit-select' || validator.type === 'equals' || validator.type === 'required')) ||
       (typeof validator === 'string' && 
       (validator.type === 'amount-with-unit-select' || validator.type === 'equals' || validator.type === 'required')))) {
-        req.form.options.fields['amountWithUnitSelect-amount']?.validate?.push(validator);
+        if(req.form.options.fields['amountWithUnitSelect-amount'] == null)
+          Object.assign(req.form.options.fields, { 
+            'amountWithUnitSelect-amount' : fields[`${key}-amount`] });
+
+        if(!req.form.options.fields['amountWithUnitSelect-amount']?.validate?.includes(validator))
+          req.form.options.fields['amountWithUnitSelect-amount'].validate.push(validator);
+
         return true
       }
     });
-
-    // alternative
-    //req.form.values.amountWithUnitSelect = req.form.values['amountWithUnitSelect'].split('-')[0];
 
     next();
   };
@@ -181,36 +184,38 @@ module.exports = (key, opts) => {
       , {}));
     };
 
-    // populates amountWithUnitSelect sub-components/field errors into req.form.errors 
-    // so they can be reflected in the next steps (processing/rending the page)
-    if(errors && errors[`${key}-amount`] && req?.form?.errors && req.form.errors[`${key}-amount`]) {
-      req.form.errors[`${key}-amount`] = {
-        errorLinkId : `${key}-amount`,
-        key : errors[`${key}-amount`]?.key || `${key}-amount`,
-        type : errors[`${key}-amount`]?.type || null
-      };
-      req.form.errors[`${key}-amount`].message = 
-        controller.prototype.getErrorMessage(req.form.errors[`${key}-amount`], req, res) ||
-        controller.prototype.getErrorMessage({
+    // if there is no error in parent component or no error in one of it's 2 child component
+    // this populates amountWithUnitSelect child component's validation errors into req.form.errors 
+    // so they can be translated, rendered and displayed
+    if(errors && !errors[key] && req?.form?.errors) {
+      if(errors[`${key}-amount`] && req.form.errors[`${key}-amount`]) {
+        req.form.errors[`${key}-amount`] = {
           errorLinkId : `${key}-amount`,
-          key : `${key}`,
+          key : errors[`${key}-amount`]?.key || `${key}-amount`,
           type : errors[`${key}-amount`]?.type || null
-        }, req, res);;
-    }
-
-    if(errors && errors[`${key}-unit`] && req?.form?.errors && req.form.errors[`${key}-unit`]) {
-      req.form.errors[`${key}-unit`] = {
-        errorLinkId : `${key}-amount`,
-        key : errors[`${key}-unit`]?.key || `${key}-unit`,
-        type : errors[`${key}-unit`]?.type || null
-      };
-      req.form.errors[`${key}-unit`].message = 
-        controller.prototype.getErrorMessage(req.form.errors[`${key}-unit`], req, res) ||
-        controller.prototype.getErrorMessage({
+        };
+        req.form.errors[`${key}-amount`].message = 
+          controller.prototype.getErrorMessage(req.form.errors[`${key}-amount`], req, res) ||
+          controller.prototype.getErrorMessage({
+            errorLinkId : `${key}-amount`,
+            key : `${key}`,
+            type : errors[`${key}-amount`]?.type || null
+          }, req, res);
+      }
+      else if(errors[`${key}-unit`] && req.form.errors[`${key}-unit`]) {
+        req.form.errors[`${key}-unit`] = {
           errorLinkId : `${key}-amount`,
-          key : `${key}`,
+          key : errors[`${key}-unit`]?.key || `${key}-unit`,
           type : errors[`${key}-unit`]?.type || null
-        }, req, res);
+        };
+        req.form.errors[`${key}-unit`].message = 
+          controller.prototype.getErrorMessage(req.form.errors[`${key}-unit`], req, res) ||
+          controller.prototype.getErrorMessage({
+            errorLinkId : `${key}-amount`,
+            key : `${key}`,
+            type : errors[`${key}-unit`]?.type || null
+          }, req, res);
+      }
     }
 
      next();
@@ -272,7 +277,8 @@ module.exports = (key, opts) => {
       req.form.options.fields[`${key}`]?.hint;
     const legendClassName = getLegendClassName(options);
     const isPageHeading = getIsPageHeading(options);
-    const error = req.form.errors && req.form.errors[key];
+    const error = req.form.errors && 
+      (req.form.errors[key] || req.form.errors[`${key}-amount`] || req.form.errors[`${key}-unit`]);   
 
     res.render(template, { key, legend, legendClassName, isPageHeading, hint, error }, (err, html) => {
       if (err) {
