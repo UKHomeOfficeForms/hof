@@ -3,14 +3,13 @@
 const _ = require('lodash');
 const path = require('path');
 const getFields = require('./fields');
-const { object } = require('underscore');
-const { amountWithUnitSelect } = require('..');
 const controller = require('../../controller/controller');
 
 const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html');
 
-// utility function that, using the req.body (where the fields key:values like 'amountWithUnitSelect-amount = 12' 
-// are submitted in a request), fields (the set of fields we're concerned with - the ones defined in ./fields.js),
+// utility function that, using the 
+// req.body (which contains the key:values pairs submitted in the request like 'amountWithUnitSelect-amount : 12'), 
+// fields (the set of fields we're concerned with - the ones defined in ./fields.js),
 // key (the parent name for the grouped fields - so 'amountWithUnitSelect in this' case)
 // returns a map of values in the format:
 // {

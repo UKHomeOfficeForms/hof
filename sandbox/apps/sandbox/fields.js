@@ -2,8 +2,6 @@
 'use strict';
 
 const dateComponent = require('../../../').components.date;
-const amountWithUnitSelectComponent = require('../../../').components.amountWithUnitSelect;
-const validate = require('../../../controller/validation');
 const staticAppealStages = require('./lib/staticAppealStages');
 
 module.exports = {
@@ -27,22 +25,6 @@ module.exports = {
       'date',
       { type: 'after', arguments: ['1900'] }
     ]
-  }),
-  'amountWithUnitSelect' : amountWithUnitSelectComponent('amountWithUnitSelect', {
-    mixin: 'input-amount-with-unit-select',
-    unitLabel: "Unit~",
-    options: [
-      { "none_selected": "Selectus..."},
-      { "label": "fields.amountWithUnitSelect.options.null", "value": ""},
-      { "label": "non trans option 1", "value": "1" },
-      { "label": "non trans option 2", "value": "2" }
-    ],
-    hint: "trans hint",
-    legend: 'Legend!',
-    isPageHeading: 'true',
-    unitOptional: 'false',
-    amountOptional: 'true',
-    validate: ['alphanum']
   }),
   building: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 100 }]
