@@ -3,6 +3,7 @@
 module.exports = key => ({
   [`${key}-amount`]: {
     label: 'Amount',
+    autocomplete: 'off',
     validate: []
   },
   [`${key}-unit`]: {

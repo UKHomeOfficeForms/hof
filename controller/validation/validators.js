@@ -79,7 +79,7 @@ module.exports = Validators = {
   },
 
   equal(v) {
-    const values = [].slice.call(arguments, 1);
+    const values =  [].slice.call(arguments, 1);
     const value = _.castArray(v);
     return values.length && _.every(value, item =>
       item === '' || values.indexOf(item) > -1
@@ -179,9 +179,11 @@ module.exports = Validators = {
   },
 
   'amount-with-unit-select'(value) {
+    if(typeof value !== 'string' || value.indexOf('-') === -1)
+      return false;
     const selectValue = [value.split('-').pop()];
     const selectOptions = [].slice.call(arguments, 1);
-    const SelectOptionsValues = Array.from(selectOptions, (opt) => opt.value);
-    return Validators.equal.apply(null, selectValue.concat(SelectOptionsValues))
+    const SelectOptionsValues = Array.from(selectOptions, (opt) => opt.value || opt);
+    return Array.isArray(selectValue) && selectValue.length && Validators.equal.apply(null, selectValue.concat(SelectOptionsValues));
   }
 };

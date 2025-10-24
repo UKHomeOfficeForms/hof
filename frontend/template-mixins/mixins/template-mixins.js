@@ -482,6 +482,12 @@ module.exports = function (options) {
           return function (key) {
             key = key || key === '' ? hoganRender(key, this) : key;
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+
+            let autocomplete = field.autocomplete || 'off';
+            if (autocomplete === 'off')
+              autocomplete = { amount: 'off'};
+            else if (typeof autocomplete === 'string') 
+              autocomplete = { amount: autocomplete + '-amount' };
             
             const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
             const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
@@ -495,6 +501,7 @@ module.exports = function (options) {
               .render(inputText.call(this, 
                 key + '-amount', { 
                   formGroupClassName, 
+                  autocomplete: autocomplete.amount,
                   className: classNameAmount }
                 ));
                   

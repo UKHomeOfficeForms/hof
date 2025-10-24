@@ -898,4 +898,40 @@ describe('Validators', () => {
       expect(validator('field-4', true)).to.be.undefined;
     });
   });
+  describe('amount-with-unit-select', () => {
+    describe('invalid values', () => {
+      const inputs = [
+        ['amount-1', 1],
+        ['amount-true', true],
+        ['amount-0', 0],
+        ['amount-a', 'b', 'c', 'd'],
+        ['amount-a'],
+        [['amount-a', 'amount-b', 'amount-c'], 'a', 'b'],
+        ['amount 1', '1'],
+        ['', '']
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators['amount-with-unit-select'].apply(null, i).should.not.be.ok;
+        });
+      });
+    });
+
+    describe('valid values', () => {
+      const inputs = [
+        ['1-', 'litre'],
+        ['1-litre', 'litre'],
+        ['amount-a', 'b', 'c', 'a'],
+        ['-', ''],
+        ['--', '-'],
+        ['-1-litres', 'litres'],
+        ['--1-litres', 'litres']
+      ];
+      inputs.forEach(i => {
+        it(testName(i), () => {
+          Validators['amount-with-unit-select'].apply(null, i).should.be.ok;
+        });
+      });
+    });
+  });
 });
