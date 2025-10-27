@@ -480,7 +480,7 @@ module.exports = function (options) {
       'input-amount-with-unit-select': {
         handler: function () {
           return function (key) {
-            key = key || key === '' ? hoganRender(key, this) : key;
+            key = (key === '{{key}}' || key === '' || key === undefined) ? hoganRender(key, this) : key;
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
 
             let autocomplete = field.autocomplete || 'off';
@@ -502,7 +502,8 @@ module.exports = function (options) {
                 key + '-amount', { 
                   formGroupClassName, 
                   autocomplete: autocomplete.amount,
-                  className: classNameAmount }
+                  className: classNameAmount,
+                  amountWithUnitSelect: true }
                 ));
                   
             const unitPart = compiled['partials/forms/grouped-inputs-select']
@@ -510,7 +511,8 @@ module.exports = function (options) {
                 optionGroup.call(this, 
                   key + '-unit', { 
                   formGroupClassName, 
-                  className: classNameUnit }, 
+                  className: classNameUnit,
+                  amountWithUnitSelect: true }, 
                   key
                 )));
 
