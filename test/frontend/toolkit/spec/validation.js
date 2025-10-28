@@ -1,7 +1,7 @@
-/* eslint-disable max-len, no-var */
-var validation = require('../../../../frontend/toolkit/assets/javascript/validation');
-var $ = require('jquery');
-var util = require('../lib/util');
+/* eslint-disable max-len */
+const validation = require('../../../../frontend/toolkit/assets/javascript/validation');
+const $ = require('jquery');
+const util = require('../lib/util');
 
 describe('Validation', function () {
   beforeEach(function () {
@@ -9,7 +9,7 @@ describe('Validation', function () {
   });
 
   it('exports a function', function () {
-    validation.should.be.a('function');
+    expect(typeof validation).toBe('function');
   });
 
   describe('summary', function () {
@@ -19,7 +19,7 @@ describe('Validation', function () {
     });
 
     it('adds focus to the validation summary', function () {
-      document.activeElement.should.equal(document.getElementsByClassName('validation-summary')[0]);
+      expect(document.activeElement).toBe(document.getElementsByClassName('validation-summary')[0]);
     });
   });
 
@@ -38,7 +38,7 @@ describe('Validation', function () {
 
       it('adds focus to the first input', function () {
         util.triggerEvent(document.getElementById('error'), 'click');
-        document.activeElement.should.equal(document.getElementsByTagName('input')[0]);
+        expect(document.activeElement).toBe(document.getElementsByTagName('input')[0]);
       });
     });
 
@@ -50,7 +50,7 @@ describe('Validation', function () {
 
       it('adds focus to the first textarea', function () {
         util.triggerEvent(document.getElementById('error'), 'click');
-        document.activeElement.should.equal(document.getElementsByTagName('textarea')[0]);
+        expect(document.activeElement).toBe(document.getElementsByTagName('textarea')[0]);
       });
     });
 
@@ -62,7 +62,7 @@ describe('Validation', function () {
 
       it('adds focus to the first select box', function () {
         util.triggerEvent(document.getElementById('error'), 'click');
-        document.activeElement.should.equal(document.getElementsByTagName('select')[0]);
+        expect(document.activeElement).toBe(document.getElementsByTagName('select')[0]);
       });
     });
   });
