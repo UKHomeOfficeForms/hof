@@ -1,0 +1,975 @@
+yarn run v1.22.22
+warning package.json: No license field
+$ HOF_SANDBOX=true ../bin/hof-build watch
+Running task: browserify
+Name task: browserify Promise task: Promise { undefined }
+Running task: vite
+Name task: vite Promise task: Promise { <pending> }
+Running task: compile sass
+Name task: compile sass Promise task: Promise { <pending> }
+Running task: compile translations
+Name task: compile translations Promise task: Promise { <pending> }
+Running task: copy images
+Name task: copy images Promise task: Promise { <pending> }
+Executing task: browserify
+Completed task: browserify
+Executing task: vite
+vite v7.1.10 building for development...
+transforming...
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+9 │ @import "govuk_frontend_toolkit";
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+13 │ @import "govuk-elements-sass/public/sass/elements";
+   │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+17 │ @import "govuk-frontend";
+   │         ^^^^^^^^^^^^^^^^
+   ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+20 │ @import "base";
+   │         ^^^^^^
+   ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 20:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+21 │ @import "layout";
+   │         ^^^^^^^^
+   ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 21:9  root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($full-width, 4) or calc($full-width / 4)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+  ╷
+4 │ $one-quarter: $full-width / 4;
+  │               ^^^^^^^^^^^^^^^
+  ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 4:15  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9           @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                             root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($full-width, 3) or calc($full-width / 3)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+  ╷
+5 │ $one-third: $full-width / 3;
+  │             ^^^^^^^^^^^^^^^
+  ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 5:13  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9           @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                             root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($full-width, 2) or calc($full-width / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+  ╷
+6 │ $half: $full-width / 2;
+  │        ^^^^^^^^^^^^^^^
+  ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 6:8  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9          @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                            root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($gutter, 4) or calc($gutter / 4)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+11 │ $gutter-one-quarter: $gutter / 4;
+   │                      ^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 11:22  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9            @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                              root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($gutter, 3) or calc($gutter / 3)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+12 │ $gutter-one-third: $gutter / 3;
+   │                    ^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 12:20  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9            @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                              root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use math.percentage instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+97 │     width: percentage($width);
+   │            ^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_grid_layout.scss 97:12  @content
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_conditionals.scss 45:9  media()
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_grid_layout.scss 95:3   grid-column()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_layout.scss 49:3  @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 14:9         @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                            root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+38 │   @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                               ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 38:31  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -58.8461538462%)
+color.adjust($color, $lightness: -15%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+38 │   @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                               ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 38:31  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+58 │     background-color: darken($colour, 5%);
+   │                       ^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 58:23  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -19.6153846154%)
+color.adjust($color, $lightness: -5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+58 │     background-color: darken($colour, 5%);
+   │                       ^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 58:23  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use string.unquote instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+88 │   filter: unquote('alpha(opacity=' + ($trans * 100) + ')'); // IE6 to IE8
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_css3.scss 88:11                    opacity()
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 70:5  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3             @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                    @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                       root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+78 │       @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                                   ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 78:35  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -58.8461538462%)
+color.adjust($color, $lightness: -15%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+78 │       @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                                   ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 78:35  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        root stylesheet
+
+DEPRECATION WARNING [color-functions]: lightness() is deprecated. Suggestion:
+
+color.channel($color, "lightness", $space: hsl)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+86 │   @if lightness($colour) < 50% {
+   │       ^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 86:7  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3             @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                    @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                       root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (30) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+83 │   @return mix(#000000, $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 83:11               govuk-shade()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 43:12         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (90) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+94 │   @return mix(govuk-colour("white"), $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 94:11               govuk-tint()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 44:17         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (20) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+83 │   @return mix(#000000, $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 83:11               govuk-shade()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 48:12         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (80) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+94 │   @return mix(govuk-colour("white"), $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 94:11               govuk-tint()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 49:17         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (60) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+83 │   @return mix(#000000, $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 83:11               govuk-shade()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 53:12         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              root stylesheet
+
+WARNING: Passing a phase to the alpha/beta banners is deprecated
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_alpha-beta.scss 15:5  phase-banner()
+    ../frontend/themes/gov-uk/styles/_check_your_answers.scss 3:3                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 27:9                                          root stylesheet
+
+WARNING: 360 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings.
+
+
+/public/images/icon-pointer.png referenced in /public/images/icon-pointer.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-pointer-2x.png referenced in /public/images/icon-pointer-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-calendar.png referenced in /public/images/icon-calendar.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-calendar-2x.png referenced in /public/images/icon-calendar-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-file-download.png referenced in /public/images/icon-file-download.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-file-download-2x.png referenced in /public/images/icon-file-download-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-important.png referenced in /public/images/icon-important.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-important-2x.png referenced in /public/images/icon-important-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-information.png referenced in /public/images/icon-information.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-information-2x.png referenced in /public/images/icon-information-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-locator.png referenced in /public/images/icon-locator.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-locator-2x.png referenced in /public/images/icon-locator-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-pointer-black.png referenced in /public/images/icon-pointer-black.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-pointer-black-2x.png referenced in /public/images/icon-pointer-black-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-search.png referenced in /public/images/icon-search.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-search-2x.png referenced in /public/images/icon-search-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-1.png referenced in /public/images/icon-steps/icon-step-1.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-1-2x.png referenced in /public/images/icon-steps/icon-step-1-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-2.png referenced in /public/images/icon-steps/icon-step-2.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-2-2x.png referenced in /public/images/icon-steps/icon-step-2-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-3.png referenced in /public/images/icon-steps/icon-step-3.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-3-2x.png referenced in /public/images/icon-steps/icon-step-3-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-4.png referenced in /public/images/icon-steps/icon-step-4.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-4-2x.png referenced in /public/images/icon-steps/icon-step-4-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-5.png referenced in /public/images/icon-steps/icon-step-5.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-5-2x.png referenced in /public/images/icon-steps/icon-step-5-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-6.png referenced in /public/images/icon-steps/icon-step-6.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-6-2x.png referenced in /public/images/icon-steps/icon-step-6-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-7.png referenced in /public/images/icon-steps/icon-step-7.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-7-2x.png referenced in /public/images/icon-steps/icon-step-7-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-8.png referenced in /public/images/icon-steps/icon-step-8.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-8-2x.png referenced in /public/images/icon-steps/icon-step-8-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-9.png referenced in /public/images/icon-steps/icon-step-9.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-9-2x.png referenced in /public/images/icon-steps/icon-step-9-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-10.png referenced in /public/images/icon-steps/icon-step-10.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-10-2x.png referenced in /public/images/icon-steps/icon-step-10-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-11.png referenced in /public/images/icon-steps/icon-step-11.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-11-2x.png referenced in /public/images/icon-steps/icon-step-11-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-12.png referenced in /public/images/icon-steps/icon-step-12.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-12-2x.png referenced in /public/images/icon-steps/icon-step-12-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-13.png referenced in /public/images/icon-steps/icon-step-13.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-13-2x.png referenced in /public/images/icon-steps/icon-step-13-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-14.png referenced in /public/images/icon-steps/icon-step-14.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/icon-steps/icon-step-14-2x.png referenced in /public/images/icon-steps/icon-step-14-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/separator.png referenced in /public/images/separator.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/separator-2x.png referenced in /public/images/separator-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/fonts/light-94a07e06a1-v2.woff2 referenced in /assets/fonts/light-94a07e06a1-v2.woff2 didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/fonts/bold-b542beb274-v2.woff2 referenced in /assets/fonts/bold-b542beb274-v2.woff2 didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/images/govuk-crest.png referenced in /assets/images/govuk-crest.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/images/govuk-crest-2x.png referenced in /assets/images/govuk-crest-2x.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/passports/new-window-link.png referenced in /public/images/passports/new-window-link.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/public/images/passports/new-window-link-blue.png referenced in /public/images/passports/new-window-link-blue.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/fonts/light-f591b13f7d-v2.woff referenced in /assets/fonts/light-f591b13f7d-v2.woff didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/fonts/bold-affa96571d-v2.woff referenced in /assets/fonts/bold-affa96571d-v2.woff didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 2 modules transformed.
+rendering chunks...
+computing gzip size...
+../public/assets/assets/styles-CxEfvDDv.css  157.08 kB │ gzip: 20.19 kB
+../public/assets/assets/index-BTtacVCj.js      0.50 kB │ gzip:  0.28 kB
+✓ built in 662ms
+Completed task: vite
+Executing task: compile sass
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import "../../../frontend/themes/gov-uk/styles/govuk";
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    assets/scss/app.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+9 │ @import "govuk_frontend_toolkit";
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9  @import
+    assets/scss/app.scss 2:9                         root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+13 │ @import "govuk-elements-sass/public/sass/elements";
+   │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9  @import
+    assets/scss/app.scss 2:9                          root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+17 │ @import "govuk-frontend";
+   │         ^^^^^^^^^^^^^^^^
+   ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9  @import
+    assets/scss/app.scss 2:9                          root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+20 │ @import "base";
+   │         ^^^^^^
+   ╵
+    ../frontend/themes/gov-uk/styles/govuk.scss 20:9  @import
+    assets/scss/app.scss 2:9                          root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($full-width, 4) or calc($full-width / 4)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+  ╷
+4 │ $one-quarter: $full-width / 4;
+  │               ^^^^^^^^^^^^^^^
+  ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 4:15  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9           @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                             @import
+    assets/scss/app.scss 2:9                                                    root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($full-width, 3) or calc($full-width / 3)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+  ╷
+5 │ $one-third: $full-width / 3;
+  │             ^^^^^^^^^^^^^^^
+  ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 5:13  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9           @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                             @import
+    assets/scss/app.scss 2:9                                                    root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($full-width, 2) or calc($full-width / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+  ╷
+6 │ $half: $full-width / 2;
+  │        ^^^^^^^^^^^^^^^
+  ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 6:8  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9          @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                            @import
+    assets/scss/app.scss 2:9                                                   root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($gutter, 4) or calc($gutter / 4)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+11 │ $gutter-one-quarter: $gutter / 4;
+   │                      ^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 11:22  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9            @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                              @import
+    assets/scss/app.scss 2:9                                                     root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($gutter, 3) or calc($gutter / 3)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+12 │ $gutter-one-third: $gutter / 3;
+   │                    ^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_measurements.scss 12:20  @import
+    ../frontend/themes/gov-uk/styles/_govuk_frontend_toolkit.scss 8:9            @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 9:9                              @import
+    assets/scss/app.scss 2:9                                                     root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use math.percentage instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+97 │     width: percentage($width);
+   │            ^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_grid_layout.scss 97:12  @content
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_conditionals.scss 45:9  media()
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_grid_layout.scss 95:3   grid-column()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_layout.scss 49:3  @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 14:9         @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                            @import
+    assets/scss/app.scss 2:9                                                    root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+38 │   @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                               ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 38:31  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        @import
+    assets/scss/app.scss 2:9                                                                root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -58.8461538462%)
+color.adjust($color, $lightness: -15%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+38 │   @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                               ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 38:31  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        @import
+    assets/scss/app.scss 2:9                                                                root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+58 │     background-color: darken($colour, 5%);
+   │                       ^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 58:23  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        @import
+    assets/scss/app.scss 2:9                                                                root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -19.6153846154%)
+color.adjust($color, $lightness: -5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+58 │     background-color: darken($colour, 5%);
+   │                       ^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 58:23  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        @import
+    assets/scss/app.scss 2:9                                                                root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use string.unquote instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+88 │   filter: unquote('alpha(opacity=' + ($trans * 100) + ')'); // IE6 to IE8
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/_css3.scss 88:11                    opacity()
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 70:5  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3             @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                    @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                       @import
+    assets/scss/app.scss 2:9                                                               root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+78 │       @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                                   ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 78:35  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        @import
+    assets/scss/app.scss 2:9                                                                root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -58.8461538462%)
+color.adjust($color, $lightness: -15%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+78 │       @include box-shadow(0 2px 0 darken($colour, 15%));
+   │                                   ^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 78:35  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3              @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                     @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                        @import
+    assets/scss/app.scss 2:9                                                                root stylesheet
+
+DEPRECATION WARNING [color-functions]: lightness() is deprecated. Suggestion:
+
+color.channel($color, "lightness", $space: hsl)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+86 │   @if lightness($colour) < 50% {
+   │       ^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_buttons.scss 86:7  button()
+    ../node_modules/govuk-elements-sass/public/sass/elements/_buttons.scss 5:3             @import
+    ../node_modules/govuk-elements-sass/public/sass/_elements.scss 18:9                    @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 13:9                                       @import
+    assets/scss/app.scss 2:9                                                               root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (30) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+83 │   @return mix(#000000, $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 83:11               govuk-shade()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 43:12         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              @import
+    assets/scss/app.scss 2:9                                                      root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (90) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+94 │   @return mix(govuk-colour("white"), $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 94:11               govuk-tint()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 44:17         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              @import
+    assets/scss/app.scss 2:9                                                      root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (20) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+83 │   @return mix(#000000, $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 83:11               govuk-shade()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 48:12         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              @import
+    assets/scss/app.scss 2:9                                                      root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (80) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+94 │   @return mix(govuk-colour("white"), $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 94:11               govuk-tint()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 49:17         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              @import
+    assets/scss/app.scss 2:9                                                      root stylesheet
+
+DEPRECATION WARNING [function-units]: $weight: Passing a number without unit % (60) is deprecated.
+
+To preserve current behavior: $weight * 1%
+
+More info: https://sass-lang.com/d/function-units
+
+   ╷
+83 │   @return mix(#000000, $colour, $percentage);
+   │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    ../node_modules/govuk-frontend/govuk/helpers/_colour.scss 83:11               govuk-shade()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 53:12         @content
+    ../node_modules/govuk-frontend/govuk/tools/_exports.scss 29:5                 govuk-exports()
+    ../node_modules/govuk-frontend/govuk/components/tag/_index.scss 1:1           @import
+    ../node_modules/govuk-frontend/govuk/components/phase-banner/_index.scss 1:9  @import
+    ../node_modules/govuk-frontend/govuk/components/_all.scss 25:9                @import
+    ../node_modules/govuk-frontend/govuk/all.scss 6:9                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 17:9                              @import
+    assets/scss/app.scss 2:9                                                      root stylesheet
+
+WARNING: Passing a phase to the alpha/beta banners is deprecated
+    ../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/_alpha-beta.scss 15:5  phase-banner()
+    ../frontend/themes/gov-uk/styles/_check_your_answers.scss 3:3                             @import
+    ../frontend/themes/gov-uk/styles/govuk.scss 27:9                                          @import
+    assets/scss/app.scss 2:9                                                                  root stylesheet
+
+WARNING: 361 repetitive deprecation warnings omitted.
+
+Completed task: compile sass
+Executing task: compile translations
+Completed task: compile translations
+Executing task: copy images
+Completed task: copy images
+
+Ignoring node_modules directory. To watch node_modules run with --watch-node-modules flag
+Ignoring dotfiles. To watch dotfiles run with --watch-dotfiles flag
+Watching 5612 files for changes
+Local env file found at /Users/paola/Desktop/projects/hof/sandbox/.env.
+To load variables from this file run with --env.
+
+> hof-bootstrap-example-app@1.0.0 start
+> node server.js
+
+
+Warning: `getAccessibility` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static cookies page.
+
+
+
+Warning: `getCookies` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static cookies page.
+
+
+
+Warning: `getTerms` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static terms and conditions page.
+
+
+{"level":"info","message":"HOF Application started!","timestamp":"2025-10-28T15:46:16.078Z"}
+(node:54881) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+ SDK releases are limited to address critical bug fixes and security issues only.
+
+Please migrate your code to use AWS SDK for JavaScript (v3).
+For more information, check the blog post at https://a.co/cUPnyil
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"level":"info","message":"Connected to redis","timestamp":"2025-10-28T15:46:16.080Z"}
+
+Restarting due to changes
+
+> hof-bootstrap-example-app@1.0.0 start
+> node server.js
+
+
+Warning: `getAccessibility` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static cookies page.
+
+
+
+Warning: `getCookies` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static cookies page.
+
+
+
+Warning: `getTerms` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static terms and conditions page.
+
+
+{"level":"info","message":"HOF Application started!","timestamp":"2025-10-28T15:48:15.875Z"}
+(node:55670) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+ SDK releases are limited to address critical bug fixes and security issues only.
+
+Please migrate your code to use AWS SDK for JavaScript (v3).
+For more information, check the blog post at https://a.co/cUPnyil
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"level":"info","message":"Connected to redis","timestamp":"2025-10-28T15:48:15.882Z"}
+
+Restarting due to changes
+
+> hof-bootstrap-example-app@1.0.0 start
+> node server.js
+
+
+Warning: `getAccessibility` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static cookies page.
+
+
+
+Warning: `getCookies` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static cookies page.
+
+
+
+Warning: `getTerms` option is deprecated and may be removed in future versions. has been deprecated.
+Use `pages` to define static terms and conditions page.
+
+
+{"level":"info","message":"HOF Application started!","timestamp":"2025-10-28T15:48:43.987Z"}
+(node:55910) NOTE: The AWS SDK for JavaScript (v2) is in maintenance mode.
+ SDK releases are limited to address critical bug fixes and security issues only.
+
+Please migrate your code to use AWS SDK for JavaScript (v3).
+For more information, check the blog post at https://a.co/cUPnyil
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"level":"info","message":"Connected to redis","timestamp":"2025-10-28T15:48:43.989Z"}
