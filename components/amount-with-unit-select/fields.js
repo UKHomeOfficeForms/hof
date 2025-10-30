@@ -8,7 +8,7 @@ module.exports = key => ({
   },
   [`${key}-unit`]: {
     label: 'Unit',
-    groupedFieldsWithOptions : true,
+    groupedFieldsWithOptions: true,
     options: {},
     validate: []
   }

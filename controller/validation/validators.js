@@ -179,11 +179,14 @@ module.exports = Validators = {
   },
 
   'amount-with-unit-select'(value) {
-    if(typeof value !== 'string' || value.indexOf('-') === -1)
+    if(typeof value !== 'string' || value.indexOf('-') === -1) {
       return false;
+    }
     const selectValue = [value.split('-').pop()];
     const selectOptions = [].slice.call(arguments, 1);
-    const SelectOptionsValues = Array.from(selectOptions, (opt) => opt.value || opt);
-    return Array.isArray(selectValue) && selectValue.length && Validators.equal.apply(null, selectValue.concat(SelectOptionsValues));
+    const SelectOptionsValues = Array.from(selectOptions, opt => opt.value || opt);
+    return Array.isArray(selectValue) &&
+      selectValue.length &&
+      Validators.equal.apply(null, selectValue.concat(SelectOptionsValues));
   }
 };

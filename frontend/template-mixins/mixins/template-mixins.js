@@ -236,13 +236,12 @@ module.exports = function (options) {
       });
     }
 
-    function optionGroup(key, opts, pKey=key) {
+    function optionGroup(key, opts, pKey = key) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
       const detail = field.detail;
       const warningValue = 'fields.' + key + '.warning';
-      const required = isRequired(field);
       let legendClassName;
       let legendValue = 'fields.' + key + '.legend';
       if (legend) {
@@ -276,7 +275,7 @@ module.exports = function (options) {
 
           if (typeof obj === 'string') {
             value = obj;
-            //pKey - optional param that demotes parent key for group components - set to key param val by default
+            // pKey - optional param that demotes parent key for group components - set to key param val by default
             label = 'fields.' + pKey + '.options.' + obj + '.label';
             optionHint = 'fields.' + pKey + '.options.' + obj + '.hint';
           } else {
@@ -484,35 +483,36 @@ module.exports = function (options) {
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
 
             let autocomplete = field.autocomplete || 'off';
-            if (autocomplete === 'off')
+            if (autocomplete === 'off') {
               autocomplete = { amount: 'off'};
-            else if (typeof autocomplete === 'string') 
+            } else if (typeof autocomplete === 'string') {
               autocomplete = { amount: autocomplete + '-amount' };
-            
+            }
+
             const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
             const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
             const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
 
             const parts = [];
 
-            //basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML 
-            // and looks for a 'renderWith' and optional 'Options' method to use) 
+            // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
+            // and looks for a 'renderWith' and optional 'Options' method to use)
             const amountPart = compiled['partials/forms/grouped-inputs-text']
-              .render(inputText.call(this, 
-                key + '-amount', { 
-                  formGroupClassName, 
+              .render(inputText.call(this,
+                key + '-amount', {
+                  formGroupClassName,
                   autocomplete: autocomplete.amount,
                   className: classNameAmount,
                   amountWithUnitSelect: true }
-                ));
-                  
+              ));
+
             const unitPart = compiled['partials/forms/grouped-inputs-select']
-              .render(inputText.call(this, key + '-unit', 
-                optionGroup.call(this, 
-                  key + '-unit', { 
-                  formGroupClassName, 
-                  className: classNameUnit,
-                  amountWithUnitSelect: true }, 
+              .render(inputText.call(this, key + '-unit',
+                optionGroup.call(this,
+                  key + '-unit', {
+                    formGroupClassName,
+                    className: classNameUnit,
+                    amountWithUnitSelect: true },
                   key
                 )));
 
