@@ -496,7 +496,7 @@ module.exports = function (options) {
             const parts = [];
 
             // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
-            // and looks for a 'renderWith' and optional 'Options' method to use)
+            // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
             const amountPart = compiled['partials/forms/grouped-inputs-text']
               .render(inputText.call(this,
                 key + '-amount', {
