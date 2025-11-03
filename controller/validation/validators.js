@@ -79,7 +79,7 @@ module.exports = Validators = {
   },
 
   equal(v) {
-    const values =  [].slice.call(arguments, 1);
+    const values = [].slice.call(arguments, 1);
     const value = _.castArray(v);
     return values.length && _.every(value, item =>
       item === '' || values.indexOf(item) > -1
