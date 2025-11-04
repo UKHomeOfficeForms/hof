@@ -42,7 +42,6 @@
     "axios": "^1.12.2",
     "bluebird": "^3.7.2",
     "body-parser": "^1.20.3",
-    "browserify": "^17.0.1",
     "callsite": "^1.0.0",
     "chalk": "^2.4.2",
     "chokidar": "^3.6.0",

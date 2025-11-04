@@ -60,7 +60,7 @@ It is recommended to alias `hof-build` to an npm script in your package.json.
 
 ## Tasks
 
-- `browserify` - compiles client-side js with browserify
+- `vite` - bundles client-side js with vite
 - `sass` - compiles sass
 - `images` - copies images from ./assets/images directory to ./public/images
 - `translate` - compiles translation files
