@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "22.10.4",
+  "version": "24.0.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -94,6 +94,7 @@
     "underscore": "^1.13.7",
     "urijs": "^1.19.11",
     "uuid": "^8.3.2",
+    "vite": "^7.1.12",
     "winston": "^3.18.3"
   },
   "devDependencies": {
@@ -132,7 +133,6 @@
     "sinon-chai": "^3.7.0",
     "supertest": "^3.4.2",
     "travis-conditions": "0.0.0",
-    "vite": "^7.1.12",
     "watchify": "^4.0.0",
     "webdriverio": "^4.14.4"
   },
