@@ -8,9 +8,9 @@ const hofDefaults = require('../../../config/hof-defaults');
 module.exports = config => {
 // The config.production’s value is set up with a command flag
 //  in the package.json’s script. process.env.NODE_ENV);
-  console.log('Vite build - production:', config.production, 'env: ',config.env);
+  console.log('Vite build - production:', config.production, 'env: ', config.env);
   console.log('hofDefaults:', hofDefaults);
-  
+
   // if (config.production === true) {
   //   return vite.build({
   //     configFile: viteConfig
@@ -23,18 +23,17 @@ module.exports = config => {
   //   mode: 'development'
   // });
   process.env.NODE_ENV = hofDefaults.env;
- 
-if(!config.production){
-  console.log('Vite build - expecting development/local:', process.env.NODE_ENV);
-  return vite.build({
-  configFile: viteConfig,
-  mode: 'development'
-  });
-} else{
+
+  if(!config.production) {
+    console.log('Vite build - expecting development/local:', process.env.NODE_ENV);
+    return vite.build({
+      configFile: viteConfig,
+      mode: 'development'
+    });
+  }
   console.log('Vite build - expecting production:', process.env.NODE_ENV);
   return vite.build({
-  configFile: viteConfig
+    configFile: viteConfig
   });
- }
-}
+};
 module.exports.task = 'vite';
