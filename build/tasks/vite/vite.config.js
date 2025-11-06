@@ -8,7 +8,7 @@ const __dirname = import.meta.dirname;
 export default defineConfig({
   root: '../../../frontend',
   build: {
-    outDir: '../public/assets',
+    outDir: resolve(__dirname, '../../../../public/assets'),
     emptyOutDir: true,
     rollupOptions: {
       input: {
