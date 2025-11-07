@@ -38,6 +38,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "aliasify": "^2.1.0",
     "axios": "^1.12.2",
     "bluebird": "^3.7.2",
