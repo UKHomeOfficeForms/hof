@@ -59,6 +59,7 @@ const defaults = {
     pdfConverter: process.env.PDF_CONVERTER_URL
   },
   serveStatic: process.env.SERVE_STATIC_FILES !== 'false',
+  useCustomSessionTimeout: parseBoolean(process.env.USE_CUSTOM_SESSION_TIMEOUT, false, 'USE_CUSTOM_SESSION_TIMEOUT'),
   sessionTimeOutWarning: process.env.SESSION_TIMEOUT_WARNING || 300,
   serviceUnavailable: parseBoolean(process.env.SERVICE_UNAVAILABLE, false, 'SERVICE_UNAVAILABLE')
 };
