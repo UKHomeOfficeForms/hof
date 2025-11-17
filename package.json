@@ -6,8 +6,8 @@
   "main": "index.js",
   "author": "HomeOffice",
   "engines": {
-    "node": ">=10.22.1",
-    "npm": ">=6.14.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "bin": {
     "hof-build": "./bin/hof-build",
