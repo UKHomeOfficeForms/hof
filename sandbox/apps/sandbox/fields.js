@@ -131,8 +131,7 @@ module.exports = {
     amountLabel: "Amount-",
     unitLabel: "Unit-",
     options: [
-      { "label": "fields.amountWithUnitSelect.options.null", "value": ""},
-      { "none_selected": "Select..."},
+      { "null": "Select" },
       { "label": "non trans option 1", "value": "1" },
       { "label": "non trans option 2", "value": "2" }
     ],

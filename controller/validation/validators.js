@@ -176,17 +176,5 @@ module.exports = Validators = {
   postcode(value) {
     // eslint-disable-next-line max-len
     return value === '' || Validators.regex(value, /^(([GIR] ?0[A]{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2}))$/i);
-  },
-
-  'amount-with-unit-select'(value) {
-    if(typeof value !== 'string' || value.indexOf('-') === -1) {
-      return false;
-    }
-    const selectValue = [value.split('-').pop()];
-    const selectOptions = [].slice.call(arguments, 1);
-    const SelectOptionsValues = Array.from(selectOptions, opt => opt.value || opt);
-    return Array.isArray(selectValue) &&
-      selectValue.length &&
-      Validators.equal.apply(null, selectValue.concat(SelectOptionsValues));
   }
 };

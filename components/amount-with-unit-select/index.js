@@ -3,57 +3,12 @@
 const _ = require('lodash');
 const path = require('path');
 const getFields = require('./fields');
-const controller = require('../../controller/controller');
+
+const controller = require('../../controller/controller').prototype;
+const utils = require('./utils');
+const validation = require('./validation');
 
 const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html');
-
-// utility function that, using the
-// req.body (the set of key:values pairs submitted in the request like 'amountWithUnitSelect-amount : 12'),
-// fields (the set of fields relevant to this component - i.e. fields defined in ./fields.js),
-// key (the name for parent of the grouped child fields - so 'amountWithUnitSelect' in this case)
-// returns a map of values in the format:
-// {
-//   amount: '1',
-//   unit: 'litres',
-// }
-// it does this by looking for the 'amountWithUnitSelect-amount' and 'amountWithUnitSelect-unit' fields in req.body
-// and making a new object that copies those 2 fields and values, and removes the 'amountWithUnitSelect-' suffix
-const getParts = (body, fields, key) =>
-  _.mapKeys(_.pick(body, Object.keys(fields)), (value, fieldKey) =>
-    fieldKey.replace(`${key}-`, '')
-  );
-
-// accepts an amountWithUnitSelect value in the format [Amount]-[Unit]
-// returns array in format [amount, value]
-const getAmountWithUnitSelectValues = amountWithUnitSelectVal => {
-  const splitPointIndex = amountWithUnitSelectVal.lastIndexOf('-');
-  return splitPointIndex === -1 ?
-    ['', ''] :
-    [amountWithUnitSelectVal.substring(0, splitPointIndex), amountWithUnitSelectVal.substring(splitPointIndex + 1)];
-};
-
-// accepts an amountWithUnitSelect value in the format [Amount]-[Unit] and fields config,
-// returns a map of key:value pairs for the intermediate fields
-const getPartsFromAmountWithUnitSelect = (amountWithUnitSelectVal, fields) =>
-  getAmountWithUnitSelectValues(amountWithUnitSelectVal).reduce(
-    (obj, value, index) => Object.assign({},
-      obj,
-      {[fields[index]]: value }),
-    {});
-
-const conditionalTranslate = (key, translate) => {
-  let result = translate(key);
-  if (result === key) {
-    result = null;
-  }
-  return result;
-};
-
-const getLegendClassName = field =>
-  field && field.legend && field.legend.className || '';
-
-const getIsPageHeading = field =>
-  field && field.isPageHeading || '';
 
 module.exports = (key, opts) => {
   if (!key) {
@@ -62,17 +17,6 @@ module.exports = (key, opts) => {
   const fields = getFields(key);
 
   const options = opts || {};
-  // creates a custom version of the default equals validator (usually set for all select components),
-  // which evaluates the translated (if exists) select options declared in the amountWithUnitSelect-unit component
-  const amountWithUnitSelectValidator = [{
-    type: 'amount-with-unit-select',
-    arguments: _.map(fields[`${key}-unit`].options, option =>
-      typeof option === 'string' ? option : option.value
-    )}];
-  options.validate = _.uniq(options.validate ?
-    amountWithUnitSelectValidator.concat(options.validate) :
-    amountWithUnitSelectValidator
-  );
 
   const template = options.template ?
     path.resolve(__dirname, options.template) :
@@ -81,7 +25,7 @@ module.exports = (key, opts) => {
   // takes the 2 parts (amount and unit), then creates a amountWithUnitSelect value
   // in the format [Amount]-[Unit] (e.g. 5-Kilograms) and saves to req.body for processing
   const preProcess = (req, res, next) => {
-    const parts = getParts(req.body, fields, key);
+    const parts = utils.getParts(req.body, fields, key);
     if (_.some(parts, part => part !== '')) {
       req.body[key] = `${(parts.amount || '')}-${(parts.unit || '')}`;
     }
@@ -99,57 +43,24 @@ module.exports = (key, opts) => {
 
   // modifies request to include custom validation
   const preValidate = (req, res, next) => {
-    // this prevents the 'equal' validator being applied to the grouped component by default
-    // this is so the validator can be added to the unit child component values instead of it's parent component's value
-    req.form.options.fields[key].groupedFieldsWithOptions = true;
+    validation.addGroupedFieldsWithOptionsProperty(req.form.options.fields[key]);
+    validation.resolveOptionalFields(req.form.options.fields, fields, options.validate, key);
+    validation.propagateChildFieldValidation(req.form, fields, key);
+    validation.addValidator(validation.createCustomEqualValidator(fields[`${key}-unit`].options));
+    validation.addValidator(validation.isTwoHyphenSeparatedValues);
 
-    // finds and edits validator arguments to pass a the list of translated/resolved options
-    // created and stored in the field options during the initilisation of the component
-    const assignedEqualsValidatorIndex = options?.validate.findIndex(
-      validator =>
-        typeof validator === 'object' &&
-        'arguments' in validator);
-
-    if(req.form.options.fields[key]?.validate[assignedEqualsValidatorIndex] !== null) {
-      req.form.options.fields[key].validate[assignedEqualsValidatorIndex].arguments =
-        assignedEqualsValidatorIndex >= 0 ?
-          fields[`${key}-unit`].options :
-          options.validate[assignedEqualsValidatorIndex].arguments;
-    }
-
-    // adds existing required validators from parent component to child components
-    // and resolves configurations for child components to be optional
-    const isAmountValOptional = req.form.options.fields[key].amountOptional === 'true';
-    const isUnitValOptional = req.form.options.fields[key].unitOptional === 'true';
-    const parentIsRequired = options.validate?.indexOf('required') !== -1;
-    if(!isAmountValOptional || parentIsRequired) {
-      fields[`${key}-amount`].validate = _.uniq(fields[`${key}-amount`].validate.concat('required'));
-    }
-    if(!isUnitValOptional || parentIsRequired) {
-      fields[`${key}-unit`].validate = _.uniq(fields[`${key}-unit`].validate.concat('required'));
-    }
-
-    // child component field data and values are put into req.form.options.fields and req.form.values respectively
-    // so they can be validated if needed
-    Object.assign(req.form.options.fields,
-      { 'amountWithUnitSelect-amount': fields[`${key}-amount`] },
-      { 'amountWithUnitSelect-unit': fields[`${key}-unit`] }
-    );
-    const amountWithUnitSelectValues = getAmountWithUnitSelectValues(req.form.values.amountWithUnitSelect);
-    Object.assign(req.form.values,
-      { 'amountWithUnitSelect-amount': amountWithUnitSelectValues[0] },
-      { 'amountWithUnitSelect-unit': amountWithUnitSelectValues[1] }
+    // Add equal validation to amountWithUnitSelect-unit
+    req.form.options.fields[`${key}-unit`].validate = _.uniq(
+      req.form.options.fields[`${key}-unit`].validate.concat()
     );
 
     // moves validation errors that do not apply to the parent component to the 'amount' child component
     _.remove(req.form.options.fields?.amountWithUnitSelect?.validate, validator => {
       if(!((typeof validator === 'object' &&
-        (validator.type === 'amount-with-unit-select' ||
-          validator.type === 'equals' ||
+        (validator.type === 'equal' ||
           validator.type === 'required')) ||
       (typeof validator === 'string' &&
-        (validator === 'amount-with-unit-select' ||
-          validator === 'equals' ||
+        (validator === 'equal' ||
           validator === 'required')))) {
         if(req.form.options.fields['amountWithUnitSelect-amount'] === null) {
           Object.assign(req.form.options.fields, {
@@ -175,7 +86,7 @@ module.exports = (key, opts) => {
     const errorValues = req.sessionModel.get('errorValues');
     if (errorValues && errorValues[key]) {
       req.sessionModel.set('errorValues',
-        Object.assign({}, errorValues, getPartsFromAmountWithUnitSelect(errorValues[key], Object.keys(fields)))
+        Object.assign({}, errorValues, utils.getPartsFromAmountWithUnitSelect(errorValues[key], Object.keys(fields)))
       );
     }
     next();
@@ -203,8 +114,8 @@ module.exports = (key, opts) => {
           type: errors[`${key}-amount`]?.type || null
         };
         req.form.errors[`${key}-amount`].message =
-          controller.prototype.getErrorMessage(req.form.errors[`${key}-amount`], req, res) ||
-          controller.prototype.getErrorMessage({
+          controller.getErrorMessage(req.form.errors[`${key}-amount`], req, res) ||
+          controller.getErrorMessage({
             errorLinkId: `${key}-amount`,
             key: `${key}`,
             type: errors[`${key}-amount`]?.type || null
@@ -216,8 +127,8 @@ module.exports = (key, opts) => {
           type: errors[`${key}-unit`]?.type || null
         };
         req.form.errors[`${key}-unit`].message =
-          controller.prototype.getErrorMessage(req.form.errors[`${key}-unit`], req, res) ||
-          controller.prototype.getErrorMessage({
+          controller.getErrorMessage(req.form.errors[`${key}-unit`], req, res) ||
+          controller.getErrorMessage({
             errorLinkId: `${key}-amount`,
             key: `${key}`,
             type: errors[`${key}-unit`]?.type || null
@@ -235,7 +146,7 @@ module.exports = (key, opts) => {
     if (amountWithUnitSelect) {
       Object.assign(
         req.form.values,
-        getPartsFromAmountWithUnitSelect(amountWithUnitSelect, Object.keys(fields)),
+        utils.getPartsFromAmountWithUnitSelect(amountWithUnitSelect, Object.keys(fields)),
         req.sessionModel.get('errorValues') || {}
       );
     }
@@ -246,8 +157,8 @@ module.exports = (key, opts) => {
   // to the amountWithUnitSelect field in res.locals.fields
   const preRender = (req, res, next) => {
     // sets unit options as either translations (if they exist) or default untranslated options
-    const optionsToDisplay = conditionalTranslate(`fields.${key}-unit.options`, req.translate) ||
-      conditionalTranslate(`fields.${key}.options`, req.translate) ||
+    const optionsToDisplay = utils.conditionalTranslate(`fields.${key}-unit.options`, req.translate) ||
+      utils.conditionalTranslate(`fields.${key}.options`, req.translate) ||
       options.options;
 
     // resolves null/default select value's label and value
@@ -261,12 +172,12 @@ module.exports = (key, opts) => {
     // or the component's translation label (translated amountWithUnitSelect.amountLabel)
     // or the component's non-translated (amountWithUnitSelect.amountLabel)
     // or the default label (which is 'Amount' or 'Unit')
-    fields[`${key}-amount`].label = conditionalTranslate(`fields.${key}-amount.label`, req.translate) ||
-      conditionalTranslate(`fields.${key}.amountLabel`, req.translate) ||
+    fields[`${key}-amount`].label = utils.conditionalTranslate(`fields.${key}-amount.label`, req.translate) ||
+      utils.conditionalTranslate(`fields.${key}.amountLabel`, req.translate) ||
       req.form.options.fields[`${key}`]?.amountLabel ||
       fields[`${key}-amount`].label;
-    fields[`${key}-unit`].label = conditionalTranslate(`fields.${key}-unit.label`, req.translate) ||
-      conditionalTranslate(`fields.${key}.unitLabel`, req.translate) ||
+    fields[`${key}-unit`].label = utils.conditionalTranslate(`fields.${key}-unit.label`, req.translate) ||
+      utils.conditionalTranslate(`fields.${key}.unitLabel`, req.translate) ||
       req.form.options.fields[`${key}`]?.unitLabel ||
       fields[`${key}-unit`].label;
 
@@ -279,12 +190,12 @@ module.exports = (key, opts) => {
       });
     }));
 
-    const legend = conditionalTranslate(`fields.${key}.legend`, req.translate) ||
+    const legend = utils.conditionalTranslate(`fields.${key}.legend`, req.translate) ||
       req.form.options.fields[`${key}`]?.legend;
-    const hint = conditionalTranslate(`fields.${key}.hint`, req.translate) ||
+    const hint = utils.conditionalTranslate(`fields.${key}.hint`, req.translate) ||
       req.form.options.fields[`${key}`]?.hint;
-    const legendClassName = getLegendClassName(options);
-    const isPageHeading = getIsPageHeading(options);
+    const legendClassName = utils.getLegendClassName(options);
+    const isPageHeading = utils.getIsPageHeading(options);
     const error = req.form.errors &&
       (req.form.errors[key] || req.form.errors[`${key}-amount`] || req.form.errors[`${key}-unit`]);
 

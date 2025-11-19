@@ -1012,6 +1012,58 @@ Using the translation key `fields.field-name.label` will return different values
 
 # HOF Components
 
+## AmountWithUnitSelect Component
+
+A component for handling the rendering, processing, and validation of a text input (amount) field and a select-dropdown input field (unit) used in HOF Applications.
+
+### Usage
+
+In your fields config:
+
+```js
+const amountWithUnitSelectComponent = require("hof").components.amountWithUnitSelect;
+
+module.exports = {
+  "amountWithUnitSelect-field": amountWithUnitSelectComponent("amountWithUnitSelect", {
+    mixin: 'input-amount-with-unit-select',
+    amountLabel: "Amount:", //If not specified, defaults to 'Amount'
+    unitLabel: "Unit:", //If not specified, defaults to 'unit'
+    options: [
+      { "null": "Select..." }, //If null option not specified, a default null option if the label 'Select...' is included in the options
+      { "label": "untranslated option label 1", "value": "1" },
+      { "label": "untrasnlated option label 2", "value": "2" }
+    ],
+    hint: "E.G: 5 Kilogram", 
+    legend: 'Enter An Amount',
+    isPageHeading: 'true',
+    amountOptional: 'false', //If not specified, defaults to false if require validator is not used, else true
+    unitOptional: 'true', //If not specified, defaults to false if require validator is not used, else true
+    validate: ['alphanum']
+  }),
+};
+```
+
+The above example will create a new AmountWithUnitSelect component with the key `'amountWithUnitSelect-field'`.
+It will set the AmountWithUnitSelect component's text input label to `'Amount:'` (instead of the default `'Amount'`) and the select input label to `'Unit:'` (instead of the default `'Unit'`).
+The component's Select input will have the dropdown options `'Select...'` (mapping to the value `'null'`), `'untranslated option label 1'` (mapping to the value `'1'`) and `'untranslated option label 2'` (mapping to the value `'2'`).
+The component's hint text will be set to `'E.G: 5 Kilogram'`, the field title/legend will be set to `'Enter An Amount'`, and the page heading will be the field's title.
+In terms of validation, the text input (amount) will have the `'required'` validator applied, but the select input (unit) not (will not require a value to be selected), and the text field will have the `'alphanum'` validator applied.
+
+### Configuration
+
+The following optional configuration options are supported:
+
+- `validate {String|Array}` - validators to use on the text input field. The `'alphanum'` and `'required'` are likely to be used.  
+- `template` - an absolute path to an alternate template.
+- `amountLabel {String}` - a custom label for the text input field (Amount). Defaults to `'Amount'` if omitted. This can also be specified and defined in the field translations. 
+- `unitLabel {String}` - a custom label for the select input field (unit). Defaults to `'Unit'` if omitted. This can also be specified and defined in the field translations.
+- `options {Array}` - a list of labels and corresponding values (options) for the select input field to present. Each option has the format `{ "label": "", "value": ""}`. The default/null option is defined with the format `{ "null": "Select" }` (where the text `'Select'` is the label and can be modified). If the null option is not defined, a default null option will be included in the option with the label `'Select...'`. This can also be specified and defined in the field translations.
+- `hint {String}` - hint text displayed for both fields. This can also be specified and defined in the field translations.
+- `legend {String}` - legend text displayed for both fields. This can also be specified and defined in the field translations.
+- `isPageHeading {Boolean}` - Sets the legend as the page heading on single page questions.
+- `amountOptional {Boolean}` - the text input (amount) defaults to `''` (empty string) if omitted. Defaults to `false`. If the `'required'` validator is defined in the `validate` configuration option, then this configuration is ignored (both fields are made mandatory).
+- `unitOptional {Boolean}` - the select input (unit) defaults to `null` if omitted. Defaults to `false`. If the `'required'` validator is defined in the `validate` configuration option, then this configuration is ignored (both fields are made mandatory).
+
 ## Date Component
 
 A component for handling the rendering and processing of 3-input date fields used in HOF Applications.
