@@ -3,9 +3,9 @@
 const _ = require('lodash');
 
 /**
- * Creates a new object with the component's/field's assigned 'amount' and 'unit' values
+ * Creates a new object with the component's assigned 'amount' and 'unit' values
  * it does this by looking for the 'amountWithUnitSelect-amount' and 'amountWithUnitSelect-unit' fields in req.body
- * and making a new object that copies those 2 fields and values, and removes the 'amountWithUnitSelect-' suffix
+ * and making a new object that copies those 2 fields and values, and removes the 'amountWithUnitSelect-' suffix.
  * 
  * @param {Object} body - The submitted request's body (req.body) containing K:V pairs (E.G. 'amountWithUnitSelect-amount : 12')
  * @param {Object} fields - The set of fields relevant to this component (I.E. fields defined in ./fields.js)
@@ -20,7 +20,7 @@ const getParts = (body, fields, key) =>
 /**
  * Splits the AmountWithUnitSelect value (usually in the format '[Amount]-[Unit]') by the last hyphen in the text
  * into an Array with 2 elements (the amount and unit - the value before and after the hyphen respectively).
- * Returns and empty string for each element if in an unexpect format
+ * Returns an empty string for each element if in an unexpect format
  * 
  * @param {string} amountWithUnitSelectVal - The amountWithUnitSelect value (E.G. '1-Litre')
  * @returns {string[]} Returns an array in format [amount, Unit]
@@ -34,10 +34,10 @@ const getAmountWithUnitSelectValues = amountWithUnitSelectVal => {
 
 /**
  * Returns a map of the component's fields' keys and their assigned values
- * (E.G. If amountWithUnitSelectVal = 1-L, it returns { amountWithUnitSelect-amount: '1', amountWithUnitSelect-unit: 'L' })
+ * (E.G. If amountWithUnitSelectVal = 1-L, it returns { amountWithUnitSelect-amount: '1', amountWithUnitSelect-unit: 'L' }).
  * 
- * @param {*} amountWithUnitSelectVal - AmountWithUnitSelect value in the format '[Amount]-[Unit]'
- * @param {*} fields - The component's children field definitions and configurations
+ * @param {string} amountWithUnitSelectVal - AmountWithUnitSelect value in the format '[Amount]-[Unit]'
+ * @param {Object} fields - The component's child field definitions and configurations
  * @returns {amountWithUnitSelect-amount: string, amountWithUnitSelect-unit: string} Returns a map of K:V pairs for each child field
  */
 const getPartsFromAmountWithUnitSelect = (amountWithUnitSelectVal, fields) =>
@@ -48,8 +48,107 @@ const getPartsFromAmountWithUnitSelect = (amountWithUnitSelectVal, fields) =>
     {});
 
 /**
+ * Translates the labels of the child fields of the AmountWithUnitSelect component.
+ * Depending on which exists, labels are set in the following order of precedence:
+ * 1. A specific child-component translation (I.E. amountWithUnitSelect-amount.label)
+ * 2. A parent-component translation for the child field (I.E. amountWithUnitSelect.amountLabel)
+ * 3. A specific child-component (non-translated) label configuration
+ * 4. A parent-component (non-translated) label configuration for the child field
+ * 
+ * @param {Object} req - The form's request object
+ * @param {Object} fields - The component's child field definitions and configurations 
+ * @param {string} pKey - The parent component's key (E.G. 'amountWithUnitSelect')
+ * @param {string[]} keys - The list of child component (by keys) to translate (E.G. ['amount', 'unit'])
+ */
+const translateLabels = (req, fields, pKey, keys) => {
+  keys.forEach(key => {
+    fields[`${pKey}-${key}`].label = 
+      conditionalTranslate(`fields.${pKey}-${key}.label`, req.translate) ||
+      conditionalTranslate(`fields.${pKey}.${key}Label`, req.translate) ||
+      fields[`${pKey}-${key}`].label ||
+      req.form.options.fields[`${pKey}`]?.[`${key}Label`];
+  });
+}
+
+/**
+ * Adds the component's child fields to the request's form options fields (req.form.options.fields).
+ * 
+ * @param {Object} reqForm - The form's request object (req.form)
+ * @param {Object} fields - The component's child field definitions and configurations
+ * @param {string} key - The parent component's key (E.G. 'amountWithUnitSelect')
+ */
+const addChildFieldsToRequestForm = (reqForm, fields, key) => {
+  Object.assign(reqForm.options.fields, _.mapValues(fields, (v, k) => {
+    const rawKey = k.replace(`${key}-`, '');
+    const labelKey = `fields.${key}.parts.${rawKey}`;
+    const label = req.translate(labelKey);
+
+    return Object.assign({}, v, {
+      label: label === labelKey ? v.label : label
+    });
+  }));
+}
+
+/**
+ * Translates the unit field's/component's options (dropdown menu options) for the AmountWithUnitSelect component.
+ * Also resolves the null/default select option's label and value.
+ * 
+ * @param {Object} req - The form's request object
+ * @param {Object} fields - The component's child field definitions and configurations
+ * @param {Object} options - The component's configuration options
+ * @param {String} key - The parent component's key (E.G. 'amountWithUnitSelect')
+ */
+const translateUnitOptions = (req, fields, options, key) => {
+  // sets unit options as either translations (if they exist) or default untranslated options
+  const optionsToDisplay = conditionalTranslate(`fields.${key}-unit.options`, req.translate) ||
+    conditionalTranslate(`fields.${key}.options`, req.translate) ||
+    options.options;
+
+  // resolves the null/default select option
+  fields[`${key}-unit`].options = resolveNullOption(optionsToDisplay);
+};
+
+/**
+ * Sets a default null option for a select component if undefined.
+ * The default null option has a label of 'Select...' and a value of an empty string.
+ * 
+ * @param {Object[]} options - The dropdown menu options
+ * @returns {Object[]} Returns the options with the null/default option resolved
+ */
+const resolveNullOption = (options) => {
+  const nullOptionLabel = options.find(opt => opt.null !== undefined && Object.keys(opt).length === 1);
+  const nonNullOptions = options.filter(opt => opt.null === undefined || Object.keys(opt).length !== 1);
+
+  return [{label: (nullOptionLabel !== undefined ? nullOptionLabel.null : 'Select...'), value: ''}].concat(nonNullOptions);
+}
+
+/**
+ * Constructs an object with field data required to render the AmountWithUnitSelect component.
+ * 
+ * @param {Object} req - The form's request object
+ * @param {Object} options - The component's configuration options
+ * @param {string} key - The parent component's key 
+ * @returns {Object} Returns an object with field data required to render the component
+ */
+const constructFieldToRender = (req, options, key) => {
+  reqForm = req.form;
+  addChildFieldsToRequestForm(reqForm, fields, key);
+  
+  const legend = conditionalTranslate(`fields.${key}.legend`, req.translate) ||
+    reqForm.options.fields[`${key}`]?.legend;
+  const hint = conditionalTranslate(`fields.${key}.hint`, req.translate) ||
+    reqForm.options.fields[`${key}`]?.hint;
+  const legendClassName = getLegendClassName(options);
+  const isPageHeading = getIsPageHeading(options); 
+  const error = reqForm.errors &&
+    (reqForm.errors[key] || reqForm.errors[`${key}-amount`] || reqForm.errors[`${key}-unit`]);
+
+  return { key, legend, legendClassName, isPageHeading, hint, error };
+}
+
+/**
  * Translates a field property (given it's key and a translation function)
- * returning null if there is no translation (enabling conditional statements to branch if there is no translation)
+ * returning null if there is no translation (enabling conditional statements to branch if there is no translation).
  * 
  * @param {string} key - The key of the field property to translate (E.G. 'fields.amountWithUnitSelect-amount.label' - references the amount field label)
  * @param {function(string): string} translate - The translation function to apply
@@ -64,8 +163,8 @@ const conditionalTranslate = (key, translate) => {
 };
 
 /**
- * Gets the classname specified for the field's legend
- * Defaults to an empty string if not specified
+ * Gets the classname specified for the field's legend.
+ * Defaults to an empty string if not specified.
  * 
  * @param {object} field - The field with (potentially) the legend classname
  * @returns {string} The classname specified fo the field's legend text
@@ -74,7 +173,7 @@ const getLegendClassName = field =>
   field?.legend?.className || '';
 
 /**
- * Gets a boolean determining if the field's heading has been set to be the page heading
+ * Gets a boolean determining if the field's heading has been set to be the page heading.
  * 
  * @param {Object} field - The field with the heading to (potentially) make the page title
  * @returns {string} A boolean the indicates if the field's heading is also the page heading
@@ -88,5 +187,10 @@ module.exports = {
     getPartsFromAmountWithUnitSelect, 
     conditionalTranslate, 
     getLegendClassName, 
-    getIsPageHeading
+    getIsPageHeading, 
+    translateLabels,
+    addChildFieldsToRequestForm,
+    constructFieldToRender,
+    translateUnitOptions,
+    resolveNullOption
 }
