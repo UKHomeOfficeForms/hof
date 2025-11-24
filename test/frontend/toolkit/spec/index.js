@@ -1,8 +1,8 @@
-/* eslint-disable max-len, no-var */
-var $ = require('jquery');
+/* eslint-disable max-len */
+const $ = require('jquery');
 
-describe('hmpo', function () {
-  before(function () {
+describe('frontend/toolkit', function () {
+  beforeAll(function () {
     $(document.body).append($('<div id="test-container"/>'));
   });
 

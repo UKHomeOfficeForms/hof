@@ -16,3 +16,5 @@ coverage
 build/Release
 node_modules
 .emails
+.vscode/
+.github/copilot-instructions.md
