@@ -156,7 +156,7 @@ function bootstrap(options) {
     res.locals.htmlLang = config.htmlLang;
     res.locals.cookieName = config.session.name;
     // session timeout warning configs
-    res.locals.sessionTimeOut = config.session.ttl;
+    res.locals.sessionTimeOut = process.env.CUSTOM_SESSION_EXPIRY || config.session.ttl;
     res.locals.sessionTimeOutWarning = config.sessionTimeOutWarning;
     res.locals.sessionTimeoutWarningContent = config.sessionTimeoutWarningContent;
     res.locals.exitFormContent = config.exitFormContent;
@@ -252,26 +252,32 @@ function bootstrap(options) {
 
   /**
    * Handles requests to the session timeout page.
+   * For custom session timeout handling that is not linked to the redis session ttl,
+   * set `CUSTOM_SESSION_EXPIRY` variables to the relevant time and `USE_CUSTOM_SESSION_TIMEOUT`variables to true.
+   * If `CUSTOM_SESSION_EXPIRY` and `USE_CUSTOM_SESSION_TIMEOUT` envs are set,
+   * include '/session-timeout' step in the project's index.js.
    * - If the user has a session cookie but their session is missing or inactive,
    *   this triggers a session timeout error handled by error middleware.
    * - Otherwise, responds with a 404 "Page Not Found" error.
    * This route ensures the timeout page only appears after an actual session expiry.
   */
-  app.get('/session-timeout', (req, res, next) => {
-    if ((req.cookies['hof-wizard-sc']) && (!req.session || req.session.exists !== true)) {
-      const err = new Error('Session expired');
-      err.code = 'SESSION_TIMEOUT';
-      return next(err);
-    }
-    const err = new Error('Not Found');
-    err.status = 404;
-    const locals = Object.assign({}, req.translate('errors'));
-    if (locals && locals['404']) {
-      return res.status(404).render('404', locals['404']);
-    }
-    // Fallback: render a basic 404 page if translation is missing
-    return res.status(404).send('Page Not Found');
-  });
+  if (!config.useCustomSessionTimeout) {
+    app.get('/session-timeout', (req, res, next) => {
+      if ((req.cookies['hof-wizard-sc']) && (!req.session || req.session.exists !== true)) {
+        const err = new Error('Session expired');
+        err.code = 'SESSION_TIMEOUT';
+        return next(err);
+      }
+      const err = new Error('Not Found');
+      err.status = 404;
+      const locals = Object.assign({}, req.translate('errors'));
+      if (locals && locals['404']) {
+        return res.status(404).render('404', locals['404']);
+      }
+      // Fallback: render a basic 404 page if translation is missing
+      return res.status(404).send('Page Not Found');
+    });
+  }
 
   if (config.getAccessibility === true) {
     deprecate(

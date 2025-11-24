@@ -867,7 +867,7 @@ Kubernetes healthcheck URLs are provided as defaults if no overrides are supplie
 |----------|-------------|---------|---------|
 | `SHOW_COOKIES_BANNER` | Controls whether the cookies banner is displayed | Auto-detected based on GA tags | `true`, `false` |
 
-**Behavior:**
+**Behaviour:**
 - If `SHOW_COOKIES_BANNER` is explicitly set, that value is used
 - If not set, banner is automatically shown when `GA_TAG` or `GA_4_TAG` is present
 - If no GA tags are configured, banner is hidden by default
@@ -1328,7 +1328,11 @@ This feature allows you to customise the content related to the session timeout 
 
 ### Usage
 
-To enable and customise the session timeout behavior, you need to set the component and translations in your project's `hof.settings.json` file:
+By default, the session timeout is set to the redis session ttl. To bypass this and display the session timeout message before the redis session ttl the following evironment variables must be set:
+`CUSTOM_SESSION_EXPIRY` - e.g. `600`. Configure to expire before thte project's redis session ttl.
+`USE_CUSTOM_SESSION_TIMEOUT` -  `false` by default. When set to `true` the '/session-timeout' page can run before the session expires without triggering a `404` middleware error.
+
+To enable and customise the session timeout behaviour, you need to set the component and translations in your project's `hof.settings.json` file:
 ```json
  "behaviours": [
     "hof/components/session-timeout-warning"
@@ -1346,6 +1350,20 @@ By default, the framework uses the standard content provided by HOF. If you wish
   "sessionTimeoutWarningContent": true, // allows you to customise the content in the session timeout dialog box
   "exitFormContent": true // allows you to customise the content on the exit page
   "saveExitFormContent": true // allows you to customise the content on the save-and-exit page
+```
+
+To override the default session-timeout page completely, the path to the session-timeout.html should be set in the views property in the hof.settings.json file e.g. 
+```json
+ "behaviours": [
+    "hof/components/session-timeout-warning"
+  ],
+  "translations": "./apps/common/translations",
+   "views": ["./apps/common/views"], // allows you to overide the HOF default session-timeout page and use a custom one from the specified views
+   ...
+```
+or in the project's `server.js` e.g.
+```js
+settings.views = path.resolve(__dirname, './apps/common/views');
 ```
 
 ### Customising content in `pages.json`

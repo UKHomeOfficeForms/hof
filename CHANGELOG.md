@@ -1,3 +1,17 @@
+## 2025-11-15, Version 22.11.0 (Stable), @Rhodine-orleans-lindsay
+
+### Changed
+- Updated custom session-timeout handling so that custom behaviours are not blocked by a `404` middleware error.
+
+### Added
+- Added a `CUSTOM_SESSION_EXPIRY` environment variable so that a time other than the redis session ttl can be used for the session timeout. **IMPORTANT**: The `CUSTOM_SESSION_EXPIRY` variable must always be a time before the redis session ttl would expire so that behaviours can run before the `SESSION_TIMEOUT` middleware is triggered.
+- Added a `USE_CUSTOM_SESSION_TIMEOUT` that is `false` by default. When set to `true` the '/session-timeout' page can run before the session expires without triggering a `404` middleware error.
+
+   - 🎬 Action:
+      - For custom session timeout handling that is not linked to the redis session ttl, The following variables must be set: `CUSTOM_SESSION_EXPIRY` to the relevant expiry time e.g.600 and `USE_CUSTOM_SESSION_TIMEOUT` to true.
+      - If a behaviour is required on the '/session-timeout` step, the '/session-timeout' step must be set in the project's index.js, along with any relevant behaviours.
+
+
 ## 2025-10-10, Version 22.10.4 (Stable), @dk4g
 ### Security
 - Upgraded axios version to address a security vulnerability
