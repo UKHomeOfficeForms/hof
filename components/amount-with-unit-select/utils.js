@@ -73,12 +73,12 @@ const translateLabels = (req, fields, pKey, keys) => {
 /**
  * Adds the component's child fields to the request's form options fields (req.form.options.fields).
  * 
- * @param {Object} reqForm - The form's request object (req.form)
+ * @param {Object} req - The form's request object
  * @param {Object} fields - The component's child field definitions and configurations
  * @param {string} key - The parent component's key (E.G. 'amountWithUnitSelect')
  */
-const addChildFieldsToRequestForm = (reqForm, fields, key) => {
-  Object.assign(reqForm.options.fields, _.mapValues(fields, (v, k) => {
+const addChildFieldsToRequestForm = (req, fields, key) => {
+  Object.assign(req.form.options.fields, _.mapValues(fields, (v, k) => {
     const rawKey = k.replace(`${key}-`, '');
     const labelKey = `fields.${key}.parts.${rawKey}`;
     const label = req.translate(labelKey);
@@ -126,14 +126,15 @@ const resolveNullOption = (options) => {
  * Constructs an object with field data required to render the AmountWithUnitSelect component.
  * 
  * @param {Object} req - The form's request object
+ * @param {Object} fields - The component's child field definitions and configurations
  * @param {Object} options - The component's configuration options
  * @param {string} key - The parent component's key 
  * @returns {Object} Returns an object with field data required to render the component
  */
-const constructFieldToRender = (req, options, key) => {
-  reqForm = req.form;
-  addChildFieldsToRequestForm(reqForm, fields, key);
+const constructFieldToRender = (req, fields, options, key) => {
+  addChildFieldsToRequestForm(req, fields, key);
   
+  let reqForm = req.form;
   const legend = conditionalTranslate(`fields.${key}.legend`, req.translate) ||
     reqForm.options.fields[`${key}`]?.legend;
   const hint = conditionalTranslate(`fields.${key}.hint`, req.translate) ||

@@ -140,7 +140,7 @@ const addValidationError = (req, res, errors, pKey, key) => {
 
     // ensure the error message is processed and translated by the controller
     req.form.errors[`${pKey}-${key}`].message =
-      controller.getErrorMessage(error, req, res) ||
+      controller.getErrorMessage(req.form.errors[`${pKey}-${key}`], req, res) ||
       controller.getErrorMessage({
         errorLinkId: `${pKey}-${key}`,
         key: `${pKey}`,
@@ -159,8 +159,8 @@ const addValidationError = (req, res, errors, pKey, key) => {
 const insertChildValidationErrors = (req, res, errors) => {
     const pKey = 'amountWithUnitSelect';
 
+    let key;
     if(errors && !errors[pKey] && req?.form?.errors) {
-        let key;
         if(errors[`${pKey}-amount`] && req.form.errors[`${pKey}-amount`]) {
             key = 'amount';        
         } else if(errors[`${pKey}-unit`] && req.form.errors[`${pKey}-unit`]) {
@@ -169,7 +169,7 @@ const insertChildValidationErrors = (req, res, errors) => {
     }
 
     //if there are not parent or child errors, no errors are added
-    key !== 'undefined' && addValidationError(pKey, key, req, res, errors); 
+    key && addValidationError(req, res, errors, pKey, key); 
 }
 
 module.exports = { 

@@ -5,7 +5,7 @@ module.exports = {
   clearSession: require('./clear-session'),
   combineAndLoopFields: require('./combine-and-loop-fields'),
   date: require('./date'),
-  amountWithUnitSelect: require('./amount-with-unit-select'),
+  amountWithUnitSelect: require('./amount-with-unit-select/amount-with-unit-select'),
   emailer: require('./emailer'),
   homeOfficeCountries: require('./homeoffice-countries'),
   notify: require('./notify'),
