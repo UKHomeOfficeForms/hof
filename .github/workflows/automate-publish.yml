@@ -9,6 +9,10 @@ on:
 jobs:
   auto-publish:
     runs-on: ubuntu-22.04
+    # OIDC for npm Trusted Publishing
+    permissions:
+      contents: read
+      id-token: write
     if: startsWith(github.ref, 'refs/heads/master')
     steps:
       - uses: actions/checkout@v4
@@ -27,10 +31,14 @@ jobs:
       - run: |
           npm_tag="v$(npm dist-tags | cut -d' ' -f 2)"
           git_tag="$(git describe --tags | cut -d'-' -f 1)"
-          if [ "$npm_tag" != "$git_tag" ] ; then npm publish; fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_bot_token }}
-      - name: 'Publish Release'
+          if [ "$npm_tag" != "$git_tag" ] ; then 
+            # Add --access public if your package is scoped and public
+            npm publish --provenance --access public
+          else
+            echo "Skip publish: npm and git tags match or missing."
+          fi
+
+      - name: Publish Github Release
         uses: Roang-zero1/github-create-release-action@master
         with:
           created_tag: ${{ steps.previoustag.outputs.tag }}
