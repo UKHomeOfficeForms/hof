@@ -1,6 +1,6 @@
 <!-- For old Universal Google Analytics Property Tags -->
-{{#gaTagId}}
-    <script{{#nonce}} nonce="{{nonce}}"{{/nonce}}>
+{% if gaTagId %}
+    <script{% if cspNonce %} nonce="{{ cspNonce }}"{% endif %}>
       var preferences = JSON.parse(GOVUK.cookie('cookie_preferences'));
 
       if (preferences !== null && preferences.usage === true) {
@@ -9,15 +9,15 @@
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', '{{gaTagId}}', 'auto');
+        ga('create', '{{ gaTagId }}', 'auto');
 
-        {{#gaCrossDomainTrackingTagId}}
-          ga('create', '{{gaCrossDomainTrackingTagId}}', 'auto', 'govuk_shared', { 'allowLinker': true });
+        {% if gaCrossDomainTrackingTagId %}
+          ga('create', '{{ gaCrossDomainTrackingTagId }}', 'auto', 'govuk_shared', { 'allowLinker': true });
           ga('govuk_shared.require', 'linker');
           ga('govuk_shared.set', 'anonymizeIp', true);
           ga('govuk_shared.set', 'allowAdFeatures', false);
           ga('govuk_shared.linker:autoLink', ['www.gov.uk', 'www.nationalarchives.gov.uk', 'www.eforms.homeoffice.gov.uk']);
-        {{/gaCrossDomainTrackingTagId}}
+        {% endif %}
 
         var path = document.location.href;
         var regex = /f_t=([\s\S]*?)?(&|$)/;
@@ -30,18 +30,18 @@
 
         ga('send', 'pageview');
 
-        {{#gaCrossDomainTrackingTagId}}
+        {% if gaCrossDomainTrackingTagId %}
           ga('govuk_shared.send', 'pageview')
-        {{/gaCrossDomainTrackingTagId}}
+        {% endif %}
       }
     </script>
-{{/gaTagId}}
+{% endif %}
 
 <!-- For new Google Analytics 4 Property Tags -->
-{{#ga4TagId}}
+{% if ga4TagId %}
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async {{#nonce}} nonce="{{nonce}}"{{/nonce}} src="https://www.googletagmanager.com/gtag/js?id={{ga4TagId}}"></script>
-  <script {{#nonce}} nonce="{{nonce}}"{{/nonce}}>
+  <script async {% if cspNonce %} nonce="{{ cspNonce }}"{% endif %} src="https://www.googletagmanager.com/gtag/js?id={{ ga4TagId }}"></script>
+  <script {% if cspNonce %} nonce="{{ cspNonce }}"{% endif %}>
     var preferences = JSON.parse(GOVUK.cookie('cookie_preferences'));
 
     if (preferences !== null && preferences.usage === true) {
@@ -49,12 +49,11 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      {{^gaAllowDebug}}
-        gtag('config', '{{ga4TagId}}');
-      {{/gaAllowDebug}}
-      {{#gaAllowDebug}}
+      {% if gaAllowDebug %}
         gtag('config', '{{ga4TagId}}', { 'debug_mode': true } );
-      {{/gaAllowDebug}}
+      {% else %}
+        gtag('config', '{{ga4TagId}}');
+      {% endif %}
     }
   </script>
-{{/ga4TagId}}
+{% endif %}

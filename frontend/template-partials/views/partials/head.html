@@ -1,31 +1,31 @@
-{{#gtmTagId}}
-{{#cookiesAccepted}}
+{% if gtmTagId %}
+{% if cookiesAccepted %}
 <!-- Google Tag Manager Data Layer  -->
-<script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
+<script {% if cspNonce %}nonce="{{ cspNonce }}"{% endif %}>
   var dataLayer = window.dataLayer || [];
   dataLayer.push(
-    {{{gtmConfig}}}
+    {{ gtmConfig | safe }}
   );
 </script>
 <!-- End Google Tag Manager Data Layer  -->
 
 <!-- Google Tag Manager -->
-<script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
+<script {% if cspNonce %}nonce="{{ cspNonce }}"{% endif %}>
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','{{gtmTagId}}');
+  })(window,document,'script','dataLayer','{{ gtmTagId }}');
 </script>
 <!-- End Google Tag Manager -->
-{{/cookiesAccepted}}
-{{/gtmTagId}}
+{% endif %}
+{% endif %}
 
-{{#deIndex}}
+{% if deIndex %}
   <meta name="robots" content="noindex">
-{{/deIndex}}
+{% endif %}
 <meta name="format-detection" content="telephone=no">
 <noscript>
-  <meta http-equiv="refresh" content="{{sessionTimeOut}};url='{{baseUrl}}/session-timeout'"/>
+  <meta http-equiv="refresh" content="{{ sessionTimeOut }};url='{{ baseUrl }}/session-timeout'"/>
 </noscript>
-<link rel="stylesheet" href="{{assetPath}}/css/app.css">
+<link rel="stylesheet" href="{{ assetPath }}/css/app.css">

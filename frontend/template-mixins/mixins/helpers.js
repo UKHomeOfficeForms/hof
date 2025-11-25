@@ -8,58 +8,73 @@ const moment = require('moment');
 const renderer = require('./render');
 
 module.exports = options => (req, res, next) => {
-  const hoganRender = renderer(res);
+  const nunjucksRender = renderer(res);
 
   const t = function (key) {
-    return hoganRender(req.translate(options.sharedTranslationsKey + key), this);
+    return nunjucksRender(req.translate(options.sharedTranslationsKey + key), this);
   };
 
-  res.locals.currency = function () {
-    return function (txt) {
-      txt = hoganRender(txt, this);
-      let value = parseFloat(txt);
-      if (isNaN(value)) {
-        return txt;
-      } else if (value % 1 === 0) {
-        value = value.toString();
-      } else {
-        value = value.toFixed(2);
+  // helper factory that supports both direct-call and block/callable usage
+  function makeHelper(fn) {
+    return function () {
+      // direct call: helper(arg)
+      if (arguments.length > 0) {
+        const txt = arguments[0];
+        return fn.call(this, nunjucksRender(txt, this));
       }
-      return '£' + value;
+      // callable/block usage: helper() returns inner function
+      return function (txt) {
+        return fn.call(this, nunjucksRender(txt, this));
+      };
     };
-  };
+  }
+
+  res.locals.currency = makeHelper(function (value) {
+    let v = parseFloat(value);
+    if (isNaN(v)) return value;
+    if (v % 1 === 0) v = v.toString();
+    else v = v.toFixed(2);
+    return '£' + v;
+  });
 
   res.locals.date = function () {
+    if (arguments.length > 0) {
+      const txt = arguments[0].split('|');
+      const value = nunjucksRender(txt[0], this);
+      return moment(value).format(txt[1] || 'D MMMM YYYY');
+    }
     return function (txt) {
       txt = (txt || '').split('|');
-      const value = hoganRender(txt[0], this);
+      const value = nunjucksRender(txt[0], this);
       return moment(value).format(txt[1] || 'D MMMM YYYY');
     };
   };
 
-  res.locals.hyphenate = function () {
-    return function (txt) {
-      const value = hoganRender(txt, this);
-      return value.trim().toLowerCase().replace(/\s+/g, '-');
-    };
-  };
+  res.locals.hyphenate = makeHelper(function (value) {
+    return value.trim().toLowerCase().replace(/\s+/g, '-');
+  });
 
-  res.locals.uppercase = function () {
-    return function (txt) {
-      return hoganRender(txt, this).toUpperCase();
-    };
-  };
+  res.locals.uppercase = makeHelper(function (value) {
+    return String(value).toUpperCase();
+  });
 
-  res.locals.lowercase = function () {
-    return function (txt) {
-      return hoganRender(txt, this).toLowerCase();
-    };
-  };
+  res.locals.lowercase = makeHelper(function (value) {
+    return String(value).toLowerCase();
+  });
 
   res.locals.selected = function () {
-    return function (txt) {
-      let val;
+    if (arguments.length > 0) {
+      const txt = arguments[0];
       const bits = txt.split('=');
+      let val;
+      if (this.values && this.values[bits[0]] !== undefined) {
+        val = this.values[bits[0]].toString();
+      }
+      return val === bits[1] ? ' checked="checked"' : '';
+    }
+    return function (txt) {
+      const bits = txt.split('=');
+      let val;
       if (this.values && this.values[bits[0]] !== undefined) {
         val = this.values[bits[0]].toString();
       }
@@ -67,33 +82,43 @@ module.exports = options => (req, res, next) => {
     };
   };
 
-  /**
-  * Use on whole sentences
-  */
-  res.locals.time = function () {
-    return function (txt) {
-      txt = hoganRender(txt, this);
-      txt = txt.replace(/12:00am/i, 'midnight').replace(/^midnight/, 'Midnight');
-      txt = txt.replace(/12:00pm/i, 'midday').replace(/^midday/, 'Midday');
-      return txt;
-    };
-  };
+  res.locals.time = makeHelper(function (value) {
+    let v = value;
+    v = v.replace(/12:00am/i, 'midnight').replace(/^midnight/, 'Midnight');
+    v = v.replace(/12:00pm/i, 'midday').replace(/^midday/, 'Midday');
+    return v;
+  });
 
   res.locals.t = function () {
+    // support both t('key') and callable block usage
+    if (arguments.length > 0) {
+      let txt = arguments[0];
+      txt = nunjucksRender(txt, this);
+      return t.apply(req, [txt, this]);
+    }
     return function (txt) {
-      txt = hoganRender(txt, this);
+      txt = nunjucksRender(txt, this);
       return t.apply(req, [txt, this]);
     };
   };
 
   res.locals.url = function () {
+    if (arguments.length > 0) {
+      let url = arguments[0];
+      url = nunjucksRender(url, this);
+      return req.baseUrl ? path.resolve(req.baseUrl, url) : url;
+    }
     return function (url) {
-      url = hoganRender(url, this);
+      url = nunjucksRender(url, this);
       return req.baseUrl ? path.resolve(req.baseUrl, url) : url;
     };
   };
 
   res.locals.qs = function () {
+    if (arguments.length > 0) {
+      const query = arguments[0];
+      return '?' + querystring.stringify(Object.assign({}, req.query, querystring.parse(query)));
+    }
     return function (query) {
       return '?' + querystring.stringify(Object.assign({}, req.query, querystring.parse(query)));
     };

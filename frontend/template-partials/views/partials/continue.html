@@ -1,5 +1,5 @@
-{{$continue}}
-    {{#continueLink}}
-        <a class="govuk-button" href="{{#url}}{{continueLink}}{{/url}}">{{#t}}buttons.continue{{/t}}</a>
-    {{/continueLink}}
-{{/continue}}
+{% block continue %}
+    {% if continueLink %}
+        <a class="govuk-button" href="{% if url %}{{ continueLink }} {% endif %}">{{ t('buttons.continue') }}</a>
+    {% endif %}
+{% endblock %}

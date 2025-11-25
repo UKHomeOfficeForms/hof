@@ -1,23 +1,25 @@
-<div id="cookie-banner"  class="govuk-cookie-banner" data-nosnippet="" role="region" aria-label="Cookies on {{#appName}}{{appName}}{{/appName}}{{^appName}}this service{{/appName}}">
+<div id="global-cookie-message" class="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="">
+{%if showCookiesBanner %}
+<div id="cookie-banner"  class="govuk-cookie-banner" data-nosnippet="" role="region" aria-label="Cookies on {% if appName %}{{ appName }}{% else %}this service{% endif %}">
   <div class="govuk-cookie-banner__message govuk-width-container">
     <div id="cookie-banner-info" class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-cookie-banner__heading govuk-heading-m">Cookies on {{#appName}}{{appName}}{{/appName}}{{^appName}}this service{{/appName}}</h2>
+        <h2 class="govuk-cookie-banner__heading govuk-heading-m">Cookies on {% if appName %}{{ appName }}{% else %}this service{% endif %}</h2>
         <div class="govuk-cookie-banner__content">
-          <p class="govuk-body">{{#t}}cookies.banner.message{{/t}}</p>
-          {{#hasGoogleAnalytics}}
+          <p class="govuk-body">{{ t('cookies.banner.message') }}</p>
+          {% if hasGoogleAnalytics %}
           <p class="govuk-body">We'd like to set additional cookies to understand how you use GOV.UK, remember your settings and improve government services.</p>
           <p class="govuk-body">We also use cookies set by other sites to help us deliver content from their services.</p>
-          {{/hasGoogleAnalytics}}
+          {% endif %}
         </div>
       </div>
     </div>
     <div id="cookie-banner-actions" class="govuk-button-group">
-      {{#hasGoogleAnalytics}}
+      {% if hasGoogleAnalytics %}
         <button id="accept-cookies-button" value="yes" type="submit" name="cookies[additional]" class="govuk-button" data-module="govuk-button" data-accept-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner accepted" data-cookie-types="all">Accept additional cookies</button>
         <button id="reject-cookies-button" value="no" type="submit" name="cookies[additional]" class="govuk-button" data-module="govuk-button" data-reject-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner rejected">Reject additional cookies</button>
-      {{/hasGoogleAnalytics}}
-        <a class="govuk-link" href="/cookies">{{#t}}cookies.banner.link{{/t}}</a>
+      {% endif %}
+        <a class="govuk-link" href="/cookies">{{ t('cookies.banner.link') }}</a>
     </div>
   </div>
   <div id="cookie-banner-submitted-accepted" data-accept-cookies="true" class="govuk-cookie-banner__message govuk-width-container" role="alert" hidden >
@@ -48,4 +50,6 @@
       </button>
     </div>
   </div>
+</div>
+{% endif %}
 </div>
