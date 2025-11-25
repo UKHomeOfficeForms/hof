@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const Hogan = require('hogan.js');
+const nunjucks = require('nunjucks');
 const _ = require('underscore');
 
 const renderer = require('./render');
@@ -76,34 +76,63 @@ module.exports = function (options) {
     const roots = [].concat(req.app.get('views')).concat(options.viewsDirectory);
     const View = req.app.get('view');
 
+    // create a nunjucks environment for resolving includes/partials from the
+    // project's views roots for this request. noCache in dev to pick up changes.
+    const nunjucksEnv = new nunjucks.Environment(
+      new nunjucks.FileSystemLoader(roots, { noCache: process.env.NODE_ENV !== 'production' }),
+      { autoescape: true }
+    );
+
+
+    // helper: resolve a template file path by trying express View, configured viewsDirectory and app roots
+    function resolveTemplateFile(name) {
+      const viewExt = '.' + (options.viewEngine || 'html');
+      const engines = {};
+      engines[viewExt] = {};
+      const view = new View(name, {
+        defaultEngine: options.viewEngine,
+        root: roots,
+        engines: engines
+      });
+
+      const candidates = [];
+      if (view && view.path) {
+        candidates.push(view.path);
+        candidates.push(view.path + viewExt);
+      }
+      if (options.viewsDirectory) {
+        candidates.push(path.join(options.viewsDirectory, name + viewExt));
+        candidates.push(path.join(options.viewsDirectory, name));
+      }
+      (roots || []).forEach(r => {
+        candidates.push(path.join(r, name + viewExt));
+        candidates.push(path.join(r, name));
+      });
+
+      const uniq = Array.from(new Set(candidates.map(p => path.resolve(p))));
+
+      const found = uniq.find(p => fs.existsSync(p) && fs.lstatSync(p).isFile());
+      if (!found) {
+        throw new Error('Could not find template file: ' + name + ' (checked: ' + uniq.join(', ') + ')');
+      }
+      return found;
+    }
+
     // wrap in try catch to throw an error if any one template cannot be resolved
     try {
       PARTIALS.forEach(relativeTemplatePath => {
-        if (compiled[relativeTemplatePath]) {
-          return;
-        }
-        const viewExtension = '.' + options.viewEngine;
-        const engines = {};
-        engines[viewExtension] = {};
-        const view = new View(relativeTemplatePath, {
-          defaultEngine: options.viewEngine,
-          root: roots,
-          engines: engines
-        });
-        if (!view.path) {
-          throw new Error('Could not find template file: ' + relativeTemplatePath);
-        }
-        const compiledTemplate = Hogan.compile(fs.readFileSync(view.path).toString());
-        compiled[relativeTemplatePath] = compiledTemplate;
+        if (compiled[relativeTemplatePath]) return;
+        const filePath = resolveTemplateFile(relativeTemplatePath);
+        compiled[relativeTemplatePath] = fs.readFileSync(filePath, 'utf8').toString();
       });
     } catch (e) {
       return next(e);
     }
 
-    const hoganRender = renderer(res);
+    const nunjucksRender = renderer(res);
 
     const t = function (key) {
-      return hoganRender(req.translate(options.sharedTranslationsKey + key), this);
+      return nunjucksRender(req.translate(options.sharedTranslationsKey + key), this);
     };
 
     // Like t() but returns null on failed translations
@@ -117,11 +146,65 @@ module.exports = function (options) {
       return field[property] ? field[property] : 'fields.' + key + '.' + property;
     };
 
+    // tries multiple candidate paths and caches source
     function readTemplate(name) {
-      if (templateCache[name]) {
-        return templateCache[name];
+      if (!name) { return ''; }
+      if (templateCache[name]) { return templateCache[name]; }
+
+      // if compiled preloaded partial exists, return that
+      if (compiled[name]) {
+        templateCache[name] = compiled[name];
+        return compiled[name];
       }
-      const data = fs.readFileSync(`${name}.${options.viewEngine}`).toString();
+
+      // if looks like a raw template string, return as-is
+      if (typeof name === 'string' && (name.indexOf('<') !== -1 || name.indexOf('{%') !== -1 || name.indexOf('{{') !== -1)) {
+        templateCache[name] = name;
+        return name;
+      }
+
+      const viewExt = '.'(options.viewEngine || 'html');
+      const candidates = [];
+      candidates.push(path.resolve(name));
+      candidates.push(path.resolve(name + viewExt));
+      if (options.viewsDirectory) {
+        candidates.push(path.resolve(options.viewsDirectory, name + viewExt));
+        candidates.push(path.resolve(options.viewsDirectory, name));
+      }
+      (roots || []).forEach(r => {
+        candidates.push(path.resolve(r, name + viewExt));
+        candidates.push(path.resolve(r, name));
+      });
+
+      // deduplicate and find existing file
+      const uniq = Array.from(new Set(candidates));
+      let found;
+      for (let i = 0; i < uniq.length; i++) {
+        const p = uniq[i];
+        if (fs.existsSync(p) && fs.lstatSync(p).isFile()) {
+          found = p;
+          break;
+        }
+      }
+      // fallback to express View resolution
+      if (!found) {
+        const engines = {};
+        engines[viewExt] = {};
+        const view = new View(name, {
+          defaultEngine: options.viewEngine,
+          root: roots,
+          engines: engines
+        });
+        if (view && view.path && fs.existsSync(view.path)) {
+          found = view.path;
+        }
+      }
+
+      if (!found) {
+        throw new Error('Could not find template file: ' + name + ' (checked: ' + uniq.join(', ') + ')');
+      }
+
+      const data = fs.readFileSync(found, 'utf8').toString();
       templateCache[name] = data;
       return data;
     }
@@ -185,12 +268,12 @@ module.exports = function (options) {
       return function () {
         if (this.child) {
           const templateString = getTemplate(this.child, this.toggle);
-          const template = Hogan.compile(templateString);
-          return template.render(Object.assign({
+          const ctx = Object.assign({
             renderMixin: renderMixin.bind(this)
-          }, res.locals, this), _.mapObject(res.locals.partials, function (partialpath) {
-            return readTemplate(partialpath);
-          }));
+          }, res.locals, this);
+          // render with nunjucks environment so {% include %} works against roots
+          return nunjucksEnv.renderString(templateString, ctx);
+
         }
       };
     }
@@ -230,7 +313,7 @@ module.exports = function (options) {
         child: field.child,
         isPageHeading: field.isPageHeading,
         attributes: field.attributes,
-        isPrefixOrSuffix: _.map(field.attributes, item => {if (item.prefix || item.suffix !== undefined) return true;}),
+        isPrefixOrSuffix: _.map(field.attributes, item => { if (item.prefix || item.suffix !== undefined) return true; }),
         isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
         renderChild: renderChild.bind(this)
       });
@@ -428,7 +511,7 @@ module.exports = function (options) {
               value: t('buttons.' + value),
               id: id
             };
-            return compiled['partials/forms/input-submit'].render(obj);
+            return nunjucksEnv.renderString(compiled['partials/forms/input-submit'], obj);
           };
         }
       },
@@ -439,7 +522,7 @@ module.exports = function (options) {
           */
           return function (key) {
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
-            key = hoganRender(key, this);
+            key = nunjucksRender(key, this);
             // Exact unless there is a inexact property against the fields key.
             const isExact = field.inexact !== true;
 
@@ -466,12 +549,12 @@ module.exports = function (options) {
             const parts = [];
 
             if (isExact) {
-              const dayPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-day', { inputmode: 'numeric', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
+              const dayPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-day', { inputmode: 'numeric', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
               parts.push(dayPart);
             }
 
-            const monthPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-month', { inputmode: 'numeric', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
-            const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { inputmode: 'numeric', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
+            const monthPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-month', { inputmode: 'numeric', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
+            const yearPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-year', { inputmode: 'numeric', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
 
             return parts.concat(monthPart, yearPart).join('\n');
           };
@@ -530,12 +613,14 @@ module.exports = function (options) {
         return function (key) {
           this.options = this.options || {};
           this.options.fields = this.options.fields || {};
-          key = hoganRender(key, this);
-          return compiled[mixin.path]
-            .render(mixin.renderWith.call(this, key, _.isFunction(mixin.options)
-              ? mixin.options.call(this, key)
-              : mixin.options
-            ));
+          key = nunjucksRender(key, this);
+          const rendered = mixin.renderWith.call(this, key, _.isFunction(mixin.options)
+            ? mixin.options.call(this, key)
+            : mixin.options
+          );
+          const ctx = Object.assign({}, res.locals, rendered);
+          // render the stored template source with nunjucks env
+          return nunjucksEnv.renderString(compiled[mixin.path], ctx);
         };
       };
       res.locals[name] = handler;
