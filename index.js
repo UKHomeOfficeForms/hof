@@ -76,7 +76,7 @@ const getContentSecurityPolicy = (config, res) => {
     styleSrc: ["'self'"],
     imgSrc: ["'self'"],
     fontSrc: ["'self'", 'data:', 'https://design-system.service.gov.uk'],
-    scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
+    scriptSrc: ["'self'", `'nonce-${res.locals.cspNonce}'`],
     'frame-ancestors': ["'none'"],
     manifestSrc: ["'self'"]
   };
@@ -153,7 +153,7 @@ function bootstrap(options) {
 
   // Add common locals all pages can access
   app.use((req, res, next) => {
-    res.locals.nonce = crypto.randomBytes(16).toString('hex');
+    res.locals.cspNonce = crypto.randomBytes(16).toString('hex');
     res.locals.appName = config.appName;
     res.locals.htmlLang = config.htmlLang;
     res.locals.cookieName = config.session.name;

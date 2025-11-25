@@ -1,14 +1,13 @@
-{{<partials-page}}
-  {{$page-content}}
-    {{#beforeFields}}
-      {{beforeFields}}
-    {{/beforeFields}}
-    {{#fields}}
-      {{#renderField}}{{/renderField}}
-    {{/fields}}
-    {{#afterFields}}
-      {{afterFields}}
-    {{/afterFields}}
-    {{#input-submit}}continue{{/input-submit}}
-  {{/page-content}}
-{{/partials-page}}
+{% extends "partials/page.html" %}
+  {% block content %}
+    {% if beforeFields %}
+      {{ beforeFields }}
+    {% endif %}
+    {% if fields %}
+      {% for renderField in renderField %}renderField{% endfor %}
+    {% endif %}
+    {% if afterFields %}
+      {{ afterFields }}
+    {% endif %}
+    {% if input-submit %}continue {% endif %}
+  {% endblock %}

@@ -1,10 +1,17 @@
-{{$content-outer}}
-{{$preloader}}{{/preloader}}
+{% extends "layout.html" %}
+  {% block preloader %}{% endblock %}
   <div class="govuk-grid-column-two-thirds">
-    {{$validationSummary}}{{/validationSummary}}
-    {{#captionHeading}}<span class="govuk-caption-l">{{captionHeading}}</span>{{/captionHeading}}
-    {{#header}}<h1 class="govuk-heading-l">{{header}}</h1>{{/header}}
-    {{#subHeading}}<div id="page-header"><h2 class="govuk-heading-m">{{subHeading}}</h2></div>{{/subHeading}}
-    {{$content}}{{/content}}
+    {% block validationSummary %}{% endblock %}
+    {% if captionHeading %}
+      <span class="govuk-caption-l">{{ captionHeading }}</span>
+    {% endif %}
+    {% if header %}
+      <h1 class="govuk-heading-l">{{ header }}bhhbhhgvg</h1>
+    {% endif %}
+    {% if subHeading %}
+      <div id="page-header"><h2 class="govuk-heading-m">{{ subHeading }}</h2></div>
+    {% endif %}
+  {% block content %}
+  {% endblock %}
   </div>
-{{/content-outer}}
+
