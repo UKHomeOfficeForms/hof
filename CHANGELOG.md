@@ -1,3 +1,23 @@
+## 2025-11-20, Version 22.12.1 (Stable), @dk4g @jamiecarterHO
+
+### Infrastructure  
+- Updated CI/CD pipeline to test against Node.js 20.x, 22.x, and 24.x
+- Updated Redis testing versions to 7 and 8
+- Added `NODE_VERSION` environment variable for consistent Node.js version across jobs
+- Updated release process to use Node.js 24 for tagging and publishing operations
+
+### Security
+  - Replaced deprecated `crypto.createCipher`/`crypto.createDecipher` with `crypto.createCipheriv`/`crypto.createDecipheriv`
+  - Added proper initialisation vector (IV) handling for enhanced security
+  - Enforced 32-byte session secret requirement for AES-256 encryption compatibility
+  - Removed insecure default session secret ('changethis') - now requires explicit configuration
+
+### Migration Notes
+- **Session Reset Required**: Due to enhanced encryption security, existing user sessions will be invalidated and users will need to re-authenticate after this update
+- **Session Secret**: You must now set a unique `SESSION_SECRET` environment variable of exactly 32 bytes for encryption compatibility. 
+For testing purposes, you can use the following command to generate a random value. For production environments, consult a security expert or refer to official cryptographic guidelines to generate a secure secret
+`node -e "console.log(require('crypto').randomBytes(16).toString('hex'))"`
+
 ## 2025-11-15, Version 22.11.0 (Stable), @Rhodine-orleans-lindsay
 
 ### Changed
