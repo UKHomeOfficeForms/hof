@@ -17,6 +17,11 @@ describe('Behaviours', () => {
       })
     });
     bootstrap.configure('root', path.resolve(__dirname, '../fixtures'));
+    bootstrap.configure({
+      session: {
+        secret: '24b8d3e2ded118839369c723d40bf624'
+      }
+    });
   });
 
   afterEach(() => {

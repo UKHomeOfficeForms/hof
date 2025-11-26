@@ -3,7 +3,7 @@
 name: Automate_Tag
 on: [push]
 env:
-  TAGGING_NODE_VERSION: 24
+  NODE_VERSION: 24
 jobs:
   test:
     runs-on: ubuntu-22.04
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.TAGGING_NODE_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
       - run: |
           git config --local user.email "$(git log --format='%ae' HEAD^!)"
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.TAGGING_NODE_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
       - run: |
           git config --local user.email "$(git log --format='%ae' HEAD^!)"
@@ -73,7 +73,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.TAGGING_NODE_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
       - run: |
           git config --local user.email "$(git log --format='%ae' HEAD^!)"

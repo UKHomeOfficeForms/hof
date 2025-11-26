@@ -29,6 +29,12 @@ function getHeaders(res, type) {
   return headers;
 }
 
+bootstrap.configure({
+  session: {
+    secret: '24b8d3e2ded118839369c723d40bf624'
+  }
+});
+
 describe('hof server', () => {
   before(() => {
     bootstrap.configure('root', root);
