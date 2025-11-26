@@ -6,6 +6,8 @@ on:
     workflows: ["Automate_Tag"]
     types:
       - completed
+env:
+  NODE_VERSION: 24
 jobs:
   auto-publish:
     runs-on: ubuntu-22.04
@@ -20,7 +22,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
         # Upgrade npm to 11.5.1 to support npm publish --provenance
       - name: Upgrade npm to 11.5.1
