@@ -1,9 +1,8 @@
 'use strict';
 
+const hooks = require('./hooks');
 const path = require('path');
 const getFields = require('./fields');
-
-const hooks = require('./hooks');
 
 const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html');
 
@@ -12,18 +11,17 @@ module.exports = (key, opts) => {
     throw new Error('Key must be passed to amountWithUnitSelect component');
   }
 
-  const fields = getFields(key); // The child field definitions and configurations
-  const options = opts || {}; // The component's configuration options
-  const template = options.template ?
+  const fields = getFields(key); // the child field definitions and configurations
+  const options = opts || {}; // the component's configuration options
+  const template = options.template ? // the field template path
     path.resolve(__dirname, options.template) :
     TEMPLATE;
 
   /**
-   * Pre-process hook 
-   * 
-   * @param {Object} req - The form's request object
-   * @param {Object} res  - The form's response object
-   * @param {function ()} next - The next middleware function in the chain
+   * Pre-process hook.
+   * @param {Object} req - The form's request object.
+   * @param {Object} res  - The form's response object.
+   * @param {function ()} next - The next middleware function in the chain.
    */
   const preProcess = (req, res, next) => {
     hooks.preProcess(req, fields, key);
@@ -31,11 +29,10 @@ module.exports = (key, opts) => {
   };
 
   /**
-   * Post-process hook 
-   * 
-   * @param {Object} req - The form's request object
-   * @param {Object} res  - The form's response object
-   * @param {function ()} next - The next middleware function in the chain
+   * Post-process hook.
+   * @param {Object} req - The form's request object.
+   * @param {Object} res  - The form's response object.
+   * @param {function ()} next - The next middleware function in the chain.
    */
   const postProcess = (req, res, next) => {
     hooks.postProcess(req, key);
@@ -43,11 +40,10 @@ module.exports = (key, opts) => {
   };
 
   /**
-   * Pre-validate hook 
-   * 
-   * @param {Object} req - The form's request object
-   * @param {Object} res  - The form's response object
-   * @param {function ()} next - The next middleware function in the chain
+   * Pre-validate hook.
+   * @param {Object} req - The form's request object.
+   * @param {Object} res  - The form's response object.
+   * @param {function ()} next - The next middleware function in the chain.
    */
   const preValidate = (req, res, next) => {
     hooks.preValidate(req, fields, key, options);
@@ -55,11 +51,10 @@ module.exports = (key, opts) => {
   };
 
   /**
-   * Pre-getErrors hook 
-   * 
-   * @param {Object} req - The form's request object
-   * @param {Object} res  - The form's response object
-   * @param {function ()} next - The next middleware function in the chain
+   * Pre-getErrors hook.
+   * @param {Object} req - The form's request object.
+   * @param {Object} res  - The form's response object.
+   * @param {function ()} next - The next middleware function in the chain.
    */
   const preGetErrors = (req, res, next) => {
     hooks.preGetErrors(req, fields, key);
@@ -67,11 +62,10 @@ module.exports = (key, opts) => {
   };
 
   /**
-   * Post-getErrors hook
-   * 
-   * @param {Object} req - The form's request object
-   * @param {Object} res  - The form's response object
-   * @param {function ()} next - The next middleware function in the chain
+   * Post-getErrors hook.
+   * @param {Object} req - The form's request object.
+   * @param {Object} res  - The form's response object.
+   * @param {function ()} next - The next middleware function in the chain.
    */
   const postGetErrors = (req, res, next) => {
     hooks.postGetErrors(req, res, fields, key);
@@ -79,11 +73,10 @@ module.exports = (key, opts) => {
   };
 
   /**
-   * Post-getValues hook
-   * 
-   * @param {Object} req - The form's request object
-   * @param {Object} res  - The form's response object
-   * @param {function ()} next - The next middleware function in the chain
+   * Post-getValues hook.
+   * @param {Object} req - The form's request object.
+   * @param {Object} res  - The form's response object.
+   * @param {function ()} next - The next middleware function in the chain.
    */
   const postGetValues = (req, res, next) => {
     hooks.postGetValues(req, fields, key);
@@ -91,11 +84,10 @@ module.exports = (key, opts) => {
   };
 
   /**
-   * Pre-render hook
-   * 
-   * @param {Object} req - The form's request object
-   * @param {Object} res  - The form's response object
-   * @param {function ()} next - The next middleware function in the chain
+   * Pre-render hook.
+   * @param {Object} req - The form's request object.
+   * @param {Object} res  - The form's response object.
+   * @param {function ()} next - The next middleware function in the chain.
    */
   const preRender = (req, res, next) => {
     hooks.preRender(req, res, fields, options, template, key, next);
