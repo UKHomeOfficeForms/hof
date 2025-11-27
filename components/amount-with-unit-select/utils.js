@@ -181,6 +181,7 @@ module.exports = {
   getLegendClassName,
   getIsPageHeading,
   getParts,
+  getAmountWithUnitSelectValues,
   getPartsFromAmountWithUnitSelect,
   translateLabels,
   addChildFieldsToRequestForm,

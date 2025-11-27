@@ -1064,6 +1064,31 @@ The following optional configuration options are supported:
 - `amountOptional {Boolean}` – The text input (amount) defaults to `''` (empty string) if omitted. Defaults to `false`. If the `'required'` validator is defined in the `validate` configuration option, then this configuration is ignored (both fields are made mandatory).
 - `unitOptional {Boolean}` – The select input (unit) defaults to `null` if omitted. Defaults to `false`. If the `'required'` validator is defined in the `validate` configuration option, then this configuration is ignored (both fields are made mandatory).
 
+### Validation Error Messages
+
+In Validation.json (within the translations):
+
+```js
+"amountWithUnitSelect": {
+  "default": "Enter the amount in the correct format; for example, 10 Litres",
+  "alphanum": "The amount must not contain any special characters",
+  "required": "Enter an amount and a unit value"
+},
+"amountWithUnitSelect-unit": {
+  "default": "A valid value must be selected as the amount unit",
+  "required": "A unit must be selected for the amount"
+},
+"amountWithUnitSelect-amount": {
+  "alphanum": "The amount must not be an alphanum"
+}
+```
+
+Validation error messages can be defined for a specific child component that errored by adding a JSON object with a key that has the component's name (I.E. `'amountWithUnitSelect'`) followed by a hyphen and the child component's name (I.E. '-amount' or '-unit'). So to define an error message, for the `'required'` validation error, for specifically the unit component, an `'amountWithUnitSelect-unit'` object can be created (like in the example above) with a validator's name and the error message to show for it respectively, set as a key:value pair in the object (E.G. `"required": "A unit must be selected for the amount" within "amountWithUnitSelect-unit"` - like in the example). 
+Validation error messages defined specifically for child components, for a given type of validation error, (such as `'required'` for `'amountWithUnitSelect-unit'`) will take precedence over error messages defined for the same validation error in the parent. So in this case, the `"required": "Enter an amount and a unit value"` validation message defined in the `"amountWithUnitSelect"` JSON object in the above example will not show when the `"amountWithUnitSelect-unit"` `'required'` validation error message is defined. If there was no `'required'` error message defined for, say, the `"amountWithUnitSelect-amount"` object (like in the example above), the `"amountWithUnitSelect"` object's `'required'` error message would show if the `'required'` validation error is triggered on the 'amount' child component (I.E. When an amount value is not provided).
+The `'default'` catch all validation error message can also be defined in a similar manner for the child components to override the parent component's defined `'default'` error message.
+
+So the example above will create a scenario where `'required'` validation errors triggered on the 'unit' field will display the error message `"A unit must be selected for the amount"` (specified in the `"amountWithUnitSelect-unit"` JSON object). Any `'required'` validation errors triggered on the 'amount' field will display the error message `"Enter an amount and a unit value"` (specified in the `"amountWithUnitSelect"` JSON object - as there is no `'required'` error message defined specifically for the 'amount' field (withing `"amountWithUnitSelect-amount"`)).
+
 ## Date Component
 
 A component for handling the rendering and processing of 3-input date fields used in HOF Applications.
