@@ -1,0 +1,95 @@
+name: Scan for Evil Packages
+
+on:
+  repository_dispatch:
+    types: [trigger-from-scanmaestro]
+
+jobs:
+  scan:
+    runs-on: ubuntu-22.04
+    outputs:
+      scan_summary: ${{ steps.scan_echo.outputs.summary }}
+    steps:
+      # Checkout the repository code
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # Set up Node.js environment
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # Clone the vulnerabilities scanner tool
+      - name: Clone hof-vulnerabilities-scanner
+        run: git clone https://github.com/UKHomeOfficeForms/hof-vulnerabilities-scanner.git
+      # Run the scanner to generate scan-results.json
+      - name: Run hof-vulnerabilities-scanner
+        id: scan_hof_vuln
+        run: node hof-vulnerabilities-scanner/index.js
+      # Scan all remote branches in workflow
+      - name: Scan all remote branches
+        id: scan_branches
+        run: |
+          # Exit on error, undefined variable, or pipe failure
+          set -euo pipefail 
+          git fetch --all --prune
+          # Makes branch refs more readable
+          branches=$(git ls-remote --heads origin | awk '{print $2}' | sed 's|refs/heads/||')
+          summary=""
+          any_compromised=0
+          repo_name=HOF
+
+          for br in $branches; do
+            echo "=== Scanning branch: $br ==="
+            git checkout --force -B "$br" "origin/$br"
+            node hof-vulnerabilities-scanner/index.js --out "scan-results-${br}.json" || true
+            cnt=$(jq '.vulnerabilitiesCount // 0' "scan-results-${br}.json" 2>/dev/null || echo 0)
+            if [ "$cnt" -gt 0 ]; then
+              any_compromised=1
+              summary="${summary}${br}: ${cnt} compromised packages\n"
+            else
+              summary="${summary}${br}: 0\n"
+            fi
+          done
+
+          if [ "$any_compromised" -eq 0 ]; then
+            final="$repo_name: No compromised packages found. ✅"
+          else
+            final="$repo_name: Compromised packages found:\n${summary}. ❌"
+          fi
+
+          echo "summary<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$final" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      # Parse scan-results.json and prepare a summary for Slack
+      - name: Save vulnerability count for Slack
+        id: scan_echo
+        run: |
+          # use aggregated summary produced by the scan_branches step (falls back if missing)
+          summary="${{ steps.scan_branches.outputs.summary || '' }}"
+          if [ -z "$summary" ]; then
+            if [ -f scan-results.json ]; then
+              count=$(jq '.vulnerabilitiesCount // 0' scan-results.json)
+              if [ "$count" -eq 0 ]; then
+                summary="$repo_name: No compromised packages. ✅"
+              else
+                summary="$repo_name: Compromised packages found: $count. ❌"
+              fi
+            else
+              summary="No scan summary found. ❌"
+            fi
+          fi
+          echo "summary=$summary" >> $GITHUB_OUTPUT
+
+  notify-slack:
+    needs: [ scan ]
+    runs-on: ubuntu-22.04
+    if: always()
+    steps:
+      # Send the scan summary to Slack
+      - name: Notify Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SCAN_OUTPUT: ${{ needs.scan.outputs.scan_summary }}
+        run: |
+          payload=$(jq -n --arg text "$SCAN_OUTPUT" '{text: $text}')
+          curl -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL"
