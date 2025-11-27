@@ -1,4 +1,4 @@
-## 2025-11-20, Version 22.12.1 (Stable), @dk4g @jamiecarterHO
+## 2025-11-20, Version 22.12.0 (Stable), @dk4g @jamiecarterHO
 
 ### Infrastructure  
 - Updated CI/CD pipeline to test against Node.js 20.x, 22.x, and 24.x

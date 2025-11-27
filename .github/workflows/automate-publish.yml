@@ -24,10 +24,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
-        # Upgrade npm to 11.5.1 to support npm publish --provenance
-      - name: Upgrade npm to 11.5.1
-        run: |
-          npm install -g npm@11.5.1
       - name: Debug npm auth
         run: |
           echo "registry: $(npm config get registry)"
