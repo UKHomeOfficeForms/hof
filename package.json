@@ -1,13 +1,12 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "22.11.3",
+  "version": "22.12.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
   "engines": {
-    "node": ">=10.22.1",
-    "npm": ">=6.14.0"
+    "node": ">=14.0.0"
   },
   "bin": {
     "hof-build": "./bin/hof-build",

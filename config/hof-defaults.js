@@ -51,7 +51,7 @@ const defaults = {
   },
   session: {
     ttl: process.env.SESSION_TTL || 1800,
-    secret: process.env.SESSION_SECRET || 'changethis',
+    secret: process.env.SESSION_SECRET,
     name: process.env.SESSION_NAME || 'hod.sid',
     sanitiseInputs: false
   },
