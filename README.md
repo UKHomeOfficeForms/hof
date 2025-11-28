@@ -109,8 +109,6 @@ hof-build watch --env .envdev
 
 ## Configuration
 
-The default settings will match those for an app generated using [`hof-generator`](https://npmjs.com/hof-generator).
-
 If a `hof.settings.json` file is found in the application root, then the `build` section of the settings file will be used to override [the default configuration](./defaults.js).
 
 Alternatively you can define a path to a local config file by passing a `--config` option
