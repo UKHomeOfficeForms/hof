@@ -17,6 +17,10 @@
     "type": "git",
     "url": "https://github.com/UKHomeOfficeForms/hof.git"
   },
+  "publishConfig": {
+    "provenance": true,
+    "registry": "https://registry.npmjs.org/"
+  },
   "bugs": {
     "url": "https://github.com/UKHomeOfficeForms/hof/issues"
   },

@@ -22,12 +22,13 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-          auth-type: oidc
-          scope: '@UKHomeOfficeForms'
+      - name: Upgrade npm to 11.5.1 and verify
+        run: |
+          npm install -g npm@11.5.1
+          npm -v
       - name: Debug npm auth
         run: |
           echo "registry: $(npm config get registry)"
-          npm whoami || true
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
@@ -39,8 +40,9 @@ jobs:
           git_tag="$(git describe --tags | cut -d'-' -f 1)"
           echo "npm_tag=${npm_tag} git_tag=${git_tag}"
           if [ "$npm_tag" != "$git_tag" ] ; then 
-            # Add --access public if your package is scoped and public
-            npm publish --provenance --access public
+            echo "Publishing package"
+            npm publish --provenance
+            echo "Successfully published package"
           else
             echo "Skip publish: npm and git tags match or missing."
           fi
