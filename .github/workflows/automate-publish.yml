@@ -9,9 +9,9 @@ on:
 jobs:
   auto-publish:
     runs-on: ubuntu-22.04
-    # OIDC for npm Trusted Publishing
+    # OIDC for npm Trusted Publishing and permissions for GitHub Releases
     permissions:
-      contents: read
+      contents: write
       id-token: write
     if: startsWith(github.ref, 'refs/heads/master')
     steps:
@@ -21,11 +21,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          # Upgrade npm to 11.5.1 to support npm publish --provenance
+          npm-version: 11.5.1
           registry-url: https://registry.npmjs.org/
-      - name: Upgrade npm to 11.5.1 and verify
-        run: |
-          npm install -g npm@11.5.1
-          npm -v
       - name: Debug npm auth
         run: |
           echo "registry: $(npm config get registry)"
