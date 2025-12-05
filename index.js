@@ -77,7 +77,8 @@ const getContentSecurityPolicy = (config, res) => {
     imgSrc: ["'self'"],
     fontSrc: ["'self'", 'data:', 'https://design-system.service.gov.uk'],
     scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
-    'frame-ancestors': ["'none'"]
+    'frame-ancestors': ["'none'"],
+    manifestSrc: ["'self'"]
   };
   /* eslint-enable quotes */
 
@@ -95,7 +96,8 @@ const getContentSecurityPolicy = (config, res) => {
       'https://www.google-analytics.com',
       'https://region1.google-analytics.com',
       'https://region1.analytics.google.com'
-    ]
+    ],
+    manifestSrc: ["'self'"]
   };
 
   if (config.gaTagId) {
@@ -236,8 +238,8 @@ function bootstrap(options) {
     app.use(hofMiddleware.rateLimiter(config, 'requests'));
   }
 
-  // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
-  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
+  // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets/rebrand
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets/rebrand')));
   // Check if service has been paused and redirect accordingly
   const bypassPaths = ['/assets', '/healthcheck', '/service-unavailable'];
 

@@ -3,6 +3,7 @@
 module.exports = {
   htmlLang: '{{htmlLang}}',
   assetPath: '{{govukAssetPath}}',
+  assetRebrandPath: '{{govukAssetPath}}rebrand/',
   afterHeader: '{{$afterHeader}}{{/afterHeader}}',
   bodyClasses: '{{$bodyClasses}}{{/bodyClasses}}',
   bodyStart: '{{$bodyStart}}{{/bodyStart}}',

@@ -34,17 +34,17 @@ module.exports = class Emailer {
         html: body,
         attachments: [{
           filename: 'govuk_logotype_email.png',
-          path: path.resolve(__dirname, './assets/images/govuk_logotype_email.png'),
+          path: path.resolve(__dirname, './assets/rebrand/images/govuk_logotype_email.png'),
           cid: 'govuk_logotype_email'
         },
         {
           filename: 'ho_crest_27px.png',
-          path: path.resolve(__dirname, './assets/images/ho_crest_27px.png'),
+          path: path.resolve(__dirname, './assets/rebrand/images/ho_crest_27px.png'),
           cid: 'ho_crest_27px'
         },
         {
           filename: 'spacer.gif',
-          path: path.resolve(__dirname, './assets/images/spacer.gif'),
+          path: path.resolve(__dirname, './assets/rebrand/images/spacer.gif'),
           cid: 'spacer_image'
         }]
       }, (err, result) => err ? reject(err) : resolve(result));

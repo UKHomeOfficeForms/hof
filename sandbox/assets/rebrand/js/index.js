@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use strict'
 
-require('../../../frontend/themes/gov-uk/client-js');
+require('../../../../frontend/themes/gov-uk/client-js');
 
 var $ = require('jquery');
 var typeahead = require('typeahead-aria');

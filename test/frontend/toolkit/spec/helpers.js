@@ -1,5 +1,5 @@
 /* eslint-disable max-len, no-var */
-var helpers = require('../../../../frontend/toolkit/assets/javascript/helpers');
+var helpers = require('../../../../frontend/toolkit/assets/rebrand/javascript/helpers');
 
 describe('Helpers', function () {
   describe('documentReady', function () {

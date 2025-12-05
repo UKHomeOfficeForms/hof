@@ -1,3 +1,17 @@
+## 2025-11-25, Version 23.0.0 (Stable), @Rhodine-orleans-lindsay
+### Changed
+- Updated cookie banner view to follow GOV.UK design system. Updated cookieSettings.js to allow for different confirmation text based on whether cookies were accepted or rejected
+- Added inputmode='numeric' to date component
+- Added span for checkbox error messages
+- Updated imported javascript
+- Added data-module attribute for govuk-skip-link for screen readers
+- Removed aria-polite=live for character-count and removed pattern attribute for date input
+- Replaced deprecated govuk-header__link--service-name with govuk-header__service-name
+- Added a modifier for phone text input styles that accept sequences of digits
+- Added govuk-template--rebranded class to govuk template html to enable govuk rebrand styles:
+  - Updated header and footer to follow GOV.UK design system as part of rebrand
+  * ⛓️‍💥 **BREAKING CHANGE** : files and folders in a project's `assets` folder will need to be moved to a `assets/rebrand` folder. Add a `rebrand` folder to the `assets` folder. e.g. `assets/images` will need to be moved to `assets/rebrand/images`. 
+
 ## 2025-11-15, Version 22.11.0 (Stable), @Rhodine-orleans-lindsay
 
 ### Changed
@@ -10,7 +24,6 @@
    - 🎬 Action:
       - For custom session timeout handling that is not linked to the redis session ttl, The following variables must be set: `CUSTOM_SESSION_EXPIRY` to the relevant expiry time e.g.600 and `USE_CUSTOM_SESSION_TIMEOUT` to true.
       - If a behaviour is required on the '/session-timeout` step, the '/session-timeout' step must be set in the project's index.js, along with any relevant behaviours.
-
 
 ## 2025-10-10, Version 22.10.4 (Stable), @dk4g
 ### Security
