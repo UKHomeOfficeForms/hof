@@ -39,5 +39,11 @@ module.exports = {
   ],
   whatHappened: [
     'whatHappened'
-  ]
+  ],
+  amountWithUnitSelect:
+  [{
+    field: 'amountWithUnitSelect',
+    parse: val => val ?
+      (val.substring(0, val.lastIndexOf('-')) || '0') + ' ' +  val.substring(val.lastIndexOf('-') + 1) : ''
+  }]
 };
