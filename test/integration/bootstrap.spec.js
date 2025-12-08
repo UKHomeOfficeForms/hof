@@ -26,6 +26,12 @@ const behaviour = SuperClass => (class extends SuperClass {
   }
 });
 
+bootstrap.configure({
+  session: {
+    secret: '24b8d3e2ded118839369c723d40bf624'
+  }
+});
+
 describe('bootstrap()', () => {
   let bs;
 
