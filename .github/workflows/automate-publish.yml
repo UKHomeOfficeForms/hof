@@ -21,8 +21,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          # Upgrade npm to 11.5.1 to support npm publish --provenance
-          npm-version: 11.5.1
           registry-url: https://registry.npmjs.org/
         # Upgrade npm to 11.5.1 to support npm publish --provenance
       - name: Upgrade npm to 11.5.1
