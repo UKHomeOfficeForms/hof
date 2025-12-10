@@ -79,10 +79,17 @@ describe('ga-tag', () => {
         expect(GOVUK.cookie).toHaveBeenNthCalledWith(2, 'cookie_preferences', expected, { days: 30 });
       });
 
-      test('it should show and focus cookie submitted message on either button click', () => {
+      test('it should show and focus accepted cookie submitted message on accept cookies button click', () => {
         cookieSettings.initialiseCookieBanner();
         document.getElementById('accept-cookies-button').click();
-        expect(document.getElementById('cookie-banner-submitted').style.display).toEqual('block');
+        expect(document.getElementById('cookie-banner-submitted-accepted').style.display).toEqual('block');
+        expect(focusMock).toBeCalledTimes(1);
+      });
+
+      test('it should show and focus reject cookie submitted message on either button click', () => {
+        cookieSettings.initialiseCookieBanner();
+        document.getElementById('reject-cookies-button').click();
+        expect(document.getElementById('cookie-banner-submitted-rejected').style.display).toEqual('block');
         expect(focusMock).toBeCalledTimes(1);
       });
 
@@ -93,9 +100,15 @@ describe('ga-tag', () => {
         expect(document.getElementById('cookie-banner-actions').style.display).toEqual('none');
       });
 
-      test('it should hide cookie banner on clicking `hide` button', () => {
+      test('it should hide cookie banner on clicking `hide` button on the accepted cookies submitted message', () => {
         cookieSettings.initialiseCookieBanner();
-        document.getElementById('hide-cookie-banner').click();
+        document.getElementById('hide-accept-cookie-banner').click();
+        expect(document.getElementById('cookie-banner').style.display).toEqual('none');
+      });
+
+      test('it should hide cookie banner on clicking `hide` button on the rejected cookies submitted message', () => {
+        cookieSettings.initialiseCookieBanner();
+        document.getElementById('hide-reject-cookie-banner').click();
         expect(document.getElementById('cookie-banner').style.display).toEqual('none');
       });
     });

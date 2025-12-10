@@ -19,5 +19,8 @@ bootstrap({
   getAccessibility: true,
   sessionTimeoutWarningContent: true,
   exitFormContent: true,
-  "port": 8082
+  "port": 8082,
+  session: {
+    secret: require('crypto').randomBytes(16).toString('hex')
+  }
 });

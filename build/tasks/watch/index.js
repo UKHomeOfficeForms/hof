@@ -32,7 +32,14 @@ module.exports = config => {
   }, {});
 
   function triggersTask(file) {
-    return Object.keys(matchers).filter(key => match(file, matchers[key]));
+    return Object.keys(matchers).filter(key => {
+      const pattern = matchers[key];
+      // Only call minimatch if pattern is a non-empty string or array of strings
+      if (Array.isArray(pattern)) {
+        return pattern.some(p => typeof p === 'string' && p.length > 0 && match(file, p));
+      }
+      return typeof pattern === 'string' && pattern.length > 0 && match(file, pattern);
+    });
   }
 
   function restart() {
@@ -94,7 +101,7 @@ module.exports = config => {
     process.stdin.setEncoding('utf8');
     process.stdin.on('data', data => {
       const dataType = (data + '').trim().toLowerCase();
-      if (dataType  === config.watch.restart) {
+      if (dataType === config.watch.restart) {
         restart();
       }
     });
