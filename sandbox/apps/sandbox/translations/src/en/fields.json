@@ -97,5 +97,15 @@
     "options": {
       "null": "Select..."
     }
+  },
+  "amountWithUnitSelect": {
+    "label": "Amount",
+    "amountLabel": "Amount:",
+    "unitLabel": "Unit:",
+    "options": [
+      { "null": "Select..." },
+      { "label": "Litres", "value": "L" },
+      { "label": "Kilograms", "value": "KG" } 
+    ]
   }
 }
