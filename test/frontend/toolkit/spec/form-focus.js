@@ -1,18 +1,18 @@
-/* eslint-disable max-len, no-var */
-var formFocus = require('../../../../frontend/toolkit/assets/javascript/form-focus');
-var util = require('../lib/util');
-var $ = require('jquery');
+/* eslint-disable max-len */
+const formFocus = require('../../../../frontend/toolkit/assets/javascript/form-focus');
+const util = require('../lib/util');
+const $ = require('jquery');
 
 describe('form-focus', function () {
-  var focussedClass = 'focused';
-  var selectedClass = 'selected';
+  const focussedClass = 'focused';
+  const selectedClass = 'selected';
 
   beforeEach(function () {
     $('#test-container').append($('<form />'));
   });
 
   it('exports a function', function () {
-    formFocus.should.be.a('function');
+    expect(typeof formFocus).toBe('function');
   });
 
   describe('radio buttons', function () {
@@ -26,20 +26,20 @@ describe('form-focus', function () {
 
     it('apply focussed class to label when gain focus', function () {
       util.triggerEvent(document.getElementById('radio-1'), 'focus');
-      $('#radio-1').parent().hasClass(focussedClass).should.be.true;
+      expect($('#radio-1').parent().hasClass(focussedClass)).toBe(true);
     });
 
     it('apply selected class to label when clicked', function () {
       // Have to explicity set the checked property before triggering event
       $('#radio-1').attr('checked', true);
       util.triggerEvent(document.getElementById('radio-1'), 'click');
-      $('#radio-1').parent().hasClass(selectedClass).should.be.true;
+      expect($('#radio-1').parent().hasClass(selectedClass)).toBe(true);
     });
 
     it('remove focussed class when focus lost', function () {
       util.triggerEvent(document.getElementById('radio-1'), 'focus');
       util.triggerEvent(document.getElementById('radio-1'), 'blur');
-      $('#radio-1').parent().hasClass(focussedClass).should.be.false;
+      expect($('#radio-1').parent().hasClass(focussedClass)).toBe(false);
     });
 
     it('retain selected class when focus lost', function () {
@@ -47,7 +47,7 @@ describe('form-focus', function () {
       $('#radio-1').attr('checked', true);
       util.triggerEvent(document.getElementById('radio-1'), 'click');
       util.triggerEvent(document.getElementById('radio-1'), 'blur');
-      $('#radio-1').parent().hasClass(selectedClass).should.be.true;
+      expect($('#radio-1').parent().hasClass(selectedClass)).toBe(true);
     });
 
     it('lose both focussed and selected classes when another radio button in the same group is clicked', function () {
@@ -58,10 +58,10 @@ describe('form-focus', function () {
       util.triggerEvent(document.getElementById('radio-2'), 'focus');
       $('#radio-2').attr('checked', true);
       util.triggerEvent(document.getElementById('radio-2'), 'click');
-      $('#radio-1').parent().hasClass(focussedClass).should.be.false;
-      $('#radio-1').parent().hasClass(selectedClass).should.be.false;
-      $('#radio-2').parent().hasClass(focussedClass).should.be.true;
-      $('#radio-2').parent().hasClass(selectedClass).should.be.true;
+      expect($('#radio-1').parent().hasClass(focussedClass)).toBe(false);
+      expect($('#radio-1').parent().hasClass(selectedClass)).toBe(false);
+      expect($('#radio-2').parent().hasClass(focussedClass)).toBe(true);
+      expect($('#radio-2').parent().hasClass(selectedClass)).toBe(true);
     });
 
     it('lose selected class when another radio button in the same group is clicked', function () {
@@ -69,8 +69,8 @@ describe('form-focus', function () {
       util.triggerEvent(document.getElementById('radio-1'), 'click');
       $('#radio-2').attr('checked', true);
       util.triggerEvent(document.getElementById('radio-2'), 'click');
-      $('#radio-1').parent().hasClass(selectedClass).should.be.false;
-      $('#radio-2').parent().hasClass(selectedClass).should.be.true;
+      expect($('#radio-1').parent().hasClass(selectedClass)).toBe(false);
+      expect($('#radio-2').parent().hasClass(selectedClass)).toBe(true);
     });
 
     it('keep selected class when a radio button in a different group is clicked', function () {
@@ -78,12 +78,12 @@ describe('form-focus', function () {
       util.triggerEvent(document.getElementById('radio-1'), 'click');
       $('#radio-3').attr('checked', true);
       util.triggerEvent(document.getElementById('radio-3'), 'click');
-      $('#radio-1').parent().hasClass(selectedClass).should.be.true;
-      $('#radio-3').parent().hasClass(selectedClass).should.be.true;
+      expect($('#radio-1').parent().hasClass(selectedClass)).toBe(true);
+      expect($('#radio-3').parent().hasClass(selectedClass)).toBe(true);
     });
 
     it('apply a selected class when a radio button is pre-selected', function () {
-      $('#radio-4').parent().hasClass(selectedClass).should.be.true;
+      expect($('#radio-4').parent().hasClass(selectedClass)).toBe(true);
     });
   });
 
@@ -97,25 +97,25 @@ describe('form-focus', function () {
 
     it('apply focussed class to label when gain focus', function () {
       util.triggerEvent(document.getElementById('checkbox-1'), 'focus');
-      $('#checkbox-1').parent().hasClass(focussedClass).should.be.true;
+      expect($('#checkbox-1').parent().hasClass(focussedClass)).toBe(true);
     });
 
     it('apply selected class to label when clicked', function () {
       // Have to explicity set the checked property before triggering event
       $('#checkbox-1').attr('checked', true);
       util.triggerEvent(document.getElementById('checkbox-1'), 'click');
-      $('#checkbox-1').parent().hasClass(selectedClass).should.be.true;
+      expect($('#checkbox-1').parent().hasClass(selectedClass)).toBe(true);
     });
 
     it('remove focussed class when another checkbox is clicked', function () {
       util.triggerEvent(document.getElementById('checkbox-1'), 'focus');
       util.triggerEvent(document.getElementById('checkbox-1'), 'blur');
       util.triggerEvent(document.getElementById('checkbox-2'), 'focus');
-      $('#checkbox-1').parent().hasClass(focussedClass).should.be.false;
+      expect($('#checkbox-1').parent().hasClass(focussedClass)).toBe(false);
     });
 
     it('apply a selected class when a check box is pre-selected', function () {
-      $('#checkbox-3').parent().hasClass(selectedClass).should.be.true;
+      expect($('#checkbox-3').parent().hasClass(selectedClass)).toBe(true);
     });
   });
 
@@ -129,13 +129,13 @@ describe('form-focus', function () {
 
     it('apply focussed class to details element when summary gains focus', function () {
       util.triggerEvent(document.getElementById('summary'), 'focus');
-      $('details').hasClass(focussedClass).should.be.true;
+      expect($('details').hasClass(focussedClass)).toBe(true);
     });
 
     it('remove focussed class from details element when summary loses focus', function () {
       util.triggerEvent(document.getElementById('summary'), 'focus');
       util.triggerEvent(document.getElementById('summary'), 'blur');
-      $('details').hasClass(focussedClass).should.be.false;
+      expect($('details').hasClass(focussedClass)).toBe(false);
     });
   });
 });

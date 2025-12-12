@@ -60,7 +60,7 @@ It is recommended to alias `hof-build` to an npm script in your package.json.
 
 ## Tasks
 
-- `browserify` - compiles client-side js with browserify
+- `vite` - compiles client-side js with vite in development and rollup in production. Requires node version `^20.19.0 || >=22.12.0`.
 - `sass` - compiles sass
 - `images` - copies images from ./assets/images directory to ./public/images
 - `translate` - compiles translation files
@@ -69,20 +69,6 @@ Note: For SASS compilation it's possible to additionally configure the following
 - `outputStyle` - Controls whether the CSS output is compressed or not, expanded (default) = non compressed and compressed = compressed CSS output.
 - `quietDeps` - This controls whether you get deprecation warning shown in the console output, if set to false (default) SASS deprecation warnings will be shown in the console, if set to true then deprecation warnings will not be shown in the console output.
 - `sourceMaps` - This controls whether the build will output css sourcemaps to help with debugging. These will be output to the same directory as the css output as a .map file. This option is not currently available in production.
-
-For JavaScript compilation, browserify can be set to debug mode by setting the `debug` option to true. This will cause browserify to output JavaScript sourcemaps as a .js.map file to the same directory as the js bundle.
-
-Debugging example (in hof.settings or your build config)
-```
-  "build": {
-    "sass": {
-      "sourceMaps": true
-    },
-    "browserify": {
-      "debug": true
-    }
-  }
-```
 
 ## Watch
 
@@ -109,7 +95,7 @@ hof-build watch --env .envdev
 
 ## Configuration
 
-The default settings will match those for an app generated using [`hof-generator`](https://npmjs.com/hof-generator).
+The default settings will match those for an app generated using [`hof-generator`](https://npmjs.com/hof-generator) (⚠️ This package has been deprecated).
 
 If a `hof.settings.json` file is found in the application root, then the `build` section of the settings file will be used to override [the default configuration](./defaults.js).
 
@@ -119,17 +105,9 @@ Alternatively you can define a path to a local config file by passing a `--confi
 hof-build --config /path/to/my/config.js
 ```
 
-Any task can be disabled by setting its configuration to `false` (or any falsy value).
-
-```js
-module.exports = {
-  browserify: false,
-};
-```
-
 ### Configuration options
 
-Each task has a common configuration format with the following options:
+Each task (except Vite) has a common configuration format with the following options:
 
 - `src` - defines the input file or files for the build task
 - `out` - defines the output location of the built code where relevant
