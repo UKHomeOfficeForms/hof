@@ -17,7 +17,7 @@
   "dependencies": {
     "govuk-frontend": "4.10",
     "jquery": "^3.7.1",
-    "sass": "^1.53.0",
+    "sass": "^1.94.2",
     "typeahead-aria": "^1.0.4"
   },
   "devDependencies": {
