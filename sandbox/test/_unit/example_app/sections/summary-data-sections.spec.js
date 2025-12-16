@@ -85,6 +85,15 @@ describe('Apply Summary Data Sections', () => {
       const result = areOrderedEqual(sectionFields, expectedFields);
       expect(result).to.be.true;
     });
+
+    it('should check expected fields in amountWithUnitSelect field', () => {
+      const sectionFields = mappedSections.amountWithUnitSelect;
+      const expectedFields = [
+        'amountWithUnitSelect'
+      ];
+      const result = areOrderedEqual(sectionFields, expectedFields);
+      expect(result).to.be.true;
+    });
   });
 
   describe('Sections and Fields', () => {
@@ -134,6 +143,13 @@ describe('Apply Summary Data Sections', () => {
       expect(containsAll(
         Object.keys(fields),
         mappedSections.whatHappened)
+      ).to.be.true;
+    });
+
+    it('amountWithUnitSelect', () => {
+      expect(containsAll(
+        Object.keys(fields),
+        mappedSections.amountWithUnitSelect)
       ).to.be.true;
     });
   });

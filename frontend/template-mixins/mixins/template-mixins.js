@@ -14,6 +14,8 @@ const PARTIALS = [
   'partials/forms/input-text-group',
   'partials/forms/input-text-date',
   'partials/forms/input-submit',
+  'partials/forms/grouped-inputs-select',
+  'partials/forms/grouped-inputs-text',
   'partials/forms/select',
   'partials/forms/checkbox',
   'partials/forms/textarea-group',
@@ -214,6 +216,7 @@ module.exports = function (options) {
         labelClassName: labelClassName ? `govuk-label ${labelClassName}` : 'govuk-label',
         formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'govuk-form-group',
         hint: hint,
+        amountWithUnitSelectItemClassName: 'grouped-inputs__item',
         hintId: extension.hintId || (hint ? key + '-hint' : null),
         error: this.errors && this.errors[key],
         maxlengthAttribute: field.maxlengthAttribute === true,
@@ -222,6 +225,7 @@ module.exports = function (options) {
         required: required,
         pattern: extension.pattern,
         date: extension.date,
+        amountWithUnitSelect: extension.amountWithUnitSelect,
         autocomplete: autocomplete,
         child: field.child,
         isPageHeading: field.isPageHeading,
@@ -232,7 +236,7 @@ module.exports = function (options) {
       });
     }
 
-    function optionGroup(key, opts) {
+    function optionGroup(key, opts, pKey = key) {
       opts = opts || {};
       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
       const legend = field.legend;
@@ -248,6 +252,7 @@ module.exports = function (options) {
           legendValue = legend.value;
         }
       }
+
       return {
         key: key,
         error: this.errors && this.errors[key],
@@ -270,15 +275,16 @@ module.exports = function (options) {
 
           if (typeof obj === 'string') {
             value = obj;
-            label = 'fields.' + key + '.options.' + obj + '.label';
-            optionHint = 'fields.' + key + '.options.' + obj + '.hint';
+            // pKey - optional param that demotes parent key for group components - set to key param val by default
+            label = 'fields.' + pKey + '.options.' + obj + '.label';
+            optionHint = 'fields.' + pKey + '.options.' + obj + '.hint';
           } else {
             value = obj.value;
-            label = obj.label || 'fields.' + key + '.options.' + obj.value + '.label';
+            label = obj.label || 'fields.' + pKey + '.options.' + obj.value + '.label';
             toggle = obj.toggle;
             child = obj.child;
             useHintText = obj.useHintText;
-            optionHint = obj.hint || 'fields.' + key + '.options.' + obj.value + '.hint';
+            optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
           }
 
           if (this.values && this.values[key] !== undefined) {
@@ -468,6 +474,50 @@ module.exports = function (options) {
             const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { inputmode: 'numeric', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
 
             return parts.concat(monthPart, yearPart).join('\n');
+          };
+        }
+      },
+      'input-amount-with-unit-select': {
+        handler: function () {
+          return function (key) {
+            key = (key === '{{key}}' || key === '' || key === undefined) ? hoganRender(key, this) : key;
+            const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+
+            let autocomplete = field.autocomplete || 'off';
+            if (autocomplete === 'off') {
+              autocomplete = { amount: 'off'};
+            } else if (typeof autocomplete === 'string') {
+              autocomplete = { amount: autocomplete + '-amount' };
+            }
+
+            const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
+            const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
+            const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
+
+            const parts = [];
+
+            // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
+            // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
+            const amountPart = compiled['partials/forms/grouped-inputs-text']
+              .render(inputText.call(this,
+                key + '-amount', {
+                  formGroupClassName,
+                  autocomplete: autocomplete.amount,
+                  className: classNameAmount,
+                  amountWithUnitSelect: true }
+              ));
+
+            const unitPart = compiled['partials/forms/grouped-inputs-select']
+              .render(inputText.call(this, key + '-unit',
+                optionGroup.call(this,
+                  key + '-unit', {
+                    formGroupClassName,
+                    className: classNameUnit,
+                    amountWithUnitSelect: true },
+                  key
+                )));
+
+            return parts.concat(amountPart, unitPart).join('\n');
           };
         }
       }
