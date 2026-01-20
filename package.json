@@ -52,7 +52,6 @@
     "dialog-polyfill": "^0.5.6",
     "dotenv": "^4.0.0",
     "duplexify": "^3.7.1",
-    "exorcist": "^2.0.0",
     "express": "^4.21.2",
     "express-healthcheck": "^0.1.0",
     "express-partial-templates": "^0.2.1",
