@@ -15,9 +15,9 @@ const entryFile = (() => {
   throw new Error(`vite: entry file not found. Checked: ${src}`);
 })();
 
-export default defineConfig(({command, mode}) => {
-  const isDev = command === 'serve' || mode === 'development';
-  console.log(`vite: building for ${isDev }mode`);
+export default defineConfig(({mode}) => {
+  console.log('66666666666666############ Vite build mode:', mode);
+  const isDev = mode === 'development' ? true : false;
   return{
     plugins: [
       commonjs({
@@ -72,15 +72,13 @@ export default defineConfig(({command, mode}) => {
         }
       },
       css: {
+        devSourcemap: isDev,
         preprocessorOptions: {
           scss: {
             includes: ['node_modules']
           }
         }
       }
-    },
-    css: {
-      devSourcemap: isDev // Enable CSS sourcemaps in dev at the root level
     }
   };
 });
