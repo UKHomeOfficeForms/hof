@@ -6,9 +6,10 @@ import { resolve } from 'path';
 import fs from 'fs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import config from '../../../config/builder-defaults';
 
 const publicDirectory = resolve(process.cwd(), 'public');
+const config = require('../../../config/builder-defaults.js');
+console.log('Vite config - loading builder defaults from:', config);
 const entryFile = (() => {
   const src = resolve(process.cwd(), 'assets/js/index.js');
   if (fs.existsSync(src)) return src;
@@ -71,7 +72,6 @@ export default defineConfig({
       }
     },
     css: {
-      // devSourcemap: isDev,
       preprocessorOptions: {
         scss: {
           includes: ['node_modules']

@@ -78,7 +78,7 @@ You can change sourcemaps' default settings in hof.settings or your build config
     },
      "js": {
       "sourceMaps": true
-    },
+    }
   }
 ```
 ## Watch

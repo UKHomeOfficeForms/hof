@@ -22,5 +22,13 @@ bootstrap({
   "port": 8082,
   session: {
     secret: require('crypto').randomBytes(16).toString('hex')
+  },
+  build: {
+    sass: {
+      sourceMaps: true
+    },
+     js: {
+      sourceMaps: true
+    }
   }
 });

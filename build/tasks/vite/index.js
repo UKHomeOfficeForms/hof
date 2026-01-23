@@ -8,6 +8,7 @@ const hofDefaults = require('../../../config/hof-defaults');
 module.exports = config => {
   process.env.NODE_ENV = hofDefaults.env;
 
+console.log('Vite build - CONFIG)))))))))) mode:', config );
   if(!config.production) {
     return vite.build({
       configFile: viteConfig,
