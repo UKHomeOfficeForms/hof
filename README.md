@@ -69,7 +69,16 @@ Note: For SASS compilation it's possible to additionally configure the following
 - `outputStyle` - Controls whether the CSS output is compressed or not, expanded (default) = non compressed and compressed = compressed CSS output.
 - `quietDeps` - This controls whether you get deprecation warning shown in the console output, if set to false (default) SASS deprecation warnings will be shown in the console, if set to true then deprecation warnings will not be shown in the console output.
 - `sourceMaps` - This controls whether the build will output css sourcemaps to help with debugging. These will be output to the same directory as the css output as a .map file. This option is not currently available in production.
+For JavaScript compilation, Vite outputs JavaScript sourcemaps as a .js.map file to the same directory as the js bundle.
 
+For CSS sourcemaps you can change the default settings in hof.settings or your build config as follows:
+```
+  "build": {
+    "sass": {
+      "sourceMaps": true
+    },
+  }
+```
 ## Watch
 
 You can additionally run a `watch` task to start a server instance, which will automatically restart based on changes to files. This will also re-perform the tasks above when relevant files change.

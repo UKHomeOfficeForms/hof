@@ -26,9 +26,8 @@ module.exports = config => {
       }
 
       // Build source maps if we are not in production
-      const createSourceMaps = !config.production;
-      console.log('Sass source maps production @@@@@@@@@@@@@@@@@', !config.production );
-
+      const createSourceMaps = !config.production && config.sass.sourceMaps;
+      
       sass.render({
         file: config.sass.src,
         importer: importer({ aliases }),
