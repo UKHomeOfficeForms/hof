@@ -70,11 +70,13 @@ Note: For SASS compilation it's possible to additionally configure the following
 - `quietDeps` - This controls whether you get deprecation warning shown in the console output, if set to false (default) SASS deprecation warnings will be shown in the console, if set to true then deprecation warnings will not be shown in the console output.
 - `sourceMaps` - This controls whether the build will output css sourcemaps to help with debugging. These will be output to the same directory as the css output as a .map file. This option is not currently available in production.
 For JavaScript compilation, Vite outputs JavaScript sourcemaps as a .js.map file to the same directory as the js bundle.
-
-For CSS sourcemaps you can change the default settings in hof.settings or your build config as follows:
+You can change sourcemaps' default settings in hof.settings or your build config as follows:
 ```
   "build": {
     "sass": {
+      "sourceMaps": true
+    },
+     "js": {
       "sourceMaps": true
     },
   }

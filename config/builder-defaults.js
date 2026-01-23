@@ -14,6 +14,9 @@ module.exports = {
     outputStyle: 'expanded',
     sourceMaps: false
   },
+  js: {
+    sourceMaps: false
+  },
   translate: {
     src: 'apps/**/translations/src',
     match: 'apps/**/translations/src/**/*.json',
