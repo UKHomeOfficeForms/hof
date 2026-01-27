@@ -1012,6 +1012,85 @@ Using the translation key `fields.field-name.label` will return different values
 
 # HOF Components
 
+## AmountWithUnitSelect Component
+
+> **Available from version 22.14.0**
+
+A component for handling the rendering, processing, and validation of a text input (amount) field and a select-dropdown input field (unit) used in HOF applications.
+
+### Usage
+
+In your fields config:
+
+```js
+const amountWithUnitSelectComponent = require("hof").components.amountWithUnitSelect;
+
+module.exports = {
+  "amountWithUnitSelect-field": amountWithUnitSelectComponent("amountWithUnitSelect", {
+    mixin: 'input-amount-with-unit-select',
+    amountLabel: "Amount:", // If not specified, defaults to 'Amount'
+    unitLabel: "Unit:", // If not specified, defaults to 'Unit'
+    options: [
+      { "null": "Select..." }, // If a null option is not specified, a default null option with the label 'Select...' is included in the options
+      { "label": "untranslated option label 1", "value": "1" },
+      { "label": "untranslated option label 2", "value": "2" }
+    ],
+    hint: "E.g: 5 Kilogram", 
+    legend: 'Enter An Amount',
+    isPageHeading: 'true',
+    amountOptional: 'false', // If not specified, defaults to false if the required validator is not applied, otherwise true
+    unitOptional: 'true', // If not specified, defaults to false if the required validator is not applied, otherwise true
+    validate: ['alphanum']
+  }),
+};
+```
+
+The above example will create a new AmountWithUnitSelect component with the key `'amountWithUnitSelect-field'`.
+It will set the AmountWithUnitSelect component's text input label to `'Amount:'` (instead of the default `'Amount'`) and the select input label to `'Unit:'` (instead of the default `'Unit'`).
+The component's Select input will have the dropdown options `'Select...'` (mapping to the value `'null'`), `'untranslated option label 1'` (mapping to the value `'1'`), and `'untranslated option label 2'` (mapping to the value `'2'`).
+The component's hint text will be set to `'E.G: 5 Kilogram'`, the field title/legend will be set to `'Enter An Amount'`, and the page heading will be the field's title.
+In terms of validation, the text input (amount) will have the `'required'` validator applied, but the select input (unit) will not (a value will not be required to be selected), and the text field will have the `'alphanum'` validator applied.
+
+### Configuration
+
+The following optional configuration options are supported:
+
+- `validate {String|Array}` – Validators to use on the text input field. The `'alphanum'` and `'required'` validators are likely to be used.  
+- `template` – An absolute path to an alternate template.
+- `amountLabel {String}` – A custom label for the text input field (amount). Defaults to `'Amount'` if omitted. This can also be specified and defined in the field translations. 
+- `unitLabel {String}` – A custom label for the select input field (unit). Defaults to `'Unit'` if omitted. This can also be specified and defined in the field translations.
+- `options {Array}` – A list of labels and corresponding values (options) for the select input field to present. Each option has the format `{ "label": "", "value": ""}`. The default/null option is defined with the format `{ "null": "Select" }` (where the text `'Select'` is the label and can be modified). If the null option is not defined, a default null option will be included in the options with the label `'Select...'`. This can also be specified and defined in the field translations.
+- `hint {String}` – Hint text displayed for both fields. This can also be specified and defined in the field translations.
+- `legend {String}` – Legend text displayed for both fields. This can also be specified and defined in the field translations.
+- `isPageHeading {Boolean}` – Sets the legend as the page heading on single-page questions.
+- `amountOptional {Boolean}` – The text input (amount) defaults to `''` (empty string) if omitted. Defaults to `false`. If the `'required'` validator is defined in the `validate` configuration option, then this configuration is ignored (both fields are made mandatory).
+- `unitOptional {Boolean}` – The select input (unit) defaults to `null` if omitted. Defaults to `false`. If the `'required'` validator is defined in the `validate` configuration option, then this configuration is ignored (both fields are made mandatory).
+
+### Validation Error Messages
+
+In Validation.json (within the translations):
+
+```js
+"amountWithUnitSelect": {
+  "default": "Enter the amount in the correct format; for example, 10 Litres",
+  "alphanum": "The amount must not contain any special characters",
+  "required": "Enter an amount and a unit value"
+},
+"amountWithUnitSelect-unit": {
+  "default": "A valid value must be selected as the amount unit",
+  "required": "A unit must be selected for the amount"
+},
+"amountWithUnitSelect-amount": {
+  "alphanum": "The amount must not be an alphanum"
+}
+```
+
+Validation error messages can be defined for a specific child component that errored by adding a JSON object with a key that has the component's name (I.E. `'amountWithUnitSelect'`) followed by a hyphen and the child component's name (I.E. '-amount' or '-unit'). So to define an error message, for the `'required'` validation error, for specifically the unit component, an `'amountWithUnitSelect-unit'` object can be created (like in the example above) with a validator's name and the error message to show for it respectively, set as a key:value pair in the object (E.G. `"required": "A unit must be selected for the amount" within "amountWithUnitSelect-unit"` - like in the example). 
+Validation error messages defined specifically for child components, for a given type of validation error, (such as `'required'` for `'amountWithUnitSelect-unit'`) will take precedence over error messages defined for the same validation error in the parent. So in this case, the `"required": "Enter an amount and a unit value"` validation message defined in the `"amountWithUnitSelect"` JSON object in the above example will not show when the `"amountWithUnitSelect-unit"` `'required'` validation error message is defined. If there was no `'required'` error message defined for, say, the `"amountWithUnitSelect-amount"` object (like in the example above), the `"amountWithUnitSelect"` object's `'required'` error message would show if the `'required'` validation error is triggered on the 'amount' child component (I.E. When an amount value is not provided).
+The `'default'` catch all validation error message can also be defined in a similar manner for the child components to override the parent component's defined `'default'` error message.
+
+So the example above will create a scenario where `'required'` validation errors triggered on the 'unit' field will display the error message `"A unit must be selected for the amount"` (specified in the `"amountWithUnitSelect-unit"` JSON object). Any `'required'` validation errors triggered on the 'amount' field will display the error message `"Enter an amount and a unit value"` (specified in the `"amountWithUnitSelect"` JSON object - as there is no `'required'` error message defined specifically for the 'amount' field (withing `"amountWithUnitSelect-amount"`)).
+
 ## Date Component
 
 A component for handling the rendering and processing of 3-input date fields used in HOF Applications.
@@ -1643,6 +1722,7 @@ currency
 select
 input-text
 input-date
+input-amount-with-unit-select
 input-text-compound
 input-text-code
 input-number

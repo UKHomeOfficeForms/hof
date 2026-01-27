@@ -47,7 +47,7 @@ function validate(fields) {
       fields[key].validate = [fields[key].validate];
     }
 
-    if (fields[key].options) {
+    if (fields[key].options && !fields[key].groupedFieldsWithOptions) {
       fields[key].validate = fields[key].validate || [];
       fields[key].validate.push({
         type: 'equal',
