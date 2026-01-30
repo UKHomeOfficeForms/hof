@@ -6,10 +6,19 @@ import { resolve } from 'path';
 import fs from 'fs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+// import hofDefaults from '../../../config/hof-defaults';
+
+let tempConfig = {};
+try {
+  tempConfig = JSON.parse(
+    fs.readFileSync(resolve(__dirname, './hof-vite-config.json'), 'utf8')
+  );
+}catch (e) {
+  console.warn('Could not load hof-vite-config.json. ' + e.message);
+}
 
 const publicDirectory = resolve(process.cwd(), 'public');
-const config = require('../../../config/builder-defaults.js');
-console.log('Vite config - loading builder defaults from:', config);
+// const config = require('../../../config/builder-defaults.js');
 const entryFile = (() => {
   const src = resolve(process.cwd(), 'assets/js/index.js');
   if (fs.existsSync(src)) return src;
@@ -17,7 +26,7 @@ const entryFile = (() => {
   throw new Error(`vite: entry file not found. Checked: ${src}`);
 })();
 
-
+console.log('5555555555 Vite build -in vite.config.js  file :', tempConfig);
 export default defineConfig({
   plugins: [
     commonjs({
@@ -47,6 +56,20 @@ export default defineConfig({
           originalWarning(...args);
         };
       }
+    },
+    {
+      name: 'delete-hof-vite-config',
+      closeBundle() {
+        const configPath = resolve(__dirname, './hof-vite-config.json');
+        if (fs.existsSync(configPath)) {
+          try {
+            fs.unlinkSync(configPath);
+            console.log('.hof-vite-config.json deleted after build');
+          } catch (err) {
+            console.warn('Failed to delete .hof-vite-config.json:', err);
+          }
+        }
+      }
     }
   ],
   base: '/assets/',
@@ -54,7 +77,7 @@ export default defineConfig({
   build: {
     outDir: publicDirectory,
     emptyOutDir: false,
-    sourcemap: config.js.sourceMaps, // Enable JS/TS sourcemaps in dev
+    sourcemap: tempConfig.js && tempConfig.js.sourceMaps,
     rollupOptions: {
       input: {
         index: entryFile
