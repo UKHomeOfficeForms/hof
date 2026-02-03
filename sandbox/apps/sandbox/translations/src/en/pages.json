@@ -45,6 +45,9 @@
       },
       "whatHappened": {
         "header": "What happened"
+      },
+      "amountWithUnitSelect": {
+        "header": "Entered amount"
       }
     }
   },

@@ -3,6 +3,7 @@
 
 const dateComponent = require('../../../').components.date;
 const staticAppealStages = require('./lib/staticAppealStages');
+const amountWithUnitSelectComponent = require('../../../').components.amountWithUnitSelect;
 
 module.exports = {
   'landing-page-radio': {
@@ -124,5 +125,21 @@ module.exports = {
       value: '',
       label: 'fields.appealStages.options.null'
     }].concat(staticAppealStages.getstaticAppealStages())
-  }
+  },
+  'amountWithUnitSelect' : amountWithUnitSelectComponent('amountWithUnitSelect', {
+    mixin: 'input-amount-with-unit-select',
+    amountLabel: "Amount-",
+    unitLabel: "Unit-",
+    options: [
+      { "null": "Select" },
+      { "label": "non trans option 1", "value": "1" },
+      { "label": "non trans option 2", "value": "2" }
+    ],
+    hint: "E.G: 5 Kilogram",
+    legend: 'Enter An Amount',
+    isPageHeading: 'true',
+    unitOptional: 'false',
+    amountOptional: 'true',
+    validate: ['alphanum']
+  })
 }

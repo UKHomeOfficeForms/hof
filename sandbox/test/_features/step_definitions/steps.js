@@ -67,6 +67,18 @@ Then('I enter a {string} date of birth for a {int} year old', async function (fi
   await this.page.fill(`input[name="${field}DateOfBirth-year"]`, (now.getUTCFullYear() - years).toString());
 }.bind(World));
 
+Then('I enter the Amount {string} and select the Unit {string}', async function (amount, unit) {
+  const field = 'amountWithUnitSelect';
+  await this.page.fill(`input[name="${field}-amount"]`, amount);
+  await this.page.selectOption(`select#${field}-unit`, { label: `${unit}`});
+}.bind(World));
+
+Then('I fill the Amount and Unit field with {string} and {string}', async function (amount, unit) {
+  const field = 'amountWithUnitSelect';
+  await this.page.fill(`input[name="${field}-amount"]`, amount);
+  await this.page.selectOption(`select#${field}-unit`, { label: `${unit}`});
+}.bind(World));
+
 Then('I should be on the {string} page showing {string}', async function (uri, heading) {
   await this.page.waitForSelector('body', { timeout: 15000 });
   expect(new URL(await this.page.url()).pathname).to.eql(`${this.subApp}/${uri}`);

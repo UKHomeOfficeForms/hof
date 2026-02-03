@@ -31,6 +31,10 @@ module.exports = {
     '/dob': {
       fields: ['dateOfBirth'],
       locals: { showSaveAndExit: true },
+      next: '/amount-unit'
+    },
+    '/amount-unit':{ 
+      fields: ['amountWithUnitSelect'], 
       next: '/address'
     },
     '/address': {
