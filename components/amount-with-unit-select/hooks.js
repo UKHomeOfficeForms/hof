@@ -38,7 +38,7 @@ const postProcess = (req, key) => {
  * - Resolves required validators and optional configurations for child components.
  * - Propagates child component field data and values to the request to enable their validation.
  * - Adds a custom 'equal' validator to the unit child component.
- * - Adds a custom 'twoHyphenSeparatedValues' validator to the parent component to validate overall value format.
+ * - Adds a custom 'twoHyphenSeparatedValues' validator to the parent component to validate value format.
  * - Moves excess validators that do not apply to the parent component to the 'amount' child component.
  * @param {Object} req - The form's request object.
  * @param {Object} fields - The component's child field definitions and configurations.
