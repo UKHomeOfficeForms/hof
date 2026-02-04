@@ -86,7 +86,7 @@
     "reqres": "^3.0.1",
     "rimraf": "^3.0.2",
     "sass": "^1.93.2",
-    "serve-static": "^1.16.2",
+    "serve-static": "^1.16.3",
     "uglify-js": "^3.19.3",
     "underscore": "^1.13.7",
     "urijs": "^1.19.11",
