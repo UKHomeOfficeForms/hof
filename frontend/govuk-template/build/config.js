@@ -14,7 +14,7 @@ module.exports = {
   footerTop: '{% block footerTop %}{% endblock %}',
   head: '{% block head %}{% endblock %}',
   headerClass: '{% block headerClass %}{% endblock %}',
-  homepageUrl: '{{$homepageUrl}}https://www.gov.uk{{/homepageUrl}}',
+  homepageUrl: '{{ homepageUrl | default("https://www.gov.uk") }}',
   logoLinkTitle: '{{$logoLinkTitle}}Go to the GOV.UK homepage{{/logoLinkTitle}}',
   insideHeader: '{% block insideHeader %}{% endblock %}',
   pageTitle: '{% block pageTitle %}{% endblock %}',
