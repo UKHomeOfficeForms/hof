@@ -1,7 +1,6 @@
-{{<error}}
-  {{$content}}
-    <h1 class="govuk-heading-l">{{{content.title}}}</h1>
-    <h2 class="govuk-heading-m">{{{content.message}}}</h2>
-    <a href="{{startLink}}" class="govuk-button" role="button">{{#t}}buttons.start-again{{/t}}</a>
-  {{/content}}
-{{/error}}
+{% extends "error.html" %}
+{% block content %}
+  <h1 class="govuk-heading-l">{{ content.title | safe }}</h1>
+  <h2 class="govuk-heading-m">{{ content.message | safe }}</h2>
+  <a href="{{ startLink }}" class="govuk-button" role="button">{% if t %}{{ t('buttons.try-again') }}{% endif %}</a>
+{% endblock %}
