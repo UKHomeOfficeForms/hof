@@ -265,7 +265,6 @@ module.exports = function (options) {
     }
 
     function renderChild() {
-      return function () {
         if (this.child) {
           const templateString = getTemplate(this.child, this.toggle);
           const ctx = Object.assign({
@@ -273,8 +272,6 @@ module.exports = function (options) {
           }, res.locals, this);
           // render with nunjucks environment so {% include %} works against roots
           return nunjucksEnv.renderString(templateString, ctx);
-
-        }
       };
     }
 
@@ -321,7 +318,7 @@ module.exports = function (options) {
 
     function optionGroup(key, opts, pKey = key) {
       opts = opts || {};
-      const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+      const field = Object.assign({}, this.options.fields[key] || options.fields[key] || {});
       const legend = field.legend;
       const detail = field.detail;
       const warningValue = 'fields.' + key + '.warning';
@@ -336,6 +333,63 @@ module.exports = function (options) {
         }
       }
 
+      // map options into a structure suitable for the nunjucks partial that will render them
+      const optsArr = (field.options || []).map((obj) => {
+        let selected = false;
+        let label;
+        let value;
+        let toggle;
+        let child;
+        let optionHint;
+        let useHintText;
+
+        if (typeof obj === 'string') {
+          value = obj;
+          // pKey - optional param that demotes parent key for group components - set to key param val by default
+          label = 'fields.' + pKey + '.options.' + obj + '.label';
+          optionHint = 'fields.' + pKey + '.options.' + obj + '.hint';
+        } else {
+          value = obj.value;
+          label = obj.label || 'fields.' + pKey + '.options.' + obj.value + '.label';
+          toggle = obj.toggle;
+          child = obj.child;
+          useHintText = obj.useHintText;
+          optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
+        }
+
+        if (this.values && this.values[key] !== undefined) {
+          const selectedValue = this.values[key];
+          selected = Array.isArray(selectedValue)
+            ? selectedValue.indexOf(value) > -1
+            : selectedValue === value;
+        }
+
+        // Translate/format label and optionHint using helpers so they are ready for nunjucks partial
+        const renderedLabel = (function () {
+          try { return t.call(this, label) || ''; } catch (e) { return ''; }
+        }).call(this);
+
+        const renderedOptionHint = (function () {
+          if (useHintText) return optionHint;
+          try {
+            return conditionalTranslate.call(this, optionHint) || '';
+          } catch (e) {
+            return '';
+          }
+        }).call(this);
+
+        return {
+          label: renderedLabel,
+          value: value,
+          type: opts.type,
+          selected: selected,
+          radioOption: opts.type === 'radio',
+          toggle: toggle,
+          child: child,
+          optionHint: renderedOptionHint
+        };
+      }, this);
+
       return {
         key: key,
         error: this.errors && this.errors[key],
@@ -347,47 +401,7 @@ module.exports = function (options) {
         warning: t(warningValue),
         detail: detail ? detail : '',
         hint: conditionalTranslate(getTranslationKey(field, key, 'hint')),
-        options: _.map(field.options, function (obj) {
-          let selected = false;
-          let label;
-          let value;
-          let toggle;
-          let child;
-          let optionHint;
-          let useHintText;
-
-          if (typeof obj === 'string') {
-            value = obj;
-            // pKey - optional param that demotes parent key for group components - set to key param val by default
-            label = 'fields.' + pKey + '.options.' + obj + '.label';
-            optionHint = 'fields.' + pKey + '.options.' + obj + '.hint';
-          } else {
-            value = obj.value;
-            label = obj.label || 'fields.' + pKey + '.options.' + obj.value + '.label';
-            toggle = obj.toggle;
-            child = obj.child;
-            useHintText = obj.useHintText;
-            optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
-          }
-
-          if (this.values && this.values[key] !== undefined) {
-            const selectedValue = this.values[key];
-            selected = Array.isArray(selectedValue)
-              ? selectedValue.indexOf(value) > -1
-              : selectedValue === value;
-          }
-
-          return {
-            label: t(label) || '',
-            value: value,
-            type: opts.type,
-            selected: selected,
-            radioOption: opts.type === 'radio',
-            toggle: toggle,
-            child: child,
-            optionHint: useHintText ? optionHint : conditionalTranslate(optionHint) || ''
-          };
-        }, this),
+        options: optsArr,
         className: classNames(field),
         renderChild: renderChild.bind(this)
       };
@@ -568,7 +582,7 @@ module.exports = function (options) {
 
             let autocomplete = field.autocomplete || 'off';
             if (autocomplete === 'off') {
-              autocomplete = { amount: 'off'};
+              autocomplete = { amount: 'off' };
             } else if (typeof autocomplete === 'string') {
               autocomplete = { amount: autocomplete + '-amount' };
             }
@@ -584,19 +598,21 @@ module.exports = function (options) {
             const amountPart = compiled['partials/forms/grouped-inputs-text']
               .render(inputText.call(this,
                 key + '-amount', {
-                  formGroupClassName,
-                  autocomplete: autocomplete.amount,
-                  className: classNameAmount,
-                  amountWithUnitSelect: true }
+                formGroupClassName,
+                autocomplete: autocomplete.amount,
+                className: classNameAmount,
+                amountWithUnitSelect: true
+              }
               ));
 
             const unitPart = compiled['partials/forms/grouped-inputs-select']
               .render(inputText.call(this, key + '-unit',
                 optionGroup.call(this,
                   key + '-unit', {
-                    formGroupClassName,
-                    className: classNameUnit,
-                    amountWithUnitSelect: true },
+                  formGroupClassName,
+                  className: classNameUnit,
+                  amountWithUnitSelect: true
+                },
                   key
                 )));
 
@@ -626,29 +642,51 @@ module.exports = function (options) {
       res.locals[name] = handler;
     });
 
+    function renderFieldImpl(key) {
+      // Accept either:
+      // - a string key
+      // - a field object (with .key and other props)
+      // - undefined (use this as already-populated field)
+      const fields = (this && this.options && this.options.fields) || res.locals.fields || [];
+
+      if (key && typeof key === 'object') {
+        // called with the full field object
+        Object.assign(this, key);
+      } else if (typeof key === 'string' && key.length) {
+        const field = fields.find(f => f.key === key);
+        if (field) {
+          Object.assign(this, field);
+        } else {
+          throw new Error('Could not find field: ' + key);
+        }
+      }
+
+      if (this.disableRender) {
+        return null;
+      }
+
+      if (this.html) {
+        return this.html;
+      }
+
+      const mixin = this.mixin || 'input-text';
+      if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
+        const ctx = Object.assign({}, res.locals);
+        return res.locals[mixin]().call(ctx, this.key || (this && this.key));
+      }
+      throw new Error('Mixin: "' + mixin + '" not found');
+    }
+
     res.locals.renderField = function () {
-      return function (key) {
-        if (key) {
-          const fields = this.fields || res.locals.fields;
-          const field = fields.find(f => f.key === key);
-          if (field) {
-            Object.assign(this, field);
-          } else {
-            throw new Error('Could not find field: ' + key);
-          }
-        }
-        if (this.disableRender) {
-          return null;
-        }
-        if (this.html) {
-          return this.html;
-        }
-        const mixin = this.mixin || 'input-text';
-        if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
-          return res.locals[mixin]().call(Object.assign({}, res.locals), this.key);
-        }
-        throw new Error('Mixin: "' + mixin + '" not found');
-      };
+      if (arguments.length === 0) {
+        // return a callable for block-style usage
+        const self = this;
+        return function (key) {
+          return renderFieldImpl.call(self, key);
+        };
+      }
+      // direct call
+      return renderFieldImpl.call(this, arguments[0]);
     };
 
     next();
