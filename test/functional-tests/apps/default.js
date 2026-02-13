@@ -55,12 +55,12 @@ module.exports = {
   },
   fields: {
     loop: {
-      mixin: 'radio-group',
+      mixin: 'radioGroup',
       options: ['yes', 'no'],
       validate: 'required'
     },
     fork: {
-      mixin: 'radio-group',
+      mixin: 'radioGroup',
       options: ['yes', 'no'],
       validate: 'required'
     }
