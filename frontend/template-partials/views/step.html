@@ -1,13 +1,37 @@
 {% extends "partials/page.html" %}
-  {% block content %}
-    {% if beforeFields %}
-      {{ beforeFields }}
-    {% endif %}
+{% block content %}
+  {% block page_content %}
+    {# beforeFields: either a variable or an overridable block #}
+    {% block beforeFields %}
+      {% if beforeFields is defined %}
+        {{ beforeFields | safe }}
+      {% endif %}
+    {% endblock %}
+
+    {# fields loop: try calling a renderField helper function if present,
+       otherwise fall back to a renderField block that can be overridden #}
     {% if fields %}
-      {% for renderField in renderField %}renderField{% endfor %}
+      {% for field in fields %}
+        {% if renderField is defined %}
+          {{ renderField(field) | safe }}
+        {% else %}
+          {% block renderField %}
+            {# default field rendering (override in child templates) #}
+          {% endblock %}
+        {% endif %}
+      {% endfor %}
     {% endif %}
-    {% if afterFields %}
-      {{ afterFields }}
-    {% endif %}
-    {% if input-submit %}continue {% endif %}
+
+    {# afterFields: variable or block #}
+    {% block afterFields %}
+      {% if afterFields is defined %}
+        {{ afterFields | safe }}
+      {% endif %}
+    {% endblock %}
+
+    {# submit button text: prefer input_submit var, fall back to ctx('input-submit') or literal 'continue' #}
+    {% set submitText = (input_submit if input_submit is defined else (inputSubmit if inputSubmit is defined else (ctx and ctx('input-submit') or 'continue'))) %}
+    <button type="submit" class="govuk-button">{{ submitText }}</button>
   {% endblock %}
+{% endblock %}
+

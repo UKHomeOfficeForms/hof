@@ -1,10 +1,14 @@
-<form action="" method="POST" {{$encoding}}{{/encoding}} autocomplete="off" novalidate="true" spellcheck="false">
-  {{$intro}}
-    {{#intro}}<p>{{intro}}</p>{{/intro}}
-  {{/intro}}
-
-  {{$form}}{{/form}}
-  {{#csrf-token}}
-    <input type="hidden" name="x-csrf-token" value="{{csrf-token}}" />
-  {{/csrf-token}}
+<form action="" method="POST" {% block encoding %}{% endblock %} autocomplete="off" novalidate="true" spellcheck="false">
+  {% block intro %}
+  {% if intro %}<p>{{ intro }}</p>{% endif %}
+  {% endblock %}
+  {% block form %}
+    {% block page_content %}{% endblock %}
+    {% include "partials/session-timeout-warning.html" %}
+  {% endblock %}
+  {# CSRF token: ctx('csrf-token') reads the original key with a hyphen #}
+  {% set csrf_token = ctx('csrf-token') %}
+  {% if csrf_token %}
+    <input type="hidden" name="x-csrf-token" value="{{ csrf_token }}" />
+  {% endif %}
 </form>

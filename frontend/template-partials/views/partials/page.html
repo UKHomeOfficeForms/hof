@@ -1,9 +1,5 @@
 {% extends "layout.html" %}
 
-{% block journeyHeader %}
-  {% if t %}{{ t('journey.header') }}{% endif %}
-{% endblock %}
-
 {% block validationSummary %}
   {% include "partials/validation-summary.html" %}
 {% endblock %}
@@ -12,17 +8,8 @@
   {% include "partials/navigation.html" %}
 {% endblock %}
 
-{% block header %}
-  {{ title | safe }}
-{% endblock %}
-
 {% block content %}
-  {# capture the inner page content for the form partial to render #}
   {% set page_content %}
-    {# place page-specific content here (was {{$page-content}}) #}
-    {% include "partials/session-timeout-warning.html" %}
+    {% include "partials/form.html" %}
   {% endset %}
-
-  {# include the form partial which should render the captured page_content #}
-  {% include "partials/form.html" %}
 {% endblock %}
