@@ -48,7 +48,7 @@ describe('summary behaviour', () => {
 
     req.form.options = {
       fieldsConfig: {
-        hasOtherNames: { mixin: 'radio-group' }
+        hasOtherNames: { mixin: 'radioGroup' }
       },
       sections: {
         'pdf-applicant-details': [
