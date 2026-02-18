@@ -1,4 +1,5 @@
 {% extends "partials/page.html" %}
+
 {% block content %}
   {% block page_content %}
     {# beforeFields: either a variable or an overridable block #}
@@ -29,9 +30,10 @@
       {% endif %}
     {% endblock %}
 
-    {# submit button text: prefer input_submit var, fall back to ctx('input-submit') or literal 'continue' #}
-    {% set submitText = (input_submit if input_submit is defined else (inputSubmit if inputSubmit is defined else (ctx and ctx('input-submit') or 'continue'))) %}
-    <button type="submit" class="govuk-button">{{ submitText }}</button>
+    {% set input_submit = (t and t('input-submit')) %}
+    {% if input_submit %}
+    {{ inputSubmit("continue") }}
+    {% endif %}
   {% endblock %}
 {% endblock %}
 

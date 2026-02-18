@@ -78,10 +78,11 @@ module.exports = function (options) {
 
     // create a nunjucks environment for resolving includes/partials from the
     // project's views roots for this request. noCache in dev to pick up changes.
-    const nunjucksEnv = new nunjucks.Environment(
-      new nunjucks.FileSystemLoader(roots, { noCache: process.env.NODE_ENV !== 'production' }),
-      { autoescape: true }
-    );
+    const nunjucksEnv = (req && req.app && req.app.locals && req.app.locals.nunjucksEnv)
+      || new nunjucks.Environment(
+        new nunjucks.FileSystemLoader(roots, { noCache: process.env.NODE_ENV !== 'production' }),
+        { autoescape: true }
+      );
 
 
     // helper: resolve a template file path by trying express View, configured viewsDirectory and app roots
@@ -163,7 +164,7 @@ module.exports = function (options) {
         return name;
       }
 
-      const viewExt = '.'(options.viewEngine || 'html');
+      const viewExt = '.' + (options.viewEngine || 'html');
       const candidates = [];
       candidates.push(path.resolve(name));
       candidates.push(path.resolve(name + viewExt));
@@ -265,13 +266,13 @@ module.exports = function (options) {
     }
 
     function renderChild() {
-        if (this.child) {
-          const templateString = getTemplate(this.child, this.toggle);
-          const ctx = Object.assign({
-            renderMixin: renderMixin.bind(this)
-          }, res.locals, this);
-          // render with nunjucks environment so {% include %} works against roots
-          return nunjucksEnv.renderString(templateString, ctx);
+      if (this.child) {
+        const templateString = getTemplate(this.child, this.toggle);
+        const ctx = Object.assign({
+          renderMixin: renderMixin.bind(this)
+        }, res.locals, this);
+        // render with nunjucks environment so {% include %} works against roots
+        return nunjucksEnv.renderString(templateString, ctx);
       };
     }
 
@@ -513,20 +514,21 @@ module.exports = function (options) {
           required: true
         }
       },
-      'input-submit': {
-        handler: function () {
-          return function (props) {
+      inputSubmit: {
+        handler: function (props) {
             props = (props || '').split(' ');
             const def = 'next';
             const value = props[0] || def;
             const id = props[1];
-
-            const obj = {
+            const obj = { 
               value: t('buttons.' + value),
-              id: id
+              id: id,
+              text: t('buttons.' + value)
             };
-            return nunjucksEnv.renderString(compiled['partials/forms/input-submit'], obj);
-          };
+            const template = `${compiled['partials/forms/input-submit']}{{ inputSubmit(value, text, id) }}`;
+            return new nunjucks.runtime.SafeString(
+              nunjucksEnv.renderString(template, obj)
+            );
         }
       },
       'input-date': {
@@ -577,7 +579,7 @@ module.exports = function (options) {
       'input-amount-with-unit-select': {
         handler: function () {
           return function (key) {
-            key = (key === '{{key}}' || key === '' || key === undefined) ? hoganRender(key, this) : key;
+            key = (key === '{{key}}' || key === '' || key === undefined) ? nunjucksRender(key, this) : key;
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
 
             let autocomplete = field.autocomplete || 'off';
@@ -595,8 +597,7 @@ module.exports = function (options) {
 
             // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
             // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
-            const amountPart = compiled['partials/forms/grouped-inputs-text']
-              .render(inputText.call(this,
+            const amountPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-text'], inputText.call(this,
                 key + '-amount', {
                 formGroupClassName,
                 autocomplete: autocomplete.amount,
@@ -605,8 +606,7 @@ module.exports = function (options) {
               }
               ));
 
-            const unitPart = compiled['partials/forms/grouped-inputs-select']
-              .render(inputText.call(this, key + '-unit',
+            const unitPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-select'], inputText.call(this, key + '-unit',
                 optionGroup.call(this,
                   key + '-unit', {
                   formGroupClassName,
@@ -621,10 +621,7 @@ module.exports = function (options) {
         }
       }
     };
-
-    // loop through mixins object and attach their handler methods
-    // to res.locals['mixin-name'].
-    _.each(mixins, function (mixin, name) {
+      _.each(mixins, function (mixin, name) {
       const handler = _.isFunction(mixin.handler) ? mixin.handler : function () {
         return function (key) {
           this.options = this.options || {};
@@ -635,11 +632,18 @@ module.exports = function (options) {
             : mixin.options
           );
           const ctx = Object.assign({}, res.locals, rendered);
-          // render the stored template source with nunjucks env
-          return nunjucksEnv.renderString(compiled[mixin.path], ctx);
+          // try to render by template name first so relative imports/includes resolve via loader roots
+          const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.html';
+          const templateName = mixin.path + viewExt;
+          try {
+            return nunjucksEnv.render(templateName, ctx);
+          } catch (err) {
+            // fallback to rendering the compiled string (older behaviour)
+            return nunjucksEnv.renderString(compiled[mixin.path], ctx);
+          }
         };
       };
-      res.locals[name] = handler;
+      res.locals[name] = _.isFunction(mixin.handler) ? handler : handler();
     });
 
     function renderFieldImpl(key) {
@@ -672,7 +676,7 @@ module.exports = function (options) {
       const mixin = this.mixin || 'input-text';
       if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
         const ctx = Object.assign({}, res.locals);
-        return res.locals[mixin]().call(ctx, this.key || (this && this.key));
+        return res.locals[mixin].call(ctx, this.key || (this && this.key));
       }
       throw new Error('Mixin: "' + mixin + '" not found');
     }
