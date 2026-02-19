@@ -83,14 +83,14 @@ describe('ga-tag', () => {
         cookieSettings.initialiseCookieBanner();
         document.getElementById('accept-cookies-button').click();
         expect(document.getElementById('cookie-banner-submitted-accepted').style.display).toEqual('block');
-        expect(focusMock).toBeCalledTimes(1);
+        expect(focusMock).toHaveBeenCalledTimes(1);
       });
 
       test('it should show and focus reject cookie submitted message on either button click', () => {
         cookieSettings.initialiseCookieBanner();
         document.getElementById('reject-cookies-button').click();
         expect(document.getElementById('cookie-banner-submitted-rejected').style.display).toEqual('block');
-        expect(focusMock).toBeCalledTimes(1);
+        expect(focusMock).toHaveBeenCalledTimes(1);
       });
 
       test('it should hide cookie banner info and actions on either button click', () => {
@@ -222,7 +222,7 @@ describe('ga-tag', () => {
         cookieSettings.initialiseCookiePage();
         document.getElementById('save-cookie-settings').click();
         expect(document.getElementById('cookie-notification').style.display).toEqual('block');
-        expect(focusMock).toBeCalledTimes(1);
+        expect(focusMock).toHaveBeenCalledTimes(1);
       });
 
       test('it should hide the cookie banner on submit', () => {
