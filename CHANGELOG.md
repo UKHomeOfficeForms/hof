@@ -1,3 +1,12 @@
+## 2026-02-23, Version 22.14.1 (Stable), @vivekkumar-ho
+
+### Security
+
+- Upgraded Jest to address a security issue: uncontrolled resource consumption in `braces`.
+- Previous dependency chain (via transitive deps) could pin `braces` to `2.3.2` (from `jest@26.6.3` → `micromatch@3.1.10` → `braces@^2.3.1`), while the earliest fixed `braces` version is `3.0.3`.
+- Jest upgrade updates the transitive dependency chain so `braces` can be resolved to a fixed version (`>= 3.0.3`).
+- Updates patch and minor dependency versions
+
 ## 2026-01-27, v22.14.0 (Stable), @rayhannurrohmanho
 
 ### Added
