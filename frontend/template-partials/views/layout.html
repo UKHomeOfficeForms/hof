@@ -1,13 +1,19 @@
 {% extends "govuk/template.njk" %}
 {% set govukRebrand = true %}
 {% set govukServiceName = t(serviceName or "journey.serviceName") %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {% from "govuk/components/footer/macro.njk" import govukFooter %}
 {% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
+{% block headIcons %}
+  <link rel="manifest" href="assets/rebrand/manifest.json">
+{% endblock %}
+
 {% block head %}
-    {% include "partials/head.html" %}
+  {{ super() }}
+  {% include "partials/head.html" %}
 {% endblock %}
 
 {% block pageTitle %}
@@ -34,7 +40,8 @@
 {% block skipLink %}
     {{ govukSkipLink({
         href: '#main-content',
-        text: "Skip to main content"
+        text: "Skip to main content",
+        classes: "skip-to-main"
     }) }}
 {% endblock %}
 
@@ -49,30 +56,38 @@
             rebrand: true
         }) }}
     {% endblock %}
+    {% block headerEnd %}
+      {% if feedbackUrl %}
+        {{ govukPhaseBanner({
+          tag: {
+            text: t('journey.phase')
+          },
+          html: 'This is a new service – your <a class="govuk-link" href="{{ feedbackUrl }}{% if not feedbackUrl %}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{% endif %}">feedback</a> will help us to improve it.',
+          classes: "govuk-width-container"
+        }) }}
+      {% endif %} 
+  {% endblock %}
 {% endblock %}
 
 {% block beforeContent %}
-  {% if feedbackUrl %}
-    {{ govukPhaseBanner({
-      tag: {
-        text: t('journey.phase')
-      },
-      html: 'This is a new service – your <a class="govuk-link" href="{{ feedbackUrl }}{% if not feedbackUrl %}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{% endif %}">feedback</a> will help us to improve it.'
-    }) }}
-  {% endif %} 
-  {% include "partials/back.html" %}
+  {% block containerStart %}
+    {% include "partials/back.html" %}
+  {% endblock %}
 {% endblock %}
 
-{% block containerStart %}
-  {% if feedbackUrl %}
-    {{ govukPhaseBanner({
-      tag: {
-        text: t('journey.phase')
-      },
-      html: 'This is a new service – your <a class="govuk-link" href="{{ feedbackUrl }}{% if not feedbackUrl %}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{% endif %}">feedback</a> will help us to improve it.'
-    }) }}
-  {% endif %} 
-  {% include "partials/back.html" %}
+{% block content %}
+  <div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% if caption %}<span class="govuk-caption-l">{{ caption }}</span>{% endif %}
+        {% if title %}<h1 class="govuk-heading-xl">{{ title }}</h1>{% endif %}
+        {% if subheading %}<p class="govuk-body-m">{{ subheading }}</p>{% endif %}
+        {% block pageForm %}
+          {% block contentInner %}{% endblock %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block footer %}
@@ -100,7 +115,17 @@
 {% endblock %}
 
 {% block bodyEnd %}
-    <script nonce="{{ cspNonce }}" type="module">if (typeof window.GOVUK === 'undefined') document.body.className = document.body.className.replace('js-enabled', '');</script>
+  {{ super() }}
+  {% if assetPath %}
+    <script nonce="{{ cspNonce }}" type="text/javascript"src="{{ assetPath }}/js/bundle.js"></script>
+  {% endif %}
+  <script nonce="{{ cspNonce }}" type="module">
+    (function () {
+      if (typeof window !== 'undefined' && window.GOVUK && typeof window.GOVUK.initAll === 'function') {
+        window.GOVUK.initAll();
+      }
+    }());
+  </script>
     {% block scripts %}{% endblock %}
     {% include "partials/gatag.html" %}
 {% endblock %}
