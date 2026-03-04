@@ -1,4 +1,7 @@
-## 2025-03-03, Version 23.0.0 (Stable), @PaolaDMadd-Pro @Rhodine-orleans-lindsay
+## 2025-03-04, Version 23.0.1 (Stable), @PaolaDMadd-Pro @Rhodine-orleans-lindsay
+### ⚠️ Versioning Notice
+v23.0.1 is published as a patch due to a prior publishing issue.
+This is the official major release that replaces a previously published beta-tagged v23.0.0, and it should be treated as such in terms of features and breaking changes.
 ### Changed
 - Replaced Browserify with Vite
   - removed browserify dependencies including in tests
