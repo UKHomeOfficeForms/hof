@@ -1,11 +1,11 @@
-/* eslint-disable max-len, no-var */
-var progressiveReveal = require('../../../../frontend/toolkit/assets/javascript/progressive-reveal');
+/* eslint-disable max-len */
+const progressiveReveal = require('../../../../frontend/toolkit/assets/javascript/progressive-reveal');
 
-var $ = require('jquery');
+const $ = require('jquery');
 
 describe('Progressive Reveal', function () {
   it('exports a function', function () {
-    progressiveReveal.should.be.a('function');
+    expect(typeof progressiveReveal).toBe('function');
   });
 
   describe('checkbox', function () {
@@ -23,13 +23,13 @@ describe('Progressive Reveal', function () {
 
       it('show toggle content when checked', function () {
         $('#check').click();
-        $('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.not.be.ok;
+        expect($('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeFalsy();
       });
 
       it('hide toggle content when unchecked', function () {
         $('#check').click();
         $('#check').click();
-        $('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.be.ok;
+        expect($('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeTruthy();
       });
     });
 
@@ -43,12 +43,12 @@ describe('Progressive Reveal', function () {
 
       it('reveals text input', function () {
         $('#check').click();
-        ($('#textbox-panel').attr('aria-hidden') === 'false').should.be.ok;
+        expect(($('#textbox-panel').attr('aria-hidden') === 'false')).toBeTruthy();
       });
 
       it('focuses on text input', function () {
         $('#check').click();
-        (document.activeElement.id === 'textbox').should.be.ok;
+        expect((document.activeElement.id === 'textbox')).toBeTruthy;
       });
     });
 
@@ -62,12 +62,12 @@ describe('Progressive Reveal', function () {
 
       it('reveals text input', function () {
         $('#check').click();
-        ($('#textbox-panel').attr('aria-hidden') === 'false').should.be.ok;
+        expect(($('#textbox-panel').attr('aria-hidden') === 'false')).toBeTruthy();
       });
 
       it('focuses on text input', function () {
         $('#check').click();
-        (document.activeElement.id === 'textbox').should.be.ok;
+        expect((document.activeElement.id === 'textbox')).toBeTruthy();
       });
     });
 
@@ -80,17 +80,17 @@ describe('Progressive Reveal', function () {
       });
 
       it('should have added the govuk-checkboxes__conditional--hidden class', function () {
-        $('#check-toggle-panel').hasClass('govuk-checkboxes__conditional--hidden').should.be.ok;
+        expect($('#check-toggle-panel').hasClass('govuk-checkboxes__conditional--hidden')).toBeTruthy();
       });
 
       it('should show #check-toggle-panel if present', function () {
         $('#check').click();
-        $('#check-toggle-panel').hasClass('govuk-checkboxes__conditional--hidden').should.not.be.ok;
+        expect($('#check-toggle-panel').hasClass('govuk-checkboxes__conditional--hidden')).toBeFalsy();
       });
 
       it('should not show #show-toggle', function () {
         $('#check').click();
-        $('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.be.ok;
+        expect($('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeTruthy();
       });
     });
 
@@ -101,7 +101,7 @@ describe('Progressive Reveal', function () {
       });
 
       it('show toggle content when checkbox is pre-selected', function () {
-        $('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.not.be.ok;
+        expect($('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeFalsy();
       });
     });
 
@@ -121,14 +121,14 @@ describe('Progressive Reveal', function () {
 
       it('only show toggle content for the particular checkbox', function () {
         $('#check').click();
-        $('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.not.be.ok;
-        $('#check-another-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.be.ok;
+        expect($('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeFalsy();
+        expect($('#check-another-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeTruthy();
       });
 
       it('do nothing when a checkbox is checked that doesn\'t have toggle content', function () {
         $('#check-other').click();
-        $('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.be.ok;
-        $('#check-another-toggle').hasClass('govuk-checkboxes__conditional--hidden').should.be.ok;
+        expect($('#check-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeTruthy();
+        expect($('#check-another-toggle').hasClass('govuk-checkboxes__conditional--hidden')).toBeTruthy();
       });
     });
   });
@@ -147,7 +147,7 @@ describe('Progressive Reveal', function () {
       });
 
       it('shows toggle content', function () {
-        $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
+        expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
       });
     });
 
@@ -159,9 +159,9 @@ describe('Progressive Reveal', function () {
 
       it('make no change', function () {
         $('#radio1').click();
-        $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
+        expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
         $('#radio1').click();
-        $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
+        expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
       });
     });
 
@@ -180,15 +180,15 @@ describe('Progressive Reveal', function () {
 
         it('show content when checked', function () {
           $('#radio1').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
         });
 
         it('show new content and hide old content if another radio is checked', function () {
           $('#radio1').click();
           $('#radio2').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
         });
       });
 
@@ -206,23 +206,23 @@ describe('Progressive Reveal', function () {
 
         it('show nothing if no associated toggle content', function () {
           $('#radio3').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
         });
 
         it('hide content if another radio is checked', function () {
           $('#radio1').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
           $('#radio3').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
         });
 
         it('shouldn\'t interfere with other radio groups', function () {
           $('#radio1').click();
           $('#radio4').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
-          $('#radio4-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
+          expect($('#radio4-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
         });
       });
 
@@ -235,33 +235,33 @@ describe('Progressive Reveal', function () {
 
         it('show content when checked', function () {
           $('#radio1').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
         });
 
         it('show new content and hide old content if another radio is checked', function () {
           $('#radio1').click();
           $('#radio2').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
         });
 
         it('show content for all radios referencing that id', function () {
           $('#radio1').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
 
           $('#radio2').click();
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
 
           $('#radio3').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
 
           $('#radio1').click();
-          $('#radio1-toggle').hasClass('govuk-radios__conditional--hidden').should.not.be.ok;
-          $('#radio2-toggle').hasClass('govuk-radios__conditional--hidden').should.be.ok;
+          expect($('#radio1-toggle').hasClass('govuk-radios__conditional--hidden')).toBeFalsy();
+          expect($('#radio2-toggle').hasClass('govuk-radios__conditional--hidden')).toBeTruthy();
         });
       });
     });

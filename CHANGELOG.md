@@ -1,3 +1,17 @@
+## 2025-03-04, Version 23.0.1 (Stable), @PaolaDMadd-Pro @Rhodine-orleans-lindsay
+### ⚠️ Versioning Notice
+v23.0.1 is published as a patch due to a prior publishing issue.
+This is the official major release that replaces a previously published beta-tagged v23.0.0, and it should be treated as such in terms of features and breaking changes.
+### Changed
+- Replaced Browserify with Vite
+  - removed browserify dependencies including in tests
+  - added vite configuration and related tests
+- Updated readme.md
+- Potential **breaking changes**:
+  - Node version required for Vite is `20.19.0 || >=22.12.0`
+  - Updated engine requirements to use node to `>=20.19.0`
+  - Vite uses Rollup in production and requires optional rollup dependencies to be loaded. Setting `--ignore-optional flag`  in Dockerfiles will result in "Module not found" errors in CI/CD or Docker.
+
 ## 2026-02-23, Version 22.14.1 (Stable), @vivekkumar-ho
 
 ### Security
