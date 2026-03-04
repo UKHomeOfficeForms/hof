@@ -50,9 +50,9 @@
       gtag('js', new Date());
 
       {% if gaAllowDebug %}
-        gtag('config', '{{ga4TagId}}', { 'debug_mode': true } );
+        gtag('config', '{{ ga4TagId }}', { 'debug_mode': true } );
       {% else %}
-        gtag('config', '{{ga4TagId}}');
+        gtag('config', '{{ ga4TagId }}');
       {% endif %}
     }
   </script>
