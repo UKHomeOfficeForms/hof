@@ -1,7 +1,7 @@
 'use strict';
 
 const EmailService = require('./email-service');
-const Hogan = require('hogan.js');
+const nunjucks = require('nunjucks');
 const fs = require('fs');
 const debug = require('debug')('hof:behaviour:emailer');
 
@@ -35,7 +35,7 @@ module.exports = config => {
 
         debug('Building email settings');
 
-        const settings = { body: Hogan.compile(template).render(data) };
+        const settings = { body: nunjucks.renderString(template, data) };
 
         if (typeof config.recipient === 'function') {
           settings.recipient = config.recipient(req.sessionModel.toJSON());

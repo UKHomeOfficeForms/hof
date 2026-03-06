@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const Hogan = require('hogan.js');
+const nunjucks = require('nunjucks');
 const debug = require('debug')('hof:emailer');
 
 const Emailer = require('./emailer');
@@ -43,7 +43,7 @@ module.exports = class EmailService {
         if (err) {
           reject(err);
         } else {
-          resolve(Hogan.compile(content.toString('utf8')));
+          resolve(nunjucks.compile(content.toString('utf8')));
         }
       });
     });

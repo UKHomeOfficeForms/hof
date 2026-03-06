@@ -1,7 +1,7 @@
 'use strict';
 
 const Notify = require('./notify');
-const Hogan = require('hogan.js');
+const nunjucks = require('nunjucks');
 const fs = require('fs');
 
 module.exports = config => {
@@ -25,7 +25,7 @@ module.exports = config => {
         })
         .then(template => {
           const data = config.parse(req.sessionModel.toJSON(), req.translate);
-          return Hogan.compile(template).render(data);
+          return nunjucks.renderString(template, data);
         })
         .then(body => {
           const settings = { body };
