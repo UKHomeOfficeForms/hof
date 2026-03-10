@@ -3,187 +3,182 @@
 
 const url = require('url');
 const Inputs = require('./inputs');
-const Promise = require('bluebird');
 
 const debug = require('debug')('hof:util:autofill');
 
 const MAX_LOOPS = 3;
 
-module.exports = browser => (target, input, opts) => {
+module.exports = browser => async (target, input, opts) => {
   const options = opts || {};
   options.maxLoops = options.maxLoops || MAX_LOOPS;
-
   const getValue = Inputs(input);
-
   let last;
   let count = 0;
 
-  function completeTextField(element, name) {
+  async function completeTextField(element, name) {
     const value = getValue(name, 'text');
     debug(`Filling field: ${name} with value: ${value}`);
-    return browser
-      .elementIdClear(element)
-      .elementIdValue(element, value)
-      .catch(() => {
-        // any error here is *probably* because the field is hidden
-        // ignore and hope for the best
-      });
+    try {
+      await element.clearValue();
+      await element.setValue(value);
+    } catch (e) {
+      // any error here is *probably* because the field is hidden
+      // ignore and hope for the best
+    }
   }
 
-  function completeFileField(element, name) {
+  async function completeFileField(element, name) {
     const value = getValue(name, 'file');
     if (value) {
       debug(`Uploading file: ${value}`);
-      return browser.uploadFile(value)
-        .then(response => {
-          debug(`Uploaded file: ${value} - remote path ${response.value}`);
-          return browser
-            .addValue(`input[name="${name}"]`, response.value);
-        });
+      const remotePath = await browser.uploadFile(value);
+      debug(`Uploaded file: ${value} - remote path ${remotePath}`);
+      await browser.addValue(`input[name="${name}"]`, remotePath);
+    } else {
+      debug(`No file specified for input ${name} - ignoring`);
     }
-    debug(`No file specified for input ${name} - ignoring`);
   }
 
-  function completeRadio(element, name) {
+  async function completeRadio(element, name) {
     const value = getValue(name, 'radio');
     if (!value) {
-      return browser.elements(`input[type="radio"][name="${name}"]`)
-        .then(radios => {
-          debug(`Checking random radio: ${name}`);
-          const index = 1 + Math.floor(Math.random() * (radios.value.length - 1));
-          return browser.elementIdClick(radios.value[index].ELEMENT);
-        });
+      const radios = await browser.$$(`input[type="radio"][name="${name}"]`);
+      debug(`Checking random radio: ${name}`);
+      if (radios.length > 1) {
+        const index = 1 + Math.floor(Math.random() * (radios.length - 1));
+        await radios[index].click();
+      }
+    } else {
+      const val = await element.getAttribute('value');
+      if (val === value) {
+        debug(`Checking radio: ${name} with value: ${val}`);
+        await element.click();
+      }
     }
-    return browser.elementIdAttribute(element, 'value')
-      .then(val => {
-        if (val.value === value) {
-          debug(`Checking radio: ${name} with value: ${val.value}`);
-          browser.elementIdClick(element);
-        }
-      });
   }
 
-  function completeCheckbox(element, name) {
+  async function completeCheckbox(element, name) {
     const value = getValue(name, 'checkbox');
-    return browser.elementIdAttribute(element, 'value')
-      .then(val => browser.elementIdAttribute(element, 'checked')
-        .then(checked => {
-          if (value === null) {
-            if (!checked.value) {
-              debug(`Leaving checkbox: ${name} blank`);
-              return;
-            }
-            debug(`Unchecking checkbox: ${name}`);
-            return browser.elementIdClick(element);
-          }
-          if (!value && !checked.value) {
-            debug(`Checking checkbox: ${name} with value: ${val.value}`);
-            return browser.elementIdClick(element);
-          } else if (value && value.indexOf(val.value) > -1 && !checked.value) {
-            debug(`Checking checkbox: ${name} with value: ${val.value}`);
-            return browser.elementIdClick(element);
-          } else if (value && value.indexOf(val.value) === -1 && checked.value) {
-            debug(`Unchecking checkbox: ${name} with value: ${val.value}`);
-            return browser.elementIdClick(element);
-          }
-          debug(`Ignoring checkbox: ${name} with value: ${val.value} - looking for ${value}`);
-        }));
+    const val = await element.getAttribute('value');
+    const checked = await element.isSelected();
+    if (value === null) {
+      if (!checked) {
+        debug(`Leaving checkbox: ${name} blank`);
+        return;
+      }
+      debug(`Unchecking checkbox: ${name}`);
+      await element.click();
+    } else if (!value && !checked) {
+      debug(`Checking checkbox: ${name} with value: ${val}`);
+      await element.click();
+    } else if (value && value.indexOf(val) > -1 && !checked) {
+      debug(`Checking checkbox: ${name} with value: ${val}`);
+      await element.click();
+    } else if (value && value.indexOf(val) === -1 && checked) {
+      debug(`Unchecking checkbox: ${name} with value: ${val}`);
+      await element.click();
+    } else {
+      debug(`Ignoring checkbox: ${name} with value: ${val} - looking for ${value}`);
+    }
   }
 
-  function completeSelectElement(element, name) {
+  async function completeSelectElement(element, name) {
     const value = getValue(name, 'select');
     if (!value) {
-      return browser.elementIdElements(element, 'option')
-        .then(o => {
-          const index = 1 + Math.floor(Math.random() * (o.value.length - 1));
-          debug(`Selecting option: ${index} from select box: ${name}`);
-          return browser.selectByIndex(`select[name="${name}"]`, index);
-        });
+      const selectOptions = await element.$$('option');
+      if (selectOptions.length > 1) {
+        const index = 1 + Math.floor(Math.random() * (selectOptions.length - 1));
+        debug(`Selecting option: ${index} from select box: ${name}`);
+        await element.selectByIndex(index);
+      }
+    } else {
+      debug(`Selecting options: ${value} from select box: ${name}`);
+      await element.selectByAttribute('value', value);
     }
-    debug(`Selecting options: ${value} from select box: ${name}`);
-    return browser.selectByValue(`select[name="${name}"]`, value);
   }
 
-  function completeStep(path) {
-    return browser
-      .elements('input')
-      .then(fields => {
-        debug(`Found ${fields.value.length} <input> elements`);
-        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'type')
-          .then(type => browser.elementIdAttribute(field.ELEMENT, 'name')
-            .then(name => {
-              if (type.value === 'radio') {
-                return completeRadio(field.ELEMENT, name.value);
-              } else if (type.value === 'checkbox') {
-                return completeCheckbox(field.ELEMENT, name.value);
-              } else if (type.value === 'file') {
-                return completeFileField(field.ELEMENT, name.value);
-              } else if (type.value === 'text') {
-                return completeTextField(field.ELEMENT, name.value);
-              }
-              debug(`Ignoring field of type ${type.value}`);
-            })), {concurrency: 1});
-      })
-      .elements('select')
-      .then(fields => {
-        debug(`Found ${fields.value.length} <select> elements`);
-        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'name')
-          .then(name => completeSelectElement(field.ELEMENT, name.value)));
-      })
-      .elements('textarea')
-      .then(fields => {
-        debug(`Found ${fields.value.length} <textarea> elements`);
-        return Promise.map(fields.value, field => browser.elementIdAttribute(field.ELEMENT, 'name')
-          .then(name => completeTextField(field.ELEMENT, name.value)));
-      })
-      .then(() => {
-        if (options.screenshots) {
-          const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.pre-submit.png');
-          return browser.saveScreenshot(screenshot);
-        }
-      })
-      .then(() => {
-        debug('Submitting form');
-        return browser.$('input[type="submit"]').click();
-      })
-      .then(() => browser.getUrl()
-        .then(p => {
-          const u = url.parse(p);
-          debug(`New page is: ${u.path}`);
-          if (u.path !== path) {
-            debug(`Checking current path ${u.path} against last path ${last}`);
-            if (last === u.path) {
-              count++;
-              debug(`Stuck on path ${u.path} for ${count} iterations`);
-              if (count === options.maxLoops) {
-                if (options.screenshots) {
-                  const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.debug.png');
-                  return browser.saveScreenshot(screenshot)
-                    .then(() => {
-                      throw new Error(`Progress stuck at ${u.path} - screenshot saved to ${screenshot}`);
-                    });
-                }
-                throw new Error(`Progress stuck at ${u.path}`);
-              }
-            } else {
-              count = 0;
-            }
-            last = u.path;
-            return completeStep(path);
+  async function completeStep(path) {
+    // Fill inputs
+    const inputs = await browser.$$('input');
+    debug(`Found ${inputs.length} <input> elements`);
+    for (const element of inputs) {
+      const type = await element.getAttribute('type');
+      const name = await element.getAttribute('name');
+      if (type === 'radio') {
+        await completeRadio(element, name);
+      } else if (type === 'checkbox') {
+        await completeCheckbox(element, name);
+      } else if (type === 'file') {
+        await completeFileField(element, name);
+      } else if (type === 'text') {
+        await completeTextField(element, name);
+      } else {
+        debug(`Ignoring field of type ${type}`);
+      }
+    }
+
+    // Fill selects
+    const selects = await browser.$$('select');
+    debug(`Found ${selects.length} <select> elements`);
+    for (const element of selects) {
+      const name = await element.getAttribute('name');
+      await completeSelectElement(element, name);
+    }
+
+    // Fill textareas
+    const textareas = await browser.$$('textarea');
+    debug(`Found ${textareas.length} <textarea> elements`);
+    for (const element of textareas) {
+      const name = await element.getAttribute('name');
+      await completeTextField(element, name);
+    }
+
+    if (options.screenshots) {
+      const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.pre-submit.png');
+      await browser.saveScreenshot(screenshot);
+    }
+
+    debug('Submitting form');
+    const submitBtn = await browser.$('input[type="submit"]');
+    await submitBtn.click();
+
+    const p = await browser.getUrl();
+    const u = url.parse(p);
+    debug(`New page is: ${u.path}`);
+    if (u.path !== path) {
+      debug(`Checking current path ${u.path} against last path ${last}`);
+      if (last === u.path) {
+        count++;
+        debug(`Stuck on path ${u.path} for ${count} iterations`);
+        if (count === options.maxLoops) {
+          if (options.screenshots) {
+            const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.debug.png');
+            await browser.saveScreenshot(screenshot);
+            throw new Error(`Progress stuck at ${u.path} - screenshot saved to ${screenshot}`);
           }
-          debug(`Arrived at ${path}. Done.`);
-        }))
-      .catch(e => browser.getText('#content')
-        .then(text => {
-          debug('PAGE CONTENT >>>>>>');
-          debug(text);
-          debug('END PAGE CONTENT >>>>>>');
-        })
-        .catch(() => null)
-        .then(() => {
-          throw e;
-        }));
+          throw new Error(`Progress stuck at ${u.path}`);
+        }
+      } else {
+        count = 0;
+      }
+      last = u.path;
+      return completeStep(path);
+    }
+    debug(`Arrived at ${path}. Done.`);
   }
 
-  return completeStep(target);
+  try {
+    await completeStep(target);
+  } catch (e) {
+    try {
+      const content = await browser.$('#content');
+      const text = await content.getText();
+      debug('PAGE CONTENT >>>>>>');
+      debug(text);
+      debug('END PAGE CONTENT >>>>>>');
+    } catch (err) {
+      // ignore error
+    }
+    throw e;
+  }
 };

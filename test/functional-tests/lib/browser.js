@@ -1,16 +1,30 @@
 'use strict';
 
-const webdriverio = require('webdriverio');
-const options = {
-  deprecationWarnings: false,
-  desiredCapabilities: {
+const { remote } = require('webdriverio');
+const autofill = require('../../../utilities/autofill');
+
+const defaultOptions = {
+  logLevel: 'error',
+  capabilities: {
     browserName: 'chrome'
   }
 };
 
-const client = webdriverio
-  .remote(options);
+module.exports = async function createBrowser(options = {}) {
+  const client = await remote({ ...defaultOptions, ...options });
 
-client.addCommand('goto', require('../../../utilities').autofill(client));
+  // Custom command used throughout the functional tests to autofill journeys
+  client.addCommand('goto', async function (targetUrl, input, customVar) {
+    return autofill(this)(targetUrl, input, customVar);
+  });
 
-module.exports = () => client.init();
+  // Provide a browser-level submitForm helper for tests that
+  // clicks the submit button within the given form selector
+  client.addCommand('submitForm', async function (selector) {
+    const form = await this.$(selector);
+    const submit = await form.$('input[type="submit"], button[type="submit"]');
+    await submit.click();
+  });
+
+  return client;
+};
