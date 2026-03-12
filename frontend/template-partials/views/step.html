@@ -1,39 +1,30 @@
 {% extends "partials/page.html" %}
 
-{% block content %}
-  {% block page_content %}
-    {# beforeFields: either a variable or an overridable block #}
-    {% block beforeFields %}
-      {% if beforeFields is defined %}
-        {{ beforeFields | safe }}
-      {% endif %}
-    {% endblock %}
-
-    {# fields loop: try calling a renderField helper function if present,
-       otherwise fall back to a renderField block that can be overridden #}
-    {% if fields %}
-      {% for field in fields %}
-        {% if renderField is defined %}
-          {{ renderField(field) | safe }}
-        {% else %}
-          {% block renderField %}
-            {# default field rendering (override in child templates) #}
-          {% endblock %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-
-    {# afterFields: variable or block #}
-    {% block afterFields %}
-      {% if afterFields is defined %}
-        {{ afterFields | safe }}
-      {% endif %}
-    {% endblock %}
-
-    {% set input_submit = (t and t('input-submit')) %}
-    {% if input_submit %}
-    {{ inputSubmit("continue") }}
+{% block page_content %}
+  {% block beforeFields %}
+    {% if beforeFields is defined %}
+      {{ beforeFields | safe }}
     {% endif %}
   {% endblock %}
+
+  {% if fields %}
+    {% for field in fields %}
+      {% if renderField is defined %}
+        {{ renderField(field) | safe }}
+      {% else %}
+        {% block renderField %}
+          {# default field rendering (override in child templates) #}
+        {% endblock %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% block afterFields %}
+    {% if afterFields is defined %}
+      {{ afterFields | safe }}
+    {% endif %}
+  {% endblock %}
+  
+  {{ inputSubmit("continue") }}
 {% endblock %}
 

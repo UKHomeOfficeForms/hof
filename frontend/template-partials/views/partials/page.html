@@ -1,4 +1,5 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} 
+{% from "partials/form.html" import form %}
 
 {% block validationSummary %}
   {% include "partials/validation-summary.html" %}
@@ -9,7 +10,8 @@
 {% endblock %}
 
 {% block content %}
-  {% set page_content %}
-    {% include "partials/form.html" %}
-  {% endset %}
+  {% call form(csrf_token) %}
+    {% block page_content %}{% endblock %}
+  {% endcall %}
+  {% include "partials/session-timeout-warning.html" %}
 {% endblock %}
