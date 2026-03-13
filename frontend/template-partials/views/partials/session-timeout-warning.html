@@ -10,28 +10,28 @@ data-url-redirect="/session-timeout" class="modal-dialog dialog" role="dialog"
   <div class="modal-dialog__inner">
   {% if showSaveAndExit %}
     <h2 id="dialog-title" class="govuk-heading-l">
-      {% if dialogTitle %}{% if t %}{{ t('pages.session-timeout-warning.dialog-title') }}{% endif %}{% else %}You will be signed out soon{% endif %}
+      {% if dialogTitle %}{{ t('pages.session-timeout-warning.dialog-title') }}{% else %}You will be signed out soon{% endif %}
     </h2>
     <div class="govuk-body">
       <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
       <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
       <p class="dialog-text-prefix visually-hidden">To protect your information, you will be signed out in </p>
-      <p class="dialog-text visually-hidden">{% if dialogText %}{% if t %}{{ t('pages.session-timeout-warning.dialog-text') }}{% endif %}{% else %}Any answers you have saved will not be affected, but your progress on this page will not be saved.{% endif %}</p>
+      <p class="dialog-text visually-hidden">{% if dialogText %}{{ t('pages.session-timeout-warning.dialog-text') }}{% else %}Any answers you have saved will not be affected, but your progress on this page will not be saved.{% endif %}</p>
     </div>
-      <button class="govuk-button dialog-button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{% if timeoutContinueButton %}{% if t %}{{ t('pages.session-timeout-warning.timeout-continue-button') }}{% endif %}{% else %}Stay signed in{% endif %}</button>
-      <a href="{{baseUrl}}{{saveAndExitStep}}" class="govuk-link dialog-exit-link" role="button">{% if dialogExitLink %}{% if t %}{{ t('pages.session-timeout-warning.dialog-exit-link') }}{% endif %}{% else %}Sign out{% endif %}</a>
+      <button class="govuk-button dialog-button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{% if timeoutContinueButton %}{{ t('pages.session-timeout-warning.timeout-continue-button') }}{% else %}Stay signed in{% endif %}</button>
+      <a href="{{baseUrl}}{{saveAndExitStep}}" class="govuk-link dialog-exit-link" role="button">{% if dialogExitLink %}{{ t('pages.session-timeout-warning.dialog-exit-link') }}{% else %}Sign out{% endif %}</a>
   {% else %}
     <h2 id="dialog-title" class="govuk-heading-l">
-      {% if dialogTitle %}{% if t %}{{ t('pages.session-timeout-warning.dialog-title') }}{% endif %}{% else %}Your page will time out soon{% endif %}
+      {% if dialogTitle %}{{ t('pages.session-timeout-warning.dialog-title') }}{% else %}Your page will time out soon{% endif %}
     </h2>
     <div class="govuk-body">
       <div id="timer" class="timer" aria-hidden="true" aria-relevant="additions"></div>
       <div id="at-timer" class="at-timer govuk-visually-hidden" role="status"></div>
       <p class="dialog-text-prefix visually-hidden">To protect your information, this page will time out in </p>
-      <p class="dialog-text visually-hidden">{% if dialogText %}{% if t %}{{ t('pages.session-timeout-warning.dialog-text') }}{% endif %}{% else %}If that happens, your progress will not be saved.{% endif %}</p>
+      <p class="dialog-text visually-hidden">{% if dialogText %}{{ t('pages.session-timeout-warning.dialog-text') }}{% else %}If that happens, your progress will not be saved.{% endif %}</p>
     </div>
-      <button class="govuk-button dialog-button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{% if timeoutContinueButton %}{% if t %}{{ t('pages.session-timeout-warning.timeout-continue-button') }}{% endif %}{% else %}Stay on this page{% endif %}</button>
-      <a href="{{ baseUrl }}{{ exitStep }}" class="govuk-link dialog-exit-link" role="button">{% if dialogExitLink %}{% if t %}{{ t('pages.session-timeout-warning.dialog-exit-link') }}{% endif %}{% else %}Exit this form{% endif %}</a>
+      <button class="govuk-button dialog-button js-dialog-close" id="timeout-continue-button" data-module="govuk-button">{% if timeoutContinueButton %}{{ t('pages.session-timeout-warning.timeout-continue-button') }}{% else %}Stay on this page{% endif %}</button>
+      <a href="{{ baseUrl }}{{ exitStep }}" class="govuk-link dialog-exit-link" role="button">{% if dialogExitLink %}{{ t('pages.session-timeout-warning.dialog-exit-link') }}{% else %}Exit this form{% endif %}</a>
   {% endif %}
   </div>
 </dialog>
