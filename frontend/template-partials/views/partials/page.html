@@ -1,4 +1,5 @@
 {% extends "layout.html" %} 
+
 {% from "partials/form.html" import form %}
 
 {% block validationSummary %}
@@ -9,7 +10,7 @@
   {% include "partials/navigation.html" %}
 {% endblock %}
 
-{% block content %}
+{% block mainContent %}
   {% call form(csrf_token) %}
     {% block page_content %}{% endblock %}
   {% endcall %}

@@ -1,6 +1,8 @@
 {% extends "govuk/template.njk" %}
+
 {% set govukRebrand = true %}
 {% set govukServiceName = t(serviceName or "journey.serviceName") %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {% from "govuk/components/footer/macro.njk" import govukFooter %}
@@ -81,16 +83,13 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-width-container">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        {% if caption %}<span class="govuk-caption-l">{{ caption }}</span>{% endif %}
-        {% if title %}<h1 class="govuk-heading-xl">{{ title }}</h1>{% endif %}
-        {% if subheading %}<p class="govuk-body-m">{{ subheading }}</p>{% endif %}
-        {% block pageForm %}
-          {% block contentInner %}{% endblock %}
-        {% endblock %}
-      </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if caption %}<span class="govuk-caption-l">{{ caption }}</span>{% endif %}
+      {% if header %}<h1 class="govuk-heading-l">{{ header }}</h1>{% endif %}
+      {% if subHeading %}<p class="govuk-body-m">{{ subHeading }}</p>{% endif %}
+
+      {% block mainContent %}{% endblock %}
     </div>
   </div>
 {% endblock %}
