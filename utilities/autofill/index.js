@@ -8,6 +8,14 @@ const debug = require('debug')('hof:util:autofill');
 
 const MAX_LOOPS = 3;
 
+function getRemoteFilePath(uploadResult) {
+  if (uploadResult && typeof uploadResult === 'object' && uploadResult.value) {
+    return uploadResult.value;
+  }
+
+  return uploadResult;
+}
+
 module.exports = browser => async (target, input, opts) => {
   const options = opts || {};
   options.maxLoops = options.maxLoops || MAX_LOOPS;
@@ -31,29 +39,42 @@ module.exports = browser => async (target, input, opts) => {
     const value = getValue(name, 'file');
     if (value) {
       debug(`Uploading file: ${value}`);
-      const remotePath = await browser.uploadFile(value);
+      const remotePath = getRemoteFilePath(await browser.uploadFile(value));
       debug(`Uploaded file: ${value} - remote path ${remotePath}`);
-      await browser.addValue(`input[name="${name}"]`, remotePath);
+      await element.setValue(remotePath);
     } else {
       debug(`No file specified for input ${name} - ignoring`);
     }
   }
 
-  async function completeRadio(element, name) {
+  async function completeRadioGroup(name) {
     const value = getValue(name, 'radio');
+    const radios = await browser.$$(`input[type="radio"][name="${name}"]`);
+
+    if (!radios.length) {
+      debug(`No radio inputs found for ${name}`);
+      return;
+    }
+
     if (!value) {
-      const radios = await browser.$$(`input[type="radio"][name="${name}"]`);
       debug(`Checking random radio: ${name}`);
-      if (radios.length > 1) {
-        const index = 1 + Math.floor(Math.random() * (radios.length - 1));
+      const index = Math.floor(Math.random() * radios.length);
+      if (!await radios[index].isSelected()) {
         await radios[index].click();
       }
     } else {
-      const val = await element.getAttribute('value');
-      if (val === value) {
-        debug(`Checking radio: ${name} with value: ${val}`);
-        await element.click();
+      for (const radio of radios) {
+        const val = await radio.getAttribute('value');
+        if (val === value) {
+          debug(`Checking radio: ${name} with value: ${val}`);
+          if (!await radio.isSelected()) {
+            await radio.click();
+          }
+          return;
+        }
       }
+
+      debug(`Ignoring radio group: ${name} - no option matches ${value}`);
     }
   }
 
@@ -98,6 +119,8 @@ module.exports = browser => async (target, input, opts) => {
   }
 
   async function completeStep(path) {
+    const completedRadioGroups = new Set();
+
     // Fill inputs
     const inputs = await browser.$$('input');
     debug(`Found ${inputs.length} <input> elements`);
@@ -105,7 +128,10 @@ module.exports = browser => async (target, input, opts) => {
       const type = await element.getAttribute('type');
       const name = await element.getAttribute('name');
       if (type === 'radio') {
-        await completeRadio(element, name);
+        if (!completedRadioGroups.has(name)) {
+          completedRadioGroups.add(name);
+          await completeRadioGroup(name);
+        }
       } else if (type === 'checkbox') {
         await completeCheckbox(element, name);
       } else if (type === 'file') {
@@ -134,12 +160,15 @@ module.exports = browser => async (target, input, opts) => {
     }
 
     if (options.screenshots) {
-      const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.pre-submit.png');
+      const screenshot = path.resolve(options.screenshots, 'hof-autofill.pre-submit.png');
       await browser.saveScreenshot(screenshot);
     }
 
     debug('Submitting form');
-    const submitBtn = await browser.$('input[type="submit"]');
+    const submitBtn = await browser.$('input[type="submit"], button[type="submit"]');
+    if (!await submitBtn.isExisting()) {
+      throw new Error('No submit control found on page');
+    }
     await submitBtn.click();
 
     const p = await browser.getUrl();
@@ -152,7 +181,7 @@ module.exports = browser => async (target, input, opts) => {
         debug(`Stuck on path ${u.path} for ${count} iterations`);
         if (count === options.maxLoops) {
           if (options.screenshots) {
-            const screenshot = require('path').resolve(options.screenshots, 'hof-autofill.debug.png');
+            const screenshot = path.resolve(options.screenshots, 'hof-autofill.debug.png');
             await browser.saveScreenshot(screenshot);
             throw new Error(`Progress stuck at ${u.path} - screenshot saved to ${screenshot}`);
           }

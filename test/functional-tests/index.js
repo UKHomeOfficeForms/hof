@@ -42,27 +42,27 @@ describe('tests', () => {
       await testUtils.fillInputAndSubmit(browser, 'input[name="loop"][value="yes"]', null);
       await browser.submitForm('form');
       await testUtils.retrieveURLAndAssert(browser, '/one-a');
-      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/two`, '/two', false);
-      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/two`, '/one', true);
+      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/two`, '/one-a');
     });
 
     it('cannot go back to confirm page after editing a fork', async () => {
       await testUtils.gotoAndAssert(browser, '/confirm', { loop: 'no', fork: 'no' }, 'confirm');
       await testUtils.navigateAndAssert(browser, `http://localhost:${port}/three/edit`, '/three/edit');
       await testUtils.fillInputAndSubmit(browser, 'input[name="fork"][value="yes"]', null);
-      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/confirm`, '/confirm', false);
+      await testUtils.retrieveURLAndAssert(browser, '/four-2/edit');
+      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/confirm`, '/four-1');
     });
 
     it('goes back to confirm page after editing first step', async () => {
       await testUtils.gotoAndAssert(browser, '/confirm', { loop: 'no', fork: 'no' }, 'confirm');
-      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/one/edit`, '/one/edit', true);
+      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/one/edit`, '/one/edit');
       await browser.submitForm('form');
       await testUtils.retrieveURLAndAssert(browser, '/confirm');
     });
 
-    it('does not autocomplete confirm page', async () => {
+    it('redirects confirmation route requests to the confirm page', async () => {
       await testUtils.gotoAndAssert(browser, '/confirm', { loop: 'no', fork: 'no' }, 'confirm');
-      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/confirmation`, '/confirm', true);
+      await testUtils.navigateAndAssert(browser, `http://localhost:${port}/confirmation`, '/confirm');
     });
 
     describe('with loop preceding confirm page', () => {
@@ -77,7 +77,7 @@ describe('tests', () => {
 
       it('allows returning to the confirmation page from a loop page in an edit journey', async () => {
         await testUtils.gotoAndAssert(browser, '/confirm', undefined, '/confirm');
-        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/two/edit`, '/two/edit', true);
+        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/two/edit`, '/two/edit');
         await testUtils.fillInputAndSubmit(browser, 'input[name="loop"][value="no"]', null);
         await testUtils.retrieveURLAndAssert(browser, '/confirm');
       });
@@ -94,7 +94,7 @@ describe('tests', () => {
       });
 
       it('allows accessing the loop through first looping step', async () => {
-        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/loop`, '/loop', true);
+        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/loop`, '/loop');
         await testUtils.fillInputAndSubmit(browser, 'input[name="loop"][value="yes"]', null);
         await testUtils.retrieveURLAndAssert(browser, '/two');
       });
@@ -112,7 +112,7 @@ describe('tests', () => {
 
       it('allows accessing the loop through first looping step', async () => {
         await testUtils.gotoAndAssert(browser, '/summary', undefined, '/summary');
-        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/two/edit`, '/two/edit', true);
+        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/two/edit`, '/two/edit');
         await browser.submitForm('form');
         await testUtils.retrieveURLAndAssert(browser, '/summary');
       });
@@ -131,27 +131,31 @@ describe('tests', () => {
       });
 
       it('redirects to the address substep on a failed lookup', async () => {
-        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one', true);
+        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one');
         await testUtils.fillInputAndSubmit(browser, 'input', 'BN25 1XY');
-        await testUtils.retrieveURLAndAssert(browser, 'step=address');
+        await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'address');
       });
 
       it('redirects to the lookup step on a successful lookup', async () => {
-        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one', true);
+        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one');
         await testUtils.fillInputAndSubmit(browser, 'input', 'CR0 2EU');
-        await testUtils.retrieveURLAndAssert(browser, 'step=lookup');
+        await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'lookup');
       });
 
       it('fails on an invalid postcode', async () => {
-        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one', true);
+        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one');
         await testUtils.fillInputAndSubmit(browser, 'input', 'INVALID');
         await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamMissing(browser, 'step');
       });
 
       it('fails on a non-English postcode', async () => {
-        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one', true);
+        await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one');
         await testUtils.fillInputAndSubmit(browser, 'input', 'CH5 1AB');
         await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamMissing(browser, 'step');
       });
 
       it('redirects to next step when an address is selected', async () => {
@@ -164,17 +168,21 @@ describe('tests', () => {
       it('redirects back to postcode step if change link is clicked', async () => {
         await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one');
         await testUtils.fillInputAndSubmit(browser, 'input', 'CR0 2EU');
-        await testUtils.retrieveURLAndAssert(browser, 'step=lookup');
+        await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'lookup');
         await testUtils.click(browser, '.change-postcode');
         await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'postcode');
       });
 
       it('redirects to manual step if cant-find link is clicked', async () => {
         await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one');
         await testUtils.fillInputAndSubmit(browser, 'input', 'CR0 2EU');
-        await testUtils.retrieveURLAndAssert(browser, 'step=lookup');
+        await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'lookup');
         await testUtils.click(browser, '.cant-find');
-        await testUtils.retrieveURLAndAssert(browser, 'step=manual');
+        await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'manual');
       });
 
       it('allows user through to next step if no postcode is entered', async () => {
@@ -186,8 +194,12 @@ describe('tests', () => {
       it('persists address on manual entry step when returning from later step (bugfix)', async () => {
         await testUtils.navigateAndAssert(browser, '/address-default-one', '/address-default-one');
         await testUtils.click(browser, 'a[href*="step=manual"]');
+        await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'manual');
         await testUtils.fillInputAndSubmit(browser, 'textarea', '1 High Street');
         await browser.back();
+        await testUtils.retrieveURLAndAssert(browser, '/address-default-one');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'manual');
         const text = await testUtils.getElementValue(browser, 'textarea');
         assert.equal(text, '1 High Street');
       });
@@ -225,7 +237,8 @@ describe('tests', () => {
         await browser.submitForm('form');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.fillInputAndSubmit(browser, 'input', 'CR0 2EU');
-        await testUtils.retrieveURLAndAssert(browser, 'step=lookup');
+        await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'lookup');
         await testUtils.click(browser, '#step a');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
@@ -235,9 +248,11 @@ describe('tests', () => {
         await browser.submitForm('form');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.fillInputAndSubmit(browser, 'input', 'CR0 2EU');
-        await testUtils.retrieveURLAndAssert(browser, 'step=lookup');
+        await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'lookup');
         await testUtils.click(browser, '.link a.cant-find');
-        await testUtils.retrieveURLAndAssert(browser, 'step=manual');
+        await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'manual');
         await testUtils.click(browser, '#step a');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
@@ -247,7 +262,8 @@ describe('tests', () => {
         await browser.submitForm('form');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.click(browser, '.link a');
-        await testUtils.retrieveURLAndAssert(browser, 'step=manual');
+        await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'manual');
         await testUtils.click(browser, '#step a');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
@@ -257,7 +273,8 @@ describe('tests', () => {
         await browser.submitForm('form');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.fillInputAndSubmit(browser, 'input', 'BN25 1XY');
-        await testUtils.retrieveURLAndAssert(browser, 'step=address');
+        await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
+        await testUtils.assertSearchParamEquals(browser, 'step', 'address');
         await testUtils.click(browser, '#step a');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
