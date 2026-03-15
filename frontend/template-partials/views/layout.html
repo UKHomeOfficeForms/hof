@@ -85,6 +85,7 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      {% block validationSummary %}{% endblock %}
       {% if caption %}<span class="govuk-caption-l">{{ caption }}</span>{% endif %}
       {% if header %}<h1 class="govuk-heading-l">{{ header }}</h1>{% endif %}
       {% if subHeading %}<p class="govuk-body-m">{{ subHeading }}</p>{% endif %}
