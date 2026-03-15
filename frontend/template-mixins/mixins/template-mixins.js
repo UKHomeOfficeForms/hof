@@ -77,7 +77,7 @@ module.exports = function (options) {
     const View = req.app.get('view');
 
     // create a nunjucks environment for resolving includes/partials from the
-    // project's views roots for this request. noCache in dev to pick up changes.
+    // project's views roots for this request.
     const nunjucksEnv = (req && req.app && req.app.locals && req.app.locals.nunjucksEnv)
       || new nunjucks.Environment(
         new nunjucks.FileSystemLoader(roots, { noCache: process.env.NODE_ENV !== 'production' }),
@@ -273,7 +273,7 @@ module.exports = function (options) {
         }, res.locals, this);
         // render with nunjucks environment so {% include %} works against roots
         return nunjucksEnv.renderString(templateString, ctx);
-      };
+      }
     }
 
     // eslint-disable-next-line complexity
@@ -335,7 +335,7 @@ module.exports = function (options) {
       }
 
       // map options into a structure suitable for the nunjucks partial that will render them
-      const optsArr = (field.options || []).map((obj) => {
+      const optsArr = (field.options || []).map(obj => {
         let selected = false;
         let label;
         let value;
@@ -366,18 +366,18 @@ module.exports = function (options) {
         }
 
         // Translate/format label and optionHint using helpers so they are ready for nunjucks partial
-        const renderedLabel = (function () {
+        const renderedLabel = function () {
           try { return t.call(this, label) || ''; } catch (e) { return ''; }
-        }).call(this);
+        }.call(this);
 
-        const renderedOptionHint = (function () {
+        const renderedOptionHint = function () {
           if (useHintText) return optionHint;
           try {
             return conditionalTranslate.call(this, optionHint) || '';
           } catch (e) {
             return '';
           }
-        }).call(this);
+        }.call(this);
 
         return {
           label: renderedLabel,
@@ -477,7 +477,7 @@ module.exports = function (options) {
         path: 'partials/forms/textarea-group',
         renderWith: inputText
       },
-      'radio-group': {
+      radioGroup: {
         path: 'partials/forms/option-group',
         renderWith: optionGroup,
         options: {
@@ -516,19 +516,19 @@ module.exports = function (options) {
       },
       inputSubmit: {
         handler: function (props) {
-            props = (props || '').split(' ');
-            const def = 'next';
-            const value = props[0] || def;
-            const id = props[1];
-            const obj = { 
-              value: t('buttons.' + value),
-              id: id,
-              text: t('buttons.' + value)
-            };
-            const template = `${compiled['partials/forms/input-submit']}{{ inputSubmit(value, text, id) }}`;
-            return new nunjucks.runtime.SafeString(
-              nunjucksEnv.renderString(template, obj)
-            );
+          props = (props || '').split(' ');
+          const def = 'next';
+          const value = props[0] || def;
+          const id = props[1];
+          const obj = {
+            value: t('buttons.' + value),
+            id: id,
+            text: t('buttons.' + value)
+          };
+          const template = `${compiled['partials/forms/input-submit']}{{ inputSubmit(value, text, id) }}`;
+          return new nunjucks.runtime.SafeString(
+            nunjucksEnv.renderString(template, obj)
+          );
         }
       },
       'input-date': {
@@ -598,52 +598,65 @@ module.exports = function (options) {
             // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
             // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
             const amountPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-text'], inputText.call(this,
-                key + '-amount', {
+              key + '-amount', {
                 formGroupClassName,
                 autocomplete: autocomplete.amount,
                 className: classNameAmount,
                 amountWithUnitSelect: true
               }
-              ));
+            ));
 
             const unitPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-select'], inputText.call(this, key + '-unit',
-                optionGroup.call(this,
-                  key + '-unit', {
+              optionGroup.call(this,
+                key + '-unit', {
                   formGroupClassName,
                   className: classNameUnit,
                   amountWithUnitSelect: true
                 },
-                  key
-                )));
+                key
+              )));
 
             return parts.concat(amountPart, unitPart).join('\n');
           };
         }
       }
     };
-      _.each(mixins, function (mixin, name) {
-      const handler = _.isFunction(mixin.handler) ? mixin.handler : function () {
-        return function (key) {
-          this.options = this.options || {};
-          this.options.fields = this.options.fields || {};
-          key = nunjucksRender(key, this);
-          const rendered = mixin.renderWith.call(this, key, _.isFunction(mixin.options)
-            ? mixin.options.call(this, key)
-            : mixin.options
-          );
-          const ctx = Object.assign({}, res.locals, rendered);
-          // try to render by template name first so relative imports/includes resolve via loader roots
-          const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.html';
-          const templateName = mixin.path + viewExt;
-          try {
-            return nunjucksEnv.render(templateName, ctx);
-          } catch (err) {
-            // fallback to rendering the compiled string (older behaviour)
-            return nunjucksEnv.renderString(compiled[mixin.path], ctx);
-          }
+    _.each(mixins, function (mixin, name) {
+      if (_.isFunction(mixin.handler)) {
+        res.locals[name] = function (key) {
+          return mixin.handler.call(res.locals, key);
         };
-      };
-      res.locals[name] = _.isFunction(mixin.handler) ? handler : handler();
+        return;
+      }
+
+      // for mixins with renderWith
+      res.locals[name] = function (key) {
+        const ctxThis = this || res.locals;   // ensure context
+        ctxThis.options = ctxThis.options || {};
+        ctxThis.options.fields = ctxThis.options.fields || {};
+
+        key = nunjucksRender(key, ctxThis);
+
+        const rendered = mixin.renderWith.call(
+          ctxThis,
+          key,
+          _.isFunction(mixin.options) ? mixin.options.call(ctxThis, key) : mixin.options
+        );
+        const ctx = Object.assign({}, res.locals, rendered);
+        // try to render by template name first so relative imports/includes resolve via loader roots
+        const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.html';
+        const templateName = mixin.path + viewExt;
+        try {
+          return new nunjucks.runtime.SafeString(
+            nunjucksEnv.render(templateName, ctx)
+          );
+        } catch (err) {
+          // fallback to rendering the compiled string (older behaviour)
+          return new nunjucks.runtime.SafeString(
+            nunjucksEnv.renderString(compiled[mixin.path], ctx)
+          );
+        }
+      }.bind(res.locals);
     });
 
     function renderFieldImpl(key) {
