@@ -31,9 +31,9 @@ module.exports = class Helpers {
    * translation if found. If not it will fallback to the
    * label or legend of the first field on the page
    * @param {String} route - the route of the step
-   * @param {Function} lookup - i18n-lookup bound to translate and Mustache.render
+   * @param {Function} lookup - i18n-lookup bound to translate and nunjucks.renderString
    * @param {Object} fields - a key:value map of step fields
-   * @param {Object} locals - the locals map for mustache rendering
+   * @param {Object} locals - the locals map for nunjucks rendering
    * @returns {String} - the first translation found
    */
   static getTitle(route, lookup, fields, locals) {
@@ -52,8 +52,8 @@ module.exports = class Helpers {
    * Helper function to return intro if
    * located in pages.{route}.intro
    * @param {String} route - the route of the step
-   * @param {Function} lookup - i18n-lookup bound to translate and Mustache.render
-   * @param {Object} locals - the locals map for mustache rendering
+   * @param {Function} lookup - i18n-lookup bound to translate and nunjucks.renderString
+   * @param {Object} locals - the locals map for nunjucks rendering
    * @returns {String} the translation if found
    */
   static getIntro(route, lookup, locals) {
