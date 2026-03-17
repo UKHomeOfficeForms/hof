@@ -27,7 +27,7 @@ must either be referenced using the src attribute, `<script src='...'></script>`
 value is generated for every request. You can add this to your own templates' inline scripts as needed:
 
 ```
-<script {{#nonce}}nonce="{{nonce}}"{{/nonce}}>
+<script {% if cspNonce %}nonce="{{cspNonce}}"{% endif %}>
 ...
 </script>
 ```
@@ -1650,7 +1650,7 @@ You can then define a single translation for country names to be used for all co
 
 ## Template Mixins
 
-A middleware that exposes a series of Mustache mixins on `res.locals` to ease usage of forms, translations, and some other things.
+A middleware that exposes a series of nunjucks mixins on `res.locals` to ease usage of forms, translations, and some other things.
 
 ## Installation
 
@@ -1708,7 +1708,7 @@ Defines a custom translation method - Default: `req.translate`
 
 Allows for manually setting static field configuration - Default: null
 
-## Mustache mixins available
+## Nunjucks mixins available
 
 ```
 t
@@ -1727,12 +1727,12 @@ input-text-compound
 input-text-code
 input-number
 input-phone
-radio-group
+radioGroup
 checkbox
 checkbox-compound
 checkbox-required
 checkbox-group
-input-submit
+inputSubmit
 textarea
 qs
 renderField
@@ -1743,7 +1743,7 @@ renderField
 This mixin takes a `key=value` query string and returns a query string with the extra params appended. If the key is already present in the query string, the value passed to the mixin is used
 
 ```html
-<a href="{{#qs}}key=value{{/qs}}">Click to append query</a>
+<a href="{% qs %}key=value{% endif %}">Click to append query</a>
 ```
 
 ### renderField
@@ -1751,7 +1751,9 @@ This mixin takes a `key=value` query string and returns a query string with the 
 The renderField mixin can be called in your template to render all fields. This will lookup the field.mixin in res.locals and call it passing the field key.
 
 ```html
-{{#fields}} {{#renderField}}{{/renderField}} {{/fields}}
+  {% for field in fields %}
+    {{ renderField(field) }}
+  {% endfor %}
 ```
 
 fields.js
@@ -1773,8 +1775,9 @@ To disable auto-rendering of a field, set `disableRender: true` in the field con
 To render a specific fields in your templates use the mixin name (matching those above) and field name like so...
 
 ```html
-{{#input-text}}myTextField{{/input-text}} {{#select}}mySelectMenu{{/select}}
-{{#radio-group}}myRadioGroup{{/radio-group}}
+{{ inputText("myTextField") }}
+{{ select("mySelectMenu") }}
+{{ radioGroup("myRadioGroup") }}
 ```
 
 ## Options
@@ -1793,13 +1796,13 @@ To render a specific fields in your templates use the mixin name (matching those
 - `legendClassName`: Applied as a class name to HTML `legend` attribute.
 - `toggle`: Can be used to toggle the display of the HTML element with a matching `id`. See [hof-frontend-toolkit](https://github.com/UKHomeOfficeForms/hof-frontend-toolkit/blob/master/assets/javascript/progressive-reveal.js) for details.
 - `attributes`: A hash of key/value pairs applicable to a HTML `textarea` field. Each key/value is assigned as an attribute of the `textarea`. For example `spellcheck="true"`.
-- `child`: Render a child partial beneath each option in an `optionGroup`. Accepts a custom mustache template string, a custom partial in the format `partials/{your-partial-name}`, `'html'` which is used to specify the html for the field has already been prerendered, such as in [hof-component-date](https://github.com/UKHomeOfficeForms/hof-component-date) or a template mixin key which will be rendered within a panel element partial.
+- `child`: Render a child partial beneath each option in an `optionGroup`. Accepts a custom nunjucks template string, a custom partial in the format `partials/{your-partial-name}`, `'html'` which is used to specify the html for the field has already been prerendered, such as in [hof-component-date](https://github.com/UKHomeOfficeForms/hof-component-date) or a template mixin key which will be rendered within a panel element partial.
 - `isPageHeading`: Applicable to `checkbox` and `radio`, `text input` and `textarea` controls. Sets the legend as the page heading on single page questions.
 - `isWarning`: Applicable to `checkbox` and `radio` controls. Allows warning text to be placed after page headings on single page questions if required.
 
 # HOF-template-partials
 
-Home Office Forms template partials is a collection of mustache partials commonly used in HOF applications. It also contains a collection of i18n translations used within the template partials. All contents are designed to be extended in your individual applications.
+Home Office Forms template partials is a collection of nunjucks partials commonly used in HOF applications. It also contains a collection of i18n translations used within the template partials. All contents are designed to be extended in your individual applications.
 
 ## Usage
 
@@ -1807,7 +1810,7 @@ Home Office Forms template partials is a collection of mustache partials commonl
 
 #### Standalone
 
-Template partials can be used by adding the route to the views directory to your express application views setting. You will need to be using the HTML view engine with Hogan and Mustache.
+Template partials can be used by adding the route to the views directory to your express application views setting. You will need to be using the HTML view engine with Nunjucks.
 
 ```js
 var app = require("express")();
@@ -1899,29 +1902,24 @@ $path: "/path/to/your/images/";
 
 # HOF FRONTEND GOVUK-TEMPLATE
 
-Compiles govuk mustache template into a more usable format and provide middleware for use in apps.
+Compiles govuk nunjucks template into a more usable format and provide middleware for use in apps.
 
-Existing [govuk mustache template](https://www.npmjs.com/package/govuk_template_mustache) has simple mustache placeholders for content sections, which necessitates a two step compile process where sections are compiled individually and then again into the parent template.
-
-Compiling the template to replace these placeholders with variables allows for templates to implement the govuk template as a parent partial.
+This allows for templates to implement the govuk template as a parent partial.
 
 ## Example
 
 ```
-{{< govuk-template}}
-
-    {{$main}}
-        <h1>Page Content</h1>
-    {{/main}}
-
-{{/ govuk-template}}
+{% extends "govuk/template.njk" %}
+{% block mainContent %}
+  <h1>Page Content</h1>
+{% endblock %}
 ```
 
 ## Usage
 
 When used as part of an express app, a middleware is returned which will add a static fileserver (using [serve-static](https://www.npmjs.com/package/serve-static)) to serve the template assets without needing to copy them to any other location.
 
-It will also add the template as a mustache partial with a name of "govuk-template".
+It will also add the template as a nunjucks partial with a name of "govuk-template".
 
 ### To configure express middleware
 
@@ -1929,15 +1927,14 @@ It will also add the template as a mustache partial with a name of "govuk-templa
 app.use(require('hof').frontend.govUKTemplate([options]);
 ```
 
-### To use the mustache partial
+### To use the nunjucks partial
 
 ```
-{{< govuk-template}}
-    {{$pageTitle}}An example page{{/pageTitle}}
-    {{$main}}
-        <h1>Page Content</h1>
-    {{/main}}
-{{/ govuk-template}}
+{% extends "govuk/template.njk" %}
+{% block pageTitle %}An example page{% endblock %}
+{% block mainContent %}
+  <h1>Page Content</h1>
+{% endblock %}
 ```
 
 ## Options
