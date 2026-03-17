@@ -133,6 +133,38 @@ describe('bootstrap()', () => {
     })).should.Throw(`Cannot find route views at ${root}/invalid_path`)
   );
 
+  it('should throw an error if the session secret is not provided', () =>
+    (() =>
+      (bs = bootstrap({
+        fields: 'fields',
+        session: {
+          secret: ''
+        },
+        routes: [
+          {
+            steps: {}
+          }
+        ]
+      }))).should.Throw(
+      'Session secret is required. Set the SESSION_SECRET environment variable to a 32-byte value.'
+    ));
+
+  it('should throw an error if the session secret is not 32 bytes', () =>
+    (() =>
+      (bs = bootstrap({
+        fields: 'fields',
+        session: {
+          secret: 'short_secret'
+        },
+        routes: [
+          {
+            steps: {}
+          }
+        ]
+      }))).should.Throw(
+      'Session secret must be exactly 32 bytes. Current: 12 bytes.'
+    ));
+
   it('does not throw if no route views option is specified and the default route views directory does not exist', () =>
     (() => bs = bootstrap({
       fields: 'fields',
