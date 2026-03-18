@@ -1,3 +1,9 @@
+## 2026-03-17, Version 23.0.2 (Stable), @vivekkumar-ho
+
+### Fixed
+- Improved session secret validation so missing or blank values now fail fast with a clearer startup error.
+- Reused the validated session secret consistently across cookie parsing, session encryption, and Redis session storage.
+
 ## 2025-03-04, Version 23.0.1 (Stable), @PaolaDMadd-Pro @Rhodine-orleans-lindsay
 ### ⚠️ Versioning Notice
 v23.0.1 is published as a patch due to a prior publishing issue.
