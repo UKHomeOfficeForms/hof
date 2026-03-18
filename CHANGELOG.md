@@ -1,3 +1,16 @@
+## 2026-03-18, Version 23.0.2 (Stable), @vinodhasamiyappan-ho
+
+### Security
+- Upgraded WebdriverIO from v4 to v5, resolving security vulnerabilities caused by transitive dependencies (`minimist@0.0.10`, `form-data@~2.3.2`) in `webdriverio@4.14.4`.
+
+### Changed
+- Migrated to WebdriverIO v5 (`webdriverio@5.23.0`), requiring the following compatibility updates:
+  - Refactored all functional tests to use async/await and the new WebdriverIO v5 command API.
+  - Updated test utilities and browser setup for async execution and modern WebdriverIO patterns.
+  - Removed deprecated synchronous and promise-chaining test code.
+  - Improved test isolation and reliability by ensuring each test runs with a fresh app and browser instance.
+- Enhanced sessionDialog Jest tests with new and improved negative test scenarios
+
 ## 2026-03-17, Version 23.0.2 (Stable), @vivekkumar-ho
 
 ### Fixed
