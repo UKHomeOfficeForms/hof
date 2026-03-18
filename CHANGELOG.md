@@ -1,4 +1,4 @@
-## 2026-03-18, Version 23.0.2 (Stable), @vinodhasamiyappan-ho
+## 2026-03-18, Version 23.0.3 (Stable), @vinodhasamiyappan-ho
 
 ### Security
 - Upgraded WebdriverIO from v4 to v5, resolving security vulnerabilities caused by transitive dependencies (`minimist@0.0.10`, `form-data@~2.3.2`) in `webdriverio@4.14.4`.
