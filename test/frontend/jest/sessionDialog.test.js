@@ -16,9 +16,18 @@ describe('sessionDialog', () => {
   let originalHTMLDialogElement;
 
   beforeAll(() => {
-    // Set up the initial DOM structure needed for the tests
-    document.body.innerHTML = `<div id='content'></div>` + sessionTimeoutWarningHtml.toString();
     window.GOVUK = {};
+    originalHTMLDialogElement = HTMLDialogElement;
+  });
+
+  beforeEach(() => {
+    jest.resetModules();
+    window.GOVUK = {};
+
+    // Set up the initial DOM structure and jQuery elements for each test
+    document.body.innerHTML =
+      `<div id='content'><button id="outside-button" type="button">Outside</button></div>` +
+      sessionTimeoutWarningHtml.toString();
     require('../../../frontend/themes/gov-uk/client-js/session-timeout-dialog.js');
     sessionDialog = window.GOVUK.sessionDialog;
     $html = $('html');
@@ -27,15 +36,20 @@ describe('sessionDialog', () => {
       secondsSessionTimeout: 1800,
       secondsTimeoutWarning: 300
     };
-    // Mock the showModal and close methods of the <dialog> element
-    sessionDialog.el.showModal = jest.fn();
-    sessionDialog.el.close = jest.fn();
+    // Only mock if dialog element exists
+    if (sessionDialog.el) {
+      sessionDialog.el.showModal = jest.fn();
+      sessionDialog.el.close = jest.fn();
+    }
     sessionDialog.$fallBackElement = { classList: { add: jest.fn() } };
     window.dialogPolyfill = { registerDialog: jest.fn() };
-    originalHTMLDialogElement = HTMLDialogElement;
+    // Mock redirect to avoid jsdom navigation errors
+    sessionDialog.redirect = jest.fn();
   });
 
   afterEach(() => {
+    jest.useRealTimers();
+
     if (originalHTMLDialogElement !== undefined) {
       Object.defineProperty(window, 'HTMLDialogElement', {
         value: originalHTMLDialogElement,
@@ -44,50 +58,81 @@ describe('sessionDialog', () => {
     } else {
       delete window.HTMLDialogElement;
     }
+
+    jest.restoreAllMocks();
     jest.clearAllMocks();
-    $html.removeClass(sessionDialog.dialogIsOpenClass);
-    $body.removeClass(sessionDialog.dialogIsOpenClass);
+    if ($html && sessionDialog && sessionDialog.dialogIsOpenClass) {
+      $html.removeClass(sessionDialog.dialogIsOpenClass);
+    }
+    if ($body && sessionDialog && sessionDialog.dialogIsOpenClass) {
+      $body.removeClass(sessionDialog.dialogIsOpenClass);
+    }
   });
 
   it('should initialize correctly', () => {
+    const bindUIElements = jest.spyOn(sessionDialog, 'bindUIElements');
     const controller = jest.spyOn(sessionDialog, 'controller');
-    sessionDialog.init(options);
+    const result = sessionDialog.init(options);
+
+    expect(result).toBe(true);
     expect(sessionDialog.secondsSessionTimeout).toBe(1800);
     expect(sessionDialog.secondsTimeoutWarning).toBe(300);
     expect(sessionDialog.timeoutRedirectUrl).toBe('/session-timeout');
+    expect(bindUIElements).toHaveBeenCalledTimes(1);
     expect(controller).toHaveBeenCalled();
   });
 
-  it('should bind UI elements', () => {
-    const spyOnBindUIElements = jest.spyOn(sessionDialog, 'bindUIElements');
-    sessionDialog.init();
-    expect(spyOnBindUIElements).toHaveBeenCalled();
+  it('should close the dialog when the close button is clicked', () => {
+    const closeDialog = jest.spyOn(sessionDialog, 'closeDialog').mockImplementation(() => {});
+
+    sessionDialog.init(options);
+    document.querySelector('.js-dialog-close').click();
+
+    expect(closeDialog).toHaveBeenCalledTimes(1);
   });
 
   it('should open the dialog', () => {
+    const outsideButton = document.querySelector('#outside-button');
+    const content = document.querySelector('#content');
+
+    outsideButton.focus();
     sessionDialog.openDialog();
+
     expect($html.hasClass(sessionDialog.dialogIsOpenClass)).toBe(true);
     expect($body.hasClass(sessionDialog.dialogIsOpenClass)).toBe(true);
+    expect(content.inert).toBe(true);
     expect(sessionDialog.el.showModal).toHaveBeenCalled();
+    expect(sessionDialog.$lastFocusedEl).toBe(outsideButton);
   });
 
   it('should close the dialog', () => {
+    const refreshSession = jest.spyOn(sessionDialog, 'refreshSession').mockImplementation(() => {});
+    const content = document.querySelector('#content');
+
     sessionDialog.openDialog();
     expect(sessionDialog.isDialogOpen()).toBe(true);
     sessionDialog.closeDialog();
+
     expect($html.hasClass(sessionDialog.dialogIsOpenClass)).toBe(false);
     expect($body.hasClass(sessionDialog.dialogIsOpenClass)).toBe(false);
+    expect(content.inert).toBe(false);
     expect(sessionDialog.isDialogOpen()).toBe(false);
     expect(sessionDialog.el.close).toHaveBeenCalled();
+    expect(refreshSession).toHaveBeenCalledTimes(1);
   });
 
   it('should save and restore last focused element', () => {
-    const button = document.querySelector('.js-dialog-close');
-    button.focus();
-    sessionDialog.saveLastFocusedEl();
+    jest.useFakeTimers();
+
+    const outsideButton = document.querySelector('#outside-button');
+    jest.spyOn(sessionDialog, 'refreshSession').mockImplementation(() => {});
+
+    outsideButton.focus();
     sessionDialog.openDialog();
     sessionDialog.closeDialog();
-    expect(document.activeElement).toBe(button);
+    jest.runAllTimers();
+
+    expect(document.activeElement).toBe(outsideButton);
   });
 
   it('should make page content inert and remove inert', () => {
@@ -101,63 +146,110 @@ describe('sessionDialog', () => {
   });
 
   it('should check if dialog is configured', () => {
-    expect(sessionDialog.isConfigured()).toBeTruthy();
+    sessionDialog.init(options);
+
+    expect(Boolean(sessionDialog.isConfigured())).toBe(true);
   });
 
   it('should redirect when session times out', () => {
     const spyOnRedirect = jest.spyOn(sessionDialog, 'redirect');
+    const spyOnOpenDialog = jest.spyOn(sessionDialog, 'openDialog');
+
+    Object.assign(sessionDialog, options);
     jest.spyOn(sessionDialog, 'secondsUntilSessionTimeout').mockReturnValue(0);
+
     sessionDialog.controller();
+
     expect(spyOnRedirect).toHaveBeenCalled();
+    expect(spyOnOpenDialog).not.toHaveBeenCalled();
   });
 
   it('should show warning and start countdown', () => {
     const spyOnOpenDialog = jest.spyOn(sessionDialog, 'openDialog');
     const spyOnStartCountdown = jest.spyOn(sessionDialog, 'startCountdown');
+    const spyOnAddTimer = jest.spyOn(sessionDialog, 'addTimer');
+
+    Object.assign(sessionDialog, options);
     jest.spyOn(sessionDialog, 'secondsUntilSessionTimeout').mockReturnValue(sessionDialog.secondsTimeoutWarning - 1);
+
     sessionDialog.controller();
+
     expect(spyOnOpenDialog).toHaveBeenCalled();
     expect(spyOnStartCountdown).toHaveBeenCalled();
+    expect(spyOnAddTimer).toHaveBeenCalledWith(sessionDialog.controller, sessionDialog.secondsTimeoutWarning - 1);
   });
 
   it('should wait for warning when enough time is left', () => {
     const spyOnAddTimer = jest.spyOn(sessionDialog, 'addTimer');
-    jest.spyOn(sessionDialog, 'secondsUntilSessionTimeout').mockReturnValue(300);
+    const spyOnOpenDialog = jest.spyOn(sessionDialog, 'openDialog');
+    const spyOnStartCountdown = jest.spyOn(sessionDialog, 'startCountdown');
+
+    Object.assign(sessionDialog, options);
+    jest.spyOn(sessionDialog, 'secondsUntilSessionTimeout').mockReturnValue(sessionDialog.secondsTimeoutWarning + 1);
+    jest.spyOn(sessionDialog, 'secondsUntilTimeoutWarning').mockReturnValue(1);
+
     sessionDialog.controller();
-    expect(spyOnAddTimer).toHaveBeenCalledWith(sessionDialog.controller, sessionDialog.secondsTimeoutWarning);
+
+    expect(spyOnOpenDialog).not.toHaveBeenCalled();
+    expect(spyOnStartCountdown).not.toHaveBeenCalled();
+    expect(spyOnAddTimer).toHaveBeenCalledWith(sessionDialog.controller, 1);
   });
 
   it('should use polyfill if HTMLDialogElement is not a function and polyfill registration succeeds', () => {
+    const bindUIElements = jest.spyOn(sessionDialog, 'bindUIElements');
+    const controller = jest.spyOn(sessionDialog, 'controller');
+
     Object.defineProperty(window, 'HTMLDialogElement', { value: undefined, configurable: true });
     window.dialogPolyfill.registerDialog.mockImplementation(() => true);
+
     const result = sessionDialog.init(options);
+
     expect(window.dialogPolyfill.registerDialog).toHaveBeenCalledWith(window.GOVUK.sessionDialog.el);
+    expect(bindUIElements).not.toHaveBeenCalled();
+    expect(controller).not.toHaveBeenCalled();
     expect(result).toBe(true);
   });
 
   it('should display fallback element if polyfill registration fails', () => {
+    const bindUIElements = jest.spyOn(sessionDialog, 'bindUIElements');
+    const controller = jest.spyOn(sessionDialog, 'controller');
+
     Object.defineProperty(window, 'HTMLDialogElement', { value: undefined, configurable: true });
     window.dialogPolyfill.registerDialog.mockImplementation(() => {
       throw new Error('polyfill error');
     });
+
     const result = sessionDialog.init(options);
+
     expect(sessionDialog.$fallBackElement.classList.add).toHaveBeenCalledWith('govuk-!-display-block');
+    expect(bindUIElements).not.toHaveBeenCalled();
+    expect(controller).not.toHaveBeenCalled();
     expect(result).toBe(false);
   });
 
   it('should bind UI elements and call controller if HTMLDialogElement is a function', () => {
+    const bindUIElements = jest.spyOn(sessionDialog, 'bindUIElements');
+    const controller = jest.spyOn(sessionDialog, 'controller');
+
     Object.defineProperty(window, 'HTMLDialogElement', { value: function () { }, configurable: true });
+
     const result = sessionDialog.init(options);
-    expect(sessionDialog.bindUIElements).toHaveBeenCalled();
-    expect(sessionDialog.controller).toHaveBeenCalled();
+
+    expect(bindUIElements).toHaveBeenCalledTimes(1);
+    expect(controller).toHaveBeenCalledTimes(1);
     expect(result).toBe(true);
   });
 
   it('should return false if sessionDialog is not configured', () => {
-    jest.spyOn(sessionDialog, 'isConfigured').mockReturnValue(false);
+    const bindUIElements = jest.spyOn(sessionDialog, 'bindUIElements');
+    const controller = jest.spyOn(sessionDialog, 'controller');
+
+    sessionDialog.$timer = $([]);
+
     const result = sessionDialog.init(options);
-    expect(sessionDialog.bindUIElements).not.toHaveBeenCalled();
-    expect(sessionDialog.controller).not.toHaveBeenCalled();
+
+    expect(bindUIElements).not.toHaveBeenCalled();
+    expect(controller).not.toHaveBeenCalled();
     expect(result).toBe(false);
   });
 });

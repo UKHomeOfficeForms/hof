@@ -129,7 +129,7 @@
     "travis-conditions": "0.0.0",
     "vitest": "^4.0.8",
     "watchify": "^4.0.0",
-    "webdriverio": "^4.14.4"
+    "webdriverio": "^5.0.0"
   },
   "jest": {
     "testEnvironment": "jsdom"
