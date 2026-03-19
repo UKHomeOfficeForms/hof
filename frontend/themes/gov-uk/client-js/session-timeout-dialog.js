@@ -277,9 +277,14 @@ window.GOVUK.sessionDialog = {
   },
 
   refreshSession: function () {
-    $.get('');
-    window.GOVUK.sessionDialog.timeSessionRefreshed = new Date();
-    window.GOVUK.sessionDialog.controller();
+    $.get('')
+      .done(function () {
+        window.GOVUK.sessionDialog.timeSessionRefreshed = new Date();
+        window.GOVUK.sessionDialog.controller();
+      })
+      .fail(function () {
+        console.error('Session refresh failed.');
+      });
   },
 
   redirect: function () {

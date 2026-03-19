@@ -1,7 +1,5 @@
 /* eslint-disable max-len, quotes */
 'use strict';
-
-const $ = require('jquery');
 const fs = require('fs');
 const path = require('path');
 const sessionTimeoutWarningHtml = fs.readFileSync(path.resolve(__dirname, '../../../frontend/template-partials/views/partials/session-timeout-warning.html'), 'utf8');
@@ -9,6 +7,7 @@ const sessionTimeoutWarningHtml = fs.readFileSync(path.resolve(__dirname, '../..
 jest.dontMock('fs');
 
 describe('sessionDialog', () => {
+  let $;
   let sessionDialog;
   let $body;
   let $html;
@@ -23,6 +22,7 @@ describe('sessionDialog', () => {
   beforeEach(() => {
     jest.resetModules();
     window.GOVUK = {};
+    $ = require('jquery');
 
     // Set up the initial DOM structure and jQuery elements for each test
     document.body.innerHTML =
@@ -251,5 +251,54 @@ describe('sessionDialog', () => {
     expect(bindUIElements).not.toHaveBeenCalled();
     expect(controller).not.toHaveBeenCalled();
     expect(result).toBe(false);
+  });
+
+  it('refreshSession updates timeSessionRefreshed and calls controller on success', () => {
+    jest.useFakeTimers();
+    const previousRefreshTime = new Date('2020-01-01T00:00:00.000Z');
+    const now = new Date(previousRefreshTime.getTime() + (10 * 60 * 1000));
+    jest.setSystemTime(now);
+
+    sessionDialog.timeSessionRefreshed = previousRefreshTime;
+    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => {});
+    const requestMock = {
+      done: jest.fn(),
+      fail: jest.fn()
+    };
+
+    requestMock.done.mockImplementation(cb => {
+      cb();
+      return requestMock;
+    });
+
+    requestMock.fail.mockReturnValue(requestMock);
+
+    jest.spyOn($, 'get').mockReturnValue(requestMock);
+
+    sessionDialog.refreshSession();
+    expect(sessionDialog.timeSessionRefreshed.getTime()).toBe(now.getTime());
+    expect(controllerSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('refreshSession logs an error on failure and does not call controller', () => {
+    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => {});
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const requestMock = {
+      done: jest.fn(),
+      fail: jest.fn()
+    };
+
+    requestMock.done.mockReturnValue(requestMock);
+    requestMock.fail.mockImplementation(cb => {
+      cb();
+      return requestMock;
+    });
+
+    jest.spyOn($, 'get').mockReturnValue(requestMock);
+
+    sessionDialog.refreshSession();
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Session refresh failed.');
+    expect(controllerSpy).not.toHaveBeenCalled();
   });
 });
