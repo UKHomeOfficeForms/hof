@@ -1407,8 +1407,8 @@ This feature allows you to customise the content related to the session timeout 
 
 ### Usage
 
-By default, the session timeout is set to the redis session ttl. To bypass this and display the session timeout message before the redis session ttl the following evironment variables must be set:
-`CUSTOM_SESSION_EXPIRY` - e.g. `600`. Configure to expire before thte project's redis session ttl.
+By default, the session timeout is set to the redis session ttl. To bypass this and display the session timeout message before the redis session ttl the following environment variables must be set:
+`CUSTOM_SESSION_EXPIRY` - e.g. `600`. Configure to expire before the project's redis session ttl.
 `USE_CUSTOM_SESSION_TIMEOUT` -  `false` by default. When set to `true` the '/session-timeout' page can run before the session expires without triggering a `404` middleware error.
 
 To enable and customise the session timeout behaviour, you need to set the component and translations in your project's `hof.settings.json` file:
@@ -1437,13 +1437,30 @@ To override the default session-timeout page completely, the path to the session
     "hof/components/session-timeout-warning"
   ],
   "translations": "./apps/common/translations",
-   "views": ["./apps/common/views"], // allows you to overide the HOF default session-timeout page and use a custom one from the specified views
+   "views": ["./apps/common/views"], // allows you to override the HOF default session-timeout page and use a custom one from the specified views
    ...
 ```
 or in the project's `server.js` e.g.
 ```js
 settings.views = path.resolve(__dirname, './apps/common/views');
 ```
+
+
+### Session Timeout Keep-alive and CSP
+
+From version 23.0.4 , session timeout keep alive is now independent of analytics tags.
+
+- Default CSP always includes: `connect-src 'self'`
+- If `GA_TAG` (`gaTagId`) is configured:
+  - Google Analytics endpoints are added to `connect-src`.
+- If `GA_TAG` is not configured: Only default same-origin `connect-src` is used (no GA region endpoints).
+
+### Timeout Dialog Behavior
+When a user clicks **Stay on this page** in the timeout dialog:
+
+- If keepalive succeeds:  session refresh timestamp is updated and the timeout countdown/controller is restarted.
+- If keepalive fails: user is redirected to `/session-timeout` by default.
+
 
 ### Customising content in `pages.json`
 Once the variables are set, you can customise the session timeout warning and exit messages in your project's pages.json:
