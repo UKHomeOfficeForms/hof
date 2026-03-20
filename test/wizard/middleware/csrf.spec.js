@@ -41,7 +41,7 @@ describe('CSRF protection', () => {
   it('generates a token on GET requests', done => {
     req.method = 'GET';
     middleware(req, res, () => {
-      res.locals['csrf-token'].should.be.a('string');
+      res.locals.csrf_token.should.be.a('string');
       done();
     });
   });
@@ -49,7 +49,7 @@ describe('CSRF protection', () => {
   it('validates token in body on POST requests', done => {
     req.method = 'GET';
     middleware(req, res, () => {
-      const token = res.locals['csrf-token'];
+      const token = res.locals.csrf_token;
       req.method = 'POST';
       req.body['x-csrf-token'] = token;
       middleware(req, res, err => {
@@ -62,7 +62,7 @@ describe('CSRF protection', () => {
   it('validates token in body on PUT requests', done => {
     req.method = 'GET';
     middleware(req, res, () => {
-      const token = res.locals['csrf-token'];
+      const token = res.locals.csrf_token;
       req.method = 'PUT';
       req.body['x-csrf-token'] = token;
       middleware(req, res, err => {
@@ -75,7 +75,7 @@ describe('CSRF protection', () => {
   it('validates token in headers on DELETE requests', done => {
     req.method = 'GET';
     middleware(req, res, () => {
-      const token = res.locals['csrf-token'];
+      const token = res.locals.csrf_token;
       req.method = 'DELETE';
       req.headers['x-csrf-token'] = token;
       middleware(req, res, err => {
@@ -88,7 +88,7 @@ describe('CSRF protection', () => {
   it('validates token in headers on PATCH requests', done => {
     req.method = 'GET';
     middleware(req, res, () => {
-      const token = res.locals['csrf-token'];
+      const token = res.locals.csrf_token;
       req.method = 'PATCH';
       req.headers['x-csrf-token'] = token;
       middleware(req, res, err => {
