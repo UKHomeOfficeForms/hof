@@ -30,7 +30,7 @@ module.exports = {
   },
   server: {
     cmd: 'npm start',
-    extensions: ['.js', '.json', '.html', '.md']
+    extensions: ['.js', '.json', '.html', '.njk', '.md']
   },
   watch: {
     restart: 'rs',

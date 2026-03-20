@@ -80,7 +80,7 @@ module.exports = config => {
       const field = `${groupName}-add-another`;
       // add yes/no field
       req.form.options.fields[field] = Object.assign({
-        mixin: 'radio-group',
+        mixin: 'radioGroup',
         validate: ['required'],
         options: [
           'yes', 'no'
