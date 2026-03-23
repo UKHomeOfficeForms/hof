@@ -107,6 +107,7 @@ module.exports = options => {
     const content = getContent(err, translate);
     const locals = {
       error: err,
+      title: content.title,
       serviceName: content.serviceName,
       content: debug === true ? err : content,
       showStack: debug === true,

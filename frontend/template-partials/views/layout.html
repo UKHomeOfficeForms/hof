@@ -1,55 +1,136 @@
-{{<govuk-template}}
-  {{$head}}
-    {{> partials-head}}
-  {{/head}}
-  {{$pageTitle}}
-    {{#errorlist.length}}{{#t}}errorlist.prefix{{/t}}{{/errorlist.length}}{{#title}}{{title}}{{/title}}{{^title}}{{$header}}{{/header}}{{/title}}{{#serviceName}} &ndash; {{serviceName}}{{/serviceName}} &ndash; GOV.UK
-  {{/pageTitle}}
-  {{$bodyStart}}
-    <a href="#{{#skipToMain}}{{skipToMain}}{{/skipToMain}}{{^skipToMain}}main-content{{/skipToMain}}" class="govuk-skip-link" data-module="govuk-skip-link" id="skip-to-main">Skip to main content</a>
-  {{/bodyStart}}
-  {{$headerClass}}govuk-header{{/headerClass}}
-  {{$insideHeader}}{{/insideHeader}}
-  {{$main}}
-	  <div class="govuk-width-container ">
-		{{#feedbackUrl}}
-			<div class="govuk-phase-banner">
-				<p class="govuk-phase-banner__content">
-				<strong class="govuk-tag govuk-phase-banner__content__tag">{{#t}}journey.phase{{/t}}</strong>
-				<span  class="govuk-phase-banner__text">This is a new service – your <a href="{{feedbackUrl}}{{^feedbackUrl}}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{{/feedbackUrl}}" class="govuk-link" id="feedback-link" target="_blank">feedback</a> will help us to improve it.</span>
-				</p>
-			</div>
-		{{/feedbackUrl}}      
-      <span id="step">
-        {{> partials-back}} <span>{{$step}}{{/step}}</span>
-      </span>
-	  <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
-		  <div class="govuk-grid-row" id="gov-grid-row-content">
-			{{> partials-maincontent-left}}
-		  </div>
-	  </main>
-      {{> partials-continue}}
-      <script type="text/javascript" src="{{assetPath}}/js/bundle.js"></script>
-	  </div>
-  {{/main}}
-  {{$cookieMessage}}
-    {{#showCookiesBanner}}
-      {{> partials-cookie-banner}}
-    {{/showCookiesBanner}}
-  {{/cookieMessage}}
-  {{$footerSupportLinks}}
-    <ul class="govuk-footer__inline-list">
-      {{#footerSupportLinks}}
-        <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="{{path}}">{{#t}}{{property}}{{/t}}</a></li>
-      {{/footerSupportLinks}}
-      {{^footerSupportLinks}}
-        <li class="govuk-footer__inline-list-item"><a class="govuk-footer__link" href="/cookies">{{#t}}base.cookies{{/t}}</a></li>
-        <li class="govuk-footer__inline-list-item"><a  class="govuk-footer__link" href="/terms-and-conditions">{{#t}}base.terms{{/t}}</a></li>
-        <li class="govuk-footer__inline-list-item"><a  class="govuk-footer__link" href="/accessibility">{{#t}}base.accessibility{{/t}}</a></li>
-      {{/footerSupportLinks}}
-    </ul>
-  {{/footerSupportLinks}}
-  {{$bodyEnd}}
-    {{> partials-gatag}}
-  {{/bodyEnd}}
-{{/govuk-template}}
+{% extends "govuk/template.njk" %}
+
+{% set govukRebrand = true %}
+{% set govukServiceName = t(serviceName or "journey.serviceName") %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{% from "govuk/components/footer/macro.njk" import govukFooter %}
+{% from "govuk/components/skip-link/macro.njk" import govukSkipLink %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% block headIcons %}
+  <link rel="icon" sizes="48x48" href="{{ govukAssetPath }}rebrand/images/favicon.ico">
+  <link rel="icon" sizes="any" href="{{ govukAssetPath }}rebrand/images/favicon.svg" type="image/svg+xml">
+  <link rel="mask-icon" href="{{ govukAssetPath }}rebrand/images/govuk-icon-mask.svg" color="{{ themeColour or '#1d70b8' }}">
+  <link rel="apple-touch-icon" href="{{ govukAssetPath }}rebrand/images/govuk-icon-180.png">
+  <link rel="manifest" href="{{ govukAssetPath }}rebrand/manifest.json">
+  <meta property="og:image" content="{{ govukAssetPath }}rebrand/images/govuk-opengraph-image.png">
+{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  {% include "partials/head.html" %}
+{% endblock %}
+
+{% block pageTitle %}
+  {% if errorlist and errorlist.length %}
+      {{ t('errorlist.prefix') }}
+  {% endif %}
+  {% if title %}
+    {{ title }}
+  {% else %}
+      {{ header }}
+  {% endif %}
+  {% if serviceName %}
+    &ndash; {{ serviceName }}
+  {% endif %}
+    &ndash; GOV.UK
+{% endblock %}
+
+{% block bodyStart %}
+  {% block cookieBanner %}
+   {% include "partials/cookie-banner.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block skipLink %}
+    {{ govukSkipLink({
+        href: '#main-content',
+        text: "Skip to main content",
+        classes: "skip-to-main"
+    }) }}
+{% endblock %}
+
+{% block header %}
+    {% block govukHeader %}
+        {{ govukHeader({
+            assetsPath: assetPath + '/images',
+            homepageUrl: homepageUrl,
+            containerClasses: "govuk-width-container",
+            productName: t('journey.header' or serviceName),
+            useTudorCrown: true,
+            rebrand: true
+        }) }}
+    {% endblock %}
+    {% block headerEnd %}
+      {% if feedbackUrl %}
+        {{ govukPhaseBanner({
+          tag: {
+            text: t('journey.phase')
+          },
+          html: 'This is a new service – your <a class="govuk-link" href="{{ feedbackUrl }}{% if not feedbackUrl %}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{% endif %}">feedback</a> will help us to improve it.',
+          classes: "govuk-width-container"
+        }) }}
+      {% endif %} 
+  {% endblock %}
+{% endblock %}
+
+{% block beforeContent %}
+  {% block containerStart %}
+    {% include "partials/back.html" %}
+  {% endblock %}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% block validationSummary %}{% endblock %}
+      {% if caption %}<span class="govuk-caption-l">{{ caption }}</span>{% endif %}
+      {% if header %}<h1 class="govuk-heading-l">{{ header }}</h1>{% endif %}
+      {% if subHeading %}<p class="govuk-body-m">{{ subHeading }}</p>{% endif %}
+
+      {% block mainContent %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {% set default_footer_items = [
+    {'href': '/cookies', 'text': t('base.cookies')},
+    {'href': '/terms-and-conditions', 'text': t('base.terms')},
+    {'href': '/accessibility', 'text': t('base.accessibility')}
+  ] %}
+
+  {# build items array from footerlinks (or fallback to defaults) #}
+  {% set meta_items = [] %}
+  {% if footerlinks %}
+    {% for link in footerlinks %}
+      {% set meta_items = meta_items + [{'href': link.path, 'text':  t('link.property')}] %}
+    {% endfor %}
+  {% else %}
+    {% set meta_items = default_footer_items %}
+  {% endif %}
+
+  {{ govukFooter({
+    meta: { items: meta_items },
+    assetsPath: assetPath + '/images',
+    rebrand: true
+  }) }}
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  {% if assetPath %}
+    <script nonce="{{ cspNonce }}" type="text/javascript"src="{{ assetPath }}/js/bundle.js"></script>
+  {% endif %}
+  <script nonce="{{ cspNonce }}" type="module">
+    (function () {
+      if (typeof window !== 'undefined' && window.GOVUK && typeof window.GOVUK.initAll === 'function') {
+        window.GOVUK.initAll();
+      }
+    }());
+  </script>
+    {% block scripts %}{% endblock %}
+    {% include "partials/gatag.html" %}
+{% endblock %}

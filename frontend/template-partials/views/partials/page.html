@@ -1,23 +1,18 @@
-{{<layout}}
-  {{$journeyHeader}}
-    {{#t}}journey.header{{/t}}
-  {{/journeyHeader}}
+{% extends "layout.html" %} 
 
-  {{$validationSummary}}
-    {{> partials-validation-summary}}
-  {{/validationSummary}}
+{% from "partials/form.html" import form %}
 
-  {{$propositionHeader}}
-    {{> partials-navigation}}
-  {{/propositionHeader}}
+{% block validationSummary %}
+  {% include "partials/validation-summary.html" %}
+{% endblock %}
 
-  {{$header}}{{{title}}}{{/header}}
-  {{$content}}
-    {{<partials-form}}
-      {{$form}}
-        {{$page-content}}{{/page-content}}
-        {{> partials-session-timeout-warning}}
-      {{/form}}
-    {{/partials-form}}
-  {{/content}}
-{{/layout}}
+{% block propositionHeader %}
+  {% include "partials/navigation.html" %}
+{% endblock %}
+
+{% block mainContent %}
+  {% call form(csrf_token) %}
+    {% block page_content %}{% endblock %}
+  {% endcall %}
+  {% include "partials/session-timeout-warning.html" %}
+{% endblock %}
