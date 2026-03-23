@@ -21,7 +21,7 @@ module.exports = (route, controller) => {
           // The HTTP method is safe. No need to verify a
           // token. Instead, provide a new one for future
           // verification.
-          res.locals['csrf-token'] = csrf.create(secret);
+          res.locals.csrf_token = csrf.create(secret);
           next();
         } else {
           // The HTTP method is assumed to be unsafe so

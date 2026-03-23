@@ -1,8 +1,6 @@
-<title>{{#t}}pages.build-your-own-form.title{{/t}} – GOV.UK</title>
+{% extends "partials/page.html" %}
 
-{{<partials-page}}
-  {{$page-content}}
-  <h2>{{#t}}pages.build-your-own-form.subheader{{/t}}</h2>
-  <a href="https://ukhomeofficeforms.github.io/hof-guide/documentation/#building-your-first-hof-form">Link to HOF form guidance</a>
-  {{/page-content}}
-{{/partials-page}}
+{% block page_content %}
+  <h2>{{ t('pages.build-your-own-form.subheader') }}</h2>
+    <a class="govuk-link" href="https://ukhomeofficeforms.github.io/hof-guide/documentation/#building-your-first-hof-form">Link to HOF form guidance</a>
+{% endblock %}

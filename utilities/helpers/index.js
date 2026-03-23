@@ -31,9 +31,9 @@ module.exports = class Helpers {
    * translation if found. If not it will fallback to the
    * label or legend of the first field on the page
    * @param {String} route - the route of the step
-   * @param {Function} lookup - i18n-lookup bound to translate and Mustache.render
+   * @param {Function} lookup - i18n-lookup bound to translate and nunjucks.renderString
    * @param {Object} fields - a key:value map of step fields
-   * @param {Object} locals - the locals map for mustache rendering
+   * @param {Object} locals - the locals map for nunjucks rendering
    * @returns {String} - the first translation found
    */
   static getTitle(route, lookup, fields, locals) {
@@ -52,8 +52,8 @@ module.exports = class Helpers {
    * Helper function to return intro if
    * located in pages.{route}.intro
    * @param {String} route - the route of the step
-   * @param {Function} lookup - i18n-lookup bound to translate and Mustache.render
-   * @param {Object} locals - the locals map for mustache rendering
+   * @param {Function} lookup - i18n-lookup bound to translate and nunjucks.renderString
+   * @param {Object} locals - the locals map for nunjucks rendering
    * @returns {String} the translation if found
    */
   static getIntro(route, lookup, locals) {
@@ -69,7 +69,7 @@ module.exports = class Helpers {
    * @returns {Boolean} - if the mixin has associated options
    */
   static hasOptions(mixin) {
-    return mixin === 'radio-group' || mixin === 'checkbox-group' || mixin === 'select';
+    return mixin === 'radioGroup' || mixin === 'checkbox-group' || mixin === 'select';
   }
 
   /**
@@ -110,7 +110,7 @@ module.exports = class Helpers {
    * Utility function which looks up translations with fallback values
    * If the translation is for a field, it will first try fields.key.summary
    * If this fails it will try fields.key.label, if this fails it will try
-   * fields.key.legend (radio-group and checkbox-group).
+   * fields.key.legend (radioGroup and checkbox-group).
    *
    * If the translation is not for a field it will first try pages.key.summary,
    * if this fails it will fallback to pages.keys.header.

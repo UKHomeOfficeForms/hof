@@ -1,19 +1,15 @@
-{{<layout}}
-  {{$journeyHeader}}
-  {{#t}}journey.header{{/t}}
-  {{/journeyHeader}}
+{% extends "layout.html" %}
 
-  {{$propositionHeader}}
-  {{> partials-navigation}}
-  {{/propositionHeader}}
+{% block journeyHeader %}
+  {{ t('journey.header') }}
+{% endblock %}
 
-  {{$header}}
-    {{header}}
-  {{/header}}
+{% block propositionHeader %}
+  {% include "partials/navigation.html" %}
+{% endblock %}
 
-  {{$content}}
-   <p>{{#t}}pages.save-and-exit.paragraph-1{{/t}}</p>
-   <p>{{#t}}pages.save-and-exit.paragraph-2{{/t}}</p>
-   <p>{{#t}}pages.save-and-exit.paragraph-3{{/t}}</p>
-  {{/content}}
-{{/layout}}
+{% block mainContent %}
+  <p class="govuk-body">{{ t('pages.save-and-exit.paragraph-1') }}</p>
+  <p class="govuk-body">{{ t('pages.save-and-exit.paragraph-2') }}</p>
+  <p class="govuk-body">{{ t('pages.save-and-exit.paragraph-3') | safe }}</p>
+{% endblock %}

@@ -1,43 +1,53 @@
-<div id="{{key}}-group" class="govuk-form-group{{#className}} {{className}} {{/className}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
-  <fieldset class="govuk-fieldset" {{#hint}} aria-describedby="{{key}}-hint"{{/hint}}>
-      <legend class="govuk-fieldset__legend {{#isPageHeading}}govuk-fieldset__legend--l{{/isPageHeading}}{{#legendClassName}} {{legendClassName}}{{/legendClassName}}">
-          {{#isPageHeading}}<h1 class="govuk-fieldset__heading">{{/isPageHeading}}
-              {{legend}}
-          {{#isPageHeading}}</h1>{{/isPageHeading}}
-      </legend>
-      {{#isWarning}}
-        <div class="govuk-warning-text">
-            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text">
-              <span class="govuk-warning-text__assistive">Warning</span>
-             {{warning}}
-            </strong>
-          </div>
-        {{/isWarning}}
-      {{#hint}}<div id="{{key}}-hint" class="govuk-hint">{{{hint}}}</div>{{/hint}}
-      {{#error}}<p id="{{key}}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{error.message}}</p>{{/error}}
-      {{{detail}}}
-  <div class="govuk-radios" data-module="govuk-radios">
-      {{#options}}
-      <div class="govuk-radios__item">
-          <input
-      class="govuk-radios__input"
-              type="{{type}}"
-              name="{{key}}"
-              id="{{key}}-{{value}}"
-              value="{{value}}"
-              {{#toggle}} data-toggle="{{toggle}}"{{/toggle}}
-              {{#selected}} checked="checked"{{/selected}}
-              {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-item-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}{{/optionHint}}{{/error}}
-              {{#error}} aria-describedby="{{key}}-error" aria-invalid="true"{{/error}}
-          >
-          <label class="govuk-label govuk-radios__label" for="{{key}}-{{value}}">
-              {{{label}}}
-          </label>
-          {{#optionHint}}<div id="{{key}}-{{value}}-item-hint" class="govuk-hint govuk-radios__hint">{{optionHint}}</div>{{/optionHint}}
+<div id="{{ key }}-group" class="govuk-form-group{% if className %} {{ className }}{% endif %}{% if formGroupClassName %} {{ formGroupClassName }}{% endif %}{% if error %} govuk-form-group--error{% endif %}">
+  <fieldset class="govuk-fieldset"{% if hint %} aria-describedby="{{ key }}-hint"{% endif %}>
+    <legend class="govuk-fieldset__legend{% if isPageHeading %} govuk-fieldset__legend--l{% endif %}{% if legendClassName %} {{ legendClassName }}{% endif %}">
+      {% if isPageHeading %}<h1 class="govuk-fieldset__heading">{% endif %}
+        {{ legend }}
+      {% if isPageHeading %}</h1>{% endif %}
+    </legend>
+
+    {% if isWarning %}
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          {{ warning }}
+        </strong>
       </div>
-      {{#renderChild}}{{/renderChild}}
-      {{/options}}
-  </div>
+    {% endif %}
+
+    {% if hint %}
+      <div id="{{ key }}-hint" class="govuk-hint">{{ hint | safe }}</div>
+    {% endif %}
+
+    {% if error %}
+      <p id="{{ key }}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ error.message }}</p>
+    {% endif %}
+
+    {{ detail | safe }}
+
+    <div class="govuk-radios" data-module="govuk-radios">
+      {% for option in options %}
+        <div class="govuk-radios__item">
+          <input
+            class="govuk-radios__input"
+            type="{{ option.type }}"
+            name="{{ key }}"
+            id="{{ key }}-{{ option.value }}"
+            value="{{ option.value }}"{% if option.toggle %} data-toggle="{{ option.toggle }}"{% endif %}{% if option.selected %} checked="checked"{% endif %}{% if not error %}{% if option.optionHint %} aria-describedby="{{ key }}-{{ option.value }}-item-hint"{% elif hint %} aria-describedby="{{ key }}-hint"{% endif %}{% endif %}{% if error %} aria-describedby="{{ key }}-error" aria-invalid="true"{% endif %}>
+          <label class="govuk-label govuk-radios__label" for="{{ key }}-{{ option.value }}">
+            {{ option.label | safe }}
+          </label>
+
+          {% if option.optionHint %}
+            <div id="{{ key }}-{{ option.value }}-item-hint" class="govuk-hint govuk-radios__hint">{{ option.optionHint }}</div>
+          {% endif %}
+        </div>
+
+        {% if renderChild %}
+          {{ renderChild(option) | safe }}
+        {% endif %}
+      {% endfor %}
+    </div>
   </fieldset>
 </div>

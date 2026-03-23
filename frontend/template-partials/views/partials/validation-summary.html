@@ -1,25 +1,28 @@
-{{#errorlist.length}}
-<div class="govuk-error-summary" aria-labelledby="error-summary-title" data-module="govuk-error-summary" role="alert" tabindex="-1">
-    {{$errorlist-title}}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-      {{#errorLength.single}}
-        <h2 class="govuk-error-summary__title" id="error-summary-title">{{#t}}errorlist.title.single{{/t}}</h2>
-      {{/errorLength.single}}
-      {{#errorLength.multiple}}
-        <h2 class="govuk-error-summary__title" id="error-summary-title">{{#t}}errorlist.title.multiple{{/t}}</h2>
-      {{/errorLength.multiple}}
+{% if errorlist.length %}
+	{% if errorLength.single %}
+		{% set errorlistTitle = t('errorlist.title.single') %}
+	{% endif %}
+	{% if errorLength.multiple %}
+		{% set errorlistTitle = t('errorlist.title.multiple') %}
+	{% endif %}
 
-    {{/errorlist-title}}
-	<div class="govuk-error-summary__body">
-		{{<partials-validation-list}}
-			{{$validation-list}}
-				{{#errorlist}}
-					{{#message}}
-						<li><a href="#{{errorLinkId}}">{{ message }}</a></li>
-					{{/message}}
-				{{/errorlist}}
-			{{/validation-list}}
-		{{/partials-validation-list}}
-	</div>
-</div>
-{{/errorlist.length}}
+	{% set validationSummary = [] %}
+
+	{% if errorlist %}
+		{% for error in errorlist %}
+			{% if error.message %}
+				{% set validationSummary = (validationSummary.push({
+					text: error.message,
+					href: "#" + error.errorLinkId
+				}), validationSummary) %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+
+	{{ govukErrorSummary({
+		titleText: errorlistTitle,
+		errorList: validationSummary
+	}) }}
+{% endif %}

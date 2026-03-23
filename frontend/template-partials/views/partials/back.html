@@ -1,5 +1,9 @@
-{{$back}}
-  {{#backLink}}
-    <a class="govuk-back-link" href="{{#url}}{{backLink}}{{/url}}">{{#t}}buttons.back{{/t}}</a>
-  {{/backLink}}
-{{/back}}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% block back %}
+  {% if backLink %}
+    {{ govukBackLink({
+      text: t('buttons.back'),
+      href: backLink
+    }) }}
+  {% endif %}
+{% endblock %}

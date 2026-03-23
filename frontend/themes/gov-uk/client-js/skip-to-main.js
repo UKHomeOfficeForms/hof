@@ -1,8 +1,8 @@
 const skipToMain = function () {
-  const skipToMainLink = document.getElementById('skip-to-main');
-  const firstControlId = skipToMainLink.hash.split('#')[1] ? skipToMainLink.hash.split('#')[1] : 'main-content';
+  const skipToMainLink = document.getElementsByClassName('skip-to-main');
+  const firstControlId = skipToMainLink[0].hash.split('#')[1] ? skipToMainLink[0].hash.split('#')[1] : 'main-content';
   if(firstControlId === 'main-content') {
-    skipToMainLink.setAttribute('href', '#main-content');
+    skipToMainLink[0].setAttribute('href', '#main-content');
   }
   if(firstControlId) {
     // eslint-disable-next-line no-unused-vars

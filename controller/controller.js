@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 const i18nLookup = require('i18n-lookup');
-const Mustache = require('mustache');
+const nunjucks = require('nunjucks');
 const BaseController = require('./base-controller');
 const Helpers = require('../utilities').helpers;
 
@@ -98,7 +98,10 @@ module.exports = class Controller extends BaseController {
   }
 
   locals(req, res) {
-    const lookup = i18nLookup(req.translate, Mustache.render);
+    const lookup = i18nLookup(
+      req.translate,
+      (template, ctx) => nunjucks.renderString(template, ctx)
+    );
     const route = req.form.options.route.replace(/^\//, '');
     const locals = super.locals(req, res);
     const stepLocals = req.form.options.locals || {};
@@ -192,7 +195,7 @@ module.exports = class Controller extends BaseController {
         if (req.form && req.form.options && req.form.options.fields) {
           const field = req.form.options.fields[key];
           // get first option for radios and checkbox
-          if (field.mixin === 'radio-group' || field.mixin === 'checkbox-group') {
+          if (field.mixin === 'radioGroup' || field.mixin === 'checkbox-group') {
             // get first option for radios and checkbox where there is a toggle
             if (typeof field.options[0] === 'object') {
               req.form.errors[key].errorLinkId = key + '-' + field.options[0].value;
@@ -240,7 +243,9 @@ module.exports = class Controller extends BaseController {
       legend: req.translate(`fields.${error.key}.legend`).toLowerCase()
     }, res.locals, getArgs(error));
 
-    return i18nLookup(req.translate, Mustache.render)(keys, context);
+    return i18nLookup(req.translate, (template, ctx) => {
+      return nunjucks.renderString(template, ctx);
+    })(keys, context);
   }
 
   // eslint-disable-next-line no-unused-vars

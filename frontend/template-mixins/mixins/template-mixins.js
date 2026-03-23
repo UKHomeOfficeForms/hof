@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const Hogan = require('hogan.js');
+const nunjucks = require('nunjucks');
 const _ = require('underscore');
 
 const renderer = require('./render');
@@ -76,34 +76,64 @@ module.exports = function (options) {
     const roots = [].concat(req.app.get('views')).concat(options.viewsDirectory);
     const View = req.app.get('view');
 
+    // create a nunjucks environment for resolving includes/partials from the
+    // project's views roots for this request.
+    const nunjucksEnv = (req && req.app && req.app.locals && req.app.locals.nunjucksEnv)
+      || new nunjucks.Environment(
+        new nunjucks.FileSystemLoader(roots, { noCache: process.env.NODE_ENV !== 'production' }),
+        { autoescape: true }
+      );
+
+
+    // helper: resolve a template file path by trying express View, configured viewsDirectory and app roots
+    function resolveTemplateFile(name) {
+      const viewExt = '.' + (options.viewEngine || 'html');
+      const engines = {};
+      engines[viewExt] = {};
+      const view = new View(name, {
+        defaultEngine: options.viewEngine,
+        root: roots,
+        engines: engines
+      });
+
+      const candidates = [];
+      if (view && view.path) {
+        candidates.push(view.path);
+        candidates.push(view.path + viewExt);
+      }
+      if (options.viewsDirectory) {
+        candidates.push(path.join(options.viewsDirectory, name + viewExt));
+        candidates.push(path.join(options.viewsDirectory, name));
+      }
+      (roots || []).forEach(r => {
+        candidates.push(path.join(r, name + viewExt));
+        candidates.push(path.join(r, name));
+      });
+
+      const uniq = Array.from(new Set(candidates.map(p => path.resolve(p))));
+
+      const found = uniq.find(p => fs.existsSync(p) && fs.lstatSync(p).isFile());
+      if (!found) {
+        throw new Error('Could not find template file: ' + name + ' (checked: ' + uniq.join(', ') + ')');
+      }
+      return found;
+    }
+
     // wrap in try catch to throw an error if any one template cannot be resolved
     try {
       PARTIALS.forEach(relativeTemplatePath => {
-        if (compiled[relativeTemplatePath]) {
-          return;
-        }
-        const viewExtension = '.' + options.viewEngine;
-        const engines = {};
-        engines[viewExtension] = {};
-        const view = new View(relativeTemplatePath, {
-          defaultEngine: options.viewEngine,
-          root: roots,
-          engines: engines
-        });
-        if (!view.path) {
-          throw new Error('Could not find template file: ' + relativeTemplatePath);
-        }
-        const compiledTemplate = Hogan.compile(fs.readFileSync(view.path).toString());
-        compiled[relativeTemplatePath] = compiledTemplate;
+        if (compiled[relativeTemplatePath]) return;
+        const filePath = resolveTemplateFile(relativeTemplatePath);
+        compiled[relativeTemplatePath] = fs.readFileSync(filePath, 'utf8').toString();
       });
     } catch (e) {
       return next(e);
     }
 
-    const hoganRender = renderer(res);
+    const nunjucksRender = renderer(res);
 
     const t = function (key) {
-      return hoganRender(req.translate(options.sharedTranslationsKey + key), this);
+      return nunjucksRender(req.translate(options.sharedTranslationsKey + key), this);
     };
 
     // Like t() but returns null on failed translations
@@ -117,11 +147,65 @@ module.exports = function (options) {
       return field[property] ? field[property] : 'fields.' + key + '.' + property;
     };
 
+    // tries multiple candidate paths and caches source
     function readTemplate(name) {
-      if (templateCache[name]) {
-        return templateCache[name];
+      if (!name) { return ''; }
+      if (templateCache[name]) { return templateCache[name]; }
+
+      // if compiled preloaded partial exists, return that
+      if (compiled[name]) {
+        templateCache[name] = compiled[name];
+        return compiled[name];
       }
-      const data = fs.readFileSync(`${name}.${options.viewEngine}`).toString();
+
+      // if looks like a raw template string, return as-is
+      if (typeof name === 'string' && (name.indexOf('<') !== -1 || name.indexOf('{%') !== -1 || name.indexOf('{{') !== -1)) {
+        templateCache[name] = name;
+        return name;
+      }
+
+      const viewExt = '.' + (options.viewEngine || 'html');
+      const candidates = [];
+      candidates.push(path.resolve(name));
+      candidates.push(path.resolve(name + viewExt));
+      if (options.viewsDirectory) {
+        candidates.push(path.resolve(options.viewsDirectory, name + viewExt));
+        candidates.push(path.resolve(options.viewsDirectory, name));
+      }
+      (roots || []).forEach(r => {
+        candidates.push(path.resolve(r, name + viewExt));
+        candidates.push(path.resolve(r, name));
+      });
+
+      // deduplicate and find existing file
+      const uniq = Array.from(new Set(candidates));
+      let found;
+      for (let i = 0; i < uniq.length; i++) {
+        const p = uniq[i];
+        if (fs.existsSync(p) && fs.lstatSync(p).isFile()) {
+          found = p;
+          break;
+        }
+      }
+      // fallback to express View resolution
+      if (!found) {
+        const engines = {};
+        engines[viewExt] = {};
+        const view = new View(name, {
+          defaultEngine: options.viewEngine,
+          root: roots,
+          engines: engines
+        });
+        if (view && view.path && fs.existsSync(view.path)) {
+          found = view.path;
+        }
+      }
+
+      if (!found) {
+        throw new Error('Could not find template file: ' + name + ' (checked: ' + uniq.join(', ') + ')');
+      }
+
+      const data = fs.readFileSync(found, 'utf8').toString();
       templateCache[name] = data;
       return data;
     }
@@ -182,17 +266,14 @@ module.exports = function (options) {
     }
 
     function renderChild() {
-      return function () {
-        if (this.child) {
-          const templateString = getTemplate(this.child, this.toggle);
-          const template = Hogan.compile(templateString);
-          return template.render(Object.assign({
-            renderMixin: renderMixin.bind(this)
-          }, res.locals, this), _.mapObject(res.locals.partials, function (partialpath) {
-            return readTemplate(partialpath);
-          }));
-        }
-      };
+      if (this.child) {
+        const templateString = getTemplate(this.child, this.toggle);
+        const ctx = Object.assign({
+          renderMixin: renderMixin.bind(this)
+        }, res.locals, this);
+        // render with nunjucks environment so {% include %} works against roots
+        return nunjucksEnv.renderString(templateString, ctx);
+      }
     }
 
     // eslint-disable-next-line complexity
@@ -230,7 +311,7 @@ module.exports = function (options) {
         child: field.child,
         isPageHeading: field.isPageHeading,
         attributes: field.attributes,
-        isPrefixOrSuffix: _.map(field.attributes, item => {if (item.prefix || item.suffix !== undefined) return true;}),
+        isPrefixOrSuffix: _.map(field.attributes, item => { if (item.prefix || item.suffix !== undefined) return true; }),
         isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
         renderChild: renderChild.bind(this)
       });
@@ -238,7 +319,7 @@ module.exports = function (options) {
 
     function optionGroup(key, opts, pKey = key) {
       opts = opts || {};
-      const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+      const field = Object.assign({}, this.options.fields[key] || options.fields[key] || {});
       const legend = field.legend;
       const detail = field.detail;
       const warningValue = 'fields.' + key + '.warning';
@@ -253,6 +334,63 @@ module.exports = function (options) {
         }
       }
 
+      // map options into a structure suitable for the nunjucks partial that will render them
+      const optsArr = (field.options || []).map(obj => {
+        let selected = false;
+        let label;
+        let value;
+        let toggle;
+        let child;
+        let optionHint;
+        let useHintText;
+
+        if (typeof obj === 'string') {
+          value = obj;
+          // pKey - optional param that demotes parent key for group components - set to key param val by default
+          label = 'fields.' + pKey + '.options.' + obj + '.label';
+          optionHint = 'fields.' + pKey + '.options.' + obj + '.hint';
+        } else {
+          value = obj.value;
+          label = obj.label || 'fields.' + pKey + '.options.' + obj.value + '.label';
+          toggle = obj.toggle;
+          child = obj.child;
+          useHintText = obj.useHintText;
+          optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
+        }
+
+        if (this.values && this.values[key] !== undefined) {
+          const selectedValue = this.values[key];
+          selected = Array.isArray(selectedValue)
+            ? selectedValue.indexOf(value) > -1
+            : selectedValue === value;
+        }
+
+        // Translate/format label and optionHint using helpers so they are ready for nunjucks partial
+        const renderedLabel = function () {
+          try { return t.call(this, label) || ''; } catch (e) { return ''; }
+        }.call(this);
+
+        const renderedOptionHint = function () {
+          if (useHintText) return optionHint;
+          try {
+            return conditionalTranslate.call(this, optionHint) || '';
+          } catch (e) {
+            return '';
+          }
+        }.call(this);
+
+        return {
+          label: renderedLabel,
+          value: value,
+          type: opts.type,
+          selected: selected,
+          radioOption: opts.type === 'radio',
+          toggle: toggle,
+          child: child,
+          optionHint: renderedOptionHint
+        };
+      }, this);
+
       return {
         key: key,
         error: this.errors && this.errors[key],
@@ -264,47 +402,7 @@ module.exports = function (options) {
         warning: t(warningValue),
         detail: detail ? detail : '',
         hint: conditionalTranslate(getTranslationKey(field, key, 'hint')),
-        options: _.map(field.options, function (obj) {
-          let selected = false;
-          let label;
-          let value;
-          let toggle;
-          let child;
-          let optionHint;
-          let useHintText;
-
-          if (typeof obj === 'string') {
-            value = obj;
-            // pKey - optional param that demotes parent key for group components - set to key param val by default
-            label = 'fields.' + pKey + '.options.' + obj + '.label';
-            optionHint = 'fields.' + pKey + '.options.' + obj + '.hint';
-          } else {
-            value = obj.value;
-            label = obj.label || 'fields.' + pKey + '.options.' + obj.value + '.label';
-            toggle = obj.toggle;
-            child = obj.child;
-            useHintText = obj.useHintText;
-            optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
-          }
-
-          if (this.values && this.values[key] !== undefined) {
-            const selectedValue = this.values[key];
-            selected = Array.isArray(selectedValue)
-              ? selectedValue.indexOf(value) > -1
-              : selectedValue === value;
-          }
-
-          return {
-            label: t(label) || '',
-            value: value,
-            type: opts.type,
-            selected: selected,
-            radioOption: opts.type === 'radio',
-            toggle: toggle,
-            child: child,
-            optionHint: useHintText ? optionHint : conditionalTranslate(optionHint) || ''
-          };
-        }, this),
+        options: optsArr,
         className: classNames(field),
         renderChild: renderChild.bind(this)
       };
@@ -379,7 +477,7 @@ module.exports = function (options) {
         path: 'partials/forms/textarea-group',
         renderWith: inputText
       },
-      'radio-group': {
+      radioGroup: {
         path: 'partials/forms/option-group',
         renderWith: optionGroup,
         options: {
@@ -416,20 +514,21 @@ module.exports = function (options) {
           required: true
         }
       },
-      'input-submit': {
-        handler: function () {
-          return function (props) {
-            props = (props || '').split(' ');
-            const def = 'next';
-            const value = props[0] || def;
-            const id = props[1];
-
-            const obj = {
-              value: t('buttons.' + value),
-              id: id
-            };
-            return compiled['partials/forms/input-submit'].render(obj);
+      inputSubmit: {
+        handler: function (props) {
+          props = (props || '').split(' ');
+          const def = 'next';
+          const value = props[0] || def;
+          const id = props[1];
+          const obj = {
+            value: t('buttons.' + value),
+            id: id,
+            text: t('buttons.' + value)
           };
+          const template = `${compiled['partials/forms/input-submit']}{{ inputSubmit(value, text, id) }}`;
+          return new nunjucks.runtime.SafeString(
+            nunjucksEnv.renderString(template, obj)
+          );
         }
       },
       'input-date': {
@@ -439,7 +538,7 @@ module.exports = function (options) {
           */
           return function (key) {
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
-            key = hoganRender(key, this);
+            key = nunjucksRender(key, this);
             // Exact unless there is a inexact property against the fields key.
             const isExact = field.inexact !== true;
 
@@ -466,12 +565,12 @@ module.exports = function (options) {
             const parts = [];
 
             if (isExact) {
-              const dayPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-day', { inputmode: 'numeric', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
+              const dayPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-day', { inputmode: 'numeric', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
               parts.push(dayPart);
             }
 
-            const monthPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-month', { inputmode: 'numeric', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
-            const yearPart = compiled['partials/forms/input-text-date'].render(inputText.call(this, key + '-year', { inputmode: 'numeric', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
+            const monthPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-month', { inputmode: 'numeric', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
+            const yearPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-year', { inputmode: 'numeric', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
 
             return parts.concat(monthPart, yearPart).join('\n');
           };
@@ -480,12 +579,12 @@ module.exports = function (options) {
       'input-amount-with-unit-select': {
         handler: function () {
           return function (key) {
-            key = (key === '{{key}}' || key === '' || key === undefined) ? hoganRender(key, this) : key;
+            key = (key === '{{key}}' || key === '' || key === undefined) ? nunjucksRender(key, this) : key;
             const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
 
             let autocomplete = field.autocomplete || 'off';
             if (autocomplete === 'off') {
-              autocomplete = { amount: 'off'};
+              autocomplete = { amount: 'off' };
             } else if (typeof autocomplete === 'string') {
               autocomplete = { amount: autocomplete + '-amount' };
             }
@@ -498,72 +597,113 @@ module.exports = function (options) {
 
             // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
             // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
-            const amountPart = compiled['partials/forms/grouped-inputs-text']
-              .render(inputText.call(this,
-                key + '-amount', {
-                  formGroupClassName,
-                  autocomplete: autocomplete.amount,
-                  className: classNameAmount,
-                  amountWithUnitSelect: true }
-              ));
+            const amountPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-text'], inputText.call(this,
+              key + '-amount', {
+                formGroupClassName,
+                autocomplete: autocomplete.amount,
+                className: classNameAmount,
+                amountWithUnitSelect: true
+              }
+            ));
 
-            const unitPart = compiled['partials/forms/grouped-inputs-select']
-              .render(inputText.call(this, key + '-unit',
-                optionGroup.call(this,
-                  key + '-unit', {
-                    formGroupClassName,
-                    className: classNameUnit,
-                    amountWithUnitSelect: true },
-                  key
-                )));
+            const unitPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-select'], inputText.call(this, key + '-unit',
+              optionGroup.call(this,
+                key + '-unit', {
+                  formGroupClassName,
+                  className: classNameUnit,
+                  amountWithUnitSelect: true
+                },
+                key
+              )));
 
             return parts.concat(amountPart, unitPart).join('\n');
           };
         }
       }
     };
-
-    // loop through mixins object and attach their handler methods
-    // to res.locals['mixin-name'].
     _.each(mixins, function (mixin, name) {
-      const handler = _.isFunction(mixin.handler) ? mixin.handler : function () {
-        return function (key) {
-          this.options = this.options || {};
-          this.options.fields = this.options.fields || {};
-          key = hoganRender(key, this);
-          return compiled[mixin.path]
-            .render(mixin.renderWith.call(this, key, _.isFunction(mixin.options)
-              ? mixin.options.call(this, key)
-              : mixin.options
-            ));
+      if (_.isFunction(mixin.handler)) {
+        res.locals[name] = function (key) {
+          return mixin.handler.call(res.locals, key);
         };
-      };
-      res.locals[name] = handler;
+        return;
+      }
+
+      // for mixins with renderWith
+      res.locals[name] = function (key) {
+        const ctxThis = this || res.locals;   // ensure context
+        ctxThis.options = ctxThis.options || {};
+        ctxThis.options.fields = ctxThis.options.fields || {};
+
+        key = nunjucksRender(key, ctxThis);
+
+        const rendered = mixin.renderWith.call(
+          ctxThis,
+          key,
+          _.isFunction(mixin.options) ? mixin.options.call(ctxThis, key) : mixin.options
+        );
+        const ctx = Object.assign({}, res.locals, rendered);
+        // try to render by template name first so relative imports/includes resolve via loader roots
+        const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.html';
+        const templateName = mixin.path + viewExt;
+        try {
+          return new nunjucks.runtime.SafeString(
+            nunjucksEnv.render(templateName, ctx)
+          );
+        } catch (err) {
+          // fallback to rendering the compiled string (older behaviour)
+          return new nunjucks.runtime.SafeString(
+            nunjucksEnv.renderString(compiled[mixin.path], ctx)
+          );
+        }
+      }.bind(res.locals);
     });
 
+    function renderFieldImpl(key) {
+      // Accept either:
+      // - a string key
+      // - a field object (with .key and other props)
+      // - undefined (use this as already-populated field)
+      const fields = (this && this.options && this.options.fields) || res.locals.fields || [];
+
+      if (key && typeof key === 'object') {
+        // called with the full field object
+        Object.assign(this, key);
+      } else if (typeof key === 'string' && key.length) {
+        const field = fields.find(f => f.key === key);
+        if (field) {
+          Object.assign(this, field);
+        } else {
+          throw new Error('Could not find field: ' + key);
+        }
+      }
+
+      if (this.disableRender) {
+        return null;
+      }
+
+      if (this.html) {
+        return this.html;
+      }
+
+      const mixin = this.mixin || 'input-text';
+      if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
+        const ctx = Object.assign({}, res.locals);
+        return res.locals[mixin].call(ctx, this.key || (this && this.key));
+      }
+      throw new Error('Mixin: "' + mixin + '" not found');
+    }
+
     res.locals.renderField = function () {
-      return function (key) {
-        if (key) {
-          const fields = this.fields || res.locals.fields;
-          const field = fields.find(f => f.key === key);
-          if (field) {
-            Object.assign(this, field);
-          } else {
-            throw new Error('Could not find field: ' + key);
-          }
-        }
-        if (this.disableRender) {
-          return null;
-        }
-        if (this.html) {
-          return this.html;
-        }
-        const mixin = this.mixin || 'input-text';
-        if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
-          return res.locals[mixin]().call(Object.assign({}, res.locals), this.key);
-        }
-        throw new Error('Mixin: "' + mixin + '" not found');
-      };
+      if (arguments.length === 0) {
+        // return a callable for block-style usage
+        const self = this;
+        return function (key) {
+          return renderFieldImpl.call(self, key);
+        };
+      }
+      // direct call
+      return renderFieldImpl.call(this, arguments[0]);
     };
 
     next();

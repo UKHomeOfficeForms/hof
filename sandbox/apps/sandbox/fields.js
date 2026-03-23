@@ -7,7 +7,7 @@ const amountWithUnitSelectComponent = require('../../../').components.amountWith
 
 module.exports = {
   'landing-page-radio': {
-    mixin: 'radio-group',
+    mixin: 'radioGroup',
     validate: ['required'],
     isPageHeading: true,
     // Design system says to avoid in-line unless it's two options,
@@ -59,7 +59,7 @@ module.exports = {
   },
   countryOfHearing: {
     isPageHeading: 'true',
-    mixin: 'radio-group',
+    mixin: 'radioGroup',
     validate: ['required'],
     options: [
       'englandAndWales',

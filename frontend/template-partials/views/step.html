@@ -1,14 +1,30 @@
-{{<partials-page}}
-  {{$page-content}}
-    {{#beforeFields}}
-      {{beforeFields}}
-    {{/beforeFields}}
-    {{#fields}}
-      {{#renderField}}{{/renderField}}
-    {{/fields}}
-    {{#afterFields}}
-      {{afterFields}}
-    {{/afterFields}}
-    {{#input-submit}}continue{{/input-submit}}
-  {{/page-content}}
-{{/partials-page}}
+{% extends "partials/page.html" %}
+
+{% block page_content %}
+  {% block beforeFields %}
+    {% if beforeFields is defined %}
+      {{ beforeFields | safe }}
+    {% endif %}
+  {% endblock %}
+
+  {% if fields %}
+    {% for field in fields %}
+      {% if renderField is defined %}
+        {{ renderField(field) | safe }}
+      {% else %}
+        {% block renderField %}
+          {# default field rendering (override in child templates) #}
+        {% endblock %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% block afterFields %}
+    {% if afterFields is defined %}
+      {{ afterFields | safe }}
+    {% endif %}
+  {% endblock %}
+  
+  {{ inputSubmit("continue") }}
+{% endblock %}
+
