@@ -1,3 +1,14 @@
+## 2025-03-18, Version 24.0.0 (Stable), @Rhodine-orleans-lindsay
+
+### Changed
+ * ⛓️‍💥 **BREAKING CHANGE** : removed `Hogan` and `Mustache` replaced with `Nunjucks`. 
+   - The `Hogan` and `Mustache` packages have been removed due to the HOF framework moving to use Nunjucks to better align with the GOV.UK design system and in preparation of upcoming govuk-frontend updates.
+  - 👊 Impact : Any functions or configurations relying on `Hogan` and `Mustache`must be updated to use `Nunjucks`. There have been changes to the names of some mixins due to compatibilty with `Nunjucks` format.
+  - 🎬 Action: Rewrite views templates and field mixins to utilize `Nunjucks` as the replacement, ensuring compatibility and security. See the ReadMe for further information.
+
+### Security
+- Updates patch and minor dependency versions
+
 ## 2026-04-16, Version 23.0.4 (Stable), @PaolaDMadd-Pro
 
 ### Fixed
@@ -36,6 +47,7 @@
 ### Fixed
 - Improved session secret validation so missing or blank values now fail fast with a clearer startup error.
 - Reused the validated session secret consistently across cookie parsing, session encryption, and Redis session storage.
+
 
 ## 2025-03-04, Version 23.0.1 (Stable), @PaolaDMadd-Pro @Rhodine-orleans-lindsay
 ### ⚠️ Versioning Notice
