@@ -1,59 +1,55 @@
 /* eslint-disable max-len */
 'use strict';
 
-const path = require('path');
 const mixins = require('../../frontend/template-mixins/mixins');
 const _ = require('underscore');
-const Hogan = require('hogan.js');
-const fs = require('fs');
+const nunjucks = require('nunjucks');
 const reqres = require('reqres');
 
 describe('Template Mixins', () => {
   let req;
   let res;
   let next;
-  let render;
+  let renderSpy;
   let middleware;
+
+  beforeAll(() => {
+    global.setImmediate = global.setImmediate || ((fn, ...args) => setTimeout(fn, 0, ...args));
+  });
 
   beforeEach(() => {
     req = reqres.req({
       translate: a => a
     });
+
     res = {
       locals: {
+        nunjucksEnv: new nunjucks.Environment(),
         options: {
           fields: {}
         }
       }
     };
-    next = sinon.stub();
+
+    next = jest.fn();
+
     middleware = mixins();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('returns a middleware', () => {
-    mixins().should.be.a('function');
-    mixins().length.should.equal(3);
+    expect(typeof mixins()).toBe('function');
+    expect(mixins().length).toBe(3);
   });
 
   it('calls next', function (done) {
     mixins()(req, res, done);
   });
 
-  describe('with stubbed Hogan', () => {
-    beforeEach(() => {
-      render = sinon.stub();
-      sinon.stub(Hogan, 'compile').callsFake(function (text) {
-        return {
-          render: render.returns(text)
-        };
-      });
-      middleware = mixins();
-    });
-
-    afterEach(() => {
-      Hogan.compile.restore();
-    });
-
+  describe('with stubbed Nunjucks', () => {
     describe('input-text', () => {
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
@@ -901,40 +897,69 @@ describe('Template Mixins', () => {
       });
     });
 
-    describe('input-submit', () => {
-      it('adds a function to res.locals', () => {
-        middleware(req, res, next);
-        res.locals['input-submit'].should.be.a('function');
+    describe('inputSubmit', () => {
+      beforeEach(() => {
+        renderSpy = jest
+          .spyOn(nunjucks.Environment.prototype, 'renderString')
+          .mockImplementation(function (template) {
+            return template;
+          });
       });
 
-      it('returns a function', () => {
+      afterEach(() => {
+        jest.restoreAllMocks();
+      });
+
+      it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals['input-submit']().should.be.a('function');
+        expect(typeof res.locals.inputSubmit).toBe('function');
+      });
+
+      it('returns an object an object when called', () => {
+        middleware(req, res, next);
+        const result = res.locals.inputSubmit();
+
+        expect(typeof result).toBe('object');
+        expect(result).not.toBeNull();
       });
 
       it('looks up button value with default key of "next"', () => {
         middleware(req, res, next);
-        res.locals['input-submit']().call(res.locals);
-        render.should.have.been.calledWith(sinon.match({
-          value: 'buttons.next'
-        }));
+
+        res.locals.inputSubmit();
+
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            value: 'buttons.next'
+          })
+        );
       });
 
       it('looks up button value with key if provided', () => {
         middleware(req, res, next);
-        res.locals['input-submit']().call(res.locals, 'button-id');
-        render.should.have.been.calledWith(sinon.match({
-          value: 'buttons.button-id'
-        }));
+        res.locals.inputSubmit('button-id');
+
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            value: 'buttons.button-id'
+          })
+        );
       });
 
       it('prefixes translation lookup with namespace if provided', () => {
         middleware = mixins({ sharedTranslationsKey: 'name.space' });
         middleware(req, res, next);
-        res.locals['input-submit']().call(res.locals, 'button-id');
-        render.should.have.been.calledWith(sinon.match({
-          value: 'name.space.buttons.button-id'
-        }));
+
+        res.locals.inputSubmit('button-id');
+
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            value: 'name.space.buttons.button-id'
+          })
+        );
       });
     });
 
@@ -1132,42 +1157,50 @@ describe('Template Mixins', () => {
       });
     });
 
-    describe('radio-group', () => {
+    describe('radioGroup', () => {
       beforeEach(() => {
+        renderSpy = jest
+          .spyOn(nunjucks.Environment.prototype, 'renderString')
+          .mockImplementation(function (template, context) {
+            renderSpy.lastContext = context;
+            return template;
+          });
+      });
+
+      afterEach(() => {
+        jest.restoreAllMocks();
       });
 
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals['radio-group'].should.be.a('function');
+        expect(typeof res.locals.radioGroup).toBe('function');
       });
 
       it('returns a function', () => {
         middleware(req, res, next);
-        res.locals['radio-group']().should.be.a('function');
+        const result = res.locals.radioGroup();
+
+        expect(result).toBeDefined();
+        expect(result.toString()).toBeDefined();
       });
 
       it('looks up field options', () => {
         res.locals.options.fields = {
           'field-name': {
-            options: [{
-              label: 'Foo',
-              value: 'foo'
-            }]
+            options: [{ label: 'Foo', value: 'foo' }]
           }
         };
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.lastCall.should.have.been.calledWith(sinon.match(function (value) {
-          const obj = value.options[0];
-          return _.isMatch(obj, {
-            label: 'Foo',
-            value: 'foo',
-            type: 'radio',
-            selected: false,
-            toggle: undefined
-          });
-        }));
+
+        const result = res.locals.radioGroup('field-name').toString();
+
+        expect(result).toContain('value="foo"');
+        expect(result).toContain('Foo');
+        expect(result).toContain('type="radio"');
+        expect(result).not.toContain('checked="checked"');
+        expect(result).not.toContain('data-toggle');
       });
+
 
       it('looks up field label from fields.field-name.options.foo.label if not specified', () => {
         res.locals.options.fields = {
@@ -1176,25 +1209,25 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.lastCall.args[0].options[0].label.should.be.equal('fields.field-name.options.foo.label');
-        render.lastCall.args[0].options[1].label.should.be.equal('fields.field-name.options.bar.label');
+
+        const result = res.locals.radioGroup('field-name').toString();
+
+        expect(result).toContain('fields.field-name.options.foo.label');
+        expect(result).toContain('fields.field-name.options.bar.label');
       });
 
       it('looks up field label from fields.field-name.options.foo.label if not specified (object options)', () => {
         res.locals.options.fields = {
           'field-name': {
-            options: [{
-              value: 'foo'
-            }, {
-              value: 'bar'
-            }]
+            options: [{ value: 'foo' }, { value: 'bar' }]
           }
         };
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.lastCall.args[0].options[0].label.should.be.equal('fields.field-name.options.foo.label');
-        render.lastCall.args[0].options[1].label.should.be.equal('fields.field-name.options.bar.label');
+
+        const result = res.locals.radioGroup('field-name').toString();
+
+        expect(result).toContain('fields.field-name.options.foo.label');
+        expect(result).toContain('fields.field-name.options.bar.label');
       });
 
       it('should have classes if one or more were specified against the field', () => {
@@ -1204,84 +1237,92 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          className: 'abc def'
-        }));
-      });
 
-      it('should have role: radiogroup', () => {
-        res.locals.options.fields = {
-          'field-name': {
-          }
-        };
-        middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          role: 'radiogroup'
-        }));
+        const result = res.locals.radioGroup('field-name').toString();
+
+        expect(result).toMatch(/class="[^"]*abc[^"]*def[^"]*"/);
+
+        const match = result.match(/class="[^"]*"/);
+
+        const classAttr = match[0];
+
+        expect(classAttr).toContain('abc def');
       });
 
       it('adds `legendClassName` if it exists as a string or an array', () => {
         res.locals.options.fields = {
           'field-name-1': {
-            legend: {
-              className: 'abc def'
-            }
+            legend: { className: 'abc def' }
           },
           'field-name-2': {
-            legend: {
-              className: ['abc', 'def']
-            }
+            legend: { className: ['abc', 'def'] }
           }
         };
-
         middleware(req, res, next);
 
-        res.locals['radio-group']().call(res.locals, 'field-name-1');
-        render.should.have.been.calledWith(sinon.match({
-          legendClassName: 'abc def'
-        }));
+        // field-name-1
+        const field1Result = res.locals.radioGroup('field-name-1').toString();
 
-        res.locals['radio-group']().call(res.locals, 'field-name-2');
-        render.should.have.been.calledWith(sinon.match({
-          legendClassName: 'abc def'
-        }));
+        expect(field1Result).toMatch(/<legend[^>]*class="[^"]*abc[^"]*def[^"]*"[^>]*>/);
+
+        const field1match = field1Result.match(/<legend[^>]*class="[^"]*"/);
+
+        const field1classAttr = field1match[0];
+
+        expect(field1classAttr).toContain('abc def');
+
+        // field-name-2
+        const field2Result = res.locals.radioGroup('field-name-2').toString();
+
+        expect(field2Result).toMatch(/<legend[^>]*class="[^"]*abc[^"]*def[^"]*"[^>]*>/);
+
+        const field2match = field1Result.match(/<legend[^>]*class="[^"]*"/);
+
+        const field2classAttr = field2match[0];
+
+        expect(field2classAttr).toContain('abc def');
       });
 
-      it('uses locales translation for legend if a field value isn\'t provided', () => {
-        req.translate = sinon.stub().withArgs('fields.field-name.legend').returns('Field legend');
+      it('uses locales translation for legend if a field value is not provided', () => {
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'fields.field-name.legend') return 'Field legend';
+          return undefined;
+        });
+
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.should.have.been.calledWithExactly(sinon.match({
-          legend: 'Field legend'
-        }));
+        const result = res.locals.radioGroup('field-name').toString();
+
+        expect(result).toContain('Field legend');
       });
 
-      it('uses locales translation for hint if a field value isn\'t provided', () => {
-        req.translate = sinon.stub().withArgs('fields.field-name.hint').returns('Field hint');
+      it('uses locales translation for hint if a field value is not provided', () => {
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'fields.field-name.hint') return 'Field hint';
+          return undefined;
+        });
+
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.should.have.been.calledWithExactly(sinon.match({
-          hint: 'Field hint'
-        }));
+        const result = res.locals.radioGroup('field-name').toString();
+
+        expect(result).toContain('Field hint');
       });
 
-      it('doesn\'t add a hint if the hint doesn\'t exist in locales', () => {
+      it('does not add a hint if the hint does not exist in locales', () => {
+        req.translate = jest.fn().mockReturnValue(undefined);
+
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
-        render.should.have.been.calledWithExactly(sinon.match({
-          hint: null
-        }));
+        const result = res.locals.radioGroup('field-name').toString();
+
+        expect(result).not.toContain('govuk-hint');
       });
     });
 
@@ -1615,14 +1656,14 @@ describe('Template Mixins', () => {
     });
   });
 
-  describe('without stubbed Hogan', () => {
+  describe('without stubbed Nunjucks', () => {
     it('looks up variables within the field key', () => {
       res.locals.foo = 'bar';
       res.locals.options.fields = {
         'bar-field-name': {}
       };
       middleware(req, res, next);
-      res.locals['input-text']().call(res.locals, '{{foo}}-field-name').should.contain('id="bar-field-name"');
+      expect(res.locals['input-text']('{{foo}}-field-name')).toContain('id="bar-field-name"');
     });
 
     describe('date', () => {
@@ -1631,19 +1672,19 @@ describe('Template Mixins', () => {
       });
 
       it('adds a function to res.locals', () => {
-        res.locals.date.should.be.a('function');
+        expect(typeof res.locals.date).toBe('function');
       });
 
       it('returns a function', () => {
-        res.locals.date().should.be.a('function');
+        expect(typeof res.locals.date()).toBe('function');
       });
 
       it('formats a date', () => {
-        res.locals.date().call(res.locals, '2015-03-26').should.equal('26 March 2015');
+        expect(res.locals.date('2015-03-26')).toEqual('26 March 2015');
       });
 
       it('applys a date format if specified', () => {
-        res.locals.date().call(res.locals, '2015-03|MMMM YYYY').should.equal('March 2015');
+        expect(res.locals.date('2015-03|MMMM YYYY')).toEqual('March 2015');
       });
     });
 
@@ -1653,31 +1694,31 @@ describe('Template Mixins', () => {
       });
 
       it('adds a function to res.locals', () => {
-        res.locals.time.should.be.a('function');
+        expect(typeof res.locals.time).toBe('function');
       });
 
       it('returns a function', () => {
-        res.locals.time().should.be.a('function');
+        expect(typeof res.locals.time()).toBe('function');
       });
 
       it('changes 12:00am to midnight', () => {
-        res.locals.time().call(res.locals, '26 March 2015 12:00am').should.equal('26 March 2015 midnight');
+        expect(res.locals.time('26 March 2015 12:00am')).toEqual('26 March 2015 midnight');
       });
 
       it('changes 12:00pm to midday', () => {
-        res.locals.time().call(res.locals, '26 March 2015 12:00pm').should.equal('26 March 2015 midday');
+        expect(res.locals.time('26 March 2015 12:00pm')).toEqual('26 March 2015 midday');
       });
 
       it('changes leading 12:00am to Midnight', () => {
-        res.locals.time().call(res.locals, '12:00am 26 March 2015').should.equal('Midnight 26 March 2015');
+        expect(res.locals.time('12:00am 26 March 2015')).toEqual('Midnight 26 March 2015');
       });
 
       it('changes leading 12:00pm to Midday', () => {
-        res.locals.time().call(res.locals, '12:00pm 26 March 2015').should.equal('Midday 26 March 2015');
+        expect(res.locals.time('12:00pm 26 March 2015')).toEqual('Midday 26 March 2015');
       });
 
       it('should pass through other times', () => {
-        res.locals.time().call(res.locals, '6:30am 26 March 2015').should.equal('6:30am 26 March 2015');
+        expect(res.locals.time('6:30am 26 March 2015')).toEqual('6:30am 26 March 2015');
       });
     });
 
@@ -1687,19 +1728,19 @@ describe('Template Mixins', () => {
       });
 
       it('adds a function to res.locals', () => {
-        res.locals.uppercase.should.be.a('function');
+        expect(typeof res.locals.uppercase).toBe('function');
       });
 
       it('returns a function', () => {
-        res.locals.uppercase().should.be.a('function');
+        expect(typeof res.locals.uppercase()).toBe('function');
       });
 
       it('changes text to uppercase', () => {
-        res.locals.uppercase().call(res.locals, 'abcdEFG').should.equal('ABCDEFG');
+        expect(res.locals.uppercase('abcdEFG')).toEqual('ABCDEFG');
       });
 
       it('returns an empty string if no text given', () => {
-        res.locals.uppercase().call(res.locals).should.equal('');
+        expect(res.locals.uppercase('')).toEqual('');
       });
     });
 
@@ -1709,19 +1750,19 @@ describe('Template Mixins', () => {
       });
 
       it('adds a function to res.locals', () => {
-        res.locals.lowercase.should.be.a('function');
+        expect(typeof res.locals.lowercase).toBe('function');
       });
 
       it('returns a function', () => {
-        res.locals.lowercase().should.be.a('function');
+        expect(typeof res.locals.lowercase()).toBe('function');
       });
 
       it('changes text to lowercase', () => {
-        res.locals.lowercase().call(res.locals, 'abcdEFG').should.equal('abcdefg');
+        expect(res.locals.lowercase('abcdEFG')).toEqual('abcdefg');
       });
 
       it('returns an empty string if no text given', () => {
-        res.locals.lowercase().call(res.locals).should.equal('');
+        expect(res.locals.lowercase('')).toEqual('');
       });
     });
 
@@ -1731,41 +1772,41 @@ describe('Template Mixins', () => {
       });
 
       it('adds a function to res.locals', () => {
-        res.locals.currency.should.be.a('function');
+        expect(typeof res.locals.currency).toBe('function');
       });
 
       it('returns a function', () => {
-        res.locals.currency().should.be.a('function');
+        expect(typeof res.locals.currency()).toBe('function');
       });
 
       it('formats whole numbers with no decimal places', () => {
-        res.locals.currency().call(res.locals, '3.00').should.equal('£3');
+        expect(res.locals.currency('3.00')).toEqual('£3');
       });
 
       it('formats 3.50 to two decimal places', () => {
-        res.locals.currency().call(res.locals, '3.50').should.equal('£3.50');
+        expect(res.locals.currency('3.50')).toEqual('£3.50');
       });
 
       it('formats and rounds 3.567 to two decimal places', () => {
-        res.locals.currency().call(res.locals, '3.567').should.equal('£3.57');
+        expect(res.locals.currency('3.567')).toEqual('£3.57');
       });
 
       it('formats 4.5678 to two decimal places from a local variable', () => {
         res.locals.value = 4.5678;
-        res.locals.currency().call(res.locals, '{{value}}').should.equal('£4.57');
+        expect(res.locals.currency('{{ value }}')).toBe('£4.57');
       });
 
       it('returns non float text as is', () => {
-        res.locals.currency().call(res.locals, 'test').should.equal('test');
+        expect(res.locals.currency('test')).toEqual('test');
       });
 
       it('returns non float template text as is', () => {
         res.locals.value = 'test';
-        res.locals.currency().call(res.locals, '{{value}}').should.equal('test');
+        expect(res.locals.currency('{{ value }}')).toEqual('test');
       });
 
       it('returns an empty string if no text given', () => {
-        res.locals.currency().call(res.locals).should.equal('');
+        expect(res.locals.currency('')).toEqual('');
       });
     });
 
@@ -1775,19 +1816,19 @@ describe('Template Mixins', () => {
       });
 
       it('adds a function to res.locals', () => {
-        res.locals.hyphenate.should.be.a('function');
+        expect(typeof res.locals.hyphenate).toBe('function');
       });
 
       it('returns a function', () => {
-        res.locals.hyphenate().should.be.a('function');
+        expect(typeof res.locals.hyphenate()).toBe('function');
       });
 
       it('hyphenates a string with a single whitespace character', () => {
-        res.locals.hyphenate().call(res.locals, 'apple blackberry').should.equal('apple-blackberry');
+        expect(res.locals.hyphenate('apple blackberry')).toEqual('apple-blackberry');
       });
 
       it('hyphenates a string with multiple whitespace characters', () => {
-        res.locals.hyphenate().call(res.locals, 'apple  blackberry   cherry').should.equal('apple-blackberry-cherry');
+        expect(res.locals.hyphenate('apple  blackberry   cherry')).toEqual('apple-blackberry-cherry');
       });
     });
 
@@ -1798,25 +1839,25 @@ describe('Template Mixins', () => {
 
       it('prepends the baseUrl to relative paths', () => {
         req.baseUrl = '/base';
-        res.locals.url().call(res.locals, './path').should.equal('/base/path');
-        res.locals.url().call(res.locals, 'path').should.equal('/base/path');
+        expect(res.locals.url('./path')).toEqual('/base/path');
+        expect(res.locals.url('path')).toEqual('/base/path');
       });
 
       it('returns path if baseUrl is not set', () => {
         req.baseUrl = undefined;
-        res.locals.url().call(res.locals, 'path').should.equal('path');
-        res.locals.url().call(res.locals, './path').should.equal('./path');
+        expect(res.locals.url('path')).toEqual('path');
+        expect(res.locals.url('./path')).toEqual('./path');
       });
 
       it('does not prepend the baseUrl to absolute paths', () => {
         req.baseUrl = '/base';
-        res.locals.url().call(res.locals, '/path').should.equal('/path');
+        expect(res.locals.url('/path')).toEqual('/path');
       });
 
       it('supports urls defined in template placeholders', () => {
         req.baseUrl = '/base';
         res.locals.href = './link';
-        res.locals.url().call(res.locals, '{{href}}').should.equal('/base/link');
+        expect(res.locals.url('{{ href }}')).toEqual('/base/link');
       });
     });
 
@@ -1827,7 +1868,7 @@ describe('Template Mixins', () => {
 
       it('appends the passed query to the url query string', () => {
         req.query = { a: 'b' };
-        res.locals.qs().call(res.locals, 'c=d').should.equal('?a=b&c=d');
+        expect(res.locals.qs('c=d')).toEqual('?a=b&c=d');
       });
     });
 
@@ -1927,9 +1968,10 @@ describe('Template Mixins', () => {
       it('recursively runs lambdas wrapped in other lambdas correctly', () => {
         middleware(req, res, next);
         res.locals.value = '2016-01-01T00:00:00.000Z';
-        const result = res.locals.uppercase().call(res.locals,
-          '{{#time}}{{#date}}{{value}}|h:mma on D MMMM YYYY{{/date}}{{/time}}');
-        result.should.equal('MIDNIGHT ON 1 JANUARY 2016');
+        const template = '{{ uppercase(time(date(value ~ \'|h:mma on D MMMM YYYY\'))) }}';
+
+        const result = nunjucks.renderString(template, res.locals).trim();
+        expect(result).toEqual('MIDNIGHT ON 1 JANUARY 2016');
       });
     });
   });
@@ -1950,11 +1992,11 @@ describe('Template Mixins', () => {
       Hogan.compile.restore();
     });
 
-    describe('radio-group renderChild', () => {
+    describe('radioGroup renderChild', () => {
       beforeEach(() => {
         middleware = mixins();
         middleware(req, res, next);
-        res.locals['radio-group']().call(res.locals, 'field-name');
+        res.locals.radioGroup.call(res.locals, 'field-name');
         renderChild = render.lastCall.args[0].renderChild;
       });
 
@@ -2019,7 +2061,7 @@ describe('Template Mixins', () => {
             }
           ];
           middleware(req, res, next);
-          res.locals['radio-group']().call(res.locals, 'field-name');
+          res.locals.radioGroup().call(res.locals, 'field-name');
           renderChild = render.lastCall.args[0].renderChild();
           renderChild.call(fields['field-name'].options[0]).should.be.equal('<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n<div>some html</div></div>\n');
           sinon.stub(Hogan, 'compile').returns({

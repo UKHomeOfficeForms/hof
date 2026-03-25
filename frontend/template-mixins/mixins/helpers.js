@@ -30,11 +30,11 @@ module.exports = options => (req, res, next) => {
   }
 
   res.locals.currency = makeHelper(function (value) {
-    value = parseFloat(value);
-    if (isNaN(value)) return value;
-    if (value % 1 === 0) value = value.toString();
-    else value = value.toFixed(2);
-    return '£' + value;
+    let txt = parseFloat(value);
+    if (isNaN(txt)) return value;
+    if (txt % 1 === 0) txt = txt.toString();
+    else txt = txt.toFixed(2);
+    return '£' + txt;
   });
 
   res.locals.date = function () {
