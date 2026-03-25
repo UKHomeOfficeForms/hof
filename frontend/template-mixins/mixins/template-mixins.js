@@ -245,35 +245,42 @@ module.exports = function (options) {
     }
 
     function renderMixin() {
-      return function () {
-        if (this.child) {
-          if (this.child === 'html') {
-            try {
-              const key = this.toggle;
-              return res.locals.fields.find(function (field) {
-                return field.key === key;
-              }).html;
-            } catch (err) {
-              const msg = `html property not set on field: ${this.toggle}. Did you forget to use a component?`;
-              next(new Error(msg));
-            }
+      if (!this.child) return '';
+
+      if (this.child === 'html') {
+        try {
+          const key = this.toggle;
+          const field = res.locals.fields.find(f => f.key === key);
+          if (!field.html) {
+            throw new Error(`html property not set on field: ${key}`);
           }
-          if (this[this.child]) {
-            return this[this.child]().call(this, this.toggle);
-          }
+          return new nunjucks.runtime.SafeString(field.html);
+        } catch (err) {
+          next(err);
         }
-      };
+      }
+      // Look for mixin attached to res.locals
+      const mixin = res.locals[this.child];
+      if (typeof mixin === 'function') {
+        // call mixin with toggle context
+        const rendered = mixin.call(res.locals, this.toggle);
+        return new nunjucks.runtime.SafeString(rendered);
+      }
+      return '';
     }
 
-    function renderChild() {
-      if (this.child) {
-        const templateString = getTemplate(this.child, this.toggle);
-        const ctx = Object.assign({
-          renderMixin: renderMixin.bind(this)
-        }, res.locals, this);
-        // render with nunjucks environment so {% include %} works against roots
-        return nunjucksEnv.renderString(templateString, ctx);
-      }
+    function renderChild(option) {
+      if (!option.child) return '';
+
+      const templateString = getTemplate(option.child, option.toggle);
+
+      const ctx = {
+        ...res.locals,
+        ...option,
+        renderMixin: renderMixin.bind(option)
+      };
+      // render with nunjucks environment so {% include %} works against roots
+      return nunjucksEnv.renderString(templateString, ctx);
     }
 
     // eslint-disable-next-line complexity

@@ -43,10 +43,7 @@
             <div id="{{ key }}-{{ option.value }}-item-hint" class="govuk-hint govuk-radios__hint">{{ option.optionHint }}</div>
           {% endif %}
         </div>
-
-        {% if renderChild %}
-          {{ renderChild(option) | safe }}
-        {% endif %}
+        {{ renderChild(option) | safe }}
       {% endfor %}
     </div>
   </fieldset>
