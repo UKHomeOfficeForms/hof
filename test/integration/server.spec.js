@@ -218,7 +218,7 @@ describe('hof server', () => {
         .get('/step')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(res => res.text.should.contain('<div class="govuk-header__content">'));
+        .expect(res => res.text.should.contain('<span class="govuk-header__product-name">'));
     });
 
     it('serves a view on request to an optional baseUrl', () => {
@@ -1046,7 +1046,7 @@ describe('hof server', () => {
         .get('/feedback')
         .expect(200)
         .expect(() => {
-          const localValue = locals.nonce;
+          const localValue = locals.cspNonce;
           localValue.should.match(/[0-9a-fA-F]{16}/);
         }));
 
@@ -1054,7 +1054,7 @@ describe('hof server', () => {
         .get('/feedback')
         .expect(200)
         .expect(res => {
-          const localsNonceValue = locals.nonce;
+          const localsNonceValue = locals.cspNonce;
           const cspScrptSrc = getHeaders(res, 'content-security-policy')['script-src'];
           cspScrptSrc.should.contain(`'nonce-${localsNonceValue}'`);
         }));
