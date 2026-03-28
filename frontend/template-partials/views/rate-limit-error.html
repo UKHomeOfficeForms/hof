@@ -1,10 +1,13 @@
-{{<layout}}
-  {{$header}}
-    {{content.title}}
-  {{/header}}
-  {{$content}}
-    <p>{{content.message}}</p>
-    <p>{{content.preTimeToWait}}{{content.timeToWait}}{{content.postTimeToWait}}</p>
-    <a href="/" class="button" role="button">{{#t}}buttons.try-again{{/t}}</a>
-  {{/content}}
-{{/layout}}
+{% extends "layout.html" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+{% set header = {{ content.title }} %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body">{{ content.message }}</p>
+      <p class="govuk-body">{{ content.preTimeToWait }}{{ content.timeToWait }}{{ content.postTimeToWait }}</p>
+      <a href="/" class="govuk-button" role="button">{{ t('buttons.try-again') }}</a>
+    </div>
+  </div>
+{% endblock %}
