@@ -1,8 +1,11 @@
-<details>
-  <summary role="button">
-    <span class="summary">{{summary}}</span>
-  </summary>
-  <div class="panel-indent">
-    {{details}}
-  </div>
-</details>
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% macro detailsComponent(details, customSummary=null, customText=null) %}
+  {% set summaryText = customSummary or details.summary or '' %}
+  {% set text = customText or details.text or '' %}
+
+  {{ govukDetails({
+    summaryText: summaryText,
+    text: text
+  }) }}
+{% endmacro %}
