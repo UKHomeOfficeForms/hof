@@ -1,19 +1,25 @@
-{{<layout}}
-  {{$journeyHeader}}
-  {{#t}}journey.header{{/t}}
-  {{/journeyHeader}}
+{% extends "layout.html" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
 
-  {{$propositionHeader}}
-  {{> partials-navigation}}
-  {{/propositionHeader}}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-  {{$header}}
-    {{header}}
-  {{/header}}
+{% block journeyHeader %}
+  {{ t('journey.header') }}
+{% endblock %}
 
-  {{$content}}
-    {{>partials-confirmation-alert}}
-    {{#markdown}}what-happens-next{{/markdown}}
-  {{/content}}
-{{/layout}}
-
+{% block propositionHeader %}
+  {% include "partials/navigation.html" %}
+{% endblock %}
+ 
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: t('journey.confirmation.message'),
+        html: t('journey.confirmation.details')
+      }) }}
+      
+      {{ markdown('what-happens-next') }}
+    </div>
+  </div>
+{% endblock %}
