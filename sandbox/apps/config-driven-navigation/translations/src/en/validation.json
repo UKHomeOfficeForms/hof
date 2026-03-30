@@ -1,0 +1,48 @@
+{
+  "selected-updates": {
+    "required": "Select at least one page to continue"
+  },
+  "name": {
+    "required": "Enter a name",
+    "maxlength": "Name must be 99 characters or less"
+  },
+  "surname": {
+    "required": "Enter a surname",
+    "maxlength": "Surname must be 99 characters or less"
+  },
+  "current-house-number": {
+    "required": "Enter the house number or name",
+    "maxlength": "House number or name must be 50 characters or less"
+  },
+  "current-street": {
+    "required": "Enter the street",
+    "maxlength": "Street must be 100 characters or less"
+  },
+  "current-townOrCity": {
+    "required": "Enter the town or city",
+    "maxlength": "Town or city must be 100 characters or less"
+  },
+  "current-county": {
+    "maxlength": "County must be 100 characters or less"
+  },
+  "has-postcode": {
+    "required": "Select yes if you have a postcode, or no if you do not"
+  },
+  "postcode": {
+    "required": "Enter a UK postcode",
+    "postcode": "Enter a real UK postcode"
+  },
+  "dob": {
+    "required": "Enter a date of birth",
+    "date": "Enter a date of birth in the correct format",
+    "after": "Date of birth must be after 1 January 1900"
+  },
+  "email": {
+    "required": "Enter an email address",
+    "email": "Enter an email address in the correct format"
+  },
+  "phone": {
+    "required": "Enter a phone number",
+    "internationalPhoneNumber": "Enter a valid phone number"
+  }
+}

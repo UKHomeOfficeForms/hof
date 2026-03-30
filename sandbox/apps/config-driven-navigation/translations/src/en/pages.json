@@ -1,0 +1,24 @@
+{
+  "address": {
+    "header": "What is your home address?"
+  },
+  "dob":{
+    "header": "What is your date of birth?"
+  },
+  "confirm": {
+    "header": "Check your answers",
+    "return-to-start": "Return to start page",
+    "sections": {
+      "personalDetails": {
+        "header": "Personal details"
+      },
+      "contactDetails": {
+        "header": "Contact details"
+      }
+    }
+  },
+  "submitted": {
+    "header": "Demo complete. If anything looked too smooth, just assume it was highly engineeing luck!",
+    "title": "Demo complete"
+  }
+}

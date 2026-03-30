@@ -1,0 +1,67 @@
+{
+  "selected-updates": {
+    "legend": "What do you need to change?",
+    "hint": "Select all that apply",
+    "options": {
+      "name": {
+        "label": "Name"
+      },
+      "surname": {
+        "label": "Surname"
+      },
+      "dob": {
+        "label": "Date of birth"
+      },
+      "address": {
+        "label": "Address"
+      },
+      "email": {
+        "label": "Email"
+      },
+      "phone": {
+        "label": "Phone"
+      }
+    }
+  },
+  "name": {
+    "label": "Name"
+  },
+  "surname": {
+    "label": "Surname"
+  },
+  "current-house-number": {
+    "label": "House number or name"
+  },
+  "current-street": {
+    "label": "Street"
+  },
+  "current-townOrCity": {
+    "label": "Town or city"
+  },
+  "current-county": {
+    "label": "County (optional)"
+  },
+  "has-postcode": {
+    "legend": "Do you have a postcode for this address?",
+    "options": {
+      "yes": {
+        "label": "Yes"
+      },
+      "no": {
+        "label": "No"
+      }
+    }
+  },
+  "postcode": {
+    "label": "Postcode"
+  },
+  "dob": {
+    "label": "Date of birth"
+  },
+  "email": {
+    "label": "Email address"
+  },
+  "phone": {
+    "label": "Phone number"
+  }
+}

@@ -1091,6 +1091,273 @@ The `'default'` catch all validation error message can also be defined in a simi
 
 So the example above will create a scenario where `'required'` validation errors triggered on the 'unit' field will display the error message `"A unit must be selected for the amount"` (specified in the `"amountWithUnitSelect-unit"` JSON object). Any `'required'` validation errors triggered on the 'amount' field will display the error message `"Enter an amount and a unit value"` (specified in the `"amountWithUnitSelect"` JSON object - as there is no `'required'` error message defined specifically for the 'amount' field (withing `"amountWithUnitSelect-amount"`)).
 
+## SelectionDrivenNavigation Component
+
+`selectionDrivenNavigation` is a reusable controller behaviour for journeys where the user chooses which items to complete on a selector page and HOF should only show the routes that belong to those selected items.
+
+This is intended for patterns such as:
+
+- a landing page where users choose what they want to update
+- section-based edit journeys where only selected parts of a form should be visited
+- multi-item journeys where each selected item has its own ordered list of routes
+
+The behaviour keeps the normal HOF controller lifecycle, but overrides next-step and back-link resolution using a declarative navigation map. It also clears stored answers for any routes that become invalid because the user deselected an item or a branch skipped later pages in the same item.
+
+### When to use it
+
+Use this component when a service needs a selection-driven journey but still wants to keep normal HOF pages, validation, templates, and edit mode semantics.
+
+Do not use it for simple linear `next` or `forks` journeys. In those cases, normal HOF routing remains the simpler option.
+
+### Usage
+
+The behaviour accepts either:
+
+- a static navigation config object
+- a function that returns the config for the current request
+- no argument, in which case it reads `journeyNavigation` from the app config
+
+You can attach it to individual steps, but the most common pattern is to register it once at app level so it applies to the whole journey.
+
+```js
+const summary = require('hof').components.summary;
+const selectionDrivenNavigation = require('hof').components.selectionDrivenNavigation;
+const journeyNavigation = require('./journey-navigation');
+
+module.exports = {
+  behaviours: [selectionDrivenNavigation(journeyNavigation)],
+  fields,
+  steps: {
+    '/start': {
+      fields: ['selected-updates'],
+      backLink: false
+    },
+    '/name': {
+      fields: ['name']
+    },
+    '/surname': {
+      fields: ['surname']
+    },
+    '/address': {
+      fields: ['current-house-number', 'current-street', 'current-townOrCity', 'current-county']
+    },
+    '/has-postcode': {
+      fields: ['has-postcode']
+    },
+    '/postcode': {
+      fields: ['postcode']
+    },
+    '/dob': {
+      fields: ['dob']
+    },
+    '/email': {
+      fields: ['email']
+    },
+    '/phone': {
+      fields: ['phone']
+    },
+    '/confirm': {
+      template: 'confirm',
+      behaviours: [summary],
+      sections: require('./sections/summary-data-sections')
+    },
+    '/submitted': {
+      backLink: false
+    }
+  }
+};
+```
+
+The navigation map can live alongside the app config in a separate module, for example `journey-navigation.js`:
+
+```js
+'use strict';
+
+module.exports = {
+  selection: {
+    field: 'selected-updates',
+    selectorStep: '/start',
+    summaryStep: '/confirm',
+    emptySelectionTarget: '/start',
+    items: {
+      name: {
+        order: 1,
+        routes: ['/name']
+      },
+      surname: {
+        order: 2,
+        routes: ['/surname']
+      },
+      address: {
+        order: 3,
+        routes: ['/address', '/has-postcode', '/postcode']
+      },
+      dob: {
+        order: 4,
+        routes: ['/dob']
+      },
+      email: {
+        order: 5,
+        routes: ['/email']
+      },
+      phone: {
+        order: 6,
+        routes: ['/phone']
+      }
+    }
+  },
+  routes: {
+    '/has-postcode': {
+      branches: [
+        {
+          condition: {
+            field: 'has-postcode',
+            value: 'yes'
+          },
+          continueOnEdit: true,
+          next: '/postcode'
+        },
+        {
+          condition: {
+            field: 'has-postcode',
+            value: 'no'
+          },
+          next: 'next-selected-item'
+        }
+      ]
+    },
+    '/confirm': {
+      next: '/submitted'
+    }
+  }
+};
+```
+
+### Navigation config
+
+The behaviour resolves navigation from an app-level `journeyNavigation` object or from the config passed directly to `selectionDrivenNavigation(...)`.
+
+The config has two main parts:
+
+- `selection`: defines the selector field and the ordered item registry
+- `routes`: defines route-level rules such as `next`, `backLink`, and conditional branches
+
+#### `selection`
+
+```js
+selection: {
+  field: 'selected-updates',
+  selectorStep: '/start',
+  summaryStep: '/confirm',
+  emptySelectionTarget: '/start',
+  items: {
+    address: {
+      order: 3,
+      routes: ['/address', '/has-postcode', '/postcode'],
+      when: {
+        field: 'can-update-address',
+        value: 'yes'
+      }
+    }
+  }
+}
+```
+
+Supported `selection` properties:
+
+- `field`: the field that stores the selected items
+- `selectorStep`: the route where users choose items
+- `dispatcherStep`: an optional route that hands off to the first selected item
+- `summaryStep`: the route to send users to after the last selected item
+- `emptySelectionTarget`: optional fallback when nothing is selected
+- `items`: the registry of selectable items
+
+Supported item properties:
+
+- `order`: numeric ordering for the selection journey
+- `routes`: ordered list of HOF routes for that item
+- `when`: optional condition that controls whether the item is available
+
+#### `routes`
+
+Each route can define navigation rules independently of the item registry.
+
+```js
+routes: {
+  '/has-postcode': {
+    branches: [
+      {
+        condition: {
+          field: 'has-postcode',
+          value: 'yes'
+        },
+        continueOnEdit: true,
+        next: '/postcode'
+      }
+    ],
+    default: {
+      next: 'next-selected-item'
+    }
+  },
+  '/confirm': {
+    next: '/submitted'
+  }
+}
+```
+
+Supported route properties:
+
+- `next`: static string, function, or the symbolic target `next-selected-item`
+- `backLink`: static string or function
+- `branches`: ordered branch definitions evaluated first
+- `default`: fallback route definition when no branch matches
+- `continueOnEdit`: preserves onward navigation in edit mode instead of short-circuiting back to the confirm step
+
+### Conditions
+
+`when` and branch `condition` support a small declarative syntax as well as functions. In many cases you do not need to set `source`; by default HOF reads from submitted form values first and then falls back to the session.
+
+```js
+condition: {
+  all: [
+    {
+      field: 'country',
+      value: 'uk'
+    },
+    {
+      field: 'has-contact-details',
+      value: 'yes'
+    }
+  ]
+}
+```
+
+Supported condition forms:
+
+- function: `(req, res) => boolean`
+- `all`: every nested condition must match
+- `any`: at least one nested condition must match
+- `not`: negates another condition
+- field comparison with `value`, `equals`, `notEquals`, `in`, `notIn`, or `exists`
+
+Supported value sources:
+
+- default: `req.form.values[field]`, falling back to session
+- `body`
+- `session`
+- `query`
+
+### Behaviour details
+
+When enabled, the component:
+
+- resolves the next route from the selection order and any route-level rules
+- resolves a back link from explicit config or from the visited route order stored in `req.sessionModel.get('steps')`
+- clears fields for skipped routes before delegating to the normal HOF `successHandler`
+- preserves HOF edit mode semantics, including support for `continueOnEdit`
+
+This lets services keep using normal HOF controllers and pages while moving the journey logic into a reusable, testable config object.
+
 ## Date Component
 
 A component for handling the rendering and processing of 3-input date fields used in HOF Applications.

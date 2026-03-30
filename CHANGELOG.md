@@ -1,3 +1,9 @@
+## Unreleased
+
+### Added
+- Added a reusable `selectionDrivenNavigation` component for HOF controllers so services can build selection-led journeys where users choose which items or sections to complete and HOF routes them through only those pages.
+- Added `wizard/util/selection-driven-navigation-resolver`, a declarative navigation resolver that supports ordered item journeys, conditional branches, symbolic targets such as `next-selected-item`, dynamic back links, and invalidation of skipped or deselected steps.
+
 ## 2026-03-18, Version 23.0.3 (Stable), @vinodhasamiyappan-ho
 
 ### Security

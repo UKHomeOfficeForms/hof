@@ -6,7 +6,8 @@ const bootstrap = require('../');
 bootstrap({
   translations: './apps/sandbox/translations',
   routes: [
-    require('./apps/sandbox')
+    require('./apps/sandbox'),
+    require('./apps/config-driven-navigation')
   ],
   behaviours: [
     require('../').components.sessionTimeoutWarning

@@ -10,5 +10,6 @@ module.exports = {
   homeOfficeCountries: require('./homeoffice-countries'),
   notify: require('./notify'),
   summary: require('./summary'),
-  sessionTimeoutWarning: require('./session-timeout-warning')
+  sessionTimeoutWarning: require('./session-timeout-warning'),
+  selectionDrivenNavigation: require('./selection-driven-navigation')
 };
