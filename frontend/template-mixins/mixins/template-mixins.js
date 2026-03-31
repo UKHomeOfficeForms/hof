@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 
 const nunjucks = require('nunjucks');
-const _ = require('underscore');
 
 const renderer = require('./render');
 
@@ -36,19 +35,19 @@ module.exports = function (options) {
   const templateCache = {};
 
   function maxlength(field) {
-    const validation = field.validate || [];
-    const ml = _.findWhere(validation, { type: 'maxlength' }) || _.findWhere(validation, { type: 'exactlength' });
+    const validations = field.validate || [];
+    const ml = validations.find(validation => validation?.type === 'maxlength' || validation?.type === 'exactlength');
     if (ml) {
-      return _.isArray(ml.arguments) ? ml.arguments[0] : ml.arguments;
+      return Array.isArray(ml.arguments) ? ml.arguments[0] : ml.arguments;
     }
     return null;
   }
 
   function maxword(field) {
-    const validation = field.validate || [];
-    const mw = _.findWhere(validation, { type: 'maxword' });
+    const validations = field.validate || [];
+    const mw = validations.find(validation => validation?.type === 'maxword');
     if (mw) {
-      return _.isArray(mw.arguments) ? mw.arguments[0] : mw.arguments;
+      return Array.isArray(mw.arguments) ? mw.arguments[0] : mw.arguments;
     }
     return null;
   }
@@ -58,7 +57,7 @@ module.exports = function (options) {
   }
 
   function classNameString(name) {
-    if (_.isArray(name)) {
+    if (Array.isArray(name)) {
       return name.join(' ');
     }
     return name;
@@ -70,6 +69,12 @@ module.exports = function (options) {
       return classNameString(field[prop]);
     }
     return '';
+  }
+
+  function isPrefixOrSuffix(field, prefixOrSuffix) {
+    const attributes = Array.isArray(field) ? field : [];
+    const item = attributes.find(attribute => attribute[prefixOrSuffix] !== undefined);
+    return item ? item[prefixOrSuffix] : undefined;
   }
 
   return function (req, res, next) {
@@ -293,7 +298,33 @@ module.exports = function (options) {
       const hint = conditionalTranslate(hKey);
       const required = isRequired(field);
       const labelClassName = classNames(field, 'labelClassName');
-      const autocomplete = field.autocomplete || extension.autocomplete;
+      const autocomplete = field.autocomplete || extension.autocomplete || 'off';
+      // govUk components set the attribute property as { attribute: value }
+      // but in hof, some attributes can be found in the field.validate object as [attribute, { type: attribute, value: value }]
+      // and field.attributes object with the format [{ type: attribute, value: value }]
+      const validation = (field.validate || []).reduce((acc, rule) => {
+        // convert required, maxlength, min and max attributes in field.validate object to govuk component compatible format
+        if (rule === 'required') {
+          acc['aria-required'] = 'true';
+        } else if (field.maxlengthAttribute && rule.type === 'maxlength' || rule.type === 'min' || rule.type === 'max') {
+          acc[rule.type] = rule.arguments;
+        }
+        return acc;
+      }, { 'aria-required': 'false' });
+
+      // convert field.attributes object into govuk component compatible format
+      const baseAttributes = (field.attributes || []).reduce((acc, attr) => {
+        if (attr.attribute) {
+          acc[attr.attribute] = attr.value;
+        }
+        return acc;
+      }, {});
+
+      const attributes = {
+        ...baseAttributes,
+        ...validation,
+        ...(this.errors && this.errors[key] && { 'aria-invalid': 'true' })
+      };
 
       return Object.assign({}, extension, {
         id: key,
@@ -301,8 +332,8 @@ module.exports = function (options) {
         type: extension.type || type(field),
         value: this.values && this.values[key],
         label: t(lKey),
-        labelClassName: labelClassName ? `govuk-label ${labelClassName}` : 'govuk-label',
-        formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName || 'govuk-form-group',
+        labelClassName: labelClassName,
+        formGroupClassName: classNames(field, 'formGroupClassName') || extension.formGroupClassName,
         hint: hint,
         amountWithUnitSelectItemClassName: 'grouped-inputs__item',
         hintId: extension.hintId || (hint ? key + '-hint' : null),
@@ -310,15 +341,16 @@ module.exports = function (options) {
         maxlengthAttribute: field.maxlengthAttribute === true,
         maxlength: maxlength(field) || extension.maxlength,
         maxword: maxword(field) || extension.maxword,
-        required: required,
-        pattern: extension.pattern,
+        required: validation.required || required,
+        pattern: validation.pattern || extension.pattern,
         date: extension.date,
         amountWithUnitSelect: extension.amountWithUnitSelect,
         autocomplete: autocomplete,
         child: field.child,
         isPageHeading: field.isPageHeading,
-        attributes: field.attributes,
-        isPrefixOrSuffix: _.map(field.attributes, item => { if (item.prefix || item.suffix !== undefined) return true; }),
+        attributes: attributes,
+        prefix: isPrefixOrSuffix(field.attributes, 'prefix'),
+        suffix: isPrefixOrSuffix(field.attributes, 'suffix'),
         isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
         renderChild: renderChild.bind(this)
       });
@@ -440,32 +472,32 @@ module.exports = function (options) {
     }
 
     const mixins = {
-      'input-text': {
+      inputText: {
         path: 'partials/forms/input-text-group',
         renderWith: inputText
       },
-      'input-text-compound': {
+      inputTextCompound: {
         path: 'partials/forms/input-text-group',
         renderWith: inputText,
         options: {
           compound: true
         }
       },
-      'input-text-code': {
+      inputTextCode: {
         path: 'partials/forms/input-text-group',
         renderWith: inputText,
         options: {
           className: 'input-code'
         }
       },
-      'input-number': {
+      inputNumber: {
         path: 'partials/forms/input-text-group',
         renderWith: inputText,
         options: {
           pattern: '[0-9]*'
         }
       },
-      'input-phone': {
+      inputPhone: {
         path: 'partials/forms/input-text-group',
         renderWith: inputText,
         options: {
@@ -473,7 +505,7 @@ module.exports = function (options) {
           className: 'govuk-input'
         }
       },
-      'input-file': {
+      'inputFile': {
         path: 'partials/forms/input-text-group',
         renderWith: inputText,
         options: {
@@ -628,11 +660,9 @@ module.exports = function (options) {
         }
       }
     };
-    _.each(mixins, function (mixin, name) {
-      if (_.isFunction(mixin.handler)) {
-        res.locals[name] = function (key) {
-          return mixin.handler.call(res.locals, key);
-        };
+    Object.entries(mixins || {}).forEach(([name, mixin]) => {
+      if (typeof mixin.handler === 'function') {
+        res.locals[name] = mixin.handler.bind(res.locals);
         return;
       }
 
@@ -647,7 +677,7 @@ module.exports = function (options) {
         const rendered = mixin.renderWith.call(
           ctxThis,
           key,
-          _.isFunction(mixin.options) ? mixin.options.call(ctxThis, key) : mixin.options
+          typeof mixin.options === 'function' ? mixin.options.call(ctxThis, key) : mixin.options
         );
         const ctx = Object.assign({}, res.locals, rendered);
         // try to render by template name first so relative imports/includes resolve via loader roots
@@ -693,7 +723,7 @@ module.exports = function (options) {
         return this.html;
       }
 
-      const mixin = this.mixin || 'input-text';
+      const mixin = this.mixin || 'inputText';
       if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
         const ctx = Object.assign({}, res.locals);
         return res.locals[mixin].call(ctx, this.key || (this && this.key));
@@ -709,6 +739,18 @@ module.exports = function (options) {
           return renderFieldImpl.call(self, key);
         };
       }
+
+      // handle (options, key)
+      if (arguments.length === 2) {
+        const opts = arguments[0];
+        const key = arguments[1];
+
+        const ctx = Object.create(this);
+        ctx.options = opts;
+
+        return renderFieldImpl.call(ctx, key);
+      }
+
       // direct call
       return renderFieldImpl.call(this, arguments[0]);
     };

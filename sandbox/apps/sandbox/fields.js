@@ -16,7 +16,7 @@ module.exports = {
     options: ['basic-form', 'complex-form', 'build-your-own-form']
   },
   name: {
-    validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }],
+    validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }]
   },
   'dateOfBirth': dateComponent('dateOfBirth', {
     mixin: 'input-date',

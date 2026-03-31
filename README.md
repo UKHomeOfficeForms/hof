@@ -1736,13 +1736,13 @@ hyphenate
 date
 currency
 select
-input-text
+inputText
 input-date
 input-amount-with-unit-select
-input-text-compound
-input-text-code
-input-number
-input-phone
+inputTextCompound
+inputTextCode
+inputNumber
+inputPhone
 radioGroup
 checkbox
 checkbox-compound
@@ -1777,12 +1777,12 @@ fields.js
 ```js
 module.exports = {
   "my-field": {
-    mixin: "input-text",
+    mixin: "inputText",
   },
 };
 ```
 
-If mixin is omitted `input-text` will be used
+If mixin is omitted `inputText` will be used
 
 To disable auto-rendering of a field, set `disableRender: true` in the field config. This is required when using the `child` element rendering functionality to prevent the field being rendered multiple times.
 

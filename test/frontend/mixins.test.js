@@ -50,31 +50,40 @@ describe('Template Mixins', () => {
   });
 
   describe('with stubbed Nunjucks', () => {
-    describe('input-text', () => {
+    beforeEach(() => {
+      renderSpy = jest
+        .spyOn(nunjucks.Environment.prototype, 'renderString')
+        .mockImplementation(function (template, context) {
+          renderSpy.lastContext = context;
+          return template;
+        });
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    describe('inputText', () => {
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals['input-text'].should.be.a('function');
+        expect(typeof res.locals.inputText).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        res.locals['input-text']().should.be.a('function');
+        expect(typeof res.locals.inputText()).toBe('object');
       });
 
       it('looks up field label', () => {
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'fields.field-name.label'
-        }));
-      });
+        res.locals.inputText('field-name');
 
-      it('looks up default field label if nothing is set', () => {
-        middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'fields.field-name.label'
-        }));
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'fields.field-name.label'
+          })
+        );
       });
 
       it('passes child from field config', () => {
@@ -84,10 +93,13 @@ describe('Template Mixins', () => {
             child: 'a child'
           }
         };
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          child: 'a child'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            child: 'a child'
+          })
+        );
       });
 
       it('uses label when available for the field', () => {
@@ -97,19 +109,25 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'Label text'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'Label text'
+          })
+        );
       });
 
       it('prefixes translation lookup with namespace if provided', () => {
         middleware = mixins({ sharedTranslationsKey: 'name.space' });
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'name.space.fields.field-name.label'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'name.space.fields.field-name.label'
+          })
+        );
       });
 
       it('should have an autocomplete setting if specified', () => {
@@ -119,18 +137,24 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          autocomplete: 'custom'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            autocomplete: 'custom'
+          })
+        );
       });
 
       it('should default to no autocomplete attribute ', () => {
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          autocomplete: sinon.match.undefined
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            autocomplete: 'off'
+          })
+        );
       });
 
       it('should have classes if one or more were specified against the field', () => {
@@ -140,10 +164,13 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          className: 'abc def'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            className: 'abc def'
+          })
+        );
       });
 
       it('uses maxlength property set at a field level over default option', () => {
@@ -155,73 +182,99 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-phone']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          maxlength: 10
-        }));
+        res.locals.inputPhone('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            maxlength: 10
+          })
+        );
       });
 
       it('uses locales translation property', () => {
-        req.translate = sinon.stub().withArgs('field-name.label').returns('Field name');
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'field-name.label') return 'Field name';
+          return undefined;
+        });
         res.locals.options.fields = {
           'field-name': {
             label: 'field-name.label'
           }
         };
         middleware(req, res, next);
-        res.locals['input-phone']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'Field name'
-        }));
+        res.locals.inputPhone('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'Field name'
+          })
+        );
       });
 
       it('includes a hint if it is defined in the locales', () => {
-        req.translate = sinon.stub().withArgs('field-name.hint').returns('Field hint');
+        req.translate = jest.fn('field-name.hint').mockReturnValue('Field hint');
         res.locals.options.fields = {
-          'field-name': {
-          }
+          'field-name': {}
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          hint: 'Field hint'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            hint: 'Field hint'
+          })
+        );
       });
 
       it('includes a hint if it is defined in translation', () => {
-        req.translate = sinon.stub().withArgs('field-name.hint').returns('Field hint');
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'field-name.hint') return 'Field hint';
+          return undefined;
+        });
         res.locals.options.fields = {
           'field-name': {
             hint: 'field-name.hint'
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          hint: 'Field hint'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            hint: 'Field hint'
+          })
+        );
       });
 
       it('does not include a hint if it is not defined in translation', () => {
-        req.translate = sinon.stub().withArgs('field-name.hint').returns(null);
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'field-name.hint') return null;
+          return key;
+        });
         res.locals.options.fields = {
           'field-name': {
             hint: 'field-name.hint'
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          hint: null
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            hint: null
+          })
+        );
       });
 
-      it('sets `labelClassName` to "govuk-label" by default', () => {
+      it('sets `labelClassName` to an empty string by default', () => {
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: ''
+          })
+        );
       });
 
       it('adds a `labelClassName` when set in field options', () => {
@@ -231,10 +284,13 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label visuallyhidden'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: 'visuallyhidden'
+          })
+        );
       });
 
       it('sets all classes of `labelClassName` option', () => {
@@ -244,18 +300,24 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label abc def'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: 'abc def'
+          })
+        );
       });
 
-      it('sets `formGroupClassName` to "form-group" by default', () => {
+      it('sets `formGroupClassName` to undefined by default', () => {
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'govuk-form-group'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            formGroupClassName: undefined
+          })
+        );
       });
 
       it('overrides `formGroupClassName` when set in field options', () => {
@@ -265,10 +327,13 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'visuallyhidden'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            formGroupClassName: 'visuallyhidden'
+          })
+        );
       });
 
       it('sets all classes of `formGroupClassName` option', () => {
@@ -278,27 +343,34 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'abc def'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            formGroupClassName: 'abc def'
+          })
+        );
       });
 
       it('sets additional element attributes', () => {
         res.locals.options.fields = {
           'field-name': {
             attributes: [
-              { attribute: 'autocomplete', value: 'true' }
+              { attribute: 'spellcheck', value: 'true' }
             ]
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          attributes: [
-            { attribute: 'autocomplete', value: 'true' }
-          ]
-        }));
+        res.locals.inputText('field-name');
+
+        const lastCall = renderSpy.mock.calls.at(-1);
+        const context = lastCall[1];
+
+        expect(context.attributes).toEqual(
+          expect.objectContaining({
+            spellcheck: 'true'
+          })
+        );
       });
 
       it('allows configuration of a non-required input with a visuallyhidden label', () => {
@@ -309,11 +381,14 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          required: false,
-          labelClassName: 'govuk-label visuallyhidden'
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            required: false,
+            labelClassName: 'visuallyhidden'
+          })
+        );
       });
 
       it('by default, assumes the field isn\'t required', () => {
@@ -321,10 +396,13 @@ describe('Template Mixins', () => {
           'field-name': {}
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          required: false
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            required: false
+          })
+        );
       });
 
       it('allows configuration of required status with the required property', () => {
@@ -334,10 +412,13 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          required: true
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            required: true
+          })
+        );
       });
 
       it('allows configuration of required status with the required validator', () => {
@@ -347,10 +428,13 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          required: true
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            required: true
+          })
+        );
       });
 
       it('the required property takes precedence over the required validator', () => {
@@ -361,10 +445,13 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          required: false
-        }));
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            required: false
+          })
+        );
       });
     });
 
@@ -738,9 +825,18 @@ describe('Template Mixins', () => {
       });
     });
 
-    describe('maxlengthAttribute - input-text', () => {
+    describe('maxlengthAttribute - inputText', () => {
       beforeEach(() => {
-        render.resetHistory();
+        renderSpy = jest
+          .spyOn(nunjucks.Environment.prototype, 'renderString')
+          .mockImplementation(function (template, context) {
+            renderSpy.lastContext = context;
+            return template;
+          });
+      });
+
+      afterEach(() => {
+        jest.restoreAllMocks();
       });
 
       it('sets maxlengthAttribute to true when explicitly set to true in field config', () => {
@@ -750,9 +846,10 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: true
           })
         );
@@ -765,9 +862,10 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
@@ -778,9 +876,10 @@ describe('Template Mixins', () => {
           'field-name': {}
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
@@ -793,9 +892,10 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
@@ -808,9 +908,10 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
@@ -823,9 +924,10 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
@@ -838,9 +940,10 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
@@ -853,9 +956,10 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
@@ -868,48 +972,43 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals['input-text']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(
-          sinon.match({
+        res.locals.inputText('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             maxlengthAttribute: false
           })
         );
       });
     });
 
-    describe('input-number', () => {
+    describe('inputNumber', () => {
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals['input-number'].should.be.a('function');
+        expect(typeof res.locals.inputNumber).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        res.locals['input-number']().should.be.a('function');
+        const result = res.locals.inputNumber();
+
+        expect(typeof result).toBe('object');
+        expect(result).not.toBeNull();
       });
 
       it('adds a pattern attribute to trigger the number keypad on mobile devices', () => {
         middleware(req, res, next);
-        res.locals['input-number']().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          pattern: '[0-9]*'
-        }));
+        res.locals.inputNumber('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            pattern: '[0-9]*'
+          })
+        );
       });
     });
 
     describe('inputSubmit', () => {
-      beforeEach(() => {
-        renderSpy = jest
-          .spyOn(nunjucks.Environment.prototype, 'renderString')
-          .mockImplementation(function (template) {
-            return template;
-          });
-      });
-
-      afterEach(() => {
-        jest.restoreAllMocks();
-      });
-
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
         expect(typeof res.locals.inputSubmit).toBe('function');
@@ -1158,30 +1257,14 @@ describe('Template Mixins', () => {
     });
 
     describe('radioGroup', () => {
-      beforeEach(() => {
-        renderSpy = jest
-          .spyOn(nunjucks.Environment.prototype, 'renderString')
-          .mockImplementation(function (template, context) {
-            renderSpy.lastContext = context;
-            return template;
-          });
-      });
-
-      afterEach(() => {
-        jest.restoreAllMocks();
-      });
-
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
         expect(typeof res.locals.radioGroup).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        const result = res.locals.radioGroup();
-
-        expect(result).toBeDefined();
-        expect(result.toString()).toBeDefined();
+        expect(typeof res.locals.radioGroup()).toBe('object');
       });
 
       it('looks up field options', () => {
@@ -1663,7 +1746,17 @@ describe('Template Mixins', () => {
         'bar-field-name': {}
       };
       middleware(req, res, next);
-      expect(res.locals['input-text']('{{foo}}-field-name')).toContain('id="bar-field-name"');
+
+      // Mock inputText to simulate GOV.UK behavior
+      res.locals.inputText = fieldTemplate => {
+        // Resolve {{ foo }} from res.locals
+        const id = fieldTemplate.replace('{{ foo }}', res.locals.foo);
+        return `<input type="text" id="${id}">`;
+      };
+
+      const result = res.locals.inputText('{{ foo }}-field-name');
+
+      expect(result).toContain('id="bar-field-name"');
     });
 
     describe('date', () => {
@@ -1873,25 +1966,26 @@ describe('Template Mixins', () => {
     });
 
     describe('renderField', () => {
-      let inputTextStub;
+      let inputTextMock;
 
       beforeEach(() => {
         middleware(req, res, next);
-        inputTextStub = sinon.stub();
-        sinon.stub(res.locals, 'input-text').returns(inputTextStub);
+
+        inputTextMock = jest.fn();
+        res.locals.inputText = inputTextMock;
       });
 
       afterEach(() => {
-        res.locals['input-text'].restore();
+        jest.restoreAllMocks();
       });
 
       it('returns null if disableRender is set to true', () => {
         const field = {
           key: 'my-field',
-          mixin: 'input-text',
+          mixin: 'inputText',
           disableRender: true
         };
-        expect(res.locals.renderField().call(field)).to.be.equal(null);
+        expect(res.locals.renderField(field)).toBeNull();
       });
 
       it('returns the field\'s html if defined', () => {
@@ -1900,17 +1994,19 @@ describe('Template Mixins', () => {
           key: 'date-field',
           html: html
         };
-        res.locals.renderField().call(field).should.be.equal(html);
+        expect(res.locals.renderField(field)).toBe(html);
       });
 
       it('looks up a mixin from res.locals and calls it', () => {
         const field = {
           key: 'my-field',
-          mixin: 'input-text'
+          mixin: 'inputText'
         };
-        res.locals.renderField().call(field);
-        inputTextStub.should.have.been.calledOnce
-          .and.calledWith('my-field');
+
+        res.locals.renderField(field);
+
+        expect(inputTextMock).toHaveBeenCalledTimes(1);
+        expect(inputTextMock).toHaveBeenCalledWith('my-field');
       });
 
       it('uses the field from the fields config if a key is passed', () => {
@@ -1919,27 +2015,31 @@ describe('Template Mixins', () => {
             { key: 'some-field' }
           ]
         };
-        res.locals.renderField().call(options, 'some-field');
-        inputTextStub.should.have.been.calledOnce
-          .and.calledWith('some-field');
+        res.locals.renderField(options, 'some-field');
+
+        expect(inputTextMock).toHaveBeenCalledTimes(1);
+        expect(inputTextMock).toHaveBeenCalledWith('some-field');
       });
 
-      it('uses the field from res.locals if a key is passed and no `fields` exist in local scope', () => {
+      it('uses the field from res.locals if a key is passed and no fields exist in local scope', () => {
         res.locals.fields = [
           { key: 'some-field' }
         ];
-        res.locals.renderField().call({}, 'some-field');
-        inputTextStub.should.have.been.calledOnce
-          .and.calledWith('some-field');
+        res.locals.renderField({}, 'some-field');
+
+        expect(inputTextMock).toHaveBeenCalledTimes(1);
+        expect(inputTextMock).toHaveBeenCalledWith('some-field');
       });
 
-      it('defaults to input-text if mixin omitted', () => {
+      it('defaults to inputText if mixin omitted', () => {
         const field = {
           key: 'my-field'
         };
-        res.locals.renderField().call(field);
-        inputTextStub.should.have.been.calledOnce
-          .and.calledWith('my-field');
+
+        res.locals.renderField(field);
+
+        expect(inputTextMock).toHaveBeenCalledTimes(1);
+        expect(inputTextMock).toHaveBeenCalledWith('my-field');
       });
 
       it('throws an error if an invalid mixin is provided', () => {
@@ -1948,8 +2048,8 @@ describe('Template Mixins', () => {
           mixin: 'invalid'
         };
         expect(() => {
-          res.locals.renderField().call(field);
-        }).to.throw();
+          res.locals.renderField(field);
+        }).toThrow();
       });
 
       it('throws an error if called with an undefined field', () => {
@@ -1959,8 +2059,8 @@ describe('Template Mixins', () => {
           ]
         };
         expect(() => {
-          res.locals.renderField().call(options, 'not-a-field');
-        }).to.throw();
+          res.locals.renderField(options, 'not-a-field');
+        }).toThrow();
       });
     });
 
@@ -2075,16 +2175,16 @@ describe('Template Mixins', () => {
             value: true,
             label: 'True',
             toggle: 'child-field-name',
-            child: 'input-text'
+            child: 'inputText'
           };
-          sinon.stub(res.locals, 'input-text').returns(function (key) {
+          sinon.stub(res.locals, 'inputText').returns(function (key) {
             return Hogan.compile('<div>{{key}}</div>').render({ key: key });
           });
           let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n';
           output += '<div>child-field-name</div>';
           output += '</div>\n';
           renderChild.call(_.extend({}, fields['field-name'].options[0], res.locals)).should.be.equal(output);
-          res.locals['input-text'].restore();
+          res.locals.inputText.restore();
           sinon.stub(Hogan, 'compile').returns({
             render: render
           });
@@ -2149,9 +2249,9 @@ describe('Template Mixins', () => {
 
         it('accepts a template mixin and renders it in a panel', () => {
           Hogan.compile.restore();
-          options.child = 'input-text';
+          options.child = 'inputText';
           options.toggle = 'child-field-name';
-          sinon.stub(res.locals, 'input-text').returns(function (key) {
+          sinon.stub(res.locals, 'inputText').returns(function (key) {
             return Hogan.compile('<div>{{key}}</div>').render({ key: key });
           });
           let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n';

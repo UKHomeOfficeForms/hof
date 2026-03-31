@@ -20,7 +20,7 @@ const getFields = (key, t, requiredValidate) => ({
 
   [`${key}-postcode`]: {
     label: conditionalTranslate(`fields.${key}-postcode.label`, t) || defaults.POSTCODE_LABEL,
-    mixin: 'input-text-code',
+    mixin: 'inputTextCode',
     validate: requiredValidate ? ['required', 'postcode'] : ['postcode'],
     formatter: 'uppercase'
   },
