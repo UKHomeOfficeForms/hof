@@ -34,8 +34,19 @@ module.exports = function (options) {
   const compiled = {};
   const templateCache = {};
 
+  function formatToArray(value) {
+    // account for values being an array or a single object
+    if (Array.isArray(value)) {
+      return value;
+    }
+    if (value !== undefined && value !== null) {
+      return [value];
+    }
+    return [];
+  }
+
   function maxlength(field) {
-    const validations = field.validate || [];
+    const validations = formatToArray(field.validate);
     const ml = validations.find(validation => validation?.type === 'maxlength' || validation?.type === 'exactlength');
     if (ml) {
       return Array.isArray(ml.arguments) ? ml.arguments[0] : ml.arguments;
@@ -44,7 +55,7 @@ module.exports = function (options) {
   }
 
   function maxword(field) {
-    const validations = field.validate || [];
+    const validations = formatToArray(field.validate);
     const mw = validations.find(validation => validation?.type === 'maxword');
     if (mw) {
       return Array.isArray(mw.arguments) ? mw.arguments[0] : mw.arguments;
@@ -299,10 +310,16 @@ module.exports = function (options) {
       const required = isRequired(field);
       const labelClassName = classNames(field, 'labelClassName');
       const autocomplete = field.autocomplete || extension.autocomplete || 'off';
+      const selectItems = field.options?.map(option => ({
+        value: option.value,
+        text: t(option.label),
+        selected: option.selected
+      }));
       // govUk components set the attribute property as { attribute: value }
       // but in hof, some attributes can be found in the field.validate object as [attribute, { type: attribute, value: value }]
       // and field.attributes object with the format [{ type: attribute, value: value }]
-      const validation = (field.validate || []).reduce((acc, rule) => {
+      const rules = formatToArray(field.validate);
+      const validation = rules.reduce((acc, rule) => {
         // convert required, maxlength, min and max attributes in field.validate object to govuk component compatible format
         if (rule === 'required') {
           acc['aria-required'] = 'true';
@@ -352,6 +369,7 @@ module.exports = function (options) {
         prefix: isPrefixOrSuffix(field.attributes, 'prefix'),
         suffix: isPrefixOrSuffix(field.attributes, 'suffix'),
         isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
+        items: selectItems,
         renderChild: renderChild.bind(this)
       });
     }

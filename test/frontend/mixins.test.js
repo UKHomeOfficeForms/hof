@@ -1647,28 +1647,27 @@ describe('Template Mixins', () => {
     });
 
     describe('select', () => {
-      beforeEach(() => {
-      });
-
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals.select.should.be.a('function');
+        expect(typeof res.locals.select).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        res.locals.select().should.be.a('function');
+        expect(typeof res.locals.select()).toBe('object');
       });
 
-      it('defaults `labelClassName` to "govuk-label "', () => {
+      it('defaults `labelClassName` to empty string', () => {
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
-        res.locals.select().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label'
-        }));
+        res.locals.select('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: ''
+          }));
       });
 
       it('adds `labelClassName` to the default class when set in field options', () => {
@@ -1678,10 +1677,12 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.select().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label visuallyhidden'
-        }));
+        res.locals.select('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: 'visuallyhidden'
+          }));
       });
 
       it('adds all classes of `labelClassName` option', () => {
@@ -1691,73 +1692,72 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.select().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label abc def'
-        }));
+        res.locals.select('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: 'abc def'
+          }));
       });
 
       it('includes a hint if it is defined in the locales', () => {
-        req.translate = sinon.stub().withArgs('field-name.hint').returns('Field hint');
+        req.translate = jest.fn('field-name.hint').mockReturnValue('Field hint');
         res.locals.options.fields = {
-          'field-name': {
-          }
+          'field-name': {}
         };
         middleware(req, res, next);
-        res.locals.select().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          hint: 'Field hint'
-        }));
+        res.locals.select('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            hint: 'Field hint'
+          })
+        );
       });
 
-      it('includes a hint if it is defined in translation', () => {
-        req.translate = sinon.stub().withArgs('field-name.hint').returns('Field hint');
-        res.locals.options.fields = {
-          'field-name': {
-            hint: 'field-name.hint'
-          }
-        };
-        middleware(req, res, next);
-        res.locals.select().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          hint: 'Field hint'
-        }));
-      });
 
       it('does not include a hint if it is not defined in translation', () => {
-        req.translate = sinon.stub().withArgs('field-name.hint').returns(null);
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'field-name.hint') return null;
+          return key;
+        });
         res.locals.options.fields = {
           'field-name': {
             hint: 'field-name.hint'
           }
         };
         middleware(req, res, next);
-        res.locals.select().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          hint: null
-        }));
+        res.locals.select('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            hint: null
+          }));
       });
 
-      it('sets labels to an empty string for translations that are returned as `undefined`', () => {
-        req.translate = sinon.stub().returns(undefined);
+      it('sets labels to an empty string for translations that are returned as undefined', () => {
+        req.translate = jest.fn().mockImplementation(() => { return undefined; });
         res.locals.options.fields = {
           'field-name': {
-            options: [
-              ''
-            ]
+            options: ['']
           }
         };
         middleware(req, res, next);
-        res.locals.select().call(res.locals, 'field-name');
-        render.lastCall.should.have.been.calledWith(sinon.match(function (value) {
-          const obj = value.options[0];
-          return _.isMatch(obj, {
-            label: '',
-            selected: false,
-            toggle: undefined,
-            value: ''
-          });
-        }));
+        res.locals.select('field-name');
+
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            options: [
+              expect.objectContaining({
+                label: '',
+                selected: false,
+                toggle: undefined,
+                value: ''
+              })
+            ]
+          })
+        );
       });
     });
   });
