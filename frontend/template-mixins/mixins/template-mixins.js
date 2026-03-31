@@ -505,7 +505,7 @@ module.exports = function (options) {
           className: 'govuk-input'
         }
       },
-      'inputFile': {
+      inputFile: {
         path: 'partials/forms/input-text-group',
         renderWith: inputText,
         options: {
@@ -701,32 +701,36 @@ module.exports = function (options) {
       // - a string key
       // - a field object (with .key and other props)
       // - undefined (use this as already-populated field)
-      const fields = (this && this.options && this.options.fields) || res.locals.fields || [];
+      const baseCtx = this;
+      const fields = (baseCtx && baseCtx.options && baseCtx.options.fields) || res.locals.fields || [];
 
       if (key && typeof key === 'object') {
         // called with the full field object
         Object.assign(this, key);
       } else if (typeof key === 'string' && key.length) {
         const field = fields.find(f => f.key === key);
-        if (field) {
-          Object.assign(this, field);
-        } else {
+        if (!field) {
           throw new Error('Could not find field: ' + key);
         }
+        key = field;
+      } else {
+        key = baseCtx;
       }
 
-      if (this.disableRender) {
+      const ctx = Object.assign({}, res.locals, baseCtx, key);
+
+      if (ctx.disableRender) {
         return null;
       }
 
-      if (this.html) {
-        return this.html;
+      if (ctx.html) {
+        return ctx.html;
       }
 
-      const mixin = this.mixin || 'inputText';
+      const mixin = key.mixin || 'inputText';
+
       if (mixin && res.locals[mixin] && typeof res.locals[mixin] === 'function') {
-        const ctx = Object.assign({}, res.locals);
-        return res.locals[mixin].call(ctx, this.key || (this && this.key));
+        return res.locals[mixin].call(ctx, ctx.key || (ctx && ctx.key));
       }
       throw new Error('Mixin: "' + mixin + '" not found');
     }

@@ -1,37 +1,75 @@
-{{#isMaxlengthOrMaxword}}<div class="govuk-character-count" data-module="govuk-character-count"
-    {{#maxlength}}data-maxlength="{{maxlength}}" {{/maxlength}} {{#maxword}}data-maxwords="{{maxword}}" {{/maxword}}>
-    {{/isMaxlengthOrMaxword}}
-    <div id="{{id}}-group" class="govuk-form-group {{#formGroupClassName}}{{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
-        {{#isPageHeading}}<h1 class="govuk-label-wrapper">{{/isPageHeading}}
-            <label for="{{id}}"
-                class="{{labelClassName}} {{#isPageHeading}}govuk-label--l{{/isPageHeading}}">
-                {{{label}}}
-            </label>
-        {{#isPageHeading}}</h1>{{/isPageHeading}}
-        {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{{hint}}}</div>{{/hint}}
-        {{#error}}
-        <p id="{{id}}-error" class="govuk-error-message">
-            <span id="{{id}}-error" class="govuk-visually-hidden">Error:</span>{{error.message}}
-        </p>
-        {{/error}}
-        {{#renderChild}}{{/renderChild}}
-        <textarea name="{{id}}" id="{{id}}"
-            class="govuk-textarea {{#isMaxlengthOrMaxword}}govuk-js-character-count{{/isMaxlengthOrMaxword}} {{#className}}{{className}}{{/className}} {{#error}}govuk-input--error{{/error}}"
-            {{#isMaxlengthOrMaxword}}
-            aria-describedby="{{id}}-hint {{id}}-info"
-            {{/isMaxlengthOrMaxword}}
-            {{#attributes}}
-                {{attribute}}="{{value}}"
-            {{/attributes}}
-            {{^error}}{{#hintId}}{{#maxlength}} aria-describedby="{{id}}-maxlength-hint {{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
-            {{^error}}{{#hintId}}{{^maxlength}} aria-describedby="{{hintId}}"{{/maxlength}}{{/hintId}}{{/error}}
-            {{^error}}{{^hintId}}{{#maxlength}}aria-describedby="{{id}}-maxlength-hint" {{/maxlength}}{{/hintId}}{{/error}}
-            {{#error}} aria-invalid="true" aria-describedby="{{id}}-error" {{/error}}
-            >{{value}}</textarea>
-        {{#isMaxlengthOrMaxword}}
-        <div id="{{id}}-info" class=" govuk-hint govuk-character-count__message">You have {{#maxlength}}{{maxlength}} characters{{/maxlength}}{{#maxword}}{{maxword}}
-            words{{/maxword}} remaining
-        </div>
-        {{/isMaxlengthOrMaxword}}
-    </div>
-{{#isMaxlengthOrMaxword}}</div>{{/isMaxlengthOrMaxword}}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{#-------------------------------------------#}
+{#  Set form group and label classes         #}
+{#-------------------------------------------#}
+{% set formGroupClasses = "" %}
+{% set labelClasses = "" %}
+
+{% set formGroupClasses = formGroupClasses + "form-group-compound " if compound %}
+
+{% set formGroupClasses = formGroupClasses + formGroupClassName if formGroupClassName %}
+
+{% set labelClasses = labelClasses + "govuk-label--l " if isPageHeading %}
+
+{#------------------------------------------#}
+{#  Set hint object if hint exists          #}
+{#------------------------------------------#}
+{% set hintObj = null %}
+{% if hint %}
+  {% set hintObj = {
+    html: hint | safe,
+    classes: "govuk-hint",
+    id: hintId
+  } %}
+{% endif %}
+
+{#------------------------------------------#}
+{#  Set error object if error exists        #}
+{#------------------------------------------#}
+{% set errorObj = null %}
+{% if error %}
+  {% set errorObj = {
+    text: error.message,
+    id: error.id
+  } %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set beforeInput HTML from renderChild()     #}
+{#----------------------------------------------#}
+{% if renderChild is defined %}
+  {% set beforeInputObj = { html: renderChild({}) | safe } %}
+{% else %}
+  {% set beforeInputObj = undefined %}
+{% endif %}
+
+{% set args = {
+  formGroup: {
+      classes: formGroupClasses,
+      beforeInput: beforeInputObj
+  },  
+  name: id,
+  id: id,
+  classes: className,
+  label: {
+      html: label | safe,
+      classes: labelClasses + labelClassName,
+      isPageHeading: isPageHeading,
+      for: id
+  },
+  value: value,
+  hint: hintObj,
+  maxlength: maxlength,
+  maxwords: maxword,
+  errorMessage: errorObj,
+  rows: attributes.rows,
+  attributes: attributes
+} %}
+
+{% if isMaxlengthOrMaxword %}
+  {{govukCharacterCount(args)}}
+{% else %}
+  {{ govukTextarea(args)}}
+{% endif %}

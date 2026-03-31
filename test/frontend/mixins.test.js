@@ -1065,29 +1065,33 @@ describe('Template Mixins', () => {
     describe('textarea', () => {
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals.textarea.should.be.a('function');
+        expect(typeof res.locals.textarea).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        res.locals.textarea().should.be.a('function');
+        expect(typeof res.locals.textarea()).toBe('object');
       });
 
       it('looks up field label', () => {
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'fields.field-name.label'
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'fields.field-name.label'
+          }));
       });
 
       it('prefixes translation lookup with namespace if provided', () => {
         middleware = mixins({ sharedTranslationsKey: 'name.space' });
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'name.space.fields.field-name.label'
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'name.space.fields.field-name.label'
+          }));
       });
 
       it('should have classes if one or more were specified against the field', () => {
@@ -1097,10 +1101,12 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          className: 'abc def'
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            className: 'abc def'
+          }));
       });
 
       it('uses maxlength property set at a field level over default option', () => {
@@ -1112,35 +1118,44 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          maxlength: 10
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            maxlength: 10
+          }));
       });
 
       it('uses locales translation property', () => {
-        req.translate = sinon.stub().withArgs('field-name.label').returns('Field name');
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'field-name.label') return 'Field name';
+          return undefined;
+        });
         res.locals.options.fields = {
           'field-name': {
             label: 'field-name.label'
           }
         };
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'Field name'
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'Field name'
+          }));
       });
 
-      it('sets `labelClassName` to "govuk-label" by default', () => {
+      it('sets `labelClassName` to an empty string by default', () => {
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label'
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: ''
+          }));
       });
 
       it('adds `labelClassName` to existing default classes when set in field options', () => {
@@ -1150,10 +1165,12 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label visuallyhidden'
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: 'visuallyhidden'
+          }));
       });
 
       it('adds all classes of `labelClassName` option to existing defaults', () => {
@@ -1163,10 +1180,12 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          labelClassName: 'govuk-label abc def'
-        }));
+        res.locals.textarea('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            labelClassName: 'abc def'
+          }));
       });
 
       it('sets additional element attributes', () => {
@@ -1179,13 +1198,17 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.textarea().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          attributes: [
-            { attribute: 'spellcheck', value: 'true' },
-            { attribute: 'autocapitalize', value: 'sentences' }
-          ]
-        }));
+        res.locals.textarea('field-name');
+
+        const lastCall = renderSpy.mock.calls.at(-1);
+        const context = lastCall[1];
+
+        expect(context.attributes).toEqual(
+          expect.objectContaining({
+            spellcheck: 'true',
+            autocapitalize: 'sentences'
+          })
+        );
       });
     });
 
