@@ -201,11 +201,11 @@ describe('controller', () => {
         beforeEach(() => {
           req.form.options.fields = {
             'a-field': {
-              mixin: 'input-text',
+              mixin: 'inputText',
               foo: 'bar'
             },
             'another-field': {
-              mixin: 'input-number',
+              mixin: 'inputNumber',
               disableRender: true
             }
           };
