@@ -1732,7 +1732,7 @@ radioGroup
 checkbox
 checkbox-compound
 checkbox-required
-checkbox-group
+checkboxGroup
 inputSubmit
 textarea
 qs

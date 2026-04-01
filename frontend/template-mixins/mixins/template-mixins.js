@@ -8,7 +8,7 @@ const nunjucks = require('nunjucks');
 
 const renderer = require('./render');
 
-const PANELMIXIN = 'partials/mixins/panel';
+const CONDITIONAL_MIXIN = 'partials/mixins/conditional';
 const PARTIALS = [
   'partials/forms/input-text-group',
   'partials/forms/input-text-date',
@@ -238,11 +238,11 @@ module.exports = function (options) {
       if (match) {
         return readTemplate(res.locals.partials['partials-' + match[1]]);
       } else if (child === 'html' || res.locals[child]) {
-        if (res.locals.partials['partials-mixins-panel']) {
-          return readTemplate(res.locals.partials['partials-mixins-panel']);
+        if (res.locals.partials['partials-mixins-conditional']) {
+          return readTemplate(res.locals.partials['partials-mixins-conditional']);
         }
-        const panelPath = path.join(options.viewsDirectory, PANELMIXIN);
-        return readTemplate(panelPath);
+        const conditionalPath = path.join(options.viewsDirectory, CONDITIONAL_MIXIN);
+        return readTemplate(conditionalPath);
       }
       return child;
     }
@@ -399,6 +399,8 @@ module.exports = function (options) {
         let child;
         let optionHint;
         let useHintText;
+        let behaviour;
+        let divider;
 
         if (typeof obj === 'string') {
           value = obj;
@@ -412,6 +414,8 @@ module.exports = function (options) {
           child = obj.child;
           useHintText = obj.useHintText;
           optionHint = obj.hint || 'fields.' + pKey + '.options.' + obj.value + '.hint';
+          behaviour = obj.behaviour;
+          divider = obj.divider;
         }
 
         if (this.values && this.values[key] !== undefined) {
@@ -443,7 +447,12 @@ module.exports = function (options) {
           radioOption: opts.type === 'radio',
           toggle: toggle,
           child: child,
-          optionHint: renderedOptionHint
+          optionHint: renderedOptionHint,
+          behaviour: behaviour,
+          divider: divider,
+          renderMixin: renderChild.bind({
+            ...this
+          })
         };
       }, this);
 
@@ -540,7 +549,7 @@ module.exports = function (options) {
           type: 'radio'
         }
       },
-      'checkbox-group': {
+      checkboxGroup: {
         path: 'partials/forms/checkbox-group',
         renderWith: optionGroup,
         options: {
