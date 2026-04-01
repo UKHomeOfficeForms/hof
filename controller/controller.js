@@ -127,6 +127,7 @@ module.exports = class Controller extends BaseController {
       serviceName: this.getServiceName(lookup, res.locals),
       captionHeading: this.getCaptionHeading(route, lookup, res.locals),
       warning: this.getWarning(route, lookup, res.locals),
+      details: this.getDetails(route, lookup, res.locals),
       subHeading: this.getSubHeading(route, lookup, res.locals),
       intro: this.getIntro(route, lookup, res.locals),
       backLink: this.getBackLink(req, res),
@@ -168,6 +169,22 @@ module.exports = class Controller extends BaseController {
 
   getWarning(route, lookup, locals) {
     return lookup(`pages.${route}.warning`, locals);
+  }
+
+  getDetails(route, lookup, locals) {
+    const details = lookup(`pages.${route}.details`, locals);
+    if (details && typeof details === 'object') {
+      return details;
+    }
+    const summary = lookup(`pages.${route}.details.summary`, locals);
+    const text = lookup(`pages.${route}.details.text`, locals);
+    if (summary || text) {
+      return {
+        summary,
+        text
+      };
+    }
+    return details;
   }
 
   getTitle(route, lookup, fields, locals) {
