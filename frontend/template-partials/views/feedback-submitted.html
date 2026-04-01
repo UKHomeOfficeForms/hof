@@ -1,11 +1,13 @@
-{{<partials-page}}
-  {{$page-content}}
-    <h1 class="govuk-panel__title">
-        {{#t}}pages.feedback-submitted.confirmed{{/t}}
-    </h1>
+{% extends "layout.html" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
 
-    <p class="govuk-body">{{#t}}pages.feedback-submitted.submitted{{/t}}</p>
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-    {{#input-submit}}close{{/input-submit}}
-  {{/page-content}}
-{{/partials-page}}
+{% block mainContent %}
+  {{ govukPanel({
+    titleText: t('pages.feedback-submitted.confirmed'),
+    text: ""
+  }) }}
+  
+  <p class="govuk-body">{{ t('pages.feedback-submitted.submitted') }}</p>
+{% endblock %}
