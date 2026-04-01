@@ -1,26 +1,32 @@
-{{<layout}}
+{% extends "layout.html" %}
 
-  {{$propositionHeader}}{{/propositionHeader}}
+{% block propositionHeader %}{% endblock %}
 
-  {{$header}}
-    {{header}}
-  {{/header}}
+{% block mainContent %}
+  <h2>{{ how_we_use }}</h2>
 
-  {{$content}}
-    <h2>{{how-we-use}}</h2>
-    {{#data-link}}
-      {{> partials-external-link}}
-    {{/data-link}}
-    <p>{{used-for}}</p>
-    {{#used-for-list}}
-      {{> partials-bullet-list}}
-    {{/used-for-list}}
-    <p>{{your-info}}</p>
-    {{#your-info-list}}
-      {{> partials-bullet-list}}
-    {{/your-info-list}}
-    <p>{{info-gathered}}</p>
-    <h2>{{countries}}</h2>
-    <p>{{countries-text}}</p>
-  {{/content}}
-{{/layout}}
+  {% if data_link %}
+    {% set ctx = data_link %}
+    {% include "partials/external-link.html" %}
+  {% endif %}
+
+  <p>{{ used_for }}</p>
+
+  {% if used_for_list %}
+  {% set items = used_for_list.items %}
+  {% include "partials/bullet-list.html" %}
+  {% endif %}
+
+  <p>{{ your_info }}</p>
+
+  {% if your_info_list %}
+    {% set items = your_info_list.items %}
+    {% include "partials/bullet-list.html" %}
+  {% endif %}
+
+  <p>{{ info_gathered }}</p>
+
+  <h2>{{ countries }}</h2>
+
+  <p>{{ countries_text }}</p>
+{% endblock %}
