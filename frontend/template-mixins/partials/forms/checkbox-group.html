@@ -1,47 +1,183 @@
-<div id="{{key}}-group" class="govuk-form-group{{#className}} {{className}} {{/className}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}{{#error}} govuk-form-group--error{{/error}}">
-    <fieldset class="govuk-fieldset" {{#hint}} aria-describedby="{{key}}-hint"{{/hint}}>
-        <legend class="govuk-fieldset__legend {{#isPageHeading}}govuk-fieldset__legend--l{{/isPageHeading}}{{#legendClassName}} {{legendClassName}}{{/legendClassName}}">
-            {{#isPageHeading}}<h1 class="govuk-fieldset__heading">{{/isPageHeading}}
-                {{legend}}
-            {{#isPageHeading}}</h1>{{/isPageHeading}}
-        </legend>
-        {{#isWarning}}
-        <div class="govuk-warning-text">
-            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text">
-              <span class="govuk-warning-text__assistive">Warning</span>
-             {{warning}}
-            </strong>
-          </div>
-        {{/isWarning}}
-        {{#hint}}<div id="{{key}}-hint" class="govuk-hint">{{{hint}}}</div>{{/hint}}
-        {{#error}}
-        <p id="{{key}}-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> {{error.message}}
-        </span>
-        {{/error}}
-        {{{detail}}}
-		<div class="govuk-checkboxes" data-module="govuk-checkboxes">
-        {{#options}}
-        <div class="govuk-checkboxes__item">
-            <input
-				class="govuk-checkboxes__input"
-                type="{{type}}"
-                name="{{key}}"
-                id="{{key}}-{{value}}"
-                value="{{value}}"                
-                {{#toggle}} data-toggle="{{toggle}}"{{/toggle}}
-                {{#selected}} checked="checked"{{/selected}}
-                {{^error}}{{#optionHint}} aria-describedby="{{key}}-{{value}}-hint"{{/optionHint}}{{^optionHint}}{{#hint}} aria-describedby="{{key}}-hint"{{/hint}}{{/optionHint}}{{/error}}
-                {{#error}} aria-describedby="{{key}}-error" aria-invalid="true"{{/error}}
-            >
-            <label class="govuk-label govuk-checkboxes__label" for="{{key}}-{{value}}">
-                {{{label}}}
-                {{#optionHint}}<div id="{{key}}-{{value}}-item-hint" class="govuk-hint">{{optionHint}}</div>{{/optionHint}}
-            </label>
+ {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+ {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% set items = [] %}
+
+{% for option in options %}
+{#------------------------------------------#}
+{#  Set conditional HTML                    #}
+{#------------------------------------------#}
+  {% set conditionalHtml = "" %}
+  {% set conditionalHtml %}
+    {{ option.renderMixin(option) | safe }}
+  {% endset %}
+
+{#------------------------------------------#}
+{#  Set checkbox items                      #}
+{#------------------------------------------#}
+  {# Add divider BEFORE the exclusive option #}
+  {% if option.divider !== "after" and option.behaviour === "exclusive" %}
+    {% set items = items.concat([{
+      divider: "or"
+    }]) %}
+  {% endif %}
+
+  {% set items = items.concat([{
+    value: option.value,
+    html: option.label | safe,
+    checked: option.selected or false,
+    id: key + '-' + option.value,
+    name: key,
+    hint: option.optionHint and {
+      text: option.optionHint
+    } or null,
+    conditional: option.toggle and {
+      html: conditionalHtml
+    } or null,
+    behaviour: option.behaviour
+  }]) %}
+
+  {# Add divider AFTER the exclusive option #}
+  {% if option.divider === "after" and option.behaviour === "exclusive" %}
+    {% set items = items.concat([{
+      divider: "or"
+    }]) %}
+  {% endif %}
+{% endfor %}
+
+{#-------------------------------------------#}
+{#  Set form group and legend classes        #}
+{#-------------------------------------------#}
+{% set formGroupClasses = "" %}
+{% set legendClasses = "" %}
+{% set classes = className or "" %}
+{% set formGroupClasses = formGroupClasses + formGroupClassName if formGroupClassName %}
+{% set legendClasses = legendClasses + "govuk-fieldset__legend--l " if isPageHeading %}
+
+
+{#------------------------------------------#}
+{#  Set hint object if hint exists          #}
+{#------------------------------------------#}
+{% set hintObj = null %}
+{% if hint %}
+  {% set hintObj = {
+    html: hint | safe,
+    classes: "govuk-hint"
+  } %}
+{% endif %}
+
+{#------------------------------------------#}
+{#  Set error object if error exists        #}
+{#------------------------------------------#}
+{% set errorObj = null %}
+{% if error %}
+  {% set errorObj = {
+    text: error.message,
+    id: error.id
+  } %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set beforeInput HTML                        #}
+{#----------------------------------------------#}
+{% if isWarning %}
+  {% set beforeInputObj = { html: govukWarningText({
+    text: warning,
+    iconFallbackText: "Warning"
+  }) | safe } %}
+{% else %}
+  {% set beforeInputObj = null %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set govukCheckboxes args                    #}
+{#----------------------------------------------#}
+{% set args = {
+  formGroup: {
+    classes: formGroupClasses,
+    beforeInputs: beforeInputObj
+  },
+  fieldset: {
+    legend: {
+      html: legend,
+      isPageHeading: isPageHeading,
+      classes: legendClasses + legendClassName
+    }
+  },
+  idPrefix: key,
+  name: key,
+  classes: classes,
+  hint: hintObj,
+  errorMessage: errorObj,
+  items: items
+} %}
+
+{# From v5.2 of the govuk-frontend beforeInputs will allow the warning component #}
+{# to be added to the govukCheckboxes component and this if/else statement can be removed #}
+
+{%if isWarning %}
+  <div class="govuk-form-group{% if errorObj %} govuk-form-group--error{% endif %} {{ formGroupClasses }}">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend {{ legendClasses }}">
+        {{ legend | safe }}
+      </legend>
+      {% if isWarning %}
+        {{ govukWarningText({
+          text: warning,
+          iconFallbackText: "Warning",
+          id: key + '-warning'
+        }) | safe }}
+      {% endif %}
+
+      {% if hintObj %}
+        <div id="{{ key }}-hint" class="{{ hintObj.classes }}">
+          {{ hintObj.html | safe }}
         </div>
-        {{#renderChild}}{{/renderChild}}
-        {{/options}}
-		</div>
+      {% endif %}
+
+      {% if errorObj %}
+        <span id="{{ errorObj.id }}" class="govuk-error-message">
+          <span class="govuk-visually-hidden">Error:</span> {{ errorObj.text }}
+        </span>
+      {% endif %}
+
+      <div class="govuk-checkboxes {{ classes }}" data-module="govuk-checkboxes">
+        {% for item in items %}
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input"
+                  id="{{ item.id }}"
+                  name="{{ item.name }}"
+                  type="checkbox"
+                  value="{{ item.value }}"
+                  {% if item.checked %}checked{% endif %}
+                  {% if item.conditional %}
+                    aria-controls="conditional-{{ item.id }}"
+                  {% endif %}
+                  {% for attr, val in item.attributes|default({}) %}
+                    {{ attr }}="{{ val }}"
+                  {% endfor %}>
+
+            <label class="govuk-label govuk-checkboxes__label" for="{{ item.id }}">
+              {{ item.html | safe }}
+            </label>
+
+            {% if item.hint %}
+              <div class="govuk-hint govuk-checkboxes__hint">
+                {{ item.hint.text | safe }}
+              </div>
+            {% endif %}
+          </div>
+          {% if item.conditional %}
+            <div id="conditional-{{ item.id }}"
+            class="govuk-checkboxes__conditional{% if not item.checked %} govuk-checkboxes__conditional--hidden{% endif %}"
+            aria-hidden="{% if not item.checked %}true{% else %}false{% endif %}">
+              {{ item.conditional.html | safe }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </fieldset>
-</div>
+  </div>
+{% else %}
+ {{ govukCheckboxes(args) }}
+{% endif %}

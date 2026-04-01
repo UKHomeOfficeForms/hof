@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block mainContent %}
-  {% call form(csrf_token) %}
+  {% call form(encoding=encoding, intro=intro, csrf_token) %}
     {% block page_content %}{% endblock %}
   {% endcall %}
   {% include "partials/session-timeout-warning.html" %}
