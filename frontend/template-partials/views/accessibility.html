@@ -1,55 +1,56 @@
-{{<layout}}
+{% extends "layout.html" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
 
-  {{$propositionHeader}}{{/propositionHeader}}
+{% block propositionHeader %}{% endblock %}
 
-  {{$header}}
-    {{header}}
-  {{/header}}
-
-  {{$content}}
-    <p class="govuk-body">{{#t}}accessibility.intro-p2{{/t}}</p>
-    <ul class="govuk-list">
-        <li>{{#t}}accessibility.intro-p2-li1{{/t}}</li>
-        <li>{{#t}}accessibility.intro-p2-li2{{/t}}</li>
-        <li>{{#t}}accessibility.intro-p2-li3{{/t}}</li>
-        <li>{{#t}}accessibility.intro-p2-li4{{/t}}</li>
-        <li>{{#t}}accessibility.intro-p2-li5{{/t}}</li>
-    </ul>
-    <p class="govuk-body">{{#t}}accessibility.intro-p3-pre-link{{/t}} <a href="https://mcmw.abilitynet.org.uk/">{{#t}}accessibility.intro-p3-link{{/t}}</a> {{#t}}accessibility.intro-p3-post-link{{/t}}</p>
-    <h2 class="govuk-heading-m">{{#t}}accessibility.how-accessible-header{{/t}}</h2>
-    <p class="govuk-body">{{#t}}accessibility.how-accessible-p1{{/t}}</p>
-    <ul class="govuk-list">
-        <li>{{#t}}accessibility.how-accessible-p1-li1{{/t}}</li>
-        <li>{{#t}}accessibility.how-accessible-p1-li2{{/t}}</li>
-    </ul>
-    <h2 class="govuk-heading-m">{{#t}}accessibility.reporting-header{{/t}}</h2>
-    <p class="govuk-body">{{#t}}accessibility.reporting-p1{{/t}}</p>
-    <ul class="govuk-list">
-        <li>{{#t}}accessibility.reporting-p1-li1-pre-link{{/t}} <a href="mailto:{{#t}}accessibility.contact-email-accessibility{{/t}}">{{#t}}accessibility.contact-email-accessibility{{/t}}</a></li>
-    </ul>
-    <p class="govuk-body">
-        <a href="http://www.w3.org/WAI/users/inaccessible">{{#t}}accessibility.reporting-p2-link{{/t}}</a>
-    </p>
-    <h2 class="govuk-heading-m">{{#t}}accessibility.enforcement-header{{/t}}</h2>
-    <p class="govuk-body">{{#t}}accessibility.enforcement-p1-pre-link{{/t}} <a href ="https://www.equalityadvisoryservice.com/">{{#t}}accessibility.enforcement-p1-link{{/t}}</a></p>
-    <p class="govuk-body">{{#t}}accessibility.enforcement-p2{{/t}}</p>
-    <h2 class="govuk-heading-m">{{#t}}accessibility.technical-info-header{{/t}}</h2>
-    <p class="govuk-body">{{#t}}accessibility.technical-info-p1{{/t}}</p>
-    <h2 class="govuk-heading-m">{{#t}}accessibility.compliance-header{{/t}}</h2>
-    <p class="govuk-body">{{#t}}accessibility.compliance-p1{{/t}}</p>
-    <h2 class="govuk-heading-m">{{#t}}accessibility.non-accessible-header{{/t}}</h2>
-    <p class="govuk-body">{{#t}}accessibility.non-accessible-p1{{/t}}</p>
-    <h3 class="govuk-heading-m">{{#t}}accessibility.non-compliance-header{{/t}}</h3>
-    <ul class="govuk-list">
-        <li>{{#t}}accessibility.non-compliance-li1{{/t}}</li>
-    </ul>
-    <h3 class="govuk-heading-m">{{#t}}accessibility.disproportionate-burden-header{{/t}}</h3>
-    <p class="govuk-body">{{#t}}accessibility.disproportionate-burden-p1{{/t}}</p>
-    <h3 class="govuk-heading-m">{{#t}}accessibility.outside-scope-header{{/t}}</h3>
-    <p class="govuk-body">{{#t}}accessibility.outside-scope-p1{{/t}}</p>
-    <h2 class="govuk-heading-m">{{#t}}accessibility.preparation-header{{/t}}</h2>
-    <p class="govuk-body">{{#t}}accessibility.preparation-p1{{/t}}</p>
-    <p class="govuk-body">{{#t}}accessibility.preparation-p2{{/t}}</p>
-    <p class="govuk-body">{{#t}}accessibility.preparation-p3{{/t}}</p>
-  {{/content}}
-{{/layout}}
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{{ t('accessibility.header') }}</h1>
+        <p class="govuk-body">{{ t('accessibility.intro-p2') }}</p>
+        <ul class="govuk-list">
+            <li>{{ t('accessibility.intro-p2-li1') }}</li>
+            <li>{{ t('accessibility.intro-p2-li2') }}</li>
+            <li>{{ t('accessibility.intro-p2-li3') }}</li>
+            <li>{{ t('accessibility.intro-p2-li4') }}</li>
+            <li>{{ t('accessibility.intro-p2-li5') }}</li>
+        </ul>
+        <p class="govuk-body">{{ t('accessibility.intro-p3-pre-link') }} <a href="https://mcmw.abilitynet.org.uk/">{{ t('accessibility.intro-p3-link') }}</a> {{ t('accessibility.intro-p3-post-link') }}</p>
+        <h2 class="govuk-heading-m">{{ t('accessibility.how-accessible-header') }}</h2>
+        <p class="govuk-body">{{ t('accessibility.how-accessible-p1') }}</p>
+        <ul class="govuk-list">
+            <li>{{ t('accessibility.how-accessible-p1-li1') }}</li>
+            <li>{{ t('accessibility.how-accessible-p1-li2') }}</li>
+        </ul>
+        <h2 class="govuk-heading-m">{{ t('accessibility.reporting-header') }}</h2>
+        <p class="govuk-body">{{ t('accessibility.reporting-p1') }}</p>
+        <ul class="govuk-list">
+            <li>{{ t('accessibility.reporting-p1-li1-pre-link') }} <a href="mailto:{{ t('accessibility.contact-email-accessibility') }}">{{ t('accessibility.contact-email-accessibility') }}</a></li>
+        </ul>
+        <p class="govuk-body">
+            <a href="http://www.w3.org/WAI/users/inaccessible">{{ t('accessibility.reporting-p2-link') }}</a>
+        </p>
+        <h2 class="govuk-heading-m">{{ t('accessibility.enforcement-header') }}</h2>
+        <p class="govuk-body">{{ t('accessibility.enforcement-p1-pre-link') }} <a href ="https://www.equalityadvisoryservice.com/">{{ t('accessibility.enforcement-p1-link') }}</a></p>
+        <p class="govuk-body">{{ t('accessibility.enforcement-p2') }}</p>
+        <h2 class="govuk-heading-m">{{ t('accessibility.technical-info-header') }}</h2>
+        <p class="govuk-body">{{ t('accessibility.technical-info-p1') }}</p>
+        <h2 class="govuk-heading-m">{{ t('accessibility.compliance-header') }}</h2>
+        <p class="govuk-body">{{ t('accessibility.compliance-p1') | safe }}</p>
+        <h2 class="govuk-heading-m">{{ t('accessibility.non-accessible-header') }}</h2>
+        <p class="govuk-body">{{ t('accessibility.non-accessible-p1') }}</p>
+        <h3 class="govuk-heading-m">{{ t('accessibility.non-compliance-header') }}</h3>
+        <ul class="govuk-list">
+            <li>{{ t('accessibility.non-compliance-li1') }}</li>
+        </ul>
+        <h3 class="govuk-heading-m">{{ t('accessibility.disproportionate-burden-header') }}</h3>
+        <p class="govuk-body">{{ t('accessibility.disproportionate-burden-p1') }}</p>
+        <h3 class="govuk-heading-m">{{ t('accessibility.outside-scope-header') }}</h3>
+        <p class="govuk-body">{{ t('accessibility.outside-scope-p1') }}</p>
+        <h2 class="govuk-heading-m">{{ t('accessibility.preparation-header') }}</h2>
+        <p class="govuk-body">{{ t('accessibility.preparation-p1') }}</p>
+        <p class="govuk-body">{{ t('accessibility.preparation-p2') }}</p>
+        <p class="govuk-body">{{ t('accessibility.preparation-p3') }}</p>
+        </div>
+  </div>
+{% endblock %}
