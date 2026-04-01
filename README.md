@@ -1842,6 +1842,53 @@ app.set("views", [
 
 The views are now available when calling `res.render('view-name')` from express.
 
+#### Details Component
+ The `detailsComponent` macro can be used to display a details summary and text on a page. It can take three parameters:
+
+  `details`: An object containing the summary and text to display. The summary is required, but the text is optional.
+
+  `customSummary`: A string that can be used to override the summary in the details object.
+
+  `customText`: A string that can be used to override the text in the details object.
+
+  This allows the component to be reused multiple times on the same page with different text.
+  
+  If `customSummary` or `customText` are not provided, the macro will use the values from the details object. If the details object does not contain a summary or text, it will default to an empty string.
+
+ 
+
+ **Example usage:**
+
+  Use default summary and text from details object set in `pages.${route}.details`:
+```
+{
+  "test-page": {
+    "details":{
+      "summary": Details Summary",
+      "text": "Details Text",
+      "custom-summary": "Custom Summary",
+      "custom-text": "Custom Text
+    }
+  }
+}
+```
+In your view file:
+```
+{% from "partials/details-summary.html" import detailsComponent %}
+
+{# Default details component #}
+{{ detailsComponent(details) }}
+
+{# Set Override arguments - optional #}
+{% set overrideSummary = t('pages.test-page.details.custom-summary') %} {# This can also be an ordinary string #}
+{% set overrideText = t('pages.test-page.details.custom-text') %} {# This can also be an ordinary string #}
+
+{# Override just default summary #}
+{{ detailsComponent(details, overrideSummary) }}
+
+{# Override both defaultsummary and text #}
+{{ detailsComponent(details, overrideSummary, overrideText) }}
+```
 #### HOF Application
 
 When used in a hof application in conjunction with [express-partial-templates](https://github.com/UKHomeOffice/express-partial-templates) the contents of the views directory are added to `res.locals.partials`. These are added right to left so conflicting views are resolved from the left-most directory.
