@@ -21,14 +21,14 @@ describe('service-unavailable', () => {
   });
 
   describe('middleware', () => {
-    it('renders service-unavailable with a default title, message and answers-saved', () => {
+    it('renders service-unavailable with a default title, message and answers_saved', () => {
       middleware = require('../../middleware').serviceUnavailable();
       middleware(req, res, next);
 
       res.render.should.have.been.calledWith('service-unavailable', sinon.match({
         title: 'Sorry, this service is unavailable',
         message: 'This service is temporarily unavailable',
-        'answers-saved': 'Your answers have not been saved',
+        answers_saved: 'Your answers have not been saved',
         contact: undefined,
         alternative: undefined
       }));
@@ -44,7 +44,7 @@ describe('service-unavailable', () => {
       res.render.should.have.been.calledWith('service-unavailable', sinon.match({
         title: 'errors.service-unavailable.title',
         message: 'errors.service-unavailable.message',
-        'answers-saved': 'errors.service-unavailable.answers-saved',
+        answers_saved: 'errors.service-unavailable.answers_saved',
         contact: '',
         alternative: ''
       }));

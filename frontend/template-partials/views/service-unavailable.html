@@ -1,13 +1,18 @@
-{{<error}}
-  {{$content}}
-   <h1 class="govuk-heading-l">{{title}}</h1>
-   <p class="govuk-body">{{{message}}}</p>
-   <p class="govuk-body">{{{answers-saved}}}</p>
-   {{#contact}}
-   <p class="govuk-body">{{{contact}}}</p>
-   {{/contact}}
-   {{#alternative}}
-   <p class="govuk-body">{{{alternative}}}</p>
-   {{/alternative}}
-  {{/content}}
-{{/error}}
+{% extends "error.html" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+      <p class="govuk-body">{{ message | safe }}</p>
+      <p class="govuk-body">{{ answers_saved | safe }}</p>
+      {% if contact %}
+        <p class="govuk-body">{{ contact | safe }}</p>
+      {% endif %}
+      {% if alternative %}
+        <p class="govuk-body">{{ alternative | safe }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
