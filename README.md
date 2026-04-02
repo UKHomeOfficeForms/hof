@@ -898,13 +898,13 @@ Allows a service to be paused when required and then resumed. It ensures that an
 
 
 ### Page Content Customisation
-There is default text for this page. Default text can be overridden by setting the `message` and `answers-saved` properties in the `errors.json` file of the service. Note that information relating to who to contact and alternatives to using the form is optional and so there is no default text for these unless the properties `contact` and `alternative` are set in errors.json:
+There is default text for this page. Default text can be overridden by setting the `message` and `answers_saved` properties in the `errors.json` file of the service. Note that information relating to who to contact and alternatives to using the form is optional and so there is no default text for these unless the properties `contact` and `alternative` are set in errors.json:
 
 ```json
 {
   "service-unavailable" : {
     "message": "This service will be unavailble for a week.",
-    "answers-saved":  "Your answers have not been saved.",
+    "answers_saved":  "Your answers have not been saved.",
     "contact":  "You can contact test@test.com for more information",
     "alternative": "You can access the www.test.com website instead"
   }

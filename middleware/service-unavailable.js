@@ -5,7 +5,7 @@ const getTranslations = translate => {
   const translations = {
     title: 'Sorry, this service is unavailable',
     message: 'This service is temporarily unavailable',
-    'answers-saved': 'Your answers have not been saved'
+    answers_saved: 'Your answers have not been saved'
   };
 
   if (translate) {
@@ -17,7 +17,7 @@ const getTranslations = translate => {
     translations.serviceName = isServiceNameSet ? translate('journey.serviceName') : translate('journey.header');
     translations.title = translate('errors.service-unavailable.title');
     translations.message = translate('errors.service-unavailable.message');
-    translations['answers-saved'] = translate('errors.service-unavailable.answers-saved');
+    translations.answers_saved = translate('errors.service-unavailable.answers_saved');
 
     // Only render contact and alternative information if the key has a value set
     if (contact === 'errors.service-unavailable.contact') {
@@ -59,7 +59,7 @@ module.exports = options => {
       serviceName: translations.serviceName,
       title: translations.title,
       message: translations.message,
-      'answers-saved': translations['answers-saved'],
+      answers_saved: translations.answers_saved,
       contact: translations.contact,
       alternative: translations.alternative
     });

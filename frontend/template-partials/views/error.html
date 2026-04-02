@@ -9,13 +9,15 @@
 {% endblock %}
  
 {% block content %}
-  {% if title %}
-  <h1 class="govuk-heading-l">{{ content.title }}</h1>
-  {% endif %}
-  <p>{{ content.message | safe }}</p>
-  <a href="" class="button" role="button">{{ t('buttons.try-again') }}</a>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">{{ content.title }}</h1>
+    <p>{{ content.message | safe }}</p>
+    <a href="" class="button" role="button">{{ t('buttons.try-again') }}</a>
 
-  {% if showStack %}
-    <pre>{{ error.stack }}</pre>
-  {% endif %}
+    {% if showStack %}
+      <pre>{{ error.stack }}</pre>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
