@@ -92,13 +92,9 @@ module.exports = function (options) {
     const roots = [].concat(req.app.get('views')).concat(options.viewsDirectory);
     const View = req.app.get('view');
 
-    // create a nunjucks environment for resolving includes/partials from the
+    // use nunjucks environment for resolving includes/partials from the
     // project's views roots for this request.
-    const nunjucksEnv = (req && req.app && req.app.locals && req.app.locals.nunjucksEnv)
-      || new nunjucks.Environment(
-        new nunjucks.FileSystemLoader(roots, { noCache: process.env.NODE_ENV !== 'production' }),
-        { autoescape: true }
-      );
+    const nunjucksEnv = (req && req.app && req.app.locals && req.app.locals.nunjucksEnv);
 
 
     // helper: resolve a template file path by trying express View, configured viewsDirectory and app roots
@@ -343,6 +339,8 @@ module.exports = function (options) {
         ...(this.errors && this.errors[key] && { 'aria-invalid': 'true' })
       };
 
+      const disabled = field.disabled;
+
       return Object.assign({}, extension, {
         id: key,
         className: extension.className || classNames(field),
@@ -366,6 +364,7 @@ module.exports = function (options) {
         child: field.child,
         isPageHeading: field.isPageHeading,
         attributes: attributes,
+        disabled: disabled,
         prefix: isPrefixOrSuffix(field.attributes, 'prefix'),
         suffix: isPrefixOrSuffix(field.attributes, 'suffix'),
         isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
