@@ -65,22 +65,22 @@ module.exports = {
   contactDetails: {
     steps: [
       {
-        step: '/current-address',
+        step: '/address',
         field: ['current-house-number'],
         parse: value => valueOrNoChange(value)
       },
       {
-        step: '/current-address',
+        step: '/address',
         field: ['current-street'],
         parse: value => valueOrNoChange(value)
       },
       {
-        step: '/current-address',
+        step: '/address',
         field: ['current-townOrCity'],
         parse: value => valueOrNoChange(value)
       },
       {
-        step: '/current-address',
+        step: '/address',
         field: ['current-county'],
         parse: value => valueOrNoChange(value)
       },

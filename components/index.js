@@ -11,5 +11,6 @@ module.exports = {
   notify: require('./notify'),
   summary: require('./summary'),
   sessionTimeoutWarning: require('./session-timeout-warning'),
-  selectionDrivenNavigation: require('./selection-driven-navigation')
+  selectionDrivenNavigation: require('./selection-driven-navigation'),
+  taskDrivenNavigation: require('./task-driven-navigation')
 };

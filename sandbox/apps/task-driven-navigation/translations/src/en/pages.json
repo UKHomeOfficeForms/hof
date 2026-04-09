@@ -1,0 +1,77 @@
+{
+  "start": {
+    "title": "What do you need to do?"
+  },
+  "personal-details": {
+    "header": "Change your personal details"
+  },
+  "personal-details/name": {},
+  "personal-details/dob": {
+    "header": "What is the new date of birth?"
+  },
+  "personal-details/check": {
+    "header": "Check the personal details change",
+    "sections": {
+      "personalDetails": {
+        "header": "Personal details"
+      }
+    }
+  },
+  "personal-details/anything-else": {},
+  "dependant/action": {},
+  "dependant/name": {},
+  "dependant/check": {
+    "header": "Check the dependant change",
+    "sections": {
+      "dependantChanges": {
+        "header": "Dependant change"
+      }
+    }
+  },
+  "dependant/anything-else": {},
+  "evidence/type": {},
+  "evidence/details": {},
+  "evidence/check": {
+    "header": "Check the evidence details",
+    "sections": {
+      "evidence": {
+        "header": "Evidence"
+      }
+    }
+  },
+  "evidence/anything-else": {},
+  "report-death/name": {},
+  "report-death/date": {
+    "header": "When did they die?"
+  },
+  "report-death/check": {
+    "header": "Check the death report",
+    "sections": {
+      "deathReport": {
+        "header": "Death report"
+      }
+    }
+  },
+  "report-death/anything-else": {},
+  "confirm": {
+    "header": "Check your answers",
+    "sections": {
+      "personalDetails": {
+        "header": "Personal details"
+      },
+      "dependantChanges": {
+        "header": "Dependant changes"
+      },
+      "evidence": {
+        "header": "Evidence"
+      },
+      "deathReport": {
+        "header": "Death report"
+      }
+    }
+  },
+  "submitted": {
+    "title": "Demo complete",
+    "header": "Task-driven navigation demo complete"
+  }
+}

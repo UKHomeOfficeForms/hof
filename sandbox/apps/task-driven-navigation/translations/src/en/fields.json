@@ -1,0 +1,78 @@
+{
+  "selected-task": {
+    "legend": "What do you need to do?",
+    "hint": "Choose one task to complete next.",
+    "options": {
+      "change-personal-details": {
+        "label": "Change your personal details",
+        "hint": "Update information such as a name or date of birth."
+      },
+      "add-or-remove-dependant": {
+        "label": "Add or remove a dependant",
+        "hint": "Tell us whether someone should be added to or removed from the claim."
+      },
+      "send-evidence": {
+        "label": "Send evidence",
+        "hint": "Tell us what evidence you want to send."
+      },
+      "tell-us-someone-has-died": {
+        "label": "Tell us someone on the claim has died",
+        "hint": "Report a death connected to the claim."
+      }
+    }
+  },
+  "name": {
+    "label": "Name"
+  },
+  "dob": {
+    "label": "Date of birth"
+  },
+  "dependant-action": {
+    "legend": "What do you need to do for the dependant?",
+    "options": {
+      "add": {
+        "label": "Add a dependant"
+      },
+      "remove": {
+        "label": "Remove a dependant"
+      }
+    }
+  },
+  "dependant-name": {
+    "label": "Dependant name"
+  },
+  "evidence-type": {
+    "legend": "What evidence do you want to send?",
+    "options": {
+      "passport": {
+        "label": "Passport"
+      },
+      "bank-statement": {
+        "label": "Bank statement"
+      },
+      "tenancy-document": {
+        "label": "Tenancy document"
+      }
+    }
+  },
+  "evidence-details": {
+    "label": "Tell us about the evidence"
+  },
+  "report-death-name": {
+    "label": "Name of the person who has died"
+  },
+  "report-death-date": {
+    "label": "Date they died"
+  },
+  "do-another-task": {
+    "legend": "Do you want to do anything else?",
+    "options": {
+      "yes": {
+        "label": "Yes"
+      },
+      "no": {
+        "label": "No"
+      }
+    }
+  }
+}

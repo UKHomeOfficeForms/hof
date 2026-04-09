@@ -7,7 +7,8 @@ bootstrap({
   translations: './apps/sandbox/translations',
   routes: [
     require('./apps/sandbox'),
-    require('./apps/config-driven-navigation')
+    require('./apps/config-driven-navigation'),
+    require('./apps/task-driven-navigation')
   ],
   behaviours: [
     require('../').components.sessionTimeoutWarning
