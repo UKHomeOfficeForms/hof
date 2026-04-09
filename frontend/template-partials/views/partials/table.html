@@ -1,18 +1,33 @@
-<table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      {{#headers}}
-        <th scope="col" class="govuk-table__header app-custom-class">{{.}}</th>
-      {{/headers}}
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body"> 
-    {{#rows}}
-      <tr class="govuk-table__row">
-        {{#.}}
-          <td  class="govuk-table__cell">{{.}}</td>
-        {{/.}}
-      </tr>
-    {{/rows}}
-  </tbody>
-</table>
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro tableComponent(tableName) %}
+  {% set head = [] %}
+  {% for header in tableName.headers %}
+    {% set head = head.concat([{
+      text: header,
+      classes: "app-custom-class"
+    }]) %}
+  {% endfor %}
+
+  {% set tableRows = [] %}
+  {% for row in tableName.rows %}
+    {% set tableCell = [] %}
+    {% for cell in row %}
+      {% set tableCell = tableCell.concat([{
+        text: cell
+      }]) %}
+    {% endfor %}
+    
+    {% set tableRows = tableRows.concat([tableCell]) %}
+  {% endfor %}
+
+  {% set args = {
+    caption: tableName.caption,
+    captionClasses: "govuk-table__caption--m",
+    firstCellIsHeader: tableName.firstCellIsHeader,
+    head: head,
+    rows: tableRows
+  } %}
+
+  {{ govukTable(args) }}
+{% endmacro %}

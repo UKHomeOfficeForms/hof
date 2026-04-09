@@ -1,4 +1,6 @@
-{{<layout}}
+{% extends "layout.html" %}
+
+{% from "partials/table.html" import tableComponent %}
 
   {{$propositionHeader}}{{/propositionHeader}}
 
@@ -23,9 +25,9 @@
       {{/indent-intro}}
       <h2>{{intro-cookie}}</h2>
       <p>{{intro-cookie-message}}</p>
-      {{#intro-cookie-table}}
-        {{> partials-table}}
-      {{/intro-cookie-table}}
+      {% if intro_cookie_table %}
+        {{ tableComponent(intro_cookie_table) }}
+      {% endif %} 
       <h2>{{session-cookies}}</h2>
       <p>{{session-cookies-content}}</p>
       {{#session-cookies-table}}
@@ -43,9 +45,10 @@
         {{/indent-intro}}
         <h2>{{intro-cookie}}</h2>
         <p>{{intro-cookie-message}}</p>
-        {{#intro-cookie-table}}
-          {{> partials-table}}
-        {{/intro-cookie-table}}
+        {% if intro_cookie_table %}
+          {% set ctx = intro_cookie_table %}
+          {% include "partials/table.html" %}
+        {% endif %} 
           <h2>{{session-cookies}}</h2>
           <p>{{session-cookies-content}}</p>
           {{#session-cookies-table}}
@@ -81,4 +84,3 @@
     {{/hasGoogleAnalytics}}
 
   {{/content}}
-{{/layout}}
