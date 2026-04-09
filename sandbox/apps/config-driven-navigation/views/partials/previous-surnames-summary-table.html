@@ -1,0 +1,27 @@
+{{#hasItems}}
+<div class="loop-summary-table">
+        <div class="table-options govuk-!-margin-bottom-5">
+        <span class="govuk-hint">Add all of your previous surnames</span>
+    </div>
+    <div class="table-options govuk-!-margin-bottom-5">
+        <h2 class="govuk-table__caption--m">Your previous surnames</h2>
+    </div>
+    {{#items}}
+    <dl class="govuk-summary-list">
+        {{#fields}}
+        {{#showInSummary}}
+        <div class="govuk-summary-list__row">
+            <dd class="govuk-summary-list__value">{{#parsed}}{{parsed}}{{/parsed}}{{^parsed}}{{value}}{{/parsed}}</dd>
+            <dd class="govuk-summary-list__actions">
+                <a href="{{baseUrl}}/{{route}}/edit/{{index}}">Change<span class="govuk-visually-hidden">{{#parsed}}{{parsed}}{{/parsed}}{{^parsed}}{{value}}{{/parsed}}</span></a>
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                <a href="{{baseUrl}}/{{route}}/delete/{{index}}">Remove<span class="govuk-visually-hidden">{{#parsed}}{{parsed}}{{/parsed}}{{^parsed}}{{value}}{{/parsed}}</span></a>
+            </dd>
+        </div>
+        {{/showInSummary}}
+        {{/fields}}
+    </dl>
+    {{/items}}
+</div>
+{{/hasItems}}

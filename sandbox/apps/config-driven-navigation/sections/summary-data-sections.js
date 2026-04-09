@@ -8,7 +8,31 @@ const formatDate = date => {
   return PRETTY_DATE_FORMATTER.format(dateObj);
 };
 
-const valueOrNoChange = value => value ?? 'No change';
+const hasSelectedUpdate = (updateKey, req) =>
+  [].concat(req.sessionModel.get('selected-updates') || []).includes(updateKey);
+
+const selectedValueOrOmit = updateKey => (value, req) =>
+  hasSelectedUpdate(updateKey, req) ? value : null;
+
+const formatFields = aggregator => {
+  const items = aggregator?.aggregatedValues;
+  if (!items?.length) {
+    return null;
+  }
+
+  if (!items.every(item => Array.isArray(item?.fields))) {
+    return null;
+  }
+
+  return items
+    .map(({ fields }) =>
+      fields
+        .map(({ parsed }) => parsed)
+        .filter(Boolean)
+        .join('\n')
+    )
+    .join('\n - \n');
+};
 
 /*
 
@@ -48,61 +72,72 @@ module.exports = {
       {
         step: '/name',
         field: 'name',
-        parse: value => valueOrNoChange(value)
+        parse: selectedValueOrOmit('name')
       },
       {
         step: '/surname',
         field: 'surname',
-        parse: value => valueOrNoChange(value)
+        parse: selectedValueOrOmit('surname')
+      },
+      {
+        step: '/surname-summary',
+        field: 'previoussurnames',
+        changeLink: '/config-driven-navigation/surname-summary',
+        parse: (value, req) => hasSelectedUpdate('surname', req)
+          ? formatFields(value)
+          : null
       },
       {
         step: '/dob',
         field: 'dob',
-        parse: value => value ? formatDate(value) : 'No change'
+        parse: (value, req) => hasSelectedUpdate('dob', req) && value
+          ? formatDate(value)
+          : null
       }
     ]
   },
   contactDetails: {
     steps: [
       {
-        step: '/current-address',
-        field: ['current-house-number'],
-        parse: value => valueOrNoChange(value)
+        step: '/address',
+        field: 'current-house-number',
+        parse: selectedValueOrOmit('address')
       },
       {
-        step: '/current-address',
-        field: ['current-street'],
-        parse: value => valueOrNoChange(value)
+        step: '/address',
+        field: 'current-street',
+        parse: selectedValueOrOmit('address')
       },
       {
-        step: '/current-address',
-        field: ['current-townOrCity'],
-        parse: value => valueOrNoChange(value)
+        step: '/address',
+        field: 'current-townOrCity',
+        parse: selectedValueOrOmit('address')
       },
       {
-        step: '/current-address',
-        field: ['current-county'],
-        parse: value => valueOrNoChange(value)
+        step: '/address',
+        field: 'current-county',
+        parse: selectedValueOrOmit('address')
       },
       {
         step: '/has-postcode',
         field: 'has-postcode',
-        parse: value => valueOrNoChange(value)
+        parse: selectedValueOrOmit('address')
       },
       {
         step: '/postcode',
         field: 'postcode',
-        dependsOn: 'has-postcode'
+        dependsOn: 'has-postcode',
+        parse: selectedValueOrOmit('address')
       },
       {
         step: '/email',
         field: 'email',
-        parse: value => valueOrNoChange(value)
+        parse: selectedValueOrOmit('email')
       },
       {
         step: '/phone',
         field: 'phone',
-        parse: value => valueOrNoChange(value)
+        parse: selectedValueOrOmit('phone')
       }
     ]
   }

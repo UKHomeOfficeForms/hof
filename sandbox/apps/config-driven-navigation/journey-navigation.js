@@ -4,8 +4,12 @@ module.exports = {
   selection: {
     field: 'selected-updates',
     selectorStep: '/start',
-    summaryStep: '/confirm',
+    summaryStep: '/change-anything-else',
     emptySelectionTarget: '/start',
+    addMore: {
+      triggerStep: '/change-anything-else',
+      triggerField: 'change-anything-else'
+    },
     items: {
       name: {
         order: 1,
@@ -13,7 +17,7 @@ module.exports = {
       },
       surname: {
         order: 2,
-        routes: ['/surname']
+        routes: ['/surname', '/surname-summary']
       },
       dob: {
         order: 3,
@@ -50,6 +54,24 @@ module.exports = {
             value: 'no'
           },
           next: 'next-selected-item'
+        }
+      ]
+    },
+    '/change-anything-else': {
+      branches: [
+        {
+          condition: {
+            field: 'change-anything-else',
+            value: 'yes'
+          },
+          next: '/start'
+        },
+        {
+          condition: {
+            field: 'change-anything-else',
+            value: 'no'
+          },
+          next: '/confirm'
         }
       ]
     },

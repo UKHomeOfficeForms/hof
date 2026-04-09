@@ -279,5 +279,38 @@ describe('tests', () => {
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
     });
+
+    describe('selection-driven add-more', () => {
+      before(() => {
+        app = App(require('./apps/selection-driven-add-more')).listen();
+        port = app.address().port;
+      });
+
+      after(() => {
+        app.close();
+      });
+
+      it('uses the last visited selected page as the backlink from change-anything-else', async () => {
+        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/start`, '/start');
+        await testUtils.fillInputAndSubmit(browser, 'input[name="selected_items"][value="item-one"]', null);
+        await testUtils.retrieveURLAndAssert(browser, '/item-one');
+        await testUtils.fillInputAndSubmit(browser, 'input[name="item_one_value"]', 'value-one');
+        await testUtils.retrieveURLAndAssert(browser, '/change-anything-else');
+        await testUtils.click(browser, '#step a');
+        await testUtils.retrieveURLAndAssert(browser, '/item-one');
+      });
+
+      it('returns to change-anything-else when the user adds nothing new after answering yes', async () => {
+        await testUtils.navigateAndAssert(browser, `http://localhost:${port}/start`, '/start');
+        await testUtils.fillInputAndSubmit(browser, 'input[name="selected_items"][value="item-one"]', null);
+        await testUtils.retrieveURLAndAssert(browser, '/item-one');
+        await testUtils.fillInputAndSubmit(browser, 'input[name="item_one_value"]', 'value-one');
+        await testUtils.retrieveURLAndAssert(browser, '/change-anything-else');
+        await testUtils.fillInputAndSubmit(browser, 'input[name="change_anything_else"][value="yes"]', null);
+        await testUtils.retrieveURLAndAssert(browser, '/start');
+        await browser.submitForm('form');
+        await testUtils.retrieveURLAndAssert(browser, '/change-anything-else');
+      });
+    });
   });
 });

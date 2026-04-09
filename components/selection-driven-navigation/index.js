@@ -47,6 +47,89 @@ module.exports = navigationConfig => superclass =>
       req.form.values[selectionField] = [];
     }
 
+    getAddMoreConfig(selectionConfig) {
+      if (!selectionConfig.addMore) {
+        return null;
+      }
+
+      const selectionField = selectionConfig.field;
+      const addMoreConfig = selectionConfig.addMore;
+
+      return {
+        triggerStep: addMoreConfig.triggerStep,
+        triggerField: addMoreConfig.triggerField,
+        affirmativeValue: addMoreConfig.affirmativeValue || 'yes',
+        modeField: addMoreConfig.modeField || `${selectionField}-add-more-mode`,
+        baselineField:
+          addMoreConfig.baselineField || `${selectionField}-add-more-baseline`,
+        activeItemsField:
+          addMoreConfig.activeItemsField || `${selectionField}-active-items`
+      };
+    }
+
+    clearAddMoreState(req, addMoreConfig) {
+      if (!addMoreConfig) {
+        return;
+      }
+
+      req.sessionModel.unset([
+        addMoreConfig.modeField,
+        addMoreConfig.baselineField,
+        addMoreConfig.activeItemsField
+      ]);
+    }
+
+    syncAddMoreMode(req) {
+      const config = navigation.getNavigationConfig(
+        req,
+        this.options,
+        navigationConfig
+      );
+      const selectionConfig = config.selection || {};
+      const addMoreConfig = this.getAddMoreConfig(selectionConfig);
+      const selectionField = selectionConfig.field;
+      const route = req.form.options.route;
+
+      if (!addMoreConfig || !selectionField) {
+        return;
+      }
+
+      if (route === addMoreConfig.triggerStep) {
+        if (req.form.values[addMoreConfig.triggerField] === addMoreConfig.affirmativeValue) {
+          req.sessionModel.set(addMoreConfig.modeField, true);
+          req.sessionModel.set(
+            addMoreConfig.baselineField,
+            [].concat(req.sessionModel.get(selectionField) || []).filter(Boolean)
+          );
+          req.sessionModel.unset(addMoreConfig.activeItemsField);
+        } else {
+          this.clearAddMoreState(req, addMoreConfig);
+        }
+
+        return;
+      }
+
+      if (
+        route !== selectionConfig.selectorStep ||
+        !req.sessionModel.get(addMoreConfig.modeField)
+      ) {
+        return;
+      }
+
+      const baselineItems = [].concat(req.sessionModel.get(addMoreConfig.baselineField) || [])
+        .filter(Boolean);
+      const selectedItems = [].concat(req.sessionModel.get(selectionField) || []).filter(Boolean);
+      const removedBaselineItems = baselineItems.filter(item => !selectedItems.includes(item));
+      const addedItems = selectedItems.filter(item => !baselineItems.includes(item));
+
+      if (!removedBaselineItems.length) {
+        req.sessionModel.set(addMoreConfig.activeItemsField, addedItems);
+        return;
+      }
+
+      this.clearAddMoreState(req, addMoreConfig);
+    }
+
     hasMeaningfulValue(value) {
       if (Array.isArray(value)) {
         return value.some(item => this.hasMeaningfulValue(item));
@@ -255,6 +338,7 @@ module.exports = navigationConfig => superclass =>
     }
 
     successHandler(req, res) {
+      this.syncAddMoreMode(req);
       this.syncSelectionForAnsweredRoute(req);
       this.invalidateSkippedSteps(req, res);
       return super.successHandler(req, res);

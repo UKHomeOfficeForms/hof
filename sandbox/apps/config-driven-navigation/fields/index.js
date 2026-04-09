@@ -61,5 +61,11 @@ module.exports = {
     mixin: 'input-text',
     validate: ['required', 'internationalPhoneNumber'],
     isPageHeading: true
+  },
+  'change-anything-else': {
+    mixin: 'radio-group',
+    validate: ['required'],
+    isPageHeading: true,
+    options: ['yes', 'no']
   }
 };

@@ -39,6 +39,10 @@ describe('selection driven navigation behaviour', () => {
           field: 'selected_items',
           selectorStep: '/selector',
           summaryStep: '/confirm',
+          addMore: {
+            triggerStep: '/anything-else',
+            triggerField: 'change_anything_else'
+          },
           items: {
             'unit-item-one': {
               routes: ['/unit-item-one']
@@ -171,6 +175,40 @@ describe('selection driven navigation behaviour', () => {
     behaviour.successHandler(req, res);
 
     req.sessionModel.get('selected_items').should.eql(['unit-item-two']);
+  });
+
+  it('should enable add-more mode when the user wants to change something else', () => {
+    req.form.options.route = '/anything-else';
+    req.form.values.change_anything_else = 'yes';
+
+    behaviour.successHandler(req, res);
+
+    req.sessionModel.get('selected_items-add-more-mode').should.equal(true);
+    req.sessionModel.get('selected_items-add-more-baseline').should.eql(['unit-item-two']);
+  });
+
+  it('should store only newly added items when the selector is submitted in add-more mode', () => {
+    req.form.options.route = '/selector';
+    req.sessionModel.set('selected_items-add-more-mode', true);
+    req.sessionModel.set('selected_items-add-more-baseline', ['unit-item-two']);
+    req.sessionModel.set('selected_items', ['unit-item-two', 'unit-item-one']);
+
+    behaviour.successHandler(req, res);
+
+    req.sessionModel.get('selected_items-active-items').should.eql(['unit-item-one']);
+  });
+
+  it('should clear add-more mode when the selector submission removes baseline items', () => {
+    req.form.options.route = '/selector';
+    req.sessionModel.set('selected_items-add-more-mode', true);
+    req.sessionModel.set('selected_items-add-more-baseline', ['unit-item-one', 'unit-item-two']);
+    req.sessionModel.set('selected_items', ['unit-item-two']);
+
+    behaviour.successHandler(req, res);
+
+    should.not.exist(req.sessionModel.get('selected_items-add-more-mode'));
+    should.not.exist(req.sessionModel.get('selected_items-add-more-baseline'));
+    should.not.exist(req.sessionModel.get('selected_items-active-items'));
   });
 
   it('should set the resolved back link before delegating to the parent method', () => {

@@ -42,6 +42,10 @@ describe('selection driven navigation resolver', () => {
         selectorStep: '/selector',
         dispatcherStep: '/dispatcher',
         summaryStep: '/summary',
+        addMore: {
+          triggerStep: '/summary',
+          triggerField: 'change_anything_else'
+        },
         emptySelectionTarget: '/empty',
         items: {
           'unit-item-one': {
@@ -166,6 +170,14 @@ describe('selection driven navigation resolver', () => {
       resolver.getSelectedItemKeys(navigationConfig.selection, req, res)
         .should.eql(['unit-item-two', 'unit-item-one']);
     });
+
+    it('should use the active add-more subset when add-more mode is enabled', () => {
+      req.sessionModel.set('selected_items-add-more-mode', true);
+      req.sessionModel.set('selected_items-active-items', ['unit-item-one']);
+
+      resolver.getSelectedItemKeys(navigationConfig.selection, req, res)
+        .should.eql(['unit-item-one']);
+    });
   });
 
   describe('resolveNext', () => {
@@ -201,6 +213,21 @@ describe('selection driven navigation resolver', () => {
     it('should fall back to the selection journey when no explicit route config is present', () => {
       const result = resolver.resolveNext(
         '/unit-item-one-b',
+        req,
+        res,
+        controller,
+        navigationConfig
+      );
+
+      result.next.should.equal('/summary');
+    });
+
+    it('should return to the summary step when add-more mode is active but no new items were selected', () => {
+      req.sessionModel.set('selected_items-add-more-mode', true);
+      req.sessionModel.set('selected_items-active-items', []);
+
+      const result = resolver.resolveNext(
+        '/dispatcher',
         req,
         res,
         controller,
@@ -277,6 +304,13 @@ describe('selection driven navigation resolver', () => {
       req.sessionModel.set('steps', ['/selector', '/unit-item-one-a', '/summary']);
 
       resolver.resolveBackLink('/unit-item-three-a', req, res, controller, navigationConfig)
+        .should.equal('/unit-item-one-a');
+    });
+
+    it('should ignore the summary step itself when resolving the summary backlink', () => {
+      req.sessionModel.set('steps', ['/selector', '/unit-item-one-a', '/summary']);
+
+      resolver.resolveBackLink('/summary', req, res, controller, navigationConfig)
         .should.equal('/unit-item-one-a');
     });
   });

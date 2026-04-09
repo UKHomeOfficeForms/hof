@@ -63,5 +63,16 @@
   },
   "phone": {
     "label": "Phone number"
+  },
+  "change-anything-else": {
+    "legend": "Do you need to change anything else?",
+    "options": {
+      "yes": {
+        "label": "Yes"
+      },
+      "no": {
+        "label": "No"
+      }
+    }
   }
 }

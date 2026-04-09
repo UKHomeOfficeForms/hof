@@ -1,0 +1,16 @@
+{{<partials-page}}
+    {{$page-content}}
+        {{> partials-previous-surnames-summary-table}}
+        <div>
+        {{#noMoreItems}}
+            <p>Limit exceeded</p>
+        {{/noMoreItems}}
+        {{^noMoreItems}}
+        <a href="{{baseUrl}}/{{addStep}}" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+           {{#t}}buttons.add-another{{/t}} surname
+        </a>
+        {{/noMoreItems}}
+        </div>
+        {{#input-submit}}continue{{/input-submit}}
+    {{/page-content}}
+{{/partials-page}}

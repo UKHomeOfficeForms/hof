@@ -31,6 +31,25 @@ const getRouteConfig = (route, config) =>
 // Pulls out the selection-driven part of the config for item-based journeys.
 const getSelectionConfig = config => config.selection || {};
 
+const getAddMoreConfig = selectionConfig => {
+  if (!selectionConfig.addMore) {
+    return null;
+  }
+
+  const selectionField = selectionConfig.field;
+  const addMoreConfig = selectionConfig.addMore;
+
+  return {
+    modeField: addMoreConfig.modeField || `${selectionField}-add-more-mode`,
+    baselineField:
+      addMoreConfig.baselineField || `${selectionField}-add-more-baseline`,
+    activeItemsField:
+      addMoreConfig.activeItemsField || `${selectionField}-active-items`,
+    noChangeTarget:
+      addMoreConfig.noChangeTarget || selectionConfig.summaryStep
+  };
+};
+
 // Resolves a static target or executes a target function lazily at runtime.
 const resolveTarget = (target, req, res, controller) => {
   if (typeof target === 'function') {
@@ -165,12 +184,15 @@ const getOrderedItems = (itemsConfig, req, res) => {
 // Returns the selected items, but only in the configured journey order.
 const getSelectedItemKeys = (selectionConfig, req, res) => {
   const field = selectionConfig.field;
+  const addMoreConfig = getAddMoreConfig(selectionConfig);
 
   if (!field) {
     return [];
   }
 
-  const selectedValues = toArray(getFieldValue(field, req, selectionConfig));
+  const selectedValues = addMoreConfig && req.sessionModel.get(addMoreConfig.modeField)
+    ? toArray(req.sessionModel.get(addMoreConfig.activeItemsField))
+    : toArray(getFieldValue(field, req, selectionConfig));
   const orderedItems = getOrderedItems(selectionConfig.items || {}, req, res);
 
   return orderedItems.filter(itemKey => selectedValues.includes(itemKey));
@@ -241,8 +263,14 @@ const getItemForRoute = (route, selectionConfig, req, res) => {
 const getNextSelectedRoute = (route, selectionConfig, req, res) => {
   const itemsConfig = selectionConfig.items || {};
   const selectedItemKeys = getSelectedItemKeys(selectionConfig, req, res);
+  const addMoreConfig = getAddMoreConfig(selectionConfig);
+  const isAddMoreMode = addMoreConfig && req.sessionModel.get(addMoreConfig.modeField);
 
   if (!selectedItemKeys.length) {
+    if (isAddMoreMode) {
+      return addMoreConfig.noChangeTarget;
+    }
+
     return selectionConfig.emptySelectionTarget || selectionConfig.summaryStep;
   }
 
@@ -401,8 +429,12 @@ const getPreviousSelectedRoute = (route, selectionConfig, req, res) => {
   }
 
   if (route === selectionConfig.summaryStep) {
-    if (visitedRoutes.length) {
-      return _.last(visitedRoutes) || selectionConfig.selectorStep || false;
+    const previousVisitedRoutes = visitedRoutes.filter(
+      visitedRoute => visitedRoute !== selectionConfig.summaryStep
+    );
+
+    if (previousVisitedRoutes.length) {
+      return _.last(previousVisitedRoutes) || selectionConfig.selectorStep || false;
     }
 
     const lastSelectedItemKey = selectedItemKeys[selectedItemKeys.length - 1];
