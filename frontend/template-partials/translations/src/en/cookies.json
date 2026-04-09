@@ -28,7 +28,7 @@
   },
   "intro-cookie": "Introductory cookie message",
   "intro-cookie-message": "When you first use the service we show a ‘cookie message’. We then store a cookie on your computer so it knows not to show this message again.",
-  "intro-cookie-table": {
+  "intro_cookie_table": {
     "headers": [
       "Name",
       "Purpose",
