@@ -1,14 +1,24 @@
-<div class="confirm-row">
-    {{#isSeparator}}
-    {{/isSeparator}}
-    {{^isSeparator}}
-        <dt class="confirm-label">{{label}}</dt>
-        <dd class="confirm-value" data-value="{{value}}">{{value}}</dd>
-    {{#changeLink}}
-        <dd><span><a class="govuk-link" href="{{changeLink}}" id="{{field}}-change-{{index}}">{{#t}}buttons.change{{/t}} <span class="visuallyhidden">{{changeLinkDescription}} from {{value}}</span></a></span></dd>
-    {{/changeLink}}
-    {{^changeLink}}
-        <dd><span><a class="govuk-link" href="{{baseUrl}}{{step}}/edit#{{field}}" id="{{field}}-change">{{#t}}buttons.change{{/t}} <span class="visuallyhidden">{{changeLinkDescription}} from {{value}}</span></a></span></dd>
-    {{/changeLink}}
-    {{/isSeparator}}
+<div class="govuk-summary-list__row">
+  {% if isSeparator %}
+  {% else %}
+    <dt class="govuk-summary-list__key">
+      {{ label }}
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{ value }}
+    </dd>
+    {% if not omitChangeLink %}
+      {% if changeLink %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="{{ changeLink }}" id="{{ field }}-change-{{ index }}">{{ t('buttons.change') }}<span class="govuk-visually-hidden"> {{ changeLinkDescription }} from {{ value }}</span></a>
+        </dd>
+      {% else %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="{{ baseUrl }}{{ step }}/edit#{{ field }}" id="{{ field }}-change">{{ t('buttons.change') }}<span class="govuk-visually-hidden"> {{ changeLinkDescription }} from {{ value }}</span></a>
+        </dd>
+      {% endif %}
+    {% else %}
+      <dd></dd>
+    {% endif %}
+  {% endif %}
 </div>
