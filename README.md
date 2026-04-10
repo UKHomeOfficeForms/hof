@@ -1981,6 +1981,29 @@ In your view file:
 
 ```
 
+#### Bullet List Macro
+
+The `bulletList` macro can be used to display a bulleted list on a page. It takes one parameter:
+
+  - `items`: an array with the text for each bullet point
+
+**Example usage:**
+
+Set your list items array in the relevant `.json` file:
+```
+"bullet_list_example": {
+    "items": [
+      "item 1",
+      "item 2
+    ]
+  }
+```
+In your view file:
+```
+{% from "partials/bullet-list.html" import bulletList %}
+
+{{ bulletList(bullet_list_example.items) }}
+```
 
 ### Translations
 
