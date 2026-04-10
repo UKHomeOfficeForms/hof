@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% from "partials/bullet-list.html" import bulletList %}
+
 {% block propositionHeader %}{% endblock %}
 
 {% block mainContent %}
@@ -13,15 +15,13 @@
   <p>{{ used_for }}</p>
 
   {% if used_for_list %}
-  {% set items = used_for_list.items %}
-  {% include "partials/bullet-list.html" %}
+  {{ bulletList(used_for_list.items) }}
   {% endif %}
 
   <p>{{ your_info }}</p>
 
   {% if your_info_list %}
-    {% set items = your_info_list.items %}
-    {% include "partials/bullet-list.html" %}
+    {{ bulletList(your_info_list.items) }}
   {% endif %}
 
   <p>{{ info_gathered }}</p>
