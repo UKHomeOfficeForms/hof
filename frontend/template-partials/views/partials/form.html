@@ -1,8 +1,6 @@
-{% macro form(csrf_token) %}
-<form action="" method="POST" {% block encoding %}{% endblock %} autocomplete="off" novalidate="true" spellcheck="false">
-  {% block intro %}
+{% macro form(encoding="", intro="", csrf_token) %}
+<form action="" method="POST" {{ encoding }} autocomplete="off" novalidate="true" spellcheck="false">
   {% if intro %}<p>{{ intro }}</p>{% endif %}
-  {% endblock %}
   {{ caller() }}
   {% if csrf_token %}
     <input type="hidden" name="x-csrf-token" value="{{ csrf_token }}" />
