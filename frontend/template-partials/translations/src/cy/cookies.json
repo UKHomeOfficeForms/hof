@@ -28,7 +28,7 @@
   },
   "intro-cookie": "Neges cyflwyno cwcis",
   "intro-cookie-message": "Pan fyddwch yn defnyddio’r gwasanaeth am y tro cyntaf rydym yn dangos ‘neges cwcis’. Yna rydym yn storio cwci ar eich cyfrifiadur fel nad yw’n dangos y neges yma i chi eto.",
-  "intro-cookie-table": {
+  "intro_cookie_table": {
     "headers": [
       "Enw",
       "Pwrpas",
