@@ -1843,24 +1843,46 @@ app.set("views", [
 
 The views are now available when calling `res.render('view-name')` from express.
 
+#### HOF Application
+
+When used in a hof application in conjunction with [express-partial-templates](https://github.com/UKHomeOffice/express-partial-templates) the contents of the views directory are added to `res.locals.partials`. These are added right to left so conflicting views are resolved from the left-most directory.
+
+```js
+var app = require("express")();
+
+app.set("view engine", "html");
+app.set("views", [
+  path.resolve(__dirname, "./path/to/views"),
+  require("hof").frontend.partials.views,
+]);
+app.use(require("express-partial-templates")(app));
+
+app.use(function (req, res, next) {
+  // res.locals.partials contains all views from the views dir in this repo
+  // which are extended by any local views in ./path/to/views
+  next();
+});
+```
+
+### Template partials - Components
+
 #### Details Component
- The `detailsComponent` macro can be used to display a details summary and text on a page. It can take three parameters:
 
-  `details`: An object containing the summary and text to display. The summary is required, but the text is optional.
+The `detailsComponent` macro can be used to display a details summary and text on a page. It can take three parameters:
 
-  `customSummary`: A string that can be used to override the summary in the details object.
+  - `details`: An object containing the summary and text to display. The summary is required, but the text is optional.
 
-  `customText`: A string that can be used to override the text in the details object.
+  - `customSummary`: A string that can be used to override the summary in the details object.
+
+  - `customText`: A string that can be used to override the text in the details object.
 
   This allows the component to be reused multiple times on the same page with different text.
   
   If `customSummary` or `customText` are not provided, the macro will use the values from the details object. If the details object does not contain a summary or text, it will default to an empty string.
 
- 
+**Example usage:**
 
- **Example usage:**
-
-  Use default summary and text from details object set in `pages.${route}.details`:
+Use default summary and text from details object set in `pages.${route}.details`:
 ```
 {
   "test-page": {
@@ -1890,25 +1912,45 @@ In your view file:
 {# Override both defaultsummary and text #}
 {{ detailsComponent(details, overrideSummary, overrideText) }}
 ```
-#### HOF Application
 
-When used in a hof application in conjunction with [express-partial-templates](https://github.com/UKHomeOffice/express-partial-templates) the contents of the views directory are added to `res.locals.partials`. These are added right to left so conflicting views are resolved from the left-most directory.
+#### Warning Component
 
-```js
-var app = require("express")();
+The `warningComponent` macro can be used to display a warning on a page. It takes one parameter:
 
-app.set("view engine", "html");
-app.set("views", [
-  path.resolve(__dirname, "./path/to/views"),
-  require("hof").frontend.partials.views,
-]);
-app.use(require("express-partial-templates")(app));
+  - `warning`: The warning text.
 
-app.use(function (req, res, next) {
-  // res.locals.partials contains all views from the views dir in this repo
-  // which are extended by any local views in ./path/to/views
-  next();
-});
+**Example usage:**
+
+To add a warning to a page, use text from `warning` set in `pages.${route}.warning`:
+```
+{
+  "test-page": {
+    "warning": "This is a warning"
+  }
+}
+```
+In your view file:
+```
+{% from "partials/warn.html" import warningComponent %}
+
+{{ warningComponent(warning) }}
+```
+
+Radio and Checkbox fields already include an optional warning component depending on if their `isWarning` field config is set. To set the warning text for such fields, set `warning` in `fields.${field}.warning`:
+```
+ "test-warn": {
+    "legend": "Which test would you like to choose?",
+    "hint": "Choose one of the options below and press continue.",
+    "options": {
+      "test1": {
+        "label": "Test 1"
+      },
+      "test2": {
+        "label": "Test 2"
+      }
+    },
+    "warning": "Radio Field Warning"
+  },
 ```
 
 ### Translations
