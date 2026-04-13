@@ -1,8 +1,51 @@
-<div>
-  <h2 class="section-header">{{section}}</h2>
-</div>
-<dl>
-    {{#fields}}
-    {{^omitFromSummary}}{{> partials-summary-table-row}}{{/omitFromSummary}}
-    {{/fields}}
-</dl>
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro summaryTableComponent(row, t, baseUrl) %}
+  {% if row.section %}
+    <h2 class="govuk-heading-m">{{ row.section }}</h2>
+  {% endif %}
+
+  {% if row.fields %}
+    {% set summaryRows = [] %}
+
+    {% for field in row.fields %}
+      {% if not field.omitFromSummary %}
+        {% set actions = null %}
+
+        {% if not field.omitChangeLink %}
+          {% if field.changeLink %}
+            {% set actions = {
+              items: [{
+                href: field.changeLink,
+                text: t('buttons.change'),
+                visuallyHiddenText: field.changeLinkDescription + " from " + field.value,
+                attributes: { id: field.field + "-change-" + field.index }
+              }]
+            } %}
+          {% else %}
+            {% set actions = {
+              items: [{
+                href: baseUrl + field.step + "/edit#" + field.field,
+                text: t('buttons.change'),
+                visuallyHiddenText: field.changeLinkDescription + " from " + field.value,
+                attributes: { id: field.field + "-change" }
+              }]
+            } %}
+          {% endif %}
+        {% endif %}
+        {% set summaryRow = {
+          key: { text: field.label },
+          value: { text: field.value },
+          actions: actions
+        } %}
+
+        {% set summaryRows = summaryRows.concat([summaryRow]) %}
+      {% endif %}
+    {% endfor %}
+
+    {{ govukSummaryList({ 
+      classes: "govuk-!-margin-bottom-9",
+      rows: summaryRows 
+    }) }}
+  {% endif %}
+{% endmacro %}
