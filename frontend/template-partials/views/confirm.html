@@ -1,8 +1,11 @@
-{{<partials-page}}
-  {{$page-content}}
-    {{#rows}}
-      {{> partials-summary-table}}
-    {{/rows}}
-    {{#input-submit}}confirm{{/input-submit}}
-  {{/page-content}}
-{{/partials-page}}
+{% extends "partials/page.html" %}
+
+{% from "partials/summary-table.html" import summaryTableComponent %}
+
+{% block page_content %}
+  {% for row in rows %}
+    {{ summaryTableComponent(row, t, baseUrl) }}
+  {% endfor %}
+
+  {{ inputSubmit("confirm") }}
+{% endblock %}
