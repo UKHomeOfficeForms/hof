@@ -1,7 +1,8 @@
-<div class="govuk-warning-text">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-    <span class="govuk-warning-text__assistive">Warning</span>
-        {{warning}}
-    </strong>
-</div>
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% macro warningComponent(warning) %}
+  {{ govukWarningText({
+    text: warning,
+    iconFallbackText: "Warning"
+  }) }}
+{% endmacro %}

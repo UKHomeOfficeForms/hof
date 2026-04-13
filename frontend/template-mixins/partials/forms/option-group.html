@@ -1,3 +1,5 @@
+{% from "partials/warn.html" import warningComponent %}
+
 <div id="{{ key }}-group" class="govuk-form-group{% if className %} {{ className }}{% endif %}{% if formGroupClassName %} {{ formGroupClassName }}{% endif %}{% if error %} govuk-form-group--error{% endif %}">
   <fieldset class="govuk-fieldset"{% if hint %} aria-describedby="{{ key }}-hint"{% endif %}>
     <legend class="govuk-fieldset__legend{% if isPageHeading %} govuk-fieldset__legend--l{% endif %}{% if legendClassName %} {{ legendClassName }}{% endif %}">
@@ -7,13 +9,7 @@
     </legend>
 
     {% if isWarning %}
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          {{ warning }}
-        </strong>
-      </div>
+      {{ warningComponent(warning) }}
     {% endif %}
 
     {% if hint %}
