@@ -18,13 +18,19 @@ describe('Template Mixins', () => {
   });
 
   beforeEach(() => {
+    const nunjucksEnv = new nunjucks.Environment();
+
     req = reqres.req({
       translate: a => a
     });
 
+    req.app = req.app || {};
+    req.app.locals = {
+      nunjucksEnv
+    };
+
     res = {
       locals: {
-        nunjucksEnv: new nunjucks.Environment(),
         options: {
           fields: {}
         }
@@ -1003,6 +1009,32 @@ describe('Template Mixins', () => {
           expect.any(String),
           expect.objectContaining({
             pattern: '[0-9]*'
+          })
+        );
+      });
+    });
+
+    describe('inputFile', () => {
+      it('adds a function to res.locals', () => {
+        middleware(req, res, next);
+        expect(typeof res.locals.inputFile).toBe('function');
+      });
+
+      it('returns an object', () => {
+        middleware(req, res, next);
+        const result = res.locals.inputFile();
+
+        expect(typeof result).toBe('object');
+        expect(result).not.toBeNull();
+      });
+
+      it('adds a `file` type attribute to file inputs', () => {
+        middleware(req, res, next);
+        res.locals.inputFile('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            type: 'file'
           })
         );
       });
