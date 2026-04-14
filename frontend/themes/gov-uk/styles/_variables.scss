@@ -1,10 +1,10 @@
 // layout
 $header-border-width: 10px;
-$header-border: $header-border-width solid $govuk-blue;
+$header-border: $header-border-width solid govuk-colour("blue");
 
 // forms
 $focus-border-width: 3px;
-$focus-outline: $focus-border-width solid $yellow;
+$focus-outline: $focus-border-width solid govuk-colour("yellow");
 
 // validation
 $validation-bdr-size: 3px;

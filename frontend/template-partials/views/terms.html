@@ -5,28 +5,28 @@
 {% block propositionHeader %}{% endblock %}
 
 {% block mainContent %}
-  <h2>{{ how_we_use }}</h2>
+  <h2 class="govuk-heading-m">{{ how_we_use }}</h2>
 
   {% if data_link %}
     {% set ctx = data_link %}
     {% include "partials/external-link.html" %}
   {% endif %}
 
-  <p>{{ used_for }}</p>
+  <p class="govuk-body">{{ used_for }}</p>
 
   {% if used_for_list %}
   {{ bulletList(used_for_list.items) }}
   {% endif %}
 
-  <p>{{ your_info }}</p>
+  <p class="govuk-body">{{ your_info }}</p>
 
   {% if your_info_list %}
     {{ bulletList(your_info_list.items) }}
   {% endif %}
 
-  <p>{{ info_gathered }}</p>
+  <p class="govuk-body">{{ info_gathered }}</p>
 
-  <h2>{{ countries }}</h2>
+  <h2 class="govuk-heading-m">{{ countries }}</h2>
 
-  <p>{{ countries_text }}</p>
+  <p class="govuk-body">{{ countries_text }}</p>
 {% endblock %}

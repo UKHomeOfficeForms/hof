@@ -238,8 +238,8 @@ function bootstrap(options) {
     app.use(hofMiddleware.rateLimiter(config, 'requests'));
   }
 
-  // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/govuk/assets
-  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/govuk/assets')));
+  // Set up routing so <YOUR-SITE-URL>/assets are served from /node_modules/govuk-frontend/dist/govuk/assets
+  app.use('/assets', express.static(path.join(__dirname, '/node_modules/govuk-frontend/dist/govuk/assets')));
   // Check if service has been paused and redirect accordingly
   const bypassPaths = ['/assets', '/healthcheck', '/service-unavailable'];
 
