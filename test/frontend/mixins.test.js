@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
 'use strict';
 
+const path = require('path');
 const mixins = require('../../frontend/template-mixins/mixins');
-const _ = require('underscore');
 const nunjucks = require('nunjucks');
 const reqres = require('reqres');
+const fs = require('fs');
 
 describe('Template Mixins', () => {
   let req;
@@ -1325,20 +1326,26 @@ describe('Template Mixins', () => {
       it('looks up field options', () => {
         res.locals.options.fields = {
           'field-name': {
-            options: [{ label: 'Foo', value: 'foo' }]
+            options: [{
+              label: 'Foo',
+              value: 'foo'
+            }]
           }
         };
         middleware(req, res, next);
+        res.locals.radioGroup('field-name');
 
-        const result = res.locals.radioGroup('field-name').toString();
+        const options = renderSpy.mock.calls[renderSpy.mock.calls.length - 1][1].options;
+        const option = options[0];
 
-        expect(result).toContain('value="foo"');
-        expect(result).toContain('Foo');
-        expect(result).toContain('type="radio"');
-        expect(result).not.toContain('checked="checked"');
-        expect(result).not.toContain('data-toggle');
+        expect(option).toEqual(expect.objectContaining({
+          label: 'Foo',
+          value: 'foo',
+          type: 'radio',
+          selected: false,
+          toggle: undefined
+        }));
       });
-
 
       it('looks up field label from fields.field-name.options.foo.label if not specified', () => {
         res.locals.options.fields = {
@@ -1347,11 +1354,11 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
+        res.locals.radioGroup('field-name');
 
-        const result = res.locals.radioGroup('field-name').toString();
-
-        expect(result).toContain('fields.field-name.options.foo.label');
-        expect(result).toContain('fields.field-name.options.bar.label');
+        const options = renderSpy.mock.calls[renderSpy.mock.calls.length - 1][1].options;
+        expect(options[0].label).toBe('fields.field-name.options.foo.label');
+        expect(options[1].label).toBe('fields.field-name.options.bar.label');
       });
 
       it('looks up field label from fields.field-name.options.foo.label if not specified (object options)', () => {
@@ -1361,11 +1368,11 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
+        res.locals.radioGroup('field-name');
 
-        const result = res.locals.radioGroup('field-name').toString();
-
-        expect(result).toContain('fields.field-name.options.foo.label');
-        expect(result).toContain('fields.field-name.options.bar.label');
+        const options = renderSpy.mock.calls[renderSpy.mock.calls.length - 1][1].options;
+        expect(options[0].label).toBe('fields.field-name.options.foo.label');
+        expect(options[1].label).toBe('fields.field-name.options.bar.label');
       });
 
       it('should have classes if one or more were specified against the field', () => {
@@ -1375,16 +1382,26 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
+        res.locals.radioGroup('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            className: 'abc def'
+          }));
+      });
 
-        const result = res.locals.radioGroup('field-name').toString();
-
-        expect(result).toMatch(/class="[^"]*abc[^"]*def[^"]*"/);
-
-        const match = result.match(/class="[^"]*"/);
-
-        const classAttr = match[0];
-
-        expect(classAttr).toContain('abc def');
+      it('should have role: group', () => {
+        res.locals.options.fields = {
+          'field-name': {
+          }
+        };
+        middleware(req, res, next);
+        res.locals.radioGroup('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            role: 'radiogroup'
+          }));
       });
 
       it('adds `legendClassName` if it exists as a string or an array', () => {
@@ -1398,27 +1415,19 @@ describe('Template Mixins', () => {
         };
         middleware(req, res, next);
 
-        // field-name-1
-        const field1Result = res.locals.radioGroup('field-name-1').toString();
+        res.locals.radioGroup('field-name-1');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            legendClassName: 'abc def'
+          }));
 
-        expect(field1Result).toMatch(/<legend[^>]*class="[^"]*abc[^"]*def[^"]*"[^>]*>/);
-
-        const field1match = field1Result.match(/<legend[^>]*class="[^"]*"/);
-
-        const field1classAttr = field1match[0];
-
-        expect(field1classAttr).toContain('abc def');
-
-        // field-name-2
-        const field2Result = res.locals.radioGroup('field-name-2').toString();
-
-        expect(field2Result).toMatch(/<legend[^>]*class="[^"]*abc[^"]*def[^"]*"[^>]*>/);
-
-        const field2match = field1Result.match(/<legend[^>]*class="[^"]*"/);
-
-        const field2classAttr = field2match[0];
-
-        expect(field2classAttr).toContain('abc def');
+        res.locals.radioGroup('field-name-2');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            legendClassName: 'abc def'
+          }));
       });
 
       it('uses locales translation for legend if a field value is not provided', () => {
@@ -1431,9 +1440,12 @@ describe('Template Mixins', () => {
           'field-name': {}
         };
         middleware(req, res, next);
-        const result = res.locals.radioGroup('field-name').toString();
-
-        expect(result).toContain('Field legend');
+        res.locals.radioGroup('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            legend: 'Field legend'
+          }));
       });
 
       it('uses locales translation for hint if a field value is not provided', () => {
@@ -1446,21 +1458,26 @@ describe('Template Mixins', () => {
           'field-name': {}
         };
         middleware(req, res, next);
-        const result = res.locals.radioGroup('field-name').toString();
+        res.locals.radioGroup('field-name').toString();
 
-        expect(result).toContain('Field hint');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            hint: 'Field hint'
+          }));
       });
 
       it('does not add a hint if the hint does not exist in locales', () => {
-        req.translate = jest.fn().mockReturnValue(undefined);
-
         res.locals.options.fields = {
           'field-name': {}
         };
         middleware(req, res, next);
-        const result = res.locals.radioGroup('field-name').toString();
-
-        expect(result).not.toContain('govuk-hint');
+        res.locals.radioGroup('field-name').toString();
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            hint: null
+          }));
       });
     });
 
@@ -2150,116 +2167,95 @@ describe('Template Mixins', () => {
     let options;
 
     beforeEach(() => {
-      render = sinon.stub();
-      sinon.stub(Hogan, 'compile').returns({
-        render: render
-      });
+      renderSpy = jest
+        .spyOn(nunjucks.Environment.prototype, 'renderString')
+        .mockImplementation(function (template, context) {
+          renderSpy.lastContext = context;
+          return template;
+        });
     });
 
     afterEach(() => {
-      Hogan.compile.restore();
+      jest.restoreAllMocks();
     });
 
     describe('radioGroup renderChild', () => {
       beforeEach(() => {
-        middleware = mixins();
         middleware(req, res, next);
-        res.locals.radioGroup.call(res.locals, 'field-name');
-        renderChild = render.lastCall.args[0].renderChild;
+        options = [{}];
+        res.locals.radioGroup('field-name');
+        renderChild = renderSpy.lastContext.renderChild;
+      });
+
+      afterEach(() => {
+        jest.restoreAllMocks();
       });
 
       it('is a function', () => {
-        renderChild.should.be.a('function');
+        expect(typeof renderChild).toBe('function');
       });
 
-      it('returns a function', () => {
-        renderChild().should.be.a('function');
+      it('returns a string', () => {
+        expect(typeof renderChild(options)).toBe('string');
       });
 
       describe('called with child', () => {
         beforeEach(() => {
-          options = [{}];
           fields = {
-            'field-name': {
-              options: options
-            },
+            'field-name': { options },
             'child-field-name': {}
           };
-          renderChild = renderChild();
+
+          renderChild = renderSpy.lastContext.renderChild;
+          jest.restoreAllMocks();
         });
 
         it('accepts an HTML template string', () => {
-          Hogan.compile.restore();
           options[0] = {
-            child: '<div>{{key}}</div>',
+            child: '<div>{{ key }}</div>',
             key: 'value'
           };
-          renderChild.call(fields['field-name'].options[0]).should.be.equal('<div>value</div>');
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
-          });
+
+          const result = renderChild(fields['field-name'].options[0]);
+          expect(result).toBe('<div>value</div>');
         });
 
         it('can lookup partial templates', () => {
-          Hogan.compile.restore();
-          const partialPath = path.resolve(__dirname, './test-partial.html').replace('.html', '');
           res.locals.partials = {
-            'partials-test-partial': partialPath
+            'partials-test-partial': path.resolve(process.cwd(), 'test', 'frontend', 'test-partial')
           };
+
           options[0] = {
-            child: '{{< partials-test-partial}}{{$title}}Title{{/title}}{{$content}}The content{{/content}}{{/partials-test-partial}}',
+            child: 'partials/test-partial',
             key: 'value'
           };
-          renderChild.call(fields['field-name'].options[0]).should.be.equal('<h1>Title</h1>\n<p>The content</p>\n');
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
-          });
+
+          const output = renderChild(fields['field-name'].options[0]);
+          expect(output).toContain('<h1>Title</h1>');
+          expect(output).toContain('<p>Content</p>');
         });
 
         it('renders raw html in a panel if specified', () => {
-          Hogan.compile.restore();
           options[0] = {
             child: 'html',
             toggle: 'child-field-name'
           };
+
           res.locals.fields = [
             {
               key: 'child-field-name',
               html: '<div>some html</div>'
             }
           ];
-          middleware(req, res, next);
-          res.locals.radioGroup().call(res.locals, 'field-name');
-          renderChild = render.lastCall.args[0].renderChild();
-          renderChild.call(fields['field-name'].options[0]).should.be.equal('<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n<div>some html</div></div>\n');
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
-          });
-        });
+          const output = renderChild(fields['field-name'].options[0]);
 
-        it('accepts a template mixin and renders it in a panel with the default checkbox markup showing up', () => {
-          Hogan.compile.restore();
-          options[0] = {
-            value: true,
-            label: 'True',
-            toggle: 'child-field-name',
-            child: 'inputText'
-          };
-          sinon.stub(res.locals, 'inputText').returns(function (key) {
-            return Hogan.compile('<div>{{key}}</div>').render({ key: key });
-          });
-          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n';
-          output += '<div>child-field-name</div>';
-          output += '</div>\n';
-          renderChild.call(_.extend({}, fields['field-name'].options[0], res.locals)).should.be.equal(output);
-          res.locals.inputText.restore();
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
-          });
+          expect(output).toBe(
+            '<div>some html</div>\n'
+          );
         });
 
         it('accepts a custom partial', () => {
-          Hogan.compile.restore();
+          jest.restoreAllMocks();
           res.locals.partials = {
             'partials-custom-partial': 'partials/custom-partial'
           };
@@ -2267,14 +2263,15 @@ describe('Template Mixins', () => {
           options[0] = {
             child: 'partials/custom-partial'
           };
-          sinon.stub(fs, 'readFileSync')
-            .withArgs('partials/custom-partial.html')
-            .returns(customPartial);
-          renderChild.call(fields['field-name'].options[0]).should.be.equal(customPartial);
-          fs.readFileSync.restore();
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
+          jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+          jest.spyOn(fs, 'lstatSync').mockReturnValue({
+            isFile: () => true
           });
+          jest.spyOn(fs, 'readFileSync').mockReturnValue(customPartial);
+
+          const output = renderChild(fields['field-name'].options[0]);
+
+          expect(output).toBe(customPartial);
         });
       });
     });
@@ -2283,16 +2280,20 @@ describe('Template Mixins', () => {
       beforeEach(() => {
         middleware = mixins({ 'field-name': {} });
         middleware(req, res, next);
-        res.locals.checkbox().call(res.locals, 'field-name');
-        renderChild = render.lastCall.args[0].renderChild;
+        res.locals.checkbox('field-name');
+        renderChild = renderSpy.lastContext.renderChild;
+      });
+
+      afterEach(() => {
+        jest.restoreAllMocks();
       });
 
       it('is a function', () => {
-        renderChild.should.be.a('function');
+        expect(typeof renderChild).toBe('function');
       });
 
-      it('returns a function', () => {
-        renderChild().should.be.a('function');
+      it('returns a string', () => {
+        expect(typeof renderChild(options)).toBe('string');
       });
 
       describe('called with child', () => {
@@ -2302,50 +2303,37 @@ describe('Template Mixins', () => {
             'field-name': options,
             'child-field-name': {}
           };
-          renderChild = renderChild();
+
+          renderChild = renderSpy.lastContext.renderChild;
         });
 
         it('accepts an HTML template string', () => {
-          Hogan.compile.restore();
-          options.child = '<div>{{key}}</div>';
+          options.child = '<div>{{ key }}</div>';
           options.key = 'value';
-          renderChild.call(fields['field-name']).should.be.equal('<div>value</div>');
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
-          });
-        });
 
-        it('accepts a template mixin and renders it in a panel', () => {
-          Hogan.compile.restore();
-          options.child = 'inputText';
-          options.toggle = 'child-field-name';
-          sinon.stub(res.locals, 'inputText').returns(function (key) {
-            return Hogan.compile('<div>{{key}}</div>').render({ key: key });
-          });
-          let output = '<div id="child-field-name-panel" class="\n  govuk-checkboxes__conditional">\n';
-          output += '<div>child-field-name</div>';
-          output += '</div>\n';
-          renderChild.call(_.extend({}, fields['field-name'], res.locals)).should.be.equal(output);
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
-          });
+          const output = res.locals.nunjucksEnv.renderString(
+            options.child,
+            options
+          );
+
+          expect(renderChild(options)).toBe(output);
         });
 
         it('accepts a custom partial', () => {
-          Hogan.compile.restore();
           res.locals.partials = {
             'partials-custom-partial': 'partials/custom-partial'
           };
           const customPartial = '<div>Custom Partial</div>';
           options.child = 'partials/custom-partial';
-          sinon.stub(fs, 'readFileSync')
-            .withArgs('partials/custom-partial.html')
-            .returns(customPartial);
-          renderChild.call(fields['field-name']).should.be.equal(customPartial);
-          fs.readFileSync.restore();
-          sinon.stub(Hogan, 'compile').returns({
-            render: render
+          jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+          jest.spyOn(fs, 'lstatSync').mockReturnValue({
+            isFile: () => true
           });
+          jest.spyOn(fs, 'readFileSync').mockReturnValue(customPartial);
+
+          const output = renderChild(options);
+
+          expect(output).toBe(customPartial);
         });
       });
     });

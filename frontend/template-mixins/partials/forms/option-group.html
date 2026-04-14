@@ -1,46 +1,172 @@
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "partials/warn.html" import warningComponent %}
 
-<div id="{{ key }}-group" class="govuk-form-group{% if className %} {{ className }}{% endif %}{% if formGroupClassName %} {{ formGroupClassName }}{% endif %}{% if error %} govuk-form-group--error{% endif %}">
-  <fieldset class="govuk-fieldset"{% if hint %} aria-describedby="{{ key }}-hint"{% endif %}>
-    <legend class="govuk-fieldset__legend{% if isPageHeading %} govuk-fieldset__legend--l{% endif %}{% if legendClassName %} {{ legendClassName }}{% endif %}">
-      {% if isPageHeading %}<h1 class="govuk-fieldset__heading">{% endif %}
-        {{ legend }}
-      {% if isPageHeading %}</h1>{% endif %}
-    </legend>
+{% set items = [] %}
 
-    {% if isWarning %}
-      {{ warningComponent(warning) }}
-    {% endif %}
+{% for option in options %}
+{#------------------------------------------#}
+{#  Set conditional HTML                    #}
+{#------------------------------------------#}
+  {% set conditionalHtml = "" %}
+  {% set conditionalHtml %}
+    {{ option.renderMixin(option) | safe }}
+  {% endset %}
 
-    {% if hint %}
-      <div id="{{ key }}-hint" class="govuk-hint">{{ hint | safe }}</div>
-    {% endif %}
+{#-------------------------------------------#}
+{#  Set radio items                          #}
+{#-------------------------------------------#}
+  {# Add divider BEFORE the option #}
+  {% if option.divider and option.divider !== "after"%}
+    {% set items = items.concat([{
+      divider: "or"
+    }]) %}
+  {% endif %}
+  
+  {% set items = items.concat([{
+    value: option.value,
+    html: option.label | safe,
+    checked: option.selected or false,
+    id: key + '-' + option.value,
+    name: key,
+    hint: option.optionHint and {
+      text: option.optionHint
+    } or null,
+    conditional: option.toggle and {
+      html: conditionalHtml
+    } or null
+  }]) %}
 
-    {% if error %}
-      <p id="{{ key }}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> {{ error.message }}</p>
-    {% endif %}
+  {# Add divider AFTER the option #}
+  {% if option.divider and option.divider === "after" %}
+    {% set items = items.concat([{
+      divider: "or"
+    }]) %}
+  {% endif %}
+{% endfor %}
 
-    {{ detail | safe }}
+{#-------------------------------------------#}
+{#  Set form group and legend classes        #}
+{#-------------------------------------------#}
+{% set formGroupClasses = "" %}
+{% set legendClasses = "" %}
+{% set classes = className or "" %}
+{% set formGroupClasses = formGroupClasses + formGroupClassName if formGroupClassName %}
+{% set legendClasses = legendClasses + "govuk-fieldset__legend--l " if isPageHeading %}
 
-    <div class="govuk-radios" data-module="govuk-radios">
-      {% for option in options %}
-        <div class="govuk-radios__item">
-          <input
-            class="govuk-radios__input"
-            type="{{ option.type }}"
-            name="{{ key }}"
-            id="{{ key }}-{{ option.value }}"
-            value="{{ option.value }}"{% if option.toggle %} data-toggle="{{ option.toggle }}"{% endif %}{% if option.selected %} checked="checked"{% endif %}{% if not error %}{% if option.optionHint %} aria-describedby="{{ key }}-{{ option.value }}-item-hint"{% elif hint %} aria-describedby="{{ key }}-hint"{% endif %}{% endif %}{% if error %} aria-describedby="{{ key }}-error" aria-invalid="true"{% endif %}>
-          <label class="govuk-label govuk-radios__label" for="{{ key }}-{{ option.value }}">
-            {{ option.label | safe }}
-          </label>
 
-          {% if option.optionHint %}
-            <div id="{{ key }}-{{ option.value }}-item-hint" class="govuk-hint govuk-radios__hint">{{ option.optionHint }}</div>
-          {% endif %}
+{#------------------------------------------#}
+{#  Set hint object if hint exists          #}
+{#------------------------------------------#}
+{% set hintObj = null %}
+{% if hint %}
+  {% set hintObj = {
+    html: hint | safe,
+    classes: "govuk-hint"
+  } %}
+{% endif %}
+
+{#------------------------------------------#}
+{#  Set error object if error exists        #}
+{#------------------------------------------#}
+{% set errorObj = null %}
+{% if error %}
+  {% set errorObj = {
+    text: error.message,
+    id: error.id
+  } %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set beforeInput HTML                        #}
+{#----------------------------------------------#}
+{% if isWarning %}
+  {% set beforeInputObj = { html: warningComponent(warning) | safe } %}
+{% else %}
+  {% set beforeInputObj = null %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set govukRadios args                        #}
+{#----------------------------------------------#}
+{% set args = {
+  formGroup: {
+    classes: formGroupClasses,
+    beforeInputs: beforeInputObj
+  },
+  fieldset: {
+    legend: {
+      html: legend,
+      isPageHeading: isPageHeading,
+      classes: legendClasses + legendClassName
+    }
+  },
+  idPrefix: key,
+  name: key,
+  classes: classes,
+  hint: hintObj,
+  errorMessage: errorObj,
+  items: items
+} %}
+
+{%if isWarning %}
+  <div class="govuk-form-group{% if errorObj %} govuk-form-group--error{% endif %} {{ formGroupClasses }}">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend {{ legendClasses }}">
+        {{ legend | safe }}
+      </legend>
+      {% if isWarning %}
+        {{ warningComponent(warning) }}
+      {% endif %}
+
+      {% if hintObj %}
+        <div id="{{ key }}-hint" class="{{ hintObj.classes }}">
+          {{ hintObj.html | safe }}
         </div>
-        {{ renderChild(option) | safe }}
-      {% endfor %}
-    </div>
-  </fieldset>
-</div>
+      {% endif %}
+
+      {% if errorObj %}
+        <span id="{{ errorObj.id }}" class="govuk-error-message">
+          <span class="govuk-visually-hidden">Error:</span> {{ errorObj.text }}
+        </span>
+      {% endif %}
+
+      <div class="govuk-radios {{ classes }}" data-module="govuk-radios">
+        {% for item in items %}
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input"
+                  id="{{ item.id }}"
+                  name="{{ item.name }}"
+                  type="checkbox"
+                  value="{{ item.value }}"
+                  {% if item.checked %}checked{% endif %}
+                  {% if item.conditional %}
+                    aria-controls="conditional-{{ item.id }}"
+                  {% endif %}
+                  {% for attr, val in item.attributes|default({}) %}
+                    {{ attr }}="{{ val }}"
+                  {% endfor %}>
+
+            <label class="govuk-label govuk-radios__label" for="{{ item.id }}">
+              {{ item.html | safe }}
+            </label>
+
+            {% if item.hint %}
+              <div class="govuk-hint govuk-radios__hint">
+                {{ item.hint.text | safe }}
+              </div>
+            {% endif %}
+          </div>
+          {% if item.conditional %}
+            <div id="conditional-{{ item.id }}"
+            class="govuk-radios__conditional{% if not item.checked %} govuk-radios__conditional--hidden{% endif %}"
+            aria-hidden="{% if not item.checked %}true{% else %}false{% endif %}">
+              {{ item.conditional.html | safe }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </fieldset>
+  </div>
+{% else %}
+ {{ govukRadios(args) }}
+{% endif %}
