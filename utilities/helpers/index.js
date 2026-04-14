@@ -69,7 +69,7 @@ module.exports = class Helpers {
    * @returns {Boolean} - if the mixin has associated options
    */
   static hasOptions(mixin) {
-    return mixin === 'radioGroup' || mixin === 'checkbox-group' || mixin === 'select';
+    return mixin === 'radioGroup' || mixin === 'checkboxGroup' || mixin === 'select';
   }
 
   /**
@@ -110,7 +110,7 @@ module.exports = class Helpers {
    * Utility function which looks up translations with fallback values
    * If the translation is for a field, it will first try fields.key.summary
    * If this fails it will try fields.key.label, if this fails it will try
-   * fields.key.legend (radioGroup and checkbox-group).
+   * fields.key.legend (radioGroup and checkboxGroup).
    *
    * If the translation is not for a field it will first try pages.key.summary,
    * if this fails it will fallback to pages.keys.header.
