@@ -1,7 +1,9 @@
-<ul class="govuk-list govuk-list--bullet">
-  {% for item in items %}
-  <li>
-    {{ item }}
-  </li>
-{% endfor %}
-</ul>
+{% macro bulletList(items) %}
+  <ul class="govuk-list govuk-list--bullet">
+    {% for item in items %}
+    <li>
+      {{ item }}
+    </li>
+  {% endfor %}
+  </ul>
+{% endmacro %}
