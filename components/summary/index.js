@@ -163,7 +163,7 @@ module.exports = SuperClass => class extends SuperClass {
 
   isCheckbox(key, req) {
     return req.sessionModel.get(key) && req.form.options.fieldsConfig[key] &&
-      (req.form.options.fieldsConfig[key].mixin === 'checkbox-group' ||
+      (req.form.options.fieldsConfig[key].mixin === 'checkboxGroup' ||
         req.form.options.fieldsConfig[key].mixin === 'radioGroup');
   }
 
