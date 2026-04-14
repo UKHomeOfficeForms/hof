@@ -1093,19 +1093,24 @@ So the example above will create a scenario where `'required'` validation errors
 
 ## SelectionDrivenNavigation Component
 
-`selectionDrivenNavigation` is a reusable controller behaviour for journeys where the user chooses which items to complete on a selector page and HOF should only show the routes that belong to those selected items.
+`selectionDrivenNavigation` is a reusable controller behaviour for selector-led journeys where a user chooses what they want to update and HOF should only visit the routes that belong to those chosen items.
 
-This is intended for patterns such as:
+In this branch the component is used with an aggregator loop and an add-more flow:
 
-- a landing page where users choose what they want to update
-- section-based edit journeys where only selected parts of a form should be visited
-- multi-item journeys where each selected item has its own ordered list of routes
-
-The behaviour keeps the normal HOF controller lifecycle, but overrides next-step and back-link resolution using a declarative navigation map. It also clears stored answers for any routes that become invalid because the user deselected an item or a branch skipped later pages in the same item.
+- the selector page chooses the first set of items to visit
+- an item can contain its own internal route sequence, including loop summary pages such as `/surname-summary`
+- after the selected items are complete, the journey goes to `/change-anything-else`
+- if the user answers `yes`, they return to the selector page but only newly added items are revisited
+- the final Check your answers page only shows items that remain selected, including aggregated surname data
 
 ### When to use it
 
-Use this component when a service needs a selection-driven journey but still wants to keep normal HOF pages, validation, templates, and edit mode semantics.
+Use this component when a service needs:
+
+- a checkbox-driven update journey
+- ordered item-level route groups
+- item sub-flows such as loop summaries or intermediate pages
+- a guided “change anything else” loop before the final summary
 
 Do not use it for simple linear `next` or `forks` journeys. In those cases, normal HOF routing remains the simpler option.
 
@@ -1117,15 +1122,18 @@ The behaviour accepts either:
 - a function that returns the config for the current request
 - no argument, in which case it reads `journeyNavigation` from the app config
 
-You can attach it to individual steps, but the most common pattern is to register it once at app level so it applies to the whole journey.
+You can attach it to individual steps, but the common pattern is to register it once at app level.
 
 ```js
 const summary = require('hof').components.summary;
 const selectionDrivenNavigation = require('hof').components.selectionDrivenNavigation;
 const journeyNavigation = require('./journey-navigation');
+const AggregateSaveUpdate = require('./behaviours/aggregator-save-update');
+const LimitAggregateItems = require('./behaviours/limit-aggregator');
 
 module.exports = {
   behaviours: [selectionDrivenNavigation(journeyNavigation)],
+  params: '/:action?/:id?/:edit?',
   fields,
   steps: {
     '/start': {
@@ -1138,6 +1146,16 @@ module.exports = {
     '/surname': {
       fields: ['surname']
     },
+    '/surname-summary': {
+      behaviours: [AggregateSaveUpdate, LimitAggregateItems],
+      aggregateTo: 'previoussurnames',
+      aggregateFrom: ['surname'],
+      addStep: 'surname',
+      aggregateLimit: 5
+    },
+    '/dob': {
+      fields: ['dob']
+    },
     '/address': {
       fields: ['current-house-number', 'current-street', 'current-townOrCity', 'current-county']
     },
@@ -1147,17 +1165,18 @@ module.exports = {
     '/postcode': {
       fields: ['postcode']
     },
-    '/dob': {
-      fields: ['dob']
-    },
     '/email': {
       fields: ['email']
     },
     '/phone': {
       fields: ['phone']
     },
+    '/change-anything-else': {
+      fields: ['change-anything-else']
+    },
     '/confirm': {
       template: 'confirm',
+      backLink: '/config-driven-navigation/change-anything-else',
       behaviours: [summary],
       sections: require('./sections/summary-data-sections')
     },
@@ -1177,8 +1196,12 @@ module.exports = {
   selection: {
     field: 'selected-updates',
     selectorStep: '/start',
-    summaryStep: '/confirm',
+    summaryStep: '/change-anything-else',
     emptySelectionTarget: '/start',
+    addMore: {
+      triggerStep: '/change-anything-else',
+      triggerField: 'change-anything-else'
+    },
     items: {
       name: {
         order: 1,
@@ -1186,15 +1209,15 @@ module.exports = {
       },
       surname: {
         order: 2,
-        routes: ['/surname']
-      },
-      address: {
-        order: 3,
-        routes: ['/address', '/has-postcode', '/postcode']
+        routes: ['/surname', '/surname-summary']
       },
       dob: {
-        order: 4,
+        order: 3,
         routes: ['/dob']
+      },
+      address: {
+        order: 4,
+        routes: ['/address', '/has-postcode', '/postcode']
       },
       email: {
         order: 5,
@@ -1226,6 +1249,24 @@ module.exports = {
         }
       ]
     },
+    '/change-anything-else': {
+      branches: [
+        {
+          condition: {
+            field: 'change-anything-else',
+            value: 'yes'
+          },
+          next: '/start'
+        },
+        {
+          condition: {
+            field: 'change-anything-else',
+            value: 'no'
+          },
+          next: '/confirm'
+        }
+      ]
+    },
     '/confirm': {
       next: '/submitted'
     }
@@ -1233,13 +1274,25 @@ module.exports = {
 };
 ```
 
+### How the journey works
+
+The component and service-level config work together like this:
+
+1. The user picks one or more update types on `/start`.
+2. `selectionDrivenNavigation` walks the selected items in configured order.
+3. An item can contain multiple routes. In this branch, `surname` uses `['/surname', '/surname-summary']`.
+4. `/surname-summary` is a loop summary page that stores surnames into the `previoussurnames` aggregate, supports edit/delete actions, and can enforce an item limit.
+5. After the selected journey finishes, the user lands on `/change-anything-else` rather than the final summary.
+6. If the user says `yes`, the component enters add-more mode, records the baseline selection, and routes the user only through newly added items.
+7. If the user says `no`, the journey proceeds to `/confirm` and then `/submitted`.
+
 ### Navigation config
 
 The behaviour resolves navigation from an app-level `journeyNavigation` object or from the config passed directly to `selectionDrivenNavigation(...)`.
 
 The config has two main parts:
 
-- `selection`: defines the selector field and the ordered item registry
+- `selection`: defines the selector field, the ordered item registry, and optional add-more behaviour
 - `routes`: defines route-level rules such as `next`, `backLink`, and conditional branches
 
 #### `selection`
@@ -1248,16 +1301,16 @@ The config has two main parts:
 selection: {
   field: 'selected-updates',
   selectorStep: '/start',
-  summaryStep: '/confirm',
+  summaryStep: '/change-anything-else',
   emptySelectionTarget: '/start',
+  addMore: {
+    triggerStep: '/change-anything-else',
+    triggerField: 'change-anything-else'
+  },
   items: {
-    address: {
-      order: 3,
-      routes: ['/address', '/has-postcode', '/postcode'],
-      when: {
-        field: 'can-update-address',
-        value: 'yes'
-      }
+    surname: {
+      order: 2,
+      routes: ['/surname', '/surname-summary']
     }
   }
 }
@@ -1271,6 +1324,17 @@ Supported `selection` properties:
 - `summaryStep`: the route to send users to after the last selected item
 - `emptySelectionTarget`: optional fallback when nothing is selected
 - `items`: the registry of selectable items
+- `addMore`: optional config for guided “change anything else” mode
+
+Supported `addMore` properties:
+
+- `triggerStep`: the step that asks whether the user wants to change anything else
+- `triggerField`: the field checked on that step
+- `affirmativeValue`: optional override for the affirmative answer, default `yes`
+- `modeField`: optional session key used to store whether add-more mode is active
+- `baselineField`: optional session key used to store the original selected items
+- `activeItemsField`: optional session key used to store only the newly added items
+- `noChangeTarget`: optional route to use when add-more mode is active but no new items were added
 
 Supported item properties:
 
@@ -1299,8 +1363,23 @@ routes: {
       next: 'next-selected-item'
     }
   },
-  '/confirm': {
-    next: '/submitted'
+  '/change-anything-else': {
+    branches: [
+      {
+        condition: {
+          field: 'change-anything-else',
+          value: 'yes'
+        },
+        next: '/start'
+      },
+      {
+        condition: {
+          field: 'change-anything-else',
+          value: 'no'
+        },
+        next: '/confirm'
+      }
+    ]
   }
 }
 ```
@@ -1351,12 +1430,28 @@ Supported value sources:
 
 When enabled, the component:
 
-- resolves the next route from the selection order and any route-level rules
+- resolves the next route from the selected-item order and any route-level rules
 - resolves a back link from explicit config or from the visited route order stored in `req.sessionModel.get('steps')`
 - clears fields for skipped routes before delegating to the normal HOF `successHandler`
 - preserves HOF edit mode semantics, including support for `continueOnEdit`
+- normalises an empty selector submission so deselection is handled correctly
+- captures historical selector values so deselected items can be invalidated reliably
+- automatically adds an item back into the selected set after a successful save if the user arrived through a `Change` link and the route now has a meaningful value
+- supports guided add-more mode so returning to the selector page only revisits newly added items
 
-This lets services keep using normal HOF controllers and pages while moving the journey logic into a reusable, testable config object.
+### Aggregator loop pages
+
+The aggregator loop in this branch is service-defined rather than built into `selectionDrivenNavigation` itself.
+
+In the sandbox app:
+
+- `/surname-summary` is part of the `surname` item's route list
+- `aggregator-save-update` persists loop items to `previoussurnames`
+- `limit-aggregator` exposes `noMoreItems` once the configured limit is reached
+- the loop summary partial renders existing items with `Change` and `Remove` links
+- the final summary section formats `previoussurnames` into a single selected summary row
+
+This lets services mix reusable selection-driven routing with custom loop pages and aggregate summaries where needed.
 
 ## Date Component
 

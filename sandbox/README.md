@@ -2,6 +2,15 @@
 
 The Home Office Forms (HOF) Sandbox app is used by developers to test out different components in the framework. 
 
+This branch mounts the config-driven selection navigation demo at `/config-driven-navigation`.
+
+That demo covers:
+
+- selector-led navigation with ordered selected items
+- a surname aggregator loop using `/surname` and `/surname-summary`
+- add-more flow through `/change-anything-else`
+- a final summary that only shows the currently selected updates, including aggregated previous surnames
+
 #### How to run the app locally 
 
 Install [Homebrew](https://brew.sh/), if it is not installed 
