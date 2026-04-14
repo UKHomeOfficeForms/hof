@@ -1095,6 +1095,8 @@ So the example above will create a scenario where `'required'` validation errors
 
 `selectionDrivenNavigation` is a reusable controller behaviour for journeys where the user chooses which items to complete on a selector page and HOF should only show the routes that belong to those selected items.
 
+The component only decides journey order, next-step resolution, back-link resolution, and invalidation of skipped answers. It does not prescribe how the Check your answers page should render each item.
+
 This is intended for patterns such as:
 
 - a landing page where users choose what they want to update
@@ -1232,6 +1234,52 @@ module.exports = {
   }
 };
 ```
+
+### Service pattern: CYA rows with default `No change`
+
+One common service-level pattern is to keep the selector page as the entry point for the update journey, but render the summary page as a full checklist of possible updates:
+
+- each item is shown on the CYA page, even if it was not selected originally
+- unanswered items render a default value such as `No change`
+- each row has its own `Change` link back to the relevant step
+
+That pattern is used by the config-driven sandbox app in this branch. In that setup:
+
+- `selectionDrivenNavigation` still controls which routes are visited during the main journey
+- the summary page is responsible for showing the full list of items and fallback values
+- the `Change` links are provided by the normal summary component configuration
+
+In other words, the "show every row with `No change` by default" behaviour is not built into `selectionDrivenNavigation` itself. It is implemented in the summary section definitions and confirm-page template used by the service.
+
+For example, a summary section can provide fallback text for unanswered fields:
+
+```js
+const valueOrNoChange = value => value ?? 'No change';
+
+module.exports = {
+  personalDetails: {
+    steps: [
+      {
+        step: '/name',
+        field: 'name',
+        parse: value => valueOrNoChange(value)
+      },
+      {
+        step: '/surname',
+        field: 'surname',
+        parse: value => valueOrNoChange(value)
+      },
+      {
+        step: '/dob',
+        field: 'dob',
+        parse: value => value ? formatDate(value) : 'No change'
+      }
+    ]
+  }
+};
+```
+
+If a service wants a different summary experience, such as only showing selected items, grouped loop data, or an intermediate "anything else to change" page, that should be implemented as a service-specific summary/configuration layer on top of the same navigation component.
 
 ### Navigation config
 
