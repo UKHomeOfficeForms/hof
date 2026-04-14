@@ -46,7 +46,7 @@ module.exports = {
   },
   incomeTypes: {
     isPageHeading: 'true',
-    mixin: 'checkbox-group',
+    mixin: 'checkboxGroup',
     labelClassName: 'visuallyhidden',
     validate: ['required'],
     options: [

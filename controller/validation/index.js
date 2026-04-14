@@ -63,7 +63,7 @@ function validate(fields) {
     debug(`Validating field: "${key}" with value: "${value}"`);
 
     function shouldValidate() {
-      // validationLink used to validates multiple dependent fields in checkbox-group
+      // validationLink used to validates multiple dependent fields in checkboxGroup
       let dependent = fields[key].dependent || fields[key].validationLink;
 
       if (typeof dependent === 'string') {

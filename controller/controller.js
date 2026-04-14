@@ -212,7 +212,7 @@ module.exports = class Controller extends BaseController {
         if (req.form && req.form.options && req.form.options.fields) {
           const field = req.form.options.fields[key];
           // get first option for radios and checkbox
-          if (field.mixin === 'radioGroup' || field.mixin === 'checkbox-group') {
+          if (field.mixin === 'radioGroup' || field.mixin === 'checkboxGroup') {
             // get first option for radios and checkbox where there is a toggle
             if (typeof field.options[0] === 'object') {
               req.form.errors[key].errorLinkId = key + '-' + field.options[0].value;
