@@ -1,27 +1,59 @@
 .bold {
-    font-weight: bold;
+  font-weight: bold;
 }
+
 .uppercase {
-    text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 h1 {
-    @extend .heading-large;
+  @include govuk-font($size: 36, $weight: bold);
+  margin-top: govuk-spacing(6);
+  margin-bottom: govuk-spacing(3);
 }
+
 h2 {
-    @extend .heading-medium;
+  @include govuk-font($size: 24, $weight: bold);
+  margin-top: govuk-spacing(6);
+  margin-bottom: govuk-spacing(3);
 }
+
 h3 {
-    @extend .heading-small;
+  @include govuk-font($size: 19, $weight: bold);
+  margin-top: govuk-spacing(4);
+  margin-bottom: govuk-spacing(2);
 }
+
+p {
+  @include govuk-font($size: 19);
+  margin-top: 0;
+  margin-bottom: govuk-spacing(4);
+}
+
 strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .new-window {
-    padding-right: 17px;
-    background: file-url("passports/new-window-link.png") right center no-repeat;
-    &:hover {
-        background-image: file-url("passports/new-window-link-blue.png");
-    }
+  padding-right: 17px;
+  background: file-url("passports/new-window-link.png") right center no-repeat;
+
+  &:hover {
+    background-image: file-url("passports/new-window-link-blue.png");
+  }
+}
+
+pre {
+  @include govuk-font($size: 19);
+  margin-top: 0;
+  margin-bottom: govuk-spacing(4);
+}
+
+code {
+  font-size: 13px;
+  line-height: 19px;
+  color: govuk-colour("black");
+  background-color: govuk-colour("light-grey");
+  border: 1px solid govuk-colour("mid-grey");
+  padding: 3px 7px;
 }

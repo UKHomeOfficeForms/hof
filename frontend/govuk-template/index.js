@@ -10,7 +10,7 @@ const setup = (opts, router) => {
   const options = opts || {};
   options.path = options.path || '/assets';
 
-  router.use(options.path, servestatic(path.join(basedir, './govuk/assets'), options));
+  router.use(options.path, servestatic(path.join(basedir, './dist/govuk/assets'), options));
   router.use((req, res, next) => {
     res.locals.govukAssetPath = req.baseUrl + options.path + '/';
     res.locals.partials = res.locals.partials || {};

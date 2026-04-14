@@ -187,10 +187,10 @@ glob-parent@~5.1.2:
   dependencies:
     is-glob "^4.0.1"
 
-govuk-frontend@4.10:
-  version "4.10.1"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.10.1.tgz#a67a680f34339c210d59ed0f6c473af29c975744"
-  integrity sha512-k7wKjPpLovQlfOiBt0A3RHQCpNagOR8xpfMgvTEQkX6Id5njYNzQTsBvpArDKAxI2174csv2uzn02py02zTVLA==
+govuk-frontend@^5.0:
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.14.0.tgz#d93f1ffa88b0696114509cab86e4ea474006f8e0"
+  integrity sha512-MgfaXswIM6KpXS2T5gltEnzgVLgfM3UoE9+rYkhBiR0suaJ8Let31VZXQZqz9QhiPDbv28fW1nRjIyLujfZIBA==
 
 has-flag@^3.0.0:
   version "3.0.0"

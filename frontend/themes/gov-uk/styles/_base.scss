@@ -1,8 +1,8 @@
 html {
-    background: $grey-3;
+    background: govuk-colour("light-grey");
 }
 body {
-    background: $white;
+    background: govuk-colour("white");
 }
 .main-content {
     img {
