@@ -1274,131 +1274,6 @@ Supported `selection` properties:
 
 Supported item properties:
 
-## TaskDrivenNavigation Component
-
-`taskDrivenNavigation` is a reusable controller behaviour for hub-and-sub-journey patterns where a landing page asks the user what they need to do next and each answer launches its own mini journey.
-
-This is intended for patterns such as:
-
-- a start page with radio options for different tasks
-- task-specific journeys with their own interim check-your-answers page
-- journeys that return to the start page so the user can complete another task
-
-Use this component when the service needs a task hub rather than a single linear flow or a checkbox-driven item journey.
-
-### Usage
-
-```js
-const summary = require('hof').components.summary;
-const taskDrivenNavigation = require('hof').components.taskDrivenNavigation;
-const taskNavigation = require('./task-navigation');
-
-module.exports = {
-  behaviours: [taskDrivenNavigation(taskNavigation)],
-  fields,
-  steps: {
-    '/start': {
-      fields: ['selected-task'],
-      backLink: false,
-      next: '/start'
-    },
-    '/personal-details/name': {
-      fields: ['name'],
-      next: '/personal-details/check'
-    },
-    '/personal-details/check': {
-      template: 'task-check',
-      behaviours: [summary],
-      sections: require('./sections/personal-details'),
-      next: '/personal-details/anything-else'
-    },
-    '/personal-details/anything-else': {
-      fields: ['do-another-task'],
-      next: '/personal-details/anything-else'
-    },
-    '/confirm': {
-      template: 'task-check',
-      behaviours: [summary],
-      sections: require('./sections/final'),
-      next: '/submitted'
-    }
-  }
-};
-```
-
-Example task navigation config:
-
-```js
-module.exports = {
-  taskSelection: {
-    field: 'selected-task',
-    selectorStep: '/start',
-    finalSummaryStep: '/confirm',
-    completedField: 'completed-tasks',
-    tasks: {
-      'change-personal-details': {
-        order: 1,
-        entryStep: '/personal-details/name',
-        summaryStep: '/personal-details/check',
-        routes: ['/personal-details/name', '/personal-details/dob', '/personal-details/anything-else']
-      },
-      'send-evidence': {
-        order: 2,
-        entryStep: '/evidence/type',
-        summaryStep: '/evidence/check',
-        routes: ['/evidence/type', '/evidence/details', '/evidence/anything-else']
-      }
-    }
-  },
-  routes: {
-    '/start': {
-      next: 'selected-task-entry'
-    },
-    '/personal-details/anything-else': {
-      branches: [
-        {
-          condition: {
-            field: 'do-another-task',
-            value: 'yes'
-          },
-          next: 'task-selector'
-        },
-        {
-          condition: {
-            field: 'do-another-task',
-            value: 'no'
-          },
-          next: 'final-summary'
-        }
-      ]
-    }
-  }
-};
-```
-
-Supported `taskSelection` properties:
-
-- `field`: the radio or select field that stores the chosen task
-- `selectorStep`: the landing page route
-- `finalSummaryStep`: the route used when the user is finished with all tasks
-- `completedField`: optional session field used to track completed tasks
-- `tasks`: the ordered task registry
-
-Supported task properties:
-
-- `order`: optional ordering value
-- `entryStep`: the first route for the task
-- `summaryStep`: the task-level interim summary route
-- `routes`: optional list of routes that belong to the task
-- `when`: optional condition controlling whether the task is available
-
-Supported symbolic `next` targets in `routes`:
-
-- `selected-task-entry`: resolves to the currently selected task's `entryStep`
-- `task-selector`: resolves to the landing page route
-- `final-summary`: resolves to `finalSummaryStep`
-- `selected-task-summary`: resolves to the currently selected task's `summaryStep`
-
 - `order`: numeric ordering for the selection journey
 - `routes`: ordered list of HOF routes for that item
 - `when`: optional condition that controls whether the item is available
@@ -1482,6 +1357,327 @@ When enabled, the component:
 - preserves HOF edit mode semantics, including support for `continueOnEdit`
 
 This lets services keep using normal HOF controllers and pages while moving the journey logic into a reusable, testable config object.
+
+## TaskDrivenNavigation Component
+
+`taskDrivenNavigation` is a reusable controller behaviour for hub-and-sub-journey patterns where a landing page asks the user what they need to do next and each answer launches its own mini journey.
+
+This is intended for patterns such as:
+
+- a start page with radio options for different tasks
+- task-specific journeys with their own interim check-your-answers page
+- journeys that return to the start page so the user can complete another task
+
+Use this component when the service needs a task hub rather than a single linear flow or a checkbox-driven item journey.
+
+The component resolves task-specific onward routing from a declarative navigation map and can mark tasks as completed when the user leaves a task summary step.
+
+### Usage
+
+```js
+const summary = require('hof').components.summary;
+const taskDrivenNavigation = require('hof').components.taskDrivenNavigation;
+const taskNavigation = require('./task-navigation');
+
+module.exports = {
+  behaviours: [taskDrivenNavigation(taskNavigation)],
+  fields,
+  steps: {
+    '/start': {
+      fields: ['selected-task'],
+      backLink: false,
+      next: '/start'
+    },
+    '/personal-details/name': {
+      fields: ['name'],
+      next: '/personal-details/dob'
+    },
+    '/personal-details/dob': {
+      fields: ['dob'],
+      next: '/personal-details/check'
+    },
+    '/personal-details/check': {
+      template: 'task-check',
+      behaviours: [summary],
+      sections: require('./sections/personal-details'),
+      next: '/personal-details/anything-else'
+    },
+    '/personal-details/anything-else': {
+      fields: ['do-another-task'],
+      next: '/personal-details/anything-else'
+    },
+    '/dependant/action': {
+      fields: ['dependant-action'],
+      next: '/dependant/name'
+    },
+    '/dependant/name': {
+      fields: ['dependant-name'],
+      next: '/dependant/check'
+    },
+    '/dependant/check': {
+      template: 'task-check',
+      behaviours: [summary],
+      sections: require('./sections/dependant'),
+      next: '/dependant/anything-else'
+    },
+    '/dependant/anything-else': {
+      fields: ['do-another-task'],
+      next: '/dependant/anything-else'
+    },
+    '/evidence/type': {
+      fields: ['evidence-type'],
+      next: '/evidence/details'
+    },
+    '/evidence/details': {
+      fields: ['evidence-details'],
+      next: '/evidence/check'
+    },
+    '/evidence/check': {
+      template: 'task-check',
+      behaviours: [summary],
+      sections: require('./sections/evidence'),
+      next: '/evidence/anything-else'
+    },
+    '/evidence/anything-else': {
+      fields: ['do-another-task'],
+      next: '/evidence/anything-else'
+    },
+    '/report-death/name': {
+      fields: ['report-death-name'],
+      next: '/report-death/date'
+    },
+    '/report-death/date': {
+      fields: ['report-death-date'],
+      next: '/report-death/check'
+    },
+    '/report-death/check': {
+      template: 'task-check',
+      behaviours: [summary],
+      sections: require('./sections/report-death'),
+      next: '/report-death/anything-else'
+    },
+    '/report-death/anything-else': {
+      fields: ['do-another-task'],
+      next: '/report-death/anything-else'
+    },
+    '/confirm': {
+      template: 'task-check',
+      behaviours: [summary],
+      sections: require('./sections/final'),
+      next: '/submitted'
+    }
+  }
+};
+```
+
+Example task navigation config:
+
+```js
+module.exports = {
+  taskSelection: {
+    field: 'selected-task',
+    selectorStep: '/start',
+    finalSummaryStep: '/confirm',
+    completedField: 'completed-tasks',
+    tasks: {
+      'change-personal-details': {
+        order: 1,
+        entryStep: '/personal-details/name',
+        summaryStep: '/personal-details/check',
+        routes: ['/personal-details/name', '/personal-details/dob', '/personal-details/anything-else']
+      },
+      'add-or-remove-dependant': {
+        order: 2,
+        entryStep: '/dependant/action',
+        summaryStep: '/dependant/check',
+        routes: ['/dependant/action', '/dependant/name', '/dependant/anything-else']
+      },
+      'send-evidence': {
+        order: 3,
+        entryStep: '/evidence/type',
+        summaryStep: '/evidence/check',
+        routes: ['/evidence/type', '/evidence/details', '/evidence/anything-else']
+      },
+      'tell-us-someone-has-died': {
+        order: 4,
+        entryStep: '/report-death/name',
+        summaryStep: '/report-death/check',
+        routes: ['/report-death/name', '/report-death/date', '/report-death/anything-else']
+      }
+    }
+  },
+  routes: {
+    '/start': {
+      next: 'selected-task-entry'
+    },
+    '/personal-details/anything-else': {
+      branches: [
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'yes'
+          },
+          next: 'task-selector'
+        },
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'no'
+          },
+          next: 'final-summary'
+        }
+      ]
+    },
+    '/dependant/anything-else': {
+      branches: [
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'yes'
+          },
+          next: 'task-selector'
+        },
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'no'
+          },
+          next: 'final-summary'
+        }
+      ]
+    },
+    '/evidence/anything-else': {
+      branches: [
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'yes'
+          },
+          next: 'task-selector'
+        },
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'no'
+          },
+          next: 'final-summary'
+        }
+      ]
+    },
+    '/report-death/anything-else': {
+      branches: [
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'yes'
+          },
+          next: 'task-selector'
+        },
+        {
+          condition: {
+            field: 'do-another-task',
+            value: 'no'
+          },
+          next: 'final-summary'
+        }
+      ]
+    }
+  }
+};
+```
+
+The navigation config can be passed directly to `taskDrivenNavigation(...)`, returned from a function, or loaded from app config as `taskNavigation`.
+
+Supported `taskSelection` properties:
+
+- `field`: the radio or select field that stores the chosen task
+- `selectorStep`: the landing page route
+- `finalSummaryStep`: the route used when the user is finished with all tasks
+- `completedField`: optional session field used to track completed tasks
+- `tasks`: the ordered task registry
+
+Supported task properties:
+
+- `order`: optional ordering value
+- `entryStep`: the first route for the task
+- `summaryStep`: the task-level interim summary route
+- `routes`: optional list of routes that belong to the task
+- `when`: optional condition controlling whether the task is available
+
+Supported symbolic `next` targets in `routes`:
+
+- `selected-task-entry`: resolves to the currently selected task's `entryStep`
+- `task-selector`: resolves to the landing page route
+- `final-summary`: resolves to `finalSummaryStep`
+- `selected-task-summary`: resolves to the currently selected task's `summaryStep`
+
+#### `routes`
+
+Each task route can define its own branch rules and symbolic targets.
+
+```js
+routes: {
+  '/start': {
+    next: 'selected-task-entry'
+  },
+  '/personal-details/anything-else': {
+    branches: [
+      {
+        condition: {
+          field: 'do-another-task',
+          value: 'yes'
+        },
+        next: 'task-selector'
+      },
+      {
+        condition: {
+          field: 'do-another-task',
+          value: 'no'
+        },
+        next: 'final-summary'
+      }
+    ]
+  }
+}
+```
+
+Supported route properties:
+
+- `next`: static string, function, or one of the symbolic task targets
+- `backLink`: static string or function
+- `branches`: ordered branch definitions evaluated first
+- `default`: fallback route definition when no branch matches
+- `continueOnEdit`: preserves onward navigation in edit mode instead of short-circuiting back to the confirm step
+
+### Conditions
+
+Task route `when` and branch `condition` support the same declarative condition syntax as selection-driven navigation.
+
+Supported condition forms:
+
+- function: `(req, res) => boolean`
+- `all`: every nested condition must match
+- `any`: at least one nested condition must match
+- `not`: negates another condition
+- field comparison with `value`, `equals`, `notEquals`, `in`, `notIn`, or `exists`
+
+Supported value sources:
+
+- default: `req.form.values[field]`, falling back to session
+- `body`
+- `session`
+- `query`
+
+### Behaviour details
+
+When enabled, the component:
+
+- resolves next steps from route config and symbolic task targets
+- honours explicit per-route back links through the shared controller behaviour
+- preserves HOF edit mode semantics, including support for `continueOnEdit`
+- marks the current task as complete when the user successfully leaves that task's `summaryStep`
+
+This is useful for services that need a central task hub with separate mini journeys, task-level summaries, and a final overall summary.
 
 ## Date Component
 
