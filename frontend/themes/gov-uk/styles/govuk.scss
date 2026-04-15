@@ -16,8 +16,8 @@ $path: "/images/" !default;
 @import "session-timeout-dialog";
 @import "grouped-input";
 
+@import "variables";
+
 // Modules
 @import "modules/buttons";
-
-// Pages
-@import "modules/confirm-page";
+@import "modules/validation";
