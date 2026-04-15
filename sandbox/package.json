@@ -8,17 +8,17 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:dev": "[ -f .env ] && HOF_SANDBOX=true .../bin/hof-build watch --env || HOF_SANDBOX=true ../bin/hof-build watch",
+    "start:dev": "HOF_SANDBOX=true ../bin/hof-build watch --env || HOF_SANDBOX=true ../bin/hof-build watch",
     "dev": "yarn && GA_TAG=test nodemon server",
     "build": "HOF_SANDBOX=true ../bin/hof-build",
     "postinstall": "yarn run build"
   },
   "author": "",
   "dependencies": {
+    "accessible-autocomplete": "^3.0.1",
     "govuk-frontend": "^5.0",
     "jquery": "^3.7.1",
-    "sass": "^1.53.0",
-    "typeahead-aria": "^1.0.4"
+    "sass": "^1.53.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
