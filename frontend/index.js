@@ -5,5 +5,4 @@ module.exports = {
   mixins: require('./template-mixins/mixins'),
   partials: require('./template-partials'),
   themes: require('./themes')
-  // toolkit: require('./toolkit')
 };

@@ -1795,7 +1795,7 @@ To render a specific fields in your templates use the mixin name (matching those
 - `selected`: Applicable to `select`, `checkbox`, and `radio` controls. Will render the selected HTML option/element selected or checked.
 - `legend`: Applicable to `radio` button controls, which are wrapped in a HTML `fieldset` with a `legend` element.
 - `legendClassName`: Applied as a class name to HTML `legend` attribute.
-- `toggle`: Can be used to toggle the display of the HTML element with a matching `id`. See [hof-frontend-toolkit](https://github.com/UKHomeOfficeForms/hof-frontend-toolkit/blob/master/assets/javascript/progressive-reveal.js) for details.
+- `toggle`: Can be used to toggle the display of the HTML element with a matching `id`.
 - `attributes`: A hash of key/value pairs applicable to a HTML `textarea` field. Each key/value is assigned as an attribute of the `textarea`. For example `spellcheck="true"`.
 - `child`: Render a child partial beneath each option in an `optionGroup`. Accepts a custom nunjucks template string, a custom partial in the format `partials/{your-partial-name}`, `'html'` which is used to specify the html for the field has already been prerendered, such as in [hof-component-date](https://github.com/UKHomeOfficeForms/hof-component-date) or a template mixin key which will be rendered within a panel element partial.
 - `isPageHeading`: Applicable to `checkbox` and `radio`, `text input` and `textarea` controls. Sets the legend as the page heading on single page questions.
@@ -2116,23 +2116,6 @@ There is an example implementation in [demo application](https://github.com/UKHo
 ## Sandbox
 
 There is a sandbox application for developers to test components directly in hof called [sandbox](/sandbox)
-
-# HOF FRONTEND TOOLKIT
-
-Set of common UI patterns/styles for HOF projects
-
-## Images
-
-Copy `assets/images/hmpo` to your image directory. Images are loaded by using the `file-url` function provided by [GOV.UK frontend toolkit](https://github.com/alphagov/govuk_frontend_toolkit). The `file-url` function uses the `$path` variable which is set before the toolkit's modules are loaded.
-
-## Vendor JavaScript
-
-Additional vendor JavaScript files are included. These are:
-
-- indexof.polyfill.js
-- safari-cachebuster.js
-
-Copy `assets/javascript/vendor` into your javascript directory (ie `hmpo/vendor`) and compile them with your JavaScript.
 
 ## Journey Header Navigation.html page
 
