@@ -2129,7 +2129,6 @@ Copy `assets/images/hmpo` to your image directory. Images are loaded by using th
 
 Additional vendor JavaScript files are included. These are:
 
-- details.polyfill.js
 - indexof.polyfill.js
 - safari-cachebuster.js
 
