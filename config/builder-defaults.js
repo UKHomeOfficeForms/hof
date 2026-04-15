@@ -1,8 +1,4 @@
 'use strict';
-const toolkitImages =
-  process.env.HOF_SANDBOX === 'true'
-    ? '../frontend/toolkit/assets/rebrand/images'
-    : 'node_modules/hof/frontend/toolkit/assets/rebrand/images';
 
 module.exports = {
   sass: {
@@ -23,7 +19,7 @@ module.exports = {
     shared: 'apps/common/translations/src'
   },
   images: {
-    src: ['assets/rebrand/images', 'assets/images', toolkitImages],
+    src: ['assets/rebrand/images', 'assets/images'],
     out: 'public/images',
     match: 'assets/images/**/*',
     restart: false
