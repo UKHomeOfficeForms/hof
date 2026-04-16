@@ -339,7 +339,7 @@ module.exports = function (options) {
         ...(this.errors && this.errors[key] && { 'aria-invalid': 'true' })
       };
 
-      const disabled = field.disabled;
+      const disabled = field.disabled === true || field.disabled === 'true';
 
       return Object.assign({}, extension, {
         id: key,
