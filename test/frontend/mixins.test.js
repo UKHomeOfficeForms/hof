@@ -1246,56 +1246,64 @@ describe('Template Mixins', () => {
     });
 
     describe('checkbox', () => {
-      beforeEach(() => {
-      });
-
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals.checkbox.should.be.a('function');
+        expect(typeof res.locals.checkbox).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        res.locals.checkbox().should.be.a('function');
+        expect(typeof res.locals.checkbox()).toBe('object');
       });
 
       it('looks up field label', () => {
         middleware(req, res, next);
-        res.locals.checkbox().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'fields.field-name.label'
-        }));
+        res.locals.checkbox('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'fields.field-name.label'
+          }));
       });
 
       it('prefixes translation lookup with namespace if provided', () => {
         middleware = mixins({ sharedTranslationsKey: 'name.space' });
         middleware(req, res, next);
-        res.locals.checkbox().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'name.space.fields.field-name.label'
-        }));
+        res.locals.checkbox('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'name.space.fields.field-name.label'
+          }));
       });
 
       it('uses locales translation property', () => {
-        req.translate = sinon.stub().withArgs('field-name.label').returns('Field name');
+        req.translate = jest.fn().mockImplementation(key => {
+          if (key === 'field-name.label') return 'Field name';
+          return undefined;
+        });
         res.locals.options.fields = {
           'field-name': {
             label: 'field-name.label'
           }
         };
         middleware(req, res, next);
-        res.locals.checkbox().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          label: 'Field name'
-        }));
+        res.locals.checkbox('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'Field name'
+          }));
       });
 
       it('should default className `govuk-label govuk-checkboxes__label`', () => {
         middleware(req, res, next);
-        res.locals.checkbox().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          className: 'govuk-label govuk-checkboxes__label'
-        }));
+        res.locals.checkbox('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            className: 'govuk-label govuk-checkboxes__label'
+          }));
       });
 
       it('should override default className if one was specified against the field', () => {
@@ -1305,10 +1313,12 @@ describe('Template Mixins', () => {
           }
         };
         middleware(req, res, next);
-        res.locals.checkbox().call(res.locals, 'field-name');
-        render.should.have.been.calledWith(sinon.match({
-          className: 'overwritten'
-        }));
+        res.locals.checkbox('field-name');
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            className: 'overwritten'
+          }));
       });
     });
 
@@ -2278,8 +2288,8 @@ describe('Template Mixins', () => {
 
     describe('checkbox renderChild', () => {
       beforeEach(() => {
-        middleware = mixins({ 'field-name': {} });
         middleware(req, res, next);
+        options = [{}];
         res.locals.checkbox('field-name');
         renderChild = renderSpy.lastContext.renderChild;
       });
@@ -2305,18 +2315,15 @@ describe('Template Mixins', () => {
           };
 
           renderChild = renderSpy.lastContext.renderChild;
+          jest.restoreAllMocks();
         });
 
         it('accepts an HTML template string', () => {
           options.child = '<div>{{ key }}</div>';
           options.key = 'value';
 
-          const output = res.locals.nunjucksEnv.renderString(
-            options.child,
-            options
-          );
-
-          expect(renderChild(options)).toBe(output);
+          const result = renderChild(options);
+          expect(result).toBe('<div>value</div>');
         });
 
         it('accepts a custom partial', () => {

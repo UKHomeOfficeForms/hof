@@ -2,7 +2,7 @@
 
 {% from "partials/summary-table.html" import summaryTableComponent %}
 
-{% block page_content %}
+{% block pageContent %}
   {% for row in rows %}
     {{ summaryTableComponent(row, t, baseUrl) }}
   {% endfor %}
