@@ -13,7 +13,7 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">{{ content.title }}</h1>
     <p>{{ content.message | safe }}</p>
-    <a href="" class="button" role="button">{{ t('buttons.try-again') }}</a>
+    <a href="" class="govuk-button" role="button">{{ t('buttons.try-again') }}</a>
 
     {% if showStack %}
       <pre>{{ error.stack }}</pre>
