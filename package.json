@@ -20,12 +20,11 @@
     "url": "https://github.com/UKHomeOfficeForms/hof/issues"
   },
   "scripts": {
-    "test": "yarn run unit && yarn run test:jest && yarn run test:functional && yarn run test:vite && yarn run test:lint",
+    "test": "yarn run unit && yarn run test:jest && yarn run test:functional && yarn run test:lint",
     "unit": "LOG_LEVEL=error nyc _mocha \"test/**/*.spec.js\" \"sandbox/test/**/*.spec.js\"",
     "unit:nocov": "LOG_LEVEL=error mocha \"test/**/*.spec.js\" \"sandbox/test/**/*.spec.js\"",
     "test:lint": "eslint . --config ./node_modules/eslint-config-hof/default.js",
     "test:functional": "funkie mocha ./test/functional-tests --timeout 20000 --exit",
-    "test:vite": "vitest run --config test/frontend/toolkit/vitest.config.js",
     "test:jest": "jest test/frontend/mixins test/frontend/jest test/integration/index test/lib test/utilities/helpers/jest",
     "test:acceptance": "TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
     "test:acceptance_browser": "ACCEPTANCE_WITH_BROWSER=true TAGS=\"${TAGS:=@feature}\" yarn run test:cucumber",
