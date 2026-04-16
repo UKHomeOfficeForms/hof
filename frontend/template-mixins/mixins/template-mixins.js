@@ -339,7 +339,8 @@ module.exports = function (options) {
         ...(this.errors && this.errors[key] && { 'aria-invalid': 'true' })
       };
 
-      const disabled = field.disabled;
+      const disabled = field.disabled === true || field.disabled === 'true';
+      const javascript = field.javascript === true || field.disabled === 'true';
 
       return Object.assign({}, extension, {
         id: key,
@@ -369,6 +370,7 @@ module.exports = function (options) {
         suffix: isPrefixOrSuffix(field.attributes, 'suffix'),
         isMaxlengthOrMaxword: maxlength(field) || extension.maxlength || maxword(field) || extension.maxword,
         items: selectItems,
+        javascript: javascript,
         renderChild: renderChild.bind(this)
       });
     }
