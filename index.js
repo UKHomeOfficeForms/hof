@@ -77,6 +77,7 @@ const getContentSecurityPolicy = (config, res) => {
     imgSrc: ["'self'"],
     fontSrc: ["'self'", 'data:', 'https://design-system.service.gov.uk'],
     scriptSrc: ["'self'", `'nonce-${res.locals.nonce}'`],
+    connectSrc: ["'self'"],
     'frame-ancestors': ["'none'"],
     manifestSrc: ["'self'"]
   };
@@ -92,7 +93,6 @@ const getContentSecurityPolicy = (config, res) => {
       'www.google.co.uk/ads/ga-audiences'
     ],
     connectSrc: [
-      "'self'",
       'https://www.google-analytics.com',
       'https://region1.google-analytics.com',
       'https://region1.analytics.google.com'
@@ -105,7 +105,7 @@ const getContentSecurityPolicy = (config, res) => {
     directives.scriptSrc = directives.scriptSrc.concat(gaDirectives.scriptSrc);
     directives.fontSrc = directives.fontSrc.concat(gaDirectives.fontSrc);
     directives.imgSrc = directives.imgSrc.concat(gaDirectives.imgSrc);
-    directives.connectSrc = gaDirectives.connectSrc;
+    directives.connectSrc = directives.connectSrc.concat(gaDirectives.connectSrc);
   }
 
   if (csp && !csp.disabled) {

@@ -497,6 +497,32 @@ describe('hof server', () => {
           const csp = getHeaders(res, 'content-security-policy');
           csp['img-src'].should.include('www.google-analytics.com');
           csp['script-src'].should.include('www.google-analytics.com');
+          csp['connect-src'].should.include('https://region1.google-analytics.com');
+          csp['connect-src'].should.include('https://region1.analytics.google.com');
+        });
+    });
+    it('CSP keeps default directives and excludes google directives if gaTagId not set', () => {
+      const bs = bootstrap({
+        csp: {},
+        fields: 'fields',
+        gaTagId: '',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(res => {
+          const csp = getHeaders(res, 'content-security-policy');
+          csp['connect-src'].should.include("'self'");
+          csp['connect-src'].should.not.include('https://region1.google-analytics.com');
+          csp['connect-src'].should.not.include('https://region1.analytics.google.com');
+          csp['img-src'].should.not.include('www.google-analytics.com');
+          csp['script-src'].should.not.include('www.google-analytics.com');
         });
     });
 

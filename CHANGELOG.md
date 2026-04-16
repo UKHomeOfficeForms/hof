@@ -1,3 +1,23 @@
+## 2026-04-16, Version 23.0.4 (Stable), @PaolaDMadd-Pro
+
+### Fixed
+- Decoupled session timeout keep alive from analytics configuration.
+- Updated CSP defaults to always include `connect-src 'self'` so same-origin keep alive requests are allowed.
+- Updated GA CSP behavior to **extend** `connect-src` with analytics endpoints when `gaTagId` is set, rather than replacing defaults.
+
+### Changed
+- Improved timeout dialog refresh behavior:
+  * On keep alive success, `timeSessionRefreshed` is updated and timeout controller logic is restarted.
+  * On keep alive failure a console.error is triggered.
+
+### Tests
+- Added integration regression coverage for CSP:
+  * `gaTagId` set: GA and region analytics `connect-src` endpoints are present.
+  * `gaTagId` not set: default `connect-src 'self'` remains and GA region endpoints are absent.
+- Added frontend Jest coverage for timeout refresh behavior:
+  * Success path (`$.get().done`) updates refresh time and calls controller.
+
+
 ## 2026-03-18, Version 23.0.3 (Stable), @vinodhasamiyappan-ho
 
 ### Security
