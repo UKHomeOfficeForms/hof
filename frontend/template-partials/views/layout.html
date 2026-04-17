@@ -39,6 +39,14 @@
 {% endblock %}
 
 {% block bodyStart %}
+  <script nonce="{{ cspNonce }}" type="module">
+    (function () {
+      if (typeof window !== 'undefined' && window.GOVUK && typeof window.GOVUK.initAll === 'function') {
+        window.GOVUK.initAll();
+      }
+    }());
+  </script>
+  
   {% block cookieBanner %}
    {% include "partials/cookie-banner.html" %}
   {% endblock %}
@@ -124,13 +132,6 @@
   {% if assetPath %}
     <script nonce="{{ cspNonce }}" type="text/javascript"src="{{ assetPath }}/js/bundle.js"></script>
   {% endif %}
-  <script nonce="{{ cspNonce }}" type="module">
-    (function () {
-      if (typeof window !== 'undefined' && window.GOVUK && typeof window.GOVUK.initAll === 'function') {
-        window.GOVUK.initAll();
-      }
-    }());
-  </script>
     {% block scripts %}{% endblock %}
     {% include "partials/gatag.html" %}
 {% endblock %}
