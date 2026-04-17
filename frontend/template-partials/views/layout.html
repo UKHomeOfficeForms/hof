@@ -55,7 +55,7 @@
     {% block govukHeader %}
         {{ govukHeader({
             assetsPath: assetPath + '/images',
-            homepageUrl: homepageUrl,
+            homepageUrl: (startPageRedirectUrl or baseUrl or "/"),
             containerClasses: "govuk-width-container",
             productName: t('journey.header' or serviceName)
         }) }}
@@ -67,7 +67,7 @@
           tag: {
             text: t('journey.phase')
           },
-          html: 'This is a new service – your <a class="govuk-link" href="{{ feedbackUrl }}{% if not feedbackUrl %}https://eforms.homeoffice.gov.uk/outreach/feedback.ofml{% endif %}">feedback</a> will help us to improve it.',
+          html: 'This is a new service – your <a class="govuk-link" href="'+ (feedbackUrl or 'https://eforms.homeoffice.gov.uk/outreach/feedback.ofml') +'">feedback</a> will help us to improve it.',
           classes: "govuk-width-container"
         }) }}
       {% endif %} 

@@ -5,29 +5,29 @@
   },
   "header": "Cookies",
   "intro": "This service puts small files (known as ‘cookies’) onto your computer in order to:",
-  "intro-list": {
+  "intro_list": {
     "items": [
       "remember what messages you’ve seen so you’re not shown them again",
       "temporarily store information you enter to support your application"
     ]
   },
-  "intro-list-ga-tag": {
+  "intro_list_ga_tag": {
     "items": [
       "remember what messages you’ve seen so you’re not shown them again",
       "understand how you use the service so we can update and improve it",
       "temporarily store information you enter to support your application"
     ]
   },
-  "indent-intro": {
+  "indent_intro": {
     "content": "The cookies we use don’t identify you personally."
   },
-  "cookies-link": {
+  "cookies_link": {
     "before": "Find out ",
     "href": "http://www.aboutcookies.org/Default.aspx?page=1",
     "link": "how to manage cookies"
   },
-  "intro-cookie": "Introductory cookie message",
-  "intro-cookie-message": "When you first use the service we show a ‘cookie message’. We then store a cookie on your computer so it knows not to show this message again.",
+  "intro_cookie": "Introductory cookie message",
+  "intro_cookie_message": "When you first use the service we show a ‘cookie message’. We then store a cookie on your computer so it knows not to show this message again.",
   "intro_cookie_table": {
     "headers": [
       "Name",
@@ -47,20 +47,20 @@
       ]
     ]
   },
-  "measuring-use": "Measuring site use",
-  "google-analytics": [
+  "measuring_use": "Measuring site use",
+  "google_analytics": [
     "We use Google Analytics to collect information about how you use this service. This helps us check it’s meeting your needs and make improvements.",
     "Google Analytics stores information about:"
   ],
-  "google-analytics-list": {
+  "google_analytics_list": {
     "items": [
       "how you got to the site",
       "pages you visit and how long you spend on them",
       "what you click on"
     ]
   },
-  "no-identify": "No personal details are stored with this information, so you can’t be identified.",
-  "analytics-table": {
+  "no_identify": "No personal details are stored with this information, so you can’t be identified.",
+  "analytics_table": {
     "containerIdExpires": "2 years",
     "containerIdPurpose": "Used to persist session state",
     "headers": [
@@ -86,12 +86,12 @@
       ]
     ]
   },
-  "indent-ga": {
+  "indent_ga": {
     "content": "We do not allow Google to use or share the data about how you use this site."
   },
-  "session-cookies": "Session cookies",
-  "session-cookies-content": "Session cookies are downloaded each time you visit the service and deleted when you close your browser. They help the service to work properly.",
-  "session-cookies-table": {
+  "session_cookies": "Session cookies",
+  "session_cookies_content": "Session cookies are downloaded each time you visit the service and deleted when you close your browser. They help the service to work properly.",
+  "session_cookies_table": {
     "headers": [
       "Name",
       "Purpose",

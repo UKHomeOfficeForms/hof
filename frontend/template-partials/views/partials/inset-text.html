@@ -1,0 +1,7 @@
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% macro insetTextComponent(content) %}
+  {{ govukInsetText({
+    text: content
+  }) }}
+{% endmacro %}

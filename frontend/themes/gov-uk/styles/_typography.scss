@@ -6,25 +6,25 @@
   text-transform: uppercase;
 }
 
-h1 {
+h1:not(.govuk-heading-l) {
   @include govuk-font($size: 36, $weight: bold);
   margin-top: govuk-spacing(6);
   margin-bottom: govuk-spacing(3);
 }
 
-h2 {
+h2:not(.govuk-heading-m) {
   @include govuk-font($size: 24, $weight: bold);
   margin-top: govuk-spacing(6);
   margin-bottom: govuk-spacing(3);
 }
 
-h3 {
+h3:not(.govuk-heading-s) {
   @include govuk-font($size: 19, $weight: bold);
   margin-top: govuk-spacing(4);
   margin-bottom: govuk-spacing(2);
 }
 
-p {
+p:not(.govuk-body) {
   @include govuk-font($size: 19);
   margin-top: 0;
   margin-bottom: govuk-spacing(4);

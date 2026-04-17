@@ -1996,6 +1996,47 @@ In your view file:
 {{ tableComponent(test_table) }}
 
 ```
+Other variations of a table component in HOF include:
+
+1. `analyticsTableComponent` which takes 4 parameters:
+    - `tableName`: as described above in `tableComponent`
+    
+    The last 3 parameters are related to google analytics:
+    - `gaContainerId`
+    - `containerIdPurpose`
+    - `containerIdExpires`
+
+    **Example usage:**
+
+    In your view file:
+    ```
+    {% from "partials/table.html" import tableComponent %}
+
+    {{ tableComponent(test_table, gaContainerId, containerIdPurpose, containerIdExpires) }}
+    ```
+
+2. `cookiesTableComponent` which takes 2 parameters:
+    - `tableName` as described above in `tableComponent`
+    - `cookieName` - picked from `res.locals.cookieName` which is set to the `session.name`.
+
+    **Example usage:**
+
+    In your view file:
+    ```
+    {% from "partials/table.html" import tableComponent %}
+
+    {{ cookiesTableComponent(test_table, cookieName) }}
+    ```
+
+     If `cookieName` is not set you can set a `defaultCookieName` property in the `session_cookies_table` object in cookies.json which will be picked up instead.
+    ```
+    "session_cookies_table": {
+    ...
+        "defaultCookieName": "test.sid"
+    ...
+    }
+    ```
+
 
 #### Bullet List Macro
 
