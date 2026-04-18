@@ -1,20 +1,20 @@
-<div class="govuk-form-group {{#error}}govuk-form-group--error{{/error}}">
-<fieldset id="{{key}}-group" class="govuk-fieldset{{#className}} {{className}}{{/className}}" role="group">
-  <legend class="govuk-fieldset__legend {{#isPageHeading}}govuk-fieldset__legend--l{{/isPageHeading}}{{#legendClassName}} {{legendClassName}}{{/legendClassName}}">
-    {{#isPageHeading}}<h1 class="govuk-fieldset__heading">{{/isPageHeading}}
-      {{legend}}
-    {{#isPageHeading}}</h1>{{/isPageHeading}}
+<div class="govuk-form-group {% if error %}govuk-form-group--error{% endif %}">
+<fieldset id="{{ key }}-group" class="govuk-fieldset{% if className %} {{ className }}{% endif %}" role="group">
+  <legend class="govuk-fieldset__legend {% if isPageHeading %}govuk-fieldset__legend--l{% endif %}{% if legendClassName %} {{ legendClassName }}{% endif %}">
+    {% if isPageHeading %}<h1 class="govuk-fieldset__heading">{% endif %}
+      {{ legend }}
+    {% if isPageHeading %}</h1>{% endif %}
   </legend>
-    {{#hint}}
-      <span id="{{key}}-hint" class="govuk-hint">{{hint}}</span>
-    {{/hint}}
-    {{#error}}
+    {% if hint %}
+      <div id="{{key}}-hint" class="govuk-hint">{{ hint | safe }}</div>
+    {% endif %}
+    {% if error %}
       <p id="{{key}}-error" class="govuk-error-message">
-        <span class="govuk-visually-hidden">Error:</span> {{error.message}}
+        <span class="govuk-visually-hidden">Error:</span> {{ error.message }}
       </p>
-    {{/error}}
-  <div id="{{key}}" class="govuk-amount-with-unit-select-input">
-    {{#input-amount-with-unit-select}}{{key}}{{/input-amount-with-unit-select}}
+    {% endif %}
+  <div id="{{ key }}" class="govuk-amount-with-unit-select-input">
+    {{ inputAmountWithUnitSelect(key) }}
   </div>
 </fieldset>
 </div>
