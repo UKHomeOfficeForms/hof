@@ -1,37 +1,78 @@
-<div class="{{amountWithUnitSelectItemClassName}}"> 
-    <div id="{{id}}-group" class="{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}">
-      <label for="{{id}}" class="{{labelClassName}}">
-          <span class="label-text">{{{label}}}</span>
-      </label>
-      {{#hint}}<span {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{{hint}}}</span>{{/hint}}
-      {{#renderChild}}{{/renderChild}}
-          {{#attributes}}
-              {{#prefix}}
-                  <div class="govuk-input__prefix" aria-hidden="true">{{prefix}}</div>
-              {{/prefix}}
-          {{/attributes}}
-          <input
-              type="{{type}}"
-              name="{{id}}"
-              id="{{id}}"
-              class="govuk-input{{#className}} {{className}}{{/className}}{{#error}} govuk-input--error{{/error}}"
-              aria-required="{{required}}"
-              {{#value}} value="{{value}}"{{/value}}
-              {{#min}} min="{{min}}"{{/min}}
-              {{#max}} max="{{max}}"{{/max}}
-              {{#maxlength}} maxlength="{{maxlength}}"{{/maxlength}}
-              {{#pattern}} pattern="{{pattern}}"{{/pattern}}
-              {{#hintId}} aria-describedby="{{hintId}}"{{/hintId}}
-              {{#error}} aria-invalid="true"{{/error}}
-              {{#autocomplete}} autocomplete="{{autocomplete}}"{{/autocomplete}}
-              {{#attributes}}
-                  {{attribute}}="{{value}}"
-              {{/attributes}}
-          >
-          {{#attributes}}
-              {{#suffix}}
-                  <div class="govuk-input__prefix" aria-hidden="true">{{suffix}}</div>
-              {{/suffix}}
-          {{/attributes}}
-    </div>
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{#-------------------------------------------#}
+{#  Set form group classes                   #}
+{#-------------------------------------------#}
+{% set formGroupClasses = "" %}
+
+{% set formGroupClasses = formGroupClasses + formGroupClassName if formGroupClassName %}
+
+{#------------------------------------------#}
+{#  Set hint object if hint exists          #}
+{#------------------------------------------#}
+{% set hintObj = null %}
+{% if hint %}
+  {% set hintObj = {
+    html: hint | safe,
+    classes: "govuk-hint",
+    id: hintId
+  } %}
+{% endif %}
+
+{#------------------------------------------#}
+{#  Set error object if error exists        #}
+{#------------------------------------------#}
+{% set errorObj = null %}
+{% if error %}
+  {% set errorObj = {
+    text: error.message,
+    id: error.id
+  } %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set beforeInput HTML from renderChild()     #}
+{#----------------------------------------------#}
+{% if renderChild is defined %}
+  {% set beforeInputObj = { html: renderChild({}) | safe } %}
+{% else %}
+  {% set beforeInputObj = undefined %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set prefix and suffix text                  #}
+{#----------------------------------------------#}
+{% if prefix or suffix is defined %}
+  {% set prefixObj = { text: prefix } %}
+  {% set suffixObj = { text: suffix } %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set govukInput args                         #}
+{#----------------------------------------------#}
+{% set args = {
+  formGroup: {
+    classes: formGroupClasses,
+    beforeInput: beforeInputObj
+  },
+  label: {
+    html: label | safe,
+    classes: labelClassName,
+    for: id
+  },
+  hint: hintObj,
+  prefix: prefixObj,
+  suffix: suffixObj,
+  classes: className + (" govuk-input--error" if error),
+  id: id,
+  name: id,
+  type: type,
+  autocomplete: autocomplete,
+  value: value,
+  pattern: pattern,
+  attributes: attributes,
+  disabled: disabled
+} %}
+<div class="{{ amountWithUnitSelectItemClassName }}"> 
+    {{ govukInput(args) }}
 </div>
