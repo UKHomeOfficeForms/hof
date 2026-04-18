@@ -127,7 +127,7 @@ module.exports = {
     }].concat(staticAppealStages.getstaticAppealStages())
   },
   'amountWithUnitSelect' : amountWithUnitSelectComponent('amountWithUnitSelect', {
-    mixin: 'input-amount-with-unit-select',
+    mixin: 'inputAmountWithUnitSelect',
     amountLabel: "Amount-",
     unitLabel: "Unit-",
     options: [

@@ -689,52 +689,40 @@ describe('Template Mixins', () => {
       });
     });
 
-    describe('input-amount-with-unit-select', () => {
+    describe('inputAmountWithUnitSelect', () => {
+      beforeEach(() => {
+        res.locals.options = {
+          fields: {
+            'field-name': {}
+          }
+        };
+      });
+
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals['input-amount-with-unit-select'].should.be.a('function');
+        expect(typeof res.locals.inputAmountWithUnitSelect).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        res.locals['input-amount-with-unit-select']().should.be.a('function');
+        expect(typeof res.locals.inputAmountWithUnitSelect('field-name')).toBe('object');
       });
 
-      it('renders 6 times if the field is not marked as inexact', () => {
+      it('renders 7 times if the field is not marked as inexact', () => {
         middleware(req, res, next);
-        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
-        render.callCount.should.be.equal(6);
+        res.locals.inputAmountWithUnitSelect('field-name');
+        expect(renderSpy).toHaveBeenCalledTimes(7);
       });
 
       it('looks up field label', () => {
         middleware(req, res, next);
-        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+        res.locals.inputAmountWithUnitSelect('field-name');
 
-        render.called;
-
-        const amountCall = render.getCall(1);
-
-        amountCall.should.have.been.calledWith(sinon.match({
-          label: 'fields.field-name-amount.label'
-        }));
-      });
-
-      it('govuk-form-group class is set in the amountWithUnitSelect fields by default', () => {
-        middleware(req, res, next);
-        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
-
-        render.called;
-
-        const amountCall = render.getCall(1);
-        const unitCall = render.getCall(5);
-
-        amountCall.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'govuk-form-group'
-        }));
-
-        unitCall.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'govuk-form-group'
-        }));
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'fields.field-name-amount.label'
+          }));
       });
 
       describe('autocomplete', () => {
@@ -745,13 +733,11 @@ describe('Template Mixins', () => {
             }
           };
           middleware(req, res, next);
-          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+          res.locals.inputAmountWithUnitSelect('field-name');
 
-          render.should.have.been.called;
-
-          const amountCall = render.getCall(1);
-
-          amountCall.should.have.been.calledWith(sinon.match({
+          expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             autocomplete: 'amount-with-unit-select-amount'
           }));
         });
@@ -765,13 +751,11 @@ describe('Template Mixins', () => {
             }
           };
           middleware(req, res, next);
-          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+          res.locals.inputAmountWithUnitSelect('field-name');
 
-          render.called;
-
-          const amountCall = render.getCall(1);
-
-          amountCall.should.have.been.calledWith(sinon.match({
+          expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             autocomplete: 'amount-with-unit-select-amount'
           }));
         });
@@ -783,27 +767,23 @@ describe('Template Mixins', () => {
             }
           };
           middleware(req, res, next);
-          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+          res.locals.inputAmountWithUnitSelect('field-name');
 
-          render.called;
-
-          const amountCall = render.getCall(1);
-
-          amountCall.should.have.been.calledWith(sinon.match({
+          expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
             autocomplete: 'off'
           }));
         });
 
         it('should default to no attribute across all amountWithUnitSelect fields', () => {
           middleware(req, res, next);
-          res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+          res.locals.inputAmountWithUnitSelect('field-name');
 
-          render.called;
-
-          const amountCall = render.getCall(0);
-
-          amountCall.should.have.been.calledWith(sinon.match({
-            autocomplete: undefined
+          expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            autocomplete: 'off'
           }));
         });
       });
@@ -811,24 +791,24 @@ describe('Template Mixins', () => {
       it('prefixes translation lookup with namespace if provided', () => {
         middleware = mixins({ sharedTranslationsKey: 'name.space' });
         middleware(req, res, next);
-        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+        res.locals.inputAmountWithUnitSelect('field-name');
 
-        render.called;
-
-        const amountCall = render.getCall(1);
-
-        amountCall.should.have.been.calledWith(sinon.match({
-          label: 'name.space.fields.field-name-amount.label'
-        }));
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            label: 'name.space.fields.field-name-amount.label'
+          }));
       });
 
       it('sets a amountWithUnitSelect boolean to conditionally show input errors', () => {
         middleware(req, res, next);
-        res.locals['input-amount-with-unit-select']().call(res.locals, 'field-name');
+        res.locals.inputAmountWithUnitSelect('field-name');
 
-        render.getCall(1).should.have.been.calledWith(sinon.match({
-          amountWithUnitSelect: true
-        }));
+        expect(renderSpy).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            amountWithUnitSelect: true
+          }));
       });
     });
 

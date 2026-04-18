@@ -641,50 +641,141 @@ module.exports = function (options) {
           };
         }
       },
-      'input-amount-with-unit-select': {
-        handler: function () {
-          return function (key) {
-            key = (key === '{{key}}' || key === '' || key === undefined) ? nunjucksRender(key, this) : key;
-            const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+      // inputAmountWithUnitSelect: {
+      //   handler: function (key, options = {}) {
 
-            let autocomplete = field.autocomplete || 'off';
-            if (autocomplete === 'off') {
-              autocomplete = { amount: 'off' };
-            } else if (typeof autocomplete === 'string') {
-              autocomplete = { amount: autocomplete + '-amount' };
-            }
+      //     const field = this.options.fields[key] || {};
+      //     const values = this.values || {};
+      //     const errors = this.errors || {};
+      //     const child = (suffix) => this.options.fields[`${key}-${suffix}`] || {};
+      //     const autocomplete = {
+      //       amount: child('amount').autocomplete || 'off'
+      //     };
 
-            const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
-            const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
-            const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
+      //     const value = (suffix) => values?.[`${key}-${suffix}`];
 
-            const parts = [];
+      //     const error = errors?.[key];
 
-            // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
-            // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
-            const amountPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-text'], inputText.call(this,
-              key + '-amount', {
+      //     const context = {
+      //       id: key,
+      //       namePrefix: key,
+      //       label: field.label,
+      //       hint: field.hint,
+      //       formGroupClassName: (field.formGroup && field.formGroup.className) ? field.formGroup.className : '',
+      //       labelClassName: field.labelClassName,
+      //       classNameAmount: (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3',
+      //       classNameUnit: (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5',
+      //       amountWithUnitSelect: true,
+      //       error
+      //     };
+
+      //     return new nunjucks.runtime.SafeString(
+      //       nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], {
+      //         ...context,
+      //         amountValue: value('amount'),
+      //         unitValue: value('unit'),
+      //         autocomplete
+      //       })
+      //     );
+      //   }
+      // },
+      inputAmountWithUnitSelect: {
+        handler: function (key, options = {}) {
+          const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+          key = nunjucksRender(key, this);
+
+          let autocomplete = field.autocomplete || {};
+          if (autocomplete === 'off') {
+            autocomplete = { amount: 'off' };
+          } else if (typeof autocomplete === 'string') {
+            autocomplete = { amount: autocomplete + '-amount' };
+          }
+          const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
+          const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
+          const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
+          const context = {
+            options: { fields: this.options.fields || {} },
+            values: res.locals.values || {},
+            errors: res.locals.errors || {}
+          };
+
+          const parts = [];
+
+          // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
+          // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
+          const amountPart = nunjucksEnv.renderString(
+            compiled['partials/forms/grouped-inputs-text'],
+            inputText.call(context, key + '-amount',
+              {
                 formGroupClassName,
                 autocomplete: autocomplete.amount,
                 className: classNameAmount,
                 amountWithUnitSelect: true
               }
-            ));
+            )
+          );
 
-            const unitPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-select'], inputText.call(this, key + '-unit',
-              optionGroup.call(this,
+          const unitPart = nunjucksEnv.renderString(
+            compiled['partials/forms/grouped-inputs-select'],
+            inputText.call(context, key + '-unit',
+              optionGroup.call(context,
                 key + '-unit', {
-                  formGroupClassName,
-                  className: classNameUnit,
-                  amountWithUnitSelect: true
-                },
+                formGroupClassName,
+                className: classNameUnit,
+                amountWithUnitSelect: true
+              },
                 key
-              )));
+            )));
 
-            return parts.concat(amountPart, unitPart).join('\n');
-          };
+          parts.push(amountPart, unitPart)
+          const template = parts.join('\n');
+          return new nunjucks.runtime.SafeString(template);
         }
-      }
+      },
+      // 'inputAmountWithUnitSelect': {
+      //   handler: function () {
+      //     return function (key) {
+      //       key = (key === '{{key}}' || key === '' || key === undefined) ? nunjucksRender(key, this) : key;
+      //       const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+
+      //       let autocomplete = field.autocomplete || 'off';
+      //       if (autocomplete === 'off') {
+      //         autocomplete = { amount: 'off' };
+      //       } else if (typeof autocomplete === 'string') {
+      //         autocomplete = { amount: autocomplete + '-amount' };
+      //       }
+
+      //       const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
+      //       const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
+      //       const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
+
+      //       const parts = [];
+
+      //       // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
+      //       // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
+      //       const amountPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-text'], inputText.call(this,
+      //         key + '-amount', {
+      //         formGroupClassName,
+      //         autocomplete: autocomplete.amount,
+      //         className: classNameAmount,
+      //         amountWithUnitSelect: true
+      //       }
+      //       ));
+
+      //       const unitPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-select'], inputText.call(this, key + '-unit',
+      //         optionGroup.call(this,
+      //           key + '-unit', {
+      //           formGroupClassName,
+      //           className: classNameUnit,
+      //           amountWithUnitSelect: true
+      //         },
+      //           key
+      //         )));
+
+      //       return parts.concat(amountPart, unitPart).join('\n');
+      //     };
+      //   }
+      // }
     };
     Object.entries(mixins || {}).forEach(([name, mixin]) => {
       if (typeof mixin.handler === 'function') {

@@ -223,7 +223,7 @@ module.exports = class Controller extends BaseController {
           } else if (field && field.mixin === 'input-date') {
             // get first field for date input control
             req.form.errors[key].errorLinkId = key + '-day';
-          } else if (field && field.mixin === 'input-amount-with-unit-select') {
+          } else if (field && field.mixin === 'inputAmountWithUnitSelect') {
             // get first field for amount-unit input control
             req.form.errors[key].errorLinkId = key + '-amount';
           } else {

@@ -1027,7 +1027,7 @@ const amountWithUnitSelectComponent = require("hof").components.amountWithUnitSe
 
 module.exports = {
   "amountWithUnitSelect-field": amountWithUnitSelectComponent("amountWithUnitSelect", {
-    mixin: 'input-amount-with-unit-select',
+    mixin: 'inputAmountWithUnitSelect',
     amountLabel: "Amount:", // If not specified, defaults to 'Amount'
     unitLabel: "Unit:", // If not specified, defaults to 'Unit'
     options: [
@@ -1739,7 +1739,7 @@ select
 inputText
 inputFile
 input-date
-input-amount-with-unit-select
+inputAmountWithUnitSelect
 inputTextCompound
 inputTextCode
 inputNumber
