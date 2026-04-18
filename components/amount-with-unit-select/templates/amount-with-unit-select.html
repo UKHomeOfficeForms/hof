@@ -1,4 +1,4 @@
-<div class="govuk-form-group {% if error %}govuk-form-group--error{% endif %}">
+<div class="govuk-form-group{% if error %} govuk-form-group--error{% endif %}">
 <fieldset id="{{ key }}-group" class="govuk-fieldset{% if className %} {{ className }}{% endif %}" role="group">
   <legend class="govuk-fieldset__legend {% if isPageHeading %}govuk-fieldset__legend--l{% endif %}{% if legendClassName %} {{ legendClassName }}{% endif %}">
     {% if isPageHeading %}<h1 class="govuk-fieldset__heading">{% endif %}
@@ -17,4 +17,45 @@
     {{ inputAmountWithUnitSelect(key) }}
   </div>
 </fieldset>
+</div>
+
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+
+{#-------------------------------------------#}
+{#  Set classes                              #}
+{#-------------------------------------------#}
+{% set legendClasses = "" %}
+{% set classes = className or "" %}
+{% set legendClasses = legendClasses + "govuk-fieldset__legend--l " if isPageHeading %}
+
+<div class="govuk-form-group{% if error %} govuk-form-group--error{% endif %}">
+  {% call govukFieldset({
+    role: "group",
+    legend: {
+      html: legend | safe,
+      classes: legendClasses + (legendClassName if legendClassName),
+      isPageHeading: isPageHeading
+    },
+    classes: classes,
+    attributes: {
+      id: key + "-group"
+    }
+  }) %}
+
+  {% if error %}
+    <p id="{{key}}-error" class="govuk-error-message">
+      <span class="govuk-visually-hidden">Error:</span> {{ error.message }}
+    </p>
+  {% endif %}
+
+  {% if hint %}
+    <div id="{{ key }}-hint" class="govuk-hint">
+      {{ hint | safe }}
+    </div>
+  {% endif %}
+
+    <div id="{{ key }}" class="govuk-amount-with-unit-select-input">
+      {{ inputAmountWithUnitSelect(key) }}
+    </div>
+  {% endcall %}
 </div>
