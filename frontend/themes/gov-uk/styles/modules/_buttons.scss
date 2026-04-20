@@ -1,5 +1,23 @@
-.button + .inline-options {
-    padding-top: em(10);
-    display: inline-block;
-    line-height: 1.25;
+.button+.inline-options {
+  padding-top: em(10);
+  display: inline-block;
+  line-height: 1.25;
+}
+
+.button {
+  @extend .govuk-button;
+}
+
+// Start now buttons
+.button-get-started {
+  @include govuk-font(24, $weight: bold);
+  background-image: file-url("icons/icon-pointer.png");
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+  padding: em(7) em(41) em(4) em(16);
+
+  @include govuk-device-pixel-ratio {
+    background-image: file-url("icons/icon-pointer-2x.png");
+    background-size: 30px 19px;
+  }
 }

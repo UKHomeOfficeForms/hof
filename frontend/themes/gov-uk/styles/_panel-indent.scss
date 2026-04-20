@@ -4,12 +4,12 @@
 
 // Indented panels with a grey left hand border
 .panel-indent {
-  @extend %contain-floats;
+  @include govuk-clearfix;
   clear: both;
-  border-left: 4px solid $border-colour;
+  border-left: 4px solid govuk-colour("mid-grey");
 
-  padding: 10px 0 10px $gutter-half;
-  margin: ($gutter $gutter-half $gutter*1.5 0);
+  padding: govuk-spacing(2) 0 govuk-spacing(2) govuk-spacing(3);
+  margin: govuk-spacing(6) govuk-spacing(3) govuk-spacing(9) 0;
 }
 
 .panel-indent legend {
