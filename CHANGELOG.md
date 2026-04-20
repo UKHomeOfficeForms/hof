@@ -1,13 +1,22 @@
-## 2025-03-18, Version 24.0.0 (Stable), @Rhodine-orleans-lindsay
+## 2025-04-20, Version 24.0.0 (Stable), @Rhodine-orleans-lindsay
 
 ### Changed
  * ⛓️‍💥 **BREAKING CHANGE** : removed `Hogan` and `Mustache` replaced with `Nunjucks`. 
    - The `Hogan` and `Mustache` packages have been removed due to the HOF framework moving to use Nunjucks to better align with the GOV.UK design system and in preparation of upcoming govuk-frontend updates.
-  - 👊 Impact : Any functions or configurations relying on `Hogan` and `Mustache`must be updated to use `Nunjucks`. There have been changes to the names of some mixins due to compatibilty with `Nunjucks` format.
-  - 🎬 Action: Rewrite views templates and field mixins to utilize `Nunjucks` as the replacement, ensuring compatibility and security. See the ReadMe for further information.
+    - 👊 Impact : Any functions or configurations relying on `Hogan` and `Mustache` must be updated to use `Nunjucks`. There have been changes to the names of some mixins due to compatibility with `Nunjucks` format.
+    - 🎬 Action: Rewrite views templates and field mixins to utilize `Nunjucks` as the replacement, ensuring compatibility and security. See the ReadMe for further information.
+* ⛓️‍💥 **BREAKING CHANGE**: Removed govuk-elements-sass package and govuk toolkit styling. Govuk Frontend stopped support for GOV.UK Template, GOV.UK Frontend Toolkit or GOV.UK Elements from v5. 
+  - 👊 Impact : Styling pulling from govuk elements and govuk toolkit will no longer work.
+  - 🎬 Action: Any raw HTML being used should include the relevant govuk classes for the corresponding elements to correct styling issues.
+* Updated version of govuk-frontend to v6:
+  - this supports a lot of changes from the govuk design system
+  - adds javascript option to file upload (available from v5.9.0)
+  - updates css stylings
+  - includes rebrand styling by default
 
 ### Security
-- Updates patch and minor dependency versions
+- Updated patch and minor dependency versions
+- Updated version of markdown-it to v14
 
 ## 2026-05-12, Version 23.1.0 (Stable), @gregwolversonHO
 

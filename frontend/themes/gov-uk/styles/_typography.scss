@@ -53,7 +53,7 @@ code {
   font-size: 13px;
   line-height: 19px;
   color: govuk-colour("black");
-  background-color: govuk-colour("light-grey");
-  border: 1px solid govuk-colour("mid-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
+  border: 1px solid govuk-colour("black", $variant: "tint-80");
   padding: 3px 7px;
 }
