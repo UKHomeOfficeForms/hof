@@ -1,6 +1,5 @@
 {% extends "govuk/template.njk" %}
 
-{% set govukRebrand = true %}
 {% set govukServiceName = t(serviceName or "journey.serviceName") %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -10,12 +9,12 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block headIcons %}
-  <link rel="icon" sizes="48x48" href="{{ govukAssetPath }}rebrand/images/favicon.ico">
-  <link rel="icon" sizes="any" href="{{ govukAssetPath }}rebrand/images/favicon.svg" type="image/svg+xml">
-  <link rel="mask-icon" href="{{ govukAssetPath }}rebrand/images/govuk-icon-mask.svg" color="{{ themeColour or '#1d70b8' }}">
-  <link rel="apple-touch-icon" href="{{ govukAssetPath }}rebrand/images/govuk-icon-180.png">
-  <link rel="manifest" href="{{ govukAssetPath }}rebrand/manifest.json">
-  <meta property="og:image" content="{{ govukAssetPath }}rebrand/images/govuk-opengraph-image.png">
+  <link rel="icon" sizes="48x48" href="{{ govukAssetPath }}images/favicon.ico">
+  <link rel="icon" sizes="any" href="{{ govukAssetPath }}images/favicon.svg" type="image/svg+xml">
+  <link rel="mask-icon" href="{{ govukAssetPath }}images/govuk-icon-mask.svg" color="{{ themeColour or '#1d70b8' }}">
+  <link rel="apple-touch-icon" href="{{ govukAssetPath }}images/govuk-icon-180.png">
+  <link rel="manifest" href="{{ govukAssetPath }}manifest.json">
+  <meta property="og:image" content="{{ govukAssetPath }}images/govuk-opengraph-image.png">
 {% endblock %}
 
 {% block head %}
@@ -58,9 +57,7 @@
             assetsPath: assetPath + '/images',
             homepageUrl: homepageUrl,
             containerClasses: "govuk-width-container",
-            productName: t('journey.header' or serviceName),
-            useTudorCrown: true,
-            rebrand: true
+            productName: t('journey.header' or serviceName)
         }) }}
     {% endblock %}
     {% block govukServiceNavigation %}{% endblock %}
@@ -115,8 +112,7 @@
 
   {{ govukFooter({
     meta: { items: meta_items },
-    assetsPath: assetPath + '/images',
-    rebrand: true
+    assetsPath: assetPath + '/images'
   }) }}
 {% endblock %}
 
