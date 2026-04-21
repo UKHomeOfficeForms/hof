@@ -5,29 +5,29 @@
   },
   "header": "Cwcis",
   "intro": "Mae’r gwasanaeth hwn yn gosod ffeiliau bychan (a elwir yn ‘cwcis’) ar eich cyfrifiadur er mwyn:",
-  "intro-list": {
+  "intro_list": {
     "items": [
       "cofio pa negeseuon rydych wedi’u gweld fel nad ydynt yn cael eu dangos i chi eto",
       "storio gwybodaeth rydych yn ei roi dros dro i gefnogi eich cais"
     ]
   },
-  "intro-list-ga-tag": {
+  "intro_list_ga_tag": {
     "items": [
       "cofio pa negeseuon rydych wedi’u gweld fel nad ydynt yn cael eu dangos i chi eto",
       "deall sut rydych yn defnyddio’r gwasanaeth er mwyn i ni allu ei ddiweddaru a’i wella",
       "storio gwybodaeth rydych yn ei roi dros dro i gefnogi eich cais"
     ]
   },
-  "indent-intro": {
+  "indent_intro": {
     "content": "Nid yw’r cwcis a ddefnyddiwn yn eich adnabod yn bersonol."
   },
-  "cookies-link": {
+  "cookies_link": {
     "before": "Darganfyddwch ",
     "href": "http://www.aboutcookies.org/Default.aspx?page=1",
     "link": "sut i reoli cwcis"
   },
-  "intro-cookie": "Neges cyflwyno cwcis",
-  "intro-cookie-message": "Pan fyddwch yn defnyddio’r gwasanaeth am y tro cyntaf rydym yn dangos ‘neges cwcis’. Yna rydym yn storio cwci ar eich cyfrifiadur fel nad yw’n dangos y neges yma i chi eto.",
+  "intro_cookie": "Neges cyflwyno cwcis",
+  "intro_cookie_message": "Pan fyddwch yn defnyddio’r gwasanaeth am y tro cyntaf rydym yn dangos ‘neges cwcis’. Yna rydym yn storio cwci ar eich cyfrifiadur fel nad yw’n dangos y neges yma i chi eto.",
   "intro_cookie_table": {
     "headers": [
       "Enw",
@@ -42,20 +42,20 @@
       ]
     ]
   },
-  "measuring-use": "Mesur defnydd o’r safle",
-  "google-analytics": [
+  "measuring_use": "Mesur defnydd o’r safle",
+  "google_analytics": [
     "Rydym yn defnyddio Google Analytics i gasglu gwybodaeth am sut rydych chi’n defnyddio\nr gwasanaeth hwn. Mae hyn yn ein helpu i wirio ei fod yn diwallu eich anghenion ac i wneud gwelliannau.",
     "Mae Google Analytics yn storio gwybodaeth am:"
   ],
-  "google-analytics-list": {
+  "google_analytics_list": {
     "items": [
       "sut wnaethoch chi gyrraedd y safle",
       "tudalennau rydych yn ymweld â hwy a faint o amser rydych yn ei dreulio arnynt",
       "beth rydych yn clicio arno"
     ]
   },
-  "no-identify": "Nid oes unrhyw fanylion personol yn cael eu storio gyda’r wybodaeth hon, felly ni ellir eich adnabod.",
-  "analytics-table": {
+  "no_identify": "Nid oes unrhyw fanylion personol yn cael eu storio gyda’r wybodaeth hon, felly ni ellir eich adnabod.",
+  "analytics_table": {
     "headers": [
       "Enw",
       "Pwrpas",
@@ -74,12 +74,12 @@
       ]
     ]
   },
-  "indent-ga": {
+  "indent_ga": {
     "content": "Ni chaniateir i Google ddefnyddio neu rannu ein data dadansoddol."
   },
-  "session-cookies": "Cwcis sesiwn",
-  "session-cookies-content": "Mae cwcis sesiwn yn cael eu lawrlwytho bob tro y byddwch yn ymweld â\nr gwasanaeth ac yn cael eu dileu pan fyddwch yn cau eich porwr. Maent yn helpu’r gwasanaeth i weithio’n iawn.",
-  "session-cookies-table": {
+  "session_cookies": "Cwcis sesiwn",
+  "session_cookies_content": "Mae cwcis sesiwn yn cael eu lawrlwytho bob tro y byddwch yn ymweld â\nr gwasanaeth ac yn cael eu dileu pan fyddwch yn cau eich porwr. Maent yn helpu’r gwasanaeth i weithio’n iawn.",
+  "session_cookies_table": {
     "headers": [
       "Enw",
       "Pwrpas",

@@ -1,0 +1,31 @@
+// Tables
+// ==========================================================================
+
+table:not(.govuk-table) {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table:not(.govuk-table) th,
+table:not(.govuk-table) td {
+  @include govuk-font(16);
+  padding: 10px;
+  border-bottom: 1px solid govuk-colour("black", $variant: "tint-80");
+  text-align: left;
+}
+
+table:not(.govuk-table) th {
+  font-weight: 700;
+}
+
+// Right align headings for numeric content
+table:not(.govuk-table) th.numeric {
+  text-align: right;
+}
+
+// Use tabular numbers for numeric table cells
+table:not(.govuk-table) td.numeric {
+  @include govuk-font(16);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

@@ -2,6 +2,7 @@
 
 // set the default image directory
 $path: "/images/" !default;
+@import "reset";
 
 // Govuk frontend
 // https://github.com/alphagov/govuk-frontend-docs
@@ -16,10 +17,8 @@ $path: "/images/" !default;
 @import "pdf";
 @import "session-timeout-dialog";
 @import "grouped-input";
+@import "tables";
 
 // Modules
 @import "modules/validation";
 @import "modules/buttons";
-
-// Deprecated panel style from gov.uk elements version 2.0
-@import "panel-indent";

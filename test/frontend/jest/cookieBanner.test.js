@@ -130,12 +130,11 @@ describe('ga-tag', () => {
 
       const submitButton = document.createElement('div');
       jsEnabled.appendChild(submitButton);
-      submitButton.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-settings-button.html'), 'utf8');
-
+      submitButton.outerHTML = '<button id="save-cookie-settings" type="submit">Save changes</button>';
       const cookieNotification = document.createElement('div');
       jsEnabled.appendChild(cookieNotification);
-      cookieNotification.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-notification.html'), 'utf8');
-
+      cookieNotification.id = 'cookie-notification';
+      cookieNotification.style.display = 'none';
       const jsDisabled = document.createElement('div');
       jsDisabled.classList.add('js-disabled');
 

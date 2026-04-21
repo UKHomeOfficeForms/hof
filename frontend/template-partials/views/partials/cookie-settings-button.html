@@ -1,1 +1,10 @@
-<button class="button" type="submit" id="save-cookie-settings" aria-label="Save changes to cookie preferences">Save changes</button>
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{{ govukButton({
+  text: "Save changes",
+  type: "submit",
+  id: "save-cookie-settings",
+  attributes: {
+    "aria-label": "Save changes to cookie preferences"
+  }
+}) }}

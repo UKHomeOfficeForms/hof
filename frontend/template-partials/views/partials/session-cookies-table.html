@@ -1,28 +1,29 @@
-<table class="govuk-table">
-  <thead class="govuk-table__head">
-  <tr class="govuk-table__row">
-    {{#headers}}
-    <th scope="col" class="govuk-table__header app-custom-class">{{.}}</th>
-    {{/headers}}
-  </tr>
-  </thead>
-  <tbody>
-  <tr class="govuk-table__row">
-    {{#cookieName}}
-      <td scope="row" class="govuk-table__header">{{cookieName}}</td>
-    {{/cookieName}}
-    {{^cookieName}}
-      <td>{{defaultCookieName}}</td>
-    {{/cookieName}}
-    <td>{{defaultCookiePurpose}}</td>
-    <td>{{defaultCookieExpires}}</td>
-  </tr>
-  {{#rows}}
-  <tr>
-    {{#.}}
-    <td>{{.}}</td>
-    {{/.}}
-  </tr>
-  {{/rows}}
-  </tbody>
-</table>
+{% macro cookiesTableComponent(tableName, cookieName) %}
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      {% for header in tableName.headers %}
+      <th scope="col" class="govuk-table__header app-custom-class">{{ header }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      {% if cookieName %}
+        <td scope="row" class="govuk-table__cell govuk-table__header">{{ cookieName }}</td>
+      {% else %}
+        <td class="govuk-table__cell">{{ tableName.defaultCookieName }}</td>
+      {% endif %}
+      <td class="govuk-table__cell">{{ tableName.defaultCookiePurpose }}</td>
+      <td class="govuk-table__cell">{{ tableName.defaultCookieExpires }}</td>
+    </tr>
+    {% for row in tableName.rows %}
+    <tr>
+      {% for cell in row %}
+      <td class="govuk-table__cell">{{ cell }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
