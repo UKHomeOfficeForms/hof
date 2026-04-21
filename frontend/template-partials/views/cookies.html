@@ -1,86 +1,84 @@
 {% extends "layout.html" %}
 
 {% from "partials/table.html" import tableComponent %}
+{% from "partials/bullet-list.html" import bulletList %}
+{% from "partials/inset-text.html" import insetTextComponent %}
+{% from "partials/session-cookies-table.html" import cookiesTableComponent %}
+{% from "partials/analytics-table.html" import analyticsTableComponent %}
 
-  {{$propositionHeader}}{{/propositionHeader}}
+  {% block propositionHeader %}{% endblock %}
 
-  {{$validationSummary}}
-    {{#hasGoogleAnalytics}}
-      {{> partials-cookie-notification}}
-    {{/hasGoogleAnalytics}}
-  {{/validationSummary}}
+  {% block validationSummary %}
+    {% if hasGoogleAnalytics %}
+      {% include "partials/cookie-notification.html" %}
+    {% endif %}
+  {% endblock %}
 
-  {{$header}}
-    {{header}}
-  {{/header}}
-
-  {{$content}}
-    <p>{{intro}}</p>
-    {{^hasGoogleAnalytics}}
-      {{#intro-list}}
-        {{> partials-bullet-list}}
-      {{/intro-list}}
-      {{#indent-intro}}
-        {{> partials-panel-indent}}
-      {{/indent-intro}}
-      <h2>{{intro-cookie}}</h2>
-      <p>{{intro-cookie-message}}</p>
+ 
+  {% block mainContent %}
+    <p class="govuk-body">{{ intro }}</p>
+    {% if not hasGoogleAnalytics %}
+      {%if intro_list %}
+        {{ bulletList(intro_list.items) }}
+      {% endif %}
+      {% if indent_intro %}
+        {{ insetTextComponent(indent_intro.content) }}
+      {% endif %}
+      <h2 class="govuk-heading-m">{{ intro_cookie }}</h2>
+      <p class="govuk-body">{{ intro_cookie_message }}</p>
       {% if intro_cookie_table %}
         {{ tableComponent(intro_cookie_table) }}
       {% endif %} 
-      <h2>{{session-cookies}}</h2>
-      <p>{{session-cookies-content}}</p>
-      {{#session-cookies-table}}
-        {{> partials-session-cookies-table}}
-      {{/session-cookies-table}}
-    {{/hasGoogleAnalytics}}
-
-    {{#hasGoogleAnalytics}}
+      <h2 class="govuk-heading-m">{{ session_cookies }}</h2>
+      <p class="govuk-body">{{ session_cookies_content }}</p>
+      {% if session_cookies_table %}
+        {{ cookiesTableComponent(session_cookies_table, cookieName) }}
+      {% endif %}
+    {% endif %}
+    {% if hasGoogleAnalytics %}
       <div id="cookie-settings">
-        {{#intro-list-ga-tag}}
-          {{> partials-bullet-list}}
-        {{/intro-list-ga-tag}}
-        {{#indent-intro}}
-          {{> partials-panel-indent}}
-        {{/indent-intro}}
-        <h2>{{intro-cookie}}</h2>
-        <p>{{intro-cookie-message}}</p>
+        {% if intro_list_ga_tag %}
+          {{ bulletList(intro_list_ga_tag.items) }}
+        {% endif %}
+        {% if indent_intro %}
+          {{ insetTextComponent(indent_intro.content) }}
+        {% endif %}
+        <h2 class="govuk-heading-m">{{ intro_cookie }}</h2>
+        <p class="govuk-body">{{ intro_cookie_message }}</p>
         {% if intro_cookie_table %}
-          {% set ctx = intro_cookie_table %}
-          {% include "partials/table.html" %}
+          {{ tableComponent(intro_cookie_table) }}
         {% endif %} 
-          <h2>{{session-cookies}}</h2>
-          <p>{{session-cookies-content}}</p>
-          {{#session-cookies-table}}
-            {{> partials-session-cookies-table}}
-          {{/session-cookies-table}}
+          <h2 class="govuk-heading-m">{{ session_cookies }}</h2>
+          <p class="govuk-body">{{ session_cookies_content }}</p>
+          {% if session_cookies_table %}
+            {{ cookiesTableComponent(session_cookies_table, cookieName) }}
+          {% endif %}
         <div class="js-enabled">
           <form>
             <div class="govuk-form-group">
-              <fieldset>
-                <legend>
-                  <h2>{{measuring-use}}</h2>
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                  <h2 class="govuk-heading-m">{{ measuring_use }}</h2>
                 </legend>
-                {{#google-analytics}}
-                  <p>{{.}}</p>
-                {{/google-analytics}}
-                {{#google-analytics-list}}
-                  {{> partials-bullet-list}}
-                {{/google-analytics-list}}
-                <p>{{no-identify}}</p>
-                {{#analytics-table}}
-                  {{> partials-analytics-table}}
-                {{/analytics-table}}
-                {{#indent-ga}}
-                  {{> partials-panel-indent}}
-                {{/indent-ga}}
-                {{> partials-cookie-settings-radio}}
+                {% for item in google_analytics %}
+                  <p class="govuk-body">{{ item }}</p>
+                {% endfor %}
+                {% if google_analytics_list %}
+                  {{ bulletList(google_analytics_list.items) }}
+                {% endif %}
+                <p class="govuk-body">{{ no_identify }}</p>
+                {% if analytics_table %}
+                  {{ analyticsTableComponent(analytics_table, gaContainerId, containerIdPurpose, containerIdExpires) }}
+                {% endif %}
+                {% if indent_ga %}
+                  {{ insetTextComponent(indent_ga.content) }}
+                {% endif %}
+                {% include "partials/cookie-settings-radio.html" %}
               </fieldset>
             </div>
-            {{> partials-cookie-settings-button}}
+            {% include "partials/cookie-settings-button.html" %}
           </form>
         </div>
       </div>
-    {{/hasGoogleAnalytics}}
-
-  {{/content}}
+    {% endif %}
+  {% endblock %}
