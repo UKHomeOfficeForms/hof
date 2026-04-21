@@ -598,49 +598,59 @@ module.exports = function (options) {
           );
         }
       },
-      'input-date': {
-        handler: function () {
-          /**
-          * props: '[value] [id]'
-          */
-          return function (key) {
-            const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
-            key = nunjucksRender(key, this);
-            // Exact unless there is a inexact property against the fields key.
-            const isExact = field.inexact !== true;
+      inputDate: {
+        handler: function (key) {
+          const fieldsConfig =
+            this.options?.fields ||
+            this.fields ||
+            options?.fields ||
+            {};
+          const field = fieldsConfig[key] || {};
 
-            let autocomplete = field.autocomplete || {};
-            if (autocomplete === 'off') {
-              autocomplete = {
-                day: 'off',
-                month: 'off',
-                year: 'off'
-              };
-            } else if (typeof autocomplete === 'string') {
-              autocomplete = {
-                day: autocomplete + '-day',
-                month: autocomplete + '-month',
-                year: autocomplete + '-year'
-              };
-            }
-            const isThisRequired = field.validate ? field.validate.indexOf('required') > -1 : false;
-            const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
-            const classNameDay = (field.controlsClass && field.controlsClass.day) ? field.controlsClass.day : 'govuk-date-input__input govuk-input--width-2';
-            const classNameMonth = (field.controlsClass && field.controlsClass.month) ? field.controlsClass.month : 'govuk-date-input__input govuk-input--width-2';
-            const classNameYear = (field.controlsClass && field.controlsClass.year) ? field.controlsClass.year : 'govuk-date-input__input govuk-input--width-4';
+          // Exact unless there is a inexact property against the fields key.
+          const isExact = field.inexact !== true;
+          const values = this.values || {};
+          const errors = this.errors || {};
+          const child = suffix => fieldsConfig[`${key}-${suffix}`] || {};
 
-            const parts = [];
-
-            if (isExact) {
-              const dayPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-day', { inputmode: 'numeric', min: 1, max: 31, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.day, formGroupClassName, className: classNameDay, isThisRequired }));
-              parts.push(dayPart);
-            }
-
-            const monthPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-month', { inputmode: 'numeric', min: 1, max: 12, maxlength: 2, hintId: key + '-hint', date: true, autocomplete: autocomplete.month, formGroupClassName, className: classNameMonth, isThisRequired }));
-            const yearPart = nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], inputText.call(this, key + '-year', { inputmode: 'numeric', maxlength: 4, hintId: key + '-hint', date: true, autocomplete: autocomplete.year, formGroupClassName, className: classNameYear, isThisRequired }));
-
-            return parts.concat(monthPart, yearPart).join('\n');
+          const autocomplete = {
+            day: child('day').autocomplete || 'off',
+            month: child('month').autocomplete || 'off',
+            year: child('year').autocomplete || 'off'
           };
+          const value = suffix => values?.[`${key}-${suffix}`];
+          const error = errors?.[key];
+          const dayValue = isExact ? value('day') : undefined;
+          const inputClassNames = {
+            day: 'govuk-input--width-2',
+            month: 'govuk-input--width-2',
+            year: 'govuk-input--width-4'
+          };
+          const buildField = suffix => ({
+            id: `${key}-${suffix}`,
+            label: this.t(child(suffix).label),
+            value: suffix === 'day' ? dayValue : value(suffix),
+            className: field.controlsClass?.[suffix] || inputClassNames[suffix] || ''
+          });
+          const fields = {
+            day: buildField('day'),
+            month: buildField('month'),
+            year: buildField('year')
+          };
+          const context = {
+            date: true,
+            formGroupClassName: (field.formGroup && field.formGroup.className) ? field.formGroup.className : '',
+            labelClassName: field.labelClassName,
+            error,
+            autocomplete,
+            ...fields
+          };
+
+          return new nunjucks.runtime.SafeString(
+            nunjucksEnv.renderString(compiled['partials/forms/input-text-date'], {
+              ...context
+            })
+          );
         }
       },
       'input-amount-with-unit-select': {
@@ -689,39 +699,36 @@ module.exports = function (options) {
       }
     };
     Object.entries(mixins || {}).forEach(([name, mixin]) => {
-      if (typeof mixin.handler === 'function') {
-        res.locals[name] = mixin.handler.bind(res.locals);
-        return;
-      }
+      const handler = typeof mixin.handler === 'function'
+        ? mixin.handler : function (key) {
+          // for mixins with renderWith
+          const ctxThis = this || res.locals;   // ensure context
+          ctxThis.options = ctxThis.options || {};
+          ctxThis.options.fields = ctxThis.options.fields || {};
 
-      // for mixins with renderWith
-      res.locals[name] = function (key) {
-        const ctxThis = this || res.locals;   // ensure context
-        ctxThis.options = ctxThis.options || {};
-        ctxThis.options.fields = ctxThis.options.fields || {};
+          key = nunjucksRender(key, ctxThis);
 
-        key = nunjucksRender(key, ctxThis);
-
-        const rendered = mixin.renderWith.call(
-          ctxThis,
-          key,
-          typeof mixin.options === 'function' ? mixin.options.call(ctxThis, key) : mixin.options
-        );
-        const ctx = Object.assign({}, res.locals, rendered);
-        // try to render by template name first so relative imports/includes resolve via loader roots
-        const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.html';
-        const templateName = mixin.path + viewExt;
-        try {
-          return new nunjucks.runtime.SafeString(
-            nunjucksEnv.render(templateName, ctx)
+          const rendered = mixin.renderWith.call(
+            ctxThis,
+            key,
+            typeof mixin.options === 'function' ? mixin.options.call(ctxThis, key) : mixin.options
           );
-        } catch (err) {
-          // fallback to rendering the compiled string (older behaviour)
-          return new nunjucks.runtime.SafeString(
-            nunjucksEnv.renderString(compiled[mixin.path], ctx)
-          );
-        }
-      }.bind(res.locals);
+          const ctx = Object.assign({}, res.locals, rendered);
+          // try to render by template name first so relative imports/includes resolve via loader roots
+          const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.html';
+          const templateName = mixin.path + viewExt;
+          try {
+            return new nunjucks.runtime.SafeString(
+              nunjucksEnv.render(templateName, ctx)
+            );
+          } catch (err) {
+            // fallback to rendering the compiled string (older behaviour)
+            return new nunjucks.runtime.SafeString(
+              nunjucksEnv.renderString(compiled[mixin.path], ctx)
+            );
+          }
+        };
+      res.locals[name] = handler.bind(res.locals);
     });
 
     function renderFieldImpl(key) {
@@ -784,7 +791,19 @@ module.exports = function (options) {
       }
 
       // direct call
-      return renderFieldImpl.call(this, arguments[0]);
+      const result = renderFieldImpl.call(this, arguments[0]);
+      // preserve pre rendered HTML and already wrapped template mixins
+      if (
+        result === null ||
+        result instanceof nunjucks.runtime.SafeString
+      ) {
+        return result;
+      }
+      // wrap plain strings coming from template mixins
+      if (typeof result === 'string') {
+        return new nunjucks.runtime.SafeString(result);
+      }
+      return result;
     };
 
     next();

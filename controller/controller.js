@@ -220,7 +220,7 @@ module.exports = class Controller extends BaseController {
               req.form.errors[key].errorLinkId = key + '-' + field.options[0];
             }
             // eslint-disable-next-line brace-style
-          } else if (field && field.mixin === 'input-date') {
+          } else if (field && field.mixin === 'inputDate') {
             // get first field for date input control
             req.form.errors[key].errorLinkId = key + '-day';
           } else if (field && field.mixin === 'input-amount-with-unit-select') {
