@@ -19,7 +19,7 @@ module.exports = {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }]
   },
   'dateOfBirth': dateComponent('dateOfBirth', {
-    mixin: 'input-date',
+    mixin: 'inputDate',
     isPageHeading: 'true',
     validate: [
       'required',

@@ -35,7 +35,7 @@
 }
 
 .govuk-form-group--error .autocomplete__input {
-  border: 2px solid #d4351c;
+  border: 2px solid govuk-functional-colour(error);
 }
 
 .autocomplete__input--focused {
@@ -51,7 +51,7 @@
 }
 
 .autocomplete__wrapper > .govuk-select--error {
-  border-color: #d4351c !important;
+  border-color: govuk-functional-colour(error) !important;
 }
 
 .autocomplete__dropdown-arrow-down {
