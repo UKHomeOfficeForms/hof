@@ -95,7 +95,7 @@
   },
   fieldset: {
     legend: {
-      html: legend,
+      html: legend | safe,
       isPageHeading: isPageHeading,
       classes: legendClasses + (legendClassName if legendClassName)
     }
@@ -108,7 +108,7 @@
   items: items
 } %}
 
-{%if isWarning %}
+{% if isWarning %}
   <div class="govuk-form-group{% if errorObj %} govuk-form-group--error{% endif %} {{ formGroupClasses }}">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend {{ legendClasses }}">

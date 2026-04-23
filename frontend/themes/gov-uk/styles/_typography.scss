@@ -24,7 +24,7 @@ h3:not(.govuk-heading-s) {
   margin-bottom: govuk-spacing(2);
 }
 
-p:not(.govuk-body) {
+p {
   @include govuk-font($size: 19);
   margin-top: 0;
   margin-bottom: govuk-spacing(4);

@@ -1746,7 +1746,7 @@ currency
 select
 inputText
 inputFile
-input-date
+inputDate
 input-amount-with-unit-select
 inputTextCompound
 inputTextCode

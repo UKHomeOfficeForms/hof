@@ -18,7 +18,7 @@
   {% block mainContent %}
     <p class="govuk-body">{{ intro }}</p>
     {% if not hasGoogleAnalytics %}
-      {%if intro_list %}
+      {% if intro_list %}
         {{ bulletList(intro_list.items) }}
       {% endif %}
       {% if indent_intro %}

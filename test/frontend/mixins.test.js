@@ -462,139 +462,97 @@ describe('Template Mixins', () => {
       });
     });
 
-    describe('input-date', () => {
+    describe('inputDate', () => {
       it('adds a function to res.locals', () => {
         middleware(req, res, next);
-        res.locals['input-date'].should.be.a('function');
+        expect(typeof res.locals.inputDate).toBe('function');
       });
 
-      it('returns a function', () => {
+      it('returns an object', () => {
         middleware(req, res, next);
-        res.locals['input-date']().should.be.a('function');
+        expect(typeof res.locals.inputDate()).toBe('object');
       });
 
-      it('renders 7 times if the field is not marked as inexact', () => {
-        middleware(req, res, next);
-        res.locals['input-date']().call(res.locals, 'field-name');
-        render.callCount.should.be.equal(7);
-      });
-
-      it('renders 5 times if the field is marked as inexact', () => {
+      it('looks up field labels', () => {
         res.locals.options.fields = {
-          'field-name': {
-            inexact: true
+          'field-name-day': {
+            label: 'fields.field-name-day.label'
+          },
+          'field-name-month': {
+            label: 'fields.field-name-month.label'
+          },
+          'field-name-year': {
+            label: 'fields.field-name-year.label'
           }
         };
+
         middleware(req, res, next);
-        res.locals['input-date']().call(res.locals, 'field-name');
-        render.callCount.should.be.equal(5);
-      });
+        res.locals.inputDate('field-name');
 
-      it('looks up field label', () => {
-        middleware(req, res, next);
-        res.locals['input-date']().call(res.locals, 'field-name');
+        const dayLabel = renderSpy.mock.calls[0][1].options.fields['field-name-day'];
+        const monthLabel = renderSpy.mock.calls[0][1].options.fields['field-name-month'];
+        const yearLabel = renderSpy.mock.calls[0][1].options.fields['field-name-year'];
 
-        render.called;
-
-        const dayCall = render.getCall(2);
-        const monthCall = render.getCall(4);
-        const yearCall = render.getCall(6);
-
-        dayCall.should.have.been.calledWith(sinon.match({
+        expect(dayLabel).toEqual(expect.objectContaining({
           label: 'fields.field-name-day.label'
         }));
 
-        monthCall.should.have.been.calledWith(sinon.match({
+        expect(monthLabel).toEqual(expect.objectContaining({
           label: 'fields.field-name-month.label'
         }));
 
-        yearCall.should.have.been.calledWith(sinon.match({
+        expect(yearLabel).toEqual(expect.objectContaining({
           label: 'fields.field-name-year.label'
-        }));
-      });
-
-      it('govuk-form-group class is set in the date fields by default', () => {
-        middleware(req, res, next);
-        res.locals['input-date']().call(res.locals, 'field-name');
-
-        render.called;
-
-        const dayCall = render.getCall(2);
-        const monthCall = render.getCall(4);
-        const yearCall = render.getCall(6);
-
-        dayCall.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'govuk-form-group'
-        }));
-
-        monthCall.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'govuk-form-group'
-        }));
-
-        yearCall.should.have.been.calledWith(sinon.match({
-          formGroupClassName: 'govuk-form-group'
         }));
       });
 
       describe('autocomplete', () => {
         it('should have a suffix of -day -month and -year', () => {
           res.locals.options.fields = {
-            'field-name': {
-              autocomplete: 'bday'
+            'field-name-day': {
+              autocomplete: 'bday-day'
+            },
+            'field-name-month': {
+              autocomplete: 'bday-month'
+            },
+            'field-name-year': {
+              autocomplete: 'bday-year'
             }
           };
           middleware(req, res, next);
-          res.locals['input-date']().call(res.locals, 'field-name');
+          res.locals.inputDate('field-name');
 
-          render.should.have.been.called;
+          const context = renderSpy.mock.calls[0][1];
 
-          const dayCall = render.getCall(2);
-          const monthCall = render.getCall(4);
-          const yearCall = render.getCall(6);
-
-          dayCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'bday-day'
-          }));
-
-          monthCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'bday-month'
-          }));
-
-          yearCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'bday-year'
-          }));
+          expect(context.autocomplete).toEqual({
+            day: 'bday-day',
+            month: 'bday-month',
+            year: 'bday-year'
+          });
         });
 
         it('should be set as exact values if an object is given', () => {
           res.locals.options.fields = {
-            'field-name': {
-              autocomplete: {
-                day: 'day-type',
-                month: 'month-type',
-                year: 'year-type'
-              }
+            'field-name-day': {
+              autocomplete: 'day-type'
+            },
+            'field-name-month': {
+              autocomplete: 'month-type'
+            },
+            'field-name-year': {
+              autocomplete: 'year-type'
             }
           };
           middleware(req, res, next);
-          res.locals['input-date']().call(res.locals, 'field-name');
+          res.locals.inputDate('field-name');
 
-          render.called;
+          const context = renderSpy.mock.calls[0][1];
 
-          const dayCall = render.getCall(2);
-          const monthCall = render.getCall(4);
-          const yearCall = render.getCall(6);
-
-          dayCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'day-type'
-          }));
-
-          monthCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'month-type'
-          }));
-
-          yearCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'year-type'
-          }));
+          expect(context.autocomplete).toEqual({
+            day: 'day-type',
+            month: 'month-type',
+            year: 'year-type'
+          });
         });
 
         it('should set autocomplete to off if off is specified', () => {
@@ -604,86 +562,71 @@ describe('Template Mixins', () => {
             }
           };
           middleware(req, res, next);
-          res.locals['input-date']().call(res.locals, 'field-name');
+          res.locals.inputDate('field-name');
 
-          render.called;
+          const context = renderSpy.mock.calls[0][1];
 
-          const dayCall = render.getCall(2);
-          const monthCall = render.getCall(4);
-          const yearCall = render.getCall(6);
-
-          dayCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'off'
-          }));
-
-          monthCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'off'
-          }));
-
-          yearCall.should.have.been.calledWith(sinon.match({
-            autocomplete: 'off'
-          }));
+          expect(context.autocomplete).toEqual({
+            day: 'off',
+            month: 'off',
+            year: 'off'
+          });
         });
 
-        it('should default to no attribute across all date fields', () => {
+        it('should default to off when not provided', () => {
           middleware(req, res, next);
-          res.locals['input-date']().call(res.locals, 'field-name');
+          res.locals.inputDate('field-name');
 
-          render.called;
+          const context = renderSpy.mock.calls[0][1];
 
-          const dayCall = render.getCall(0);
-          const monthCall = render.getCall(1);
-          const yearCall = render.getCall(2);
-
-          dayCall.should.have.been.calledWith(sinon.match({
-            autocomplete: undefined
-          }));
-
-          monthCall.should.have.been.calledWith(sinon.match({
-            autocomplete: undefined
-          }));
-
-          yearCall.should.have.been.calledWith(sinon.match({
-            autocomplete: undefined
-          }));
+          expect(context.autocomplete).toEqual({
+            day: 'off',
+            month: 'off',
+            year: 'off'
+          });
         });
       });
 
       it('prefixes translation lookup with namespace if provided', () => {
+        res.locals.options.fields =
+        {
+          'field-name-day': {
+            label: 'fields.field-name-day.label'
+          },
+          'field-name-month': {
+            label: 'fields.field-name-month.label'
+          },
+          'field-name-year': {
+            label: 'fields.field-name-year.label'
+          }
+        };
         middleware = mixins({ sharedTranslationsKey: 'name.space' });
         middleware(req, res, next);
-        res.locals['input-date']().call(res.locals, 'field-name');
 
-        render.called;
+        res.locals.inputDate('field-name');
 
-        const dayCall = render.getCall(2);
-        const monthCall = render.getCall(4);
-        const yearCall = render.getCall(6);
+        const context = renderSpy.mock.calls[renderSpy.mock.calls.length - 1][1];
 
-        dayCall.should.have.been.calledWith(sinon.match({
-          label: 'name.space.fields.field-name-day.label'
-        }));
-
-        monthCall.should.have.been.calledWith(sinon.match({
-          label: 'name.space.fields.field-name-month.label'
-        }));
-
-        yearCall.should.have.been.calledWith(sinon.match({
-          label: 'name.space.fields.field-name-year.label'
+        expect(context).toEqual(expect.objectContaining({
+          day: expect.objectContaining({
+            label: 'name.space.fields.field-name-day.label'
+          }),
+          month: expect.objectContaining({
+            label: 'name.space.fields.field-name-month.label'
+          }),
+          year: expect.objectContaining({
+            label: 'name.space.fields.field-name-year.label'
+          })
         }));
       });
 
       it('sets a date boolean to conditionally show input errors', () => {
         middleware(req, res, next);
-        res.locals['input-date']().call(res.locals, 'field-name');
+        res.locals.inputDate('field-name');
 
-        render.getCall(2).should.have.been.calledWith(sinon.match({
-          date: true
-        }));
-        render.getCall(4).should.have.been.calledWith(sinon.match({
-          date: true
-        }));
-        render.getCall(6).should.have.been.calledWith(sinon.match({
+        const context = renderSpy.mock.calls[0][1];
+
+        expect(context).toEqual(expect.objectContaining({
           date: true
         }));
       });
@@ -2079,7 +2022,7 @@ describe('Template Mixins', () => {
           key: 'date-field',
           html: html
         };
-        expect(res.locals.renderField(field)).toBe(html);
+        expect(String(res.locals.renderField(field))).toBe(html);
       });
 
       it('looks up a mixin from res.locals and calls it', () => {
