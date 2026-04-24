@@ -30,6 +30,11 @@ p {
   margin-bottom: govuk-spacing(4);
 }
 
+ul,
+ol {
+  @extend .govuk-list;
+}
+
 strong {
   font-weight: bold;
 }
