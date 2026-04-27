@@ -653,48 +653,56 @@ module.exports = function (options) {
           );
         }
       },
-      'input-amount-with-unit-select': {
-        handler: function () {
-          return function (key) {
-            key = (key === '{{key}}' || key === '' || key === undefined) ? nunjucksRender(key, this) : key;
-            const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+      inputAmountWithUnitSelect: {
+        handler: function (key) {
+          const field = Object.assign({}, this.options.fields[key] || options.fields[key]);
+          key = nunjucksRender(key, this);
 
-            let autocomplete = field.autocomplete || 'off';
-            if (autocomplete === 'off') {
-              autocomplete = { amount: 'off' };
-            } else if (typeof autocomplete === 'string') {
-              autocomplete = { amount: autocomplete + '-amount' };
-            }
+          let autocomplete = field.autocomplete || {};
+          if (autocomplete === 'off') {
+            autocomplete = { amount: 'off' };
+          } else if (typeof autocomplete === 'string') {
+            autocomplete = { amount: autocomplete + '-amount' };
+          }
+          const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
+          const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
+          const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
+          const context = {
+            options: { fields: this.options.fields || {} },
+            values: res.locals.values || {},
+            errors: res.locals.errors || {}
+          };
 
-            const formGroupClassName = (field.formGroup && field.formGroup.className) ? field.formGroup.className : '';
-            const classNameAmount = (field.controlsClass && field.controlsClass.amount) ? field.controlsClass.amount : 'govuk-input--width-3';
-            const classNameUnit = (field.controlsClass && field.controlsClass.unit) ? field.controlsClass.unit : 'govuk-input--width-5';
+          const parts = [];
 
-            const parts = [];
-
-            // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
-            // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
-            const amountPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-text'], inputText.call(this,
-              key + '-amount', {
+          // basically does the '_.each(mixins, function (mixin, name)' part manually (which renders the HTML
+          // for both child components and looks for a 'renderWith' and optional 'Options' method to use)
+          const amountPart = nunjucksEnv.renderString(
+            compiled['partials/forms/grouped-inputs-text'],
+            inputText.call(context, key + '-amount',
+              {
                 formGroupClassName,
                 autocomplete: autocomplete.amount,
                 className: classNameAmount,
                 amountWithUnitSelect: true
               }
-            ));
+            )
+          );
 
-            const unitPart = nunjucksEnv.renderString(compiled['partials/forms/grouped-inputs-select'], inputText.call(this, key + '-unit',
-              optionGroup.call(this,
-                key + '-unit', {
-                  formGroupClassName,
-                  className: classNameUnit,
-                  amountWithUnitSelect: true
-                },
-                key
+          const unitPart = nunjucksEnv.renderString(
+            compiled['partials/forms/grouped-inputs-select'],
+            inputText.call(context, key + '-unit',
+              optionGroup.call(context, key + '-unit', {
+                formGroupClassName,
+                className: classNameUnit,
+                amountWithUnitSelect: true
+              },
+              key
               )));
 
-            return parts.concat(amountPart, unitPart).join('\n');
-          };
+          parts.push(amountPart, unitPart);
+          const template = parts.join('\n');
+          return new nunjucks.runtime.SafeString(template);
         }
       }
     };
@@ -752,7 +760,11 @@ module.exports = function (options) {
         key = baseCtx;
       }
 
-      const ctx = Object.assign({}, res.locals, baseCtx, key);
+      const ctx = Object.assign({}, res.locals, key, {
+        options: baseCtx.options,
+        values: baseCtx.values,
+        errors: baseCtx.errors
+      });
 
       if (ctx.disableRender) {
         return null;
@@ -784,8 +796,7 @@ module.exports = function (options) {
         const opts = arguments[0];
         const key = arguments[1];
 
-        const ctx = Object.create(this);
-        ctx.options = opts;
+        const ctx = Object.assign({}, this, { options: opts });
 
         return renderFieldImpl.call(ctx, key);
       }
