@@ -1,13 +1,58 @@
-<div class="{{amountWithUnitSelectItemClassName}}">
-  <div id="{{id}}-group" class="{{#compound}} form-group-compound{{/compound}}{{#formGroupClassName}} {{formGroupClassName}}{{/formGroupClassName}}">
-      <label for="{{id}}" class="{{labelClassName}}">
-        <span class="label-text">{{{label}}}</span>
-      </label>
-      {{#hint}}<div {{$hintId}}id="{{hintId}}" {{/hintId}}class="govuk-hint">{{{hint}}}</div>{{/hint}}
-      <select id="{{id}}" class="govuk-select{{#className}} {{className}}{{/className}}{{#error}} govuk-select--error{{/error}}" name="{{id}}" aria-required="{{required}}">
-      {{#options}}
-          <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
-      {{/options}}
-      </select>
-  </div>
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{#-------------------------------------------#}
+{#  Set form group and label classes         #}
+{#-------------------------------------------#}
+{% set formGroupClasses = "" %}
+
+{% set formGroupClasses = formGroupClasses + formGroupClassName if formGroupClassName %}
+
+
+{#------------------------------------------#}
+{#  Set hint object if hint exists          #}
+{#------------------------------------------#}
+{% set hintObj = null %}
+{% if hint %}
+  {% set hintObj = {
+    html: hint | safe,
+    classes: "govuk-hint",
+    id: hintId
+  } %}
+{% endif %}
+
+{#------------------------------------------#}
+{#  Set error object if error exists        #}
+{#------------------------------------------#}
+{% set errorObj = null %}
+{% if error %}
+  {% set errorObj = {
+    text: error.message,
+    id: error.id
+  } %}
+{% endif %}
+
+{#----------------------------------------------#}
+{#  Set govukSelect args                         #}
+{#----------------------------------------------#}
+{% set args = {
+  id: id,
+  name: id,
+  value: value,
+  formGroup: {
+    classes: formGroupClasses
+  },
+  label: {
+    html: label | safe,
+    classes: labelClassName,
+    for: id
+  },
+  hint: hintObj,
+  classes: className + ("govuk-select--error" if error),
+  items: items,
+  attributes: {
+    "aria-required": required
+  }
+} %}
+<div class="{{ amountWithUnitSelectItemClassName }}">
+  {{ govukSelect(args) }}
 </div>
