@@ -5,6 +5,12 @@
   "name":{
     "default": "Enter your full name"
   },
+  "otherName":{
+    "default": "Enter your other name"
+  },
+  "otherNames-add-another": {
+      "required": "Select yes if you want to add another previous name"
+    },
   "dateOfBirth": {
     "default": "Enter your date of birth in the correct format; for example, 31 10 1990",
     "after": "Enter a date after 1 1 1900",

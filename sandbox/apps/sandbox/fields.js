@@ -18,6 +18,9 @@ module.exports = {
   name: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }]
   },
+  otherName: {
+    validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }]
+  },
   'dateOfBirth': dateComponent('dateOfBirth', {
     mixin: 'inputDate',
     isPageHeading: 'true',

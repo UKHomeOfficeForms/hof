@@ -17,6 +17,23 @@
   "name": {
     "label": "Full name"
   },
+  "otherName": {
+    "label": "Previous name"
+  },
+  "otherNames": {
+      "label": "Previous name"
+  },
+  "otherNames-add-another": {
+    "legend": "Do you want to add another previous name?",
+    "options": {
+      "yes": {
+        "label": "yes"
+      },
+      "no": {
+        "label": "no"
+      }
+    }
+  },
   "dateOfBirth": {
     "legend": "What is your date of birth?",
     "hint": "For example, 31 10 1990"

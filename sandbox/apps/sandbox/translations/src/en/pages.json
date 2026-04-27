@@ -13,6 +13,12 @@
   "name": {
     "header": "What is your full name?"
   },
+   "other-name": {
+    "header": "What is your previous name?"
+  },
+  "add-other-name": {
+      "header": "Do you want to add a previous name?"
+    },
   "email": {
     "header": "Enter your email address"
   },

@@ -4,6 +4,7 @@
 const CountrySelect = require('./behaviours/country-select')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
+const CombineAndLoopFields = require('../../../').components.combineAndLoopFields;
 
 module.exports = {
   name: 'sandbox',
@@ -26,8 +27,67 @@ module.exports = {
     },
     '/name': {
       fields: ['name'],
-      next: '/dob'
+      next: '/add-other-name'
     },
+    '/add-other-name': {
+      template: 'list-add-looped-items',
+      behaviours: [CombineAndLoopFields({
+        groupName: 'otherNames',
+        fieldsToGroup: ['otherName'],
+        combineValuesToSingleField: 'record',
+        returnTo: '/other-name',
+        groupOptional: true
+      })],
+      next: '/other-name-summary',
+      locals: {
+        loopedPage: true
+      }
+    },
+    '/other-name': {
+      fields: ['otherName'],
+      next: '/add-other-name',
+      continueOnEdit: true
+    },
+    '/other-name-summary': {
+      template: 'confirm',
+      behaviours: [SummaryPageBehaviour],
+      sections: require('./sections/other-name-summary-sections'),
+      next: '/email'
+    },
+
+    // EXAMPLE OF HOW TO USE THE COMBINE AND LOOP FIELDS BEHAVIOUR
+
+    //const CombineAndLoopFields = require('hof').components.combineAndLoopFields;
+    // '/add-other-name': {
+    //   template: 'list-add-looped-items',
+    //   behaviours: [CombineAndLoopFields({
+    //     groupName: 'other-names',
+    //     fieldsToGroup: ['other-name'],
+    //     groupOptional: true,
+    //     removePrefix: 'other-',
+    //     combineValuesToSingleField: 'record',
+    //     returnTo: '/other-name'
+    //   }), SaveFormSession],
+    //   next: '/date-of-birth',
+    //   backLink: 'add-previous-surname',
+    //   locals: {
+    //     section: 'other-name',
+    //     showSaveAndExit: true,
+    //     loopedPage: true,
+    //     captionHeading: 'Section 4 of 15 - Additional names'
+    //   }
+    // },
+    // '/other-name': {
+    //   behaviours: SaveFormSession,
+    //   fields: ['other-name'],
+    //   next: '/add-other-name',
+    //   backLink: 'add-other-name',
+    //   continueOnEdit: true,
+    //   locals: { showSaveAndExit: true, captionHeading: 'Section 4 of 15 - Additional names' }
+    // },
+
+
+
     '/dob': {
       fields: ['dateOfBirth'],
       locals: { showSaveAndExit: true },
