@@ -1,6 +1,7 @@
-{{#hasItems}}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+<!-- { % for item in hasItems % } -->
 <div class="loop-summary-table">
-    {{#items}}
+    <!-- { % endfor % } -->
     <table class="govuk-table">
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">

@@ -88,6 +88,41 @@ module.exports = {
 
 
 
+    // '/name': {
+    //   fields: ['name'],
+    //   forks: [
+    //     {
+    //       target: '/other-names',
+    //       continueOnEdit: true,
+    //       condition: req =>
+    //         req.sessionModel.get('new-renew-other-names') === 'yes'
+    //     }
+    //   ],
+    //   next: '/confirm'
+    // },
+
+    //  '/other-names': {
+    //   fields: [
+    //     ,
+    //     'other-first-name',
+       
+    //   ],
+    //   next: '/other-names-summary'
+    // },
+    //    '/other-names-summary': {
+    //   behaviours: [AggregateSaveUpdate, ParseSummaryFields],
+    //   aggregateTo: 'othernames',
+    //   aggregateFrom: [
+    //     'other-name-first-name'
+    //   ],
+    //   titleField: [
+    //     'other-name-first-name'
+    //   ],
+    //   addStep: 'other-names',
+    //   addAnotherLinkText: 'previous name',
+    //   continueOnEdit: false,
+    //   next: '/address',
+    // },
     '/dob': {
       fields: ['dateOfBirth'],
       locals: { showSaveAndExit: true },
