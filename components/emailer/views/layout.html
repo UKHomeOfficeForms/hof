@@ -4,22 +4,38 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <meta content="utf-8" http-equiv="encoding" />
     <!-- Use title if it's in the page YAML frontmatter -->
-    <title>{{subject}}</title>
+    <title>{{ subject }}</title>
   </head>
 
   <body style="font-family: Helvetica, Arial, sans-serif;font-size: 16px;margin: 0;color:#0b0c0c">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-      <tr>
-        <td width="100%" height="53px" bgcolor="#0b0c0c">
-          <table width="580" cellpadding="0" cellspacing="0" border="0" align="center">
-            <tr>
-              <td width="100%" bgcolor="#0b0c0c" valign="middle">
-                <img width="152" height="31" src="cid:govuk_logotype_email" alt="GOV.UK" border="0" />
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; width:100%" scaled-up="true">
+      <tbody>
+        <tr>
+          <td width="100%" height="60" style="background-color: #1d70b8 !important;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="border-collapse:collapse; max-width:580px; width:100%">
+                <tbody>
+                  <tr>
+                    <td width="70" valign="bottom">
+                      <a href="https://www.gov.uk/" style="text-decoration:none; color:#fff">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse">
+                          <tbody>
+                            <tr>
+                              <td valign="bottom" height="60" class="x_logo__crown" style="font-size:28px; line-height:2; padding-left:10px">
+                                <img data-imagetype="External" src="https://static.notifications.service.gov.uk/images/govuk-logotype-tudor-crown.png" alt="" height="32" border="0" aria-hidden="true" style="margin-top:2px; max-height:32px">
+                              </td>
+                              <td valign="bottom" height="60" class="x_logo__text" style="font-size:28px; line-height:2.1428571429; padding-left:8px"><span aria-label="GOV.UK" style="font-family:Helvetica,Arial,'Noto Sans',sans-serif; font-weight:700; text-decoration:none; vertical-align:middle; display:inline-block">GOV<span class="x_logo__dot" style="font-family:Georgia,Times New Roman,Times,sans-serif; color:#00ffe0; display:inline-block; text-indent:0.04em; font-size:32px; line-height:1.35; vertical-align:top; margin-right:0.05em">.</span>UK</span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </td>
+        </tr>
+      </tbody>
     </table>
     <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF">
       <tr>
@@ -47,10 +63,10 @@
             <tr>
               <td style="font-family: Helvetica, Arial, sans-serif;">
                 <p style="font-size: 19px; font-weight: bold; color: #000; line-height: 1.32; margin: 0 0 10px 0;">
-                  {{subject}}
+                  {{ subject }}
                 <p>
                 <div style="margin: 0 0 20px 0;">
-                  {{{body}}}
+                  {{ body | safe }}
                 </div>
               </td>
             </tr>
