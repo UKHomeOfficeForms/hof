@@ -1,33 +1,35 @@
-{% from "govuk/components/table/macro.njk" import govukTable %}
-<!-- { % for item in hasItems % } -->
-<div class="loop-summary-table">
-    <!-- { % endfor % } -->
-    <table class="govuk-table">
-        <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header data-col" colspan="2">{{itemTitle}}</th>
-            <th scope="col" class="govuk-table__header action-col">
-                <a href="{{baseUrl}}/{{route}}/edit/{{index}}">{{#t}}buttons.edit{{/t}}<span class="visuallyhidden"> {{itemTitle}}</span></a>
-            </th>
-            <th scope="col" class="govuk-table__header action-col">
-                <a href="{{baseUrl}}/{{route}}/delete/{{index}}">{{#t}}buttons.delete{{/t}}<span
-                        class="visuallyhidden"> {{itemTitle}}</span></a>
-            </th>
-        </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-        {{#fields}}
-        {{#showInSummary}}
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell" class="govuk-table__header data-col">{{#t}}fields.{{field}}{{/t}}</td>
-            <td></td>
-            <td class="govuk-table__cell" class="govuk-table__header data-col">{{#parsed}}{{parsed}}{{/parsed}}{{^parsed}}{{value}}{{/parsed}}</td>
-            <td></td>
-        </tr>
-        {{/showInSummary}}
-        {{/fields}}
-        </tbody>
-    </table>
-    {{/items}}
-</div>
-{{/hasItems}}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{{ govukSummaryList({
+  rows: [
+    {
+      key: {
+        text: "table title"
+      },
+      actions: {
+        items: [
+          {
+            href: "#",
+            text: t('buttons.edit'),
+            visuallyHiddenText: "change for edit"
+          },
+          {
+            href: "#",
+            text: t('buttons.delete'),
+            visuallyHiddenText: "change for delete"
+          }
+        ]
+    }
+      },
+      {
+      key: {
+        text: "Item details",
+        classes: "summary-list-key-no-bold"
+      },
+        value: {
+        html: '<p class="govuk-body">sarah.phillips@example.com</p>'
+      }
+    }
+  ]
+})
+}}
