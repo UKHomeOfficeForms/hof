@@ -94,8 +94,7 @@ module.exports = function (options) {
 
     // use nunjucks environment for resolving includes/partials from the
     // project's views roots for this request.
-    const nunjucksEnv = (req && req.app && req.app.locals && req.app.locals.nunjucksEnv);
-
+    const nunjucksEnv = req?.res?.locals?.nunjucksEnv;
 
     // helper: resolve a template file path by trying express View, configured viewsDirectory and app roots
     function resolveTemplateFile(name) {
