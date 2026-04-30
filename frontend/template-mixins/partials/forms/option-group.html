@@ -131,37 +131,41 @@
       {% endif %}
 
       <div class="govuk-radios {{ classes }}" data-module="govuk-radios">
-        {% for item in items %}
+        {% for option in options %}
+        {% if option.divider and option.divider !== "after" %}
+        <div class="govuk-radios__divider">or</div>
+        {% endif %}
           <div class="govuk-radios__item">
             <input class="govuk-radios__input"
-                  id="{{ item.id }}"
-                  name="{{ item.name }}"
-                  type="checkbox"
-                  value="{{ item.value }}"
-                  {% if item.checked %}checked{% endif %}
-                  {% if item.conditional %}
-                    aria-controls="conditional-{{ item.id }}"
+                  id="{{ key }}-{{ option.value }}"
+                  name="{{ key }}"
+                  type="{{ option.type }}"
+                  value="{{ option.value }}"
+                  {% if option.selected %}checked{% endif %}
+                  {% if option.toggle %}
+                    aria-controls="conditional-{{ key }}-{{ option.value }}"
                   {% endif %}
-                  {% for attr, val in item.attributes|default({}) %}
+                  {% for attr, val in option.attributes|default({}) %}
                     {{ attr }}="{{ val }}"
                   {% endfor %}>
 
-            <label class="govuk-label govuk-radios__label" for="{{ item.id }}">
-              {{ item.html | safe }}
+            <label class="govuk-label govuk-radios__label" for="{{ key }}-{{ option.value }}">
+              {{ option.label | safe }}
             </label>
 
-            {% if item.hint %}
-              <div class="govuk-hint govuk-radios__hint">
-                {{ item.hint.text | safe }}
-              </div>
+            {% if option.optionHint %}
+              <div id="{{ key }}-{{ option.value }}-item-hint" class="govuk-hint govuk-radios__hint">{{ option.optionHint }}</div>
             {% endif %}
           </div>
-          {% if item.conditional %}
-            <div id="conditional-{{ item.id }}"
-            class="govuk-radios__conditional{% if not item.checked %} govuk-radios__conditional--hidden{% endif %}"
-            aria-hidden="{% if not item.checked %}true{% else %}false{% endif %}">
-              {{ item.conditional.html | safe }}
+          {% if option.toggle %}
+            <div id="conditional-{{ key }}-{{ option.value }}"
+            class="govuk-radios__conditional{% if not option.selected %} govuk-radios__conditional--hidden{% endif %}"
+            aria-hidden="{% if not option.selected %}true{% else %}false{% endif %}">
+              {{ renderChild(option) | safe }}
             </div>
+          {% endif %}
+          {% if option.divider and option.divider === "after" %}
+          <div class="govuk-radios__divider">or</div>
           {% endif %}
         {% endfor %}
       </div>
