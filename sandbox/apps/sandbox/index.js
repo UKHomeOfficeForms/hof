@@ -5,7 +5,8 @@ const CountrySelect = require('./behaviours/country-select')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
 const CombineAndLoopFields = require('../../../').components.combineAndLoopFields;
-
+const Aggregate = require('./behaviours/aggregator');
+const { add } = require('lodash');
 module.exports = {
   name: 'sandbox',
   steps: {
@@ -27,102 +28,45 @@ module.exports = {
     },
     '/name': {
       fields: ['name'],
-      next: '/add-other-name'
+      next: '/has-other-name'
     },
-    '/add-other-name': {
-      template: 'list-add-looped-items',
-      behaviours: [CombineAndLoopFields({
-        groupName: 'otherNames',
-        fieldsToGroup: ['otherName'],
-        combineValuesToSingleField: 'record',
-        returnTo: '/other-name',
-        groupOptional: true
-      })],
-      next: '/other-name-summary',
+    '/has-other-name': {
+      fields: ['hasOtherName'],
+      forks: [{
+        target: '/name-details',
+        condition: {
+          field: 'hasOtherName',
+          value: 'yes'
+        }
+       }],
+       next: '/email'
+    },
+    '/other-name': {
+      fields: ['otherName', 'otherMidName'],
+      next: '/other-surname',
+      continueOnEdit: true
+    },
+    '/other-surname': {
+      fields: ['otherSurname'],
+      next: '/name-details',
+      continueOnEdit: true
+    },
+    '/name-details': {
+      template: 'summary-name-list',
+      behaviours: [Aggregate],
+      aggregateTo: 'otherNames',
+      aggregateFrom: [
+        'otherName',
+        'otherMidName',
+        'otherSurname',
+      ],
+      titleField: 'otherName',
+      addStep: ['other-name'],
+      next: '/email',
       locals: {
         loopedPage: true
       }
     },
-    '/other-name': {
-      fields: ['otherName'],
-      next: '/add-other-name',
-      continueOnEdit: true
-    },
-    '/other-name-summary': {
-      template: 'confirm',
-      behaviours: [SummaryPageBehaviour],
-      sections: require('./sections/other-name-summary-sections'),
-      next: '/email'
-    },
-
-    // EXAMPLE OF HOW TO USE THE COMBINE AND LOOP FIELDS BEHAVIOUR
-
-    //const CombineAndLoopFields = require('hof').components.combineAndLoopFields;
-    // '/add-other-name': {
-    //   template: 'list-add-looped-items',
-    //   behaviours: [CombineAndLoopFields({
-    //     groupName: 'other-names',
-    //     fieldsToGroup: ['other-name'],
-    //     groupOptional: true,
-    //     removePrefix: 'other-',
-    //     combineValuesToSingleField: 'record',
-    //     returnTo: '/other-name'
-    //   }), SaveFormSession],
-    //   next: '/date-of-birth',
-    //   backLink: 'add-previous-surname',
-    //   locals: {
-    //     section: 'other-name',
-    //     showSaveAndExit: true,
-    //     loopedPage: true,
-    //     captionHeading: 'Section 4 of 15 - Additional names'
-    //   }
-    // },
-    // '/other-name': {
-    //   behaviours: SaveFormSession,
-    //   fields: ['other-name'],
-    //   next: '/add-other-name',
-    //   backLink: 'add-other-name',
-    //   continueOnEdit: true,
-    //   locals: { showSaveAndExit: true, captionHeading: 'Section 4 of 15 - Additional names' }
-    // },
-
-
-
-    // '/name': {
-    //   fields: ['name'],
-    //   forks: [
-    //     {
-    //       target: '/other-names',
-    //       continueOnEdit: true,
-    //       condition: req =>
-    //         req.sessionModel.get('new-renew-other-names') === 'yes'
-    //     }
-    //   ],
-    //   next: '/confirm'
-    // },
-
-    //  '/other-names': {
-    //   fields: [
-    //     ,
-    //     'other-first-name',
-       
-    //   ],
-    //   next: '/other-names-summary'
-    // },
-    //    '/other-names-summary': {
-    //   behaviours: [AggregateSaveUpdate, ParseSummaryFields],
-    //   aggregateTo: 'othernames',
-    //   aggregateFrom: [
-    //     'other-name-first-name'
-    //   ],
-    //   titleField: [
-    //     'other-name-first-name'
-    //   ],
-    //   addStep: 'other-names',
-    //   addAnotherLinkText: 'previous name',
-    //   continueOnEdit: false,
-    //   next: '/address',
-    // },
     '/dob': {
       fields: ['dateOfBirth'],
       locals: { showSaveAndExit: true },

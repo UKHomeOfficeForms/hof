@@ -21,6 +21,17 @@ module.exports = {
   otherName: {
     validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }]
   },
+   otherMidName: {
+    validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }]
+  },
+  otherSurname: {
+    validate: ['required', 'notUrl', { type: 'maxlength', arguments: 200 }]
+  },
+  hasOtherName: {
+    mixin: 'radioGroup',
+    validate: ['required'],
+    options: ['yes', 'no']
+  },
   'dateOfBirth': dateComponent('dateOfBirth', {
     mixin: 'inputDate',
     isPageHeading: 'true',

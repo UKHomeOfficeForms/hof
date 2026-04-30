@@ -21,9 +21,15 @@
     "label": "Previous name"
   },
   "otherNames": {
-      "label": "Previous name"
+      "label": "Other first name"
   },
-  "otherNames-add-another": {
+  "otherSurname": {
+    "label": "Other surname"
+  },
+  "otherMidName": {
+    "label": "Other  mid name"
+  },
+  "hasOtherName": {
     "legend": "Do you want to add another previous name?",
     "options": {
       "yes": {

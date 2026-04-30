@@ -1,35 +1,39 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% if hasItems %}
+{% for item in items %}
+{% set summaryRows = [] %}
+{% set actions = null %}
+{% set actions = { 
+  items: [
+  {
+    href: baseUrl+ "/" + route + "/edit/" + item.index,
+    text: t('buttons.edit'),
+    visuallyHiddenText: item.itemTitle
+  },
+  {
+    href: baseUrl+ "/" + route + "/delete/" + item.index,
+    text: t('buttons.delete'),
+    visuallyHiddenText: item.itemTitle
+  }
+  ]} %}
+        
+{% set summaryRow = {
+  key: { text: item.itemTitle },
+  actions: actions
+} %}
+{% if item.fields %}
+  {% for row in item.fields %}
+    {% if row.showInSummary %}
+      {% set summaryRow = {
+          key: { text: t('fields.' + row.field),  classes: "summary-list-key-no-bold"},
+          value: { html: row.parsed if row.parsed else row.value }
+        } %}
+    {% endif %}
+    {% set summaryRows = summaryRows.concat([summaryRow]) %}
+  {% endfor %}
+{% endif %}
 
-{{ govukSummaryList({
-  rows: [
-    {
-      key: {
-        text: "table title"
-      },
-      actions: {
-        items: [
-          {
-            href: "#",
-            text: t('buttons.edit'),
-            visuallyHiddenText: "change for edit"
-          },
-          {
-            href: "#",
-            text: t('buttons.delete'),
-            visuallyHiddenText: "change for delete"
-          }
-        ]
-    }
-      },
-      {
-      key: {
-        text: "Item details",
-        classes: "summary-list-key-no-bold"
-      },
-        value: {
-        html: '<p class="govuk-body">sarah.phillips@example.com</p>'
-      }
-    }
-  ]
-})
-}}
+{{ govukSummaryList({rows: summaryRows}) }}
+{% endfor %}
+{% endif %}
+
