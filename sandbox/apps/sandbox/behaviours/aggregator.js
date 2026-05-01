@@ -76,7 +76,8 @@ module.exports = superclass => class extends superclass {
         req.sessionModel.set(aggregateFromField,
           items[id].fields.find(field => field.field === aggregateFromField).value);
       });
-      const editPath = req.params.edit ? `/edit#${req.params.edit}` : '/edit';
+      const field = req.params.field || req.params.edit;
+      const editPath = field ? `/edit#${field}` : '/edit';
       res.redirect(`${req.baseUrl}/${req.form.options.addStep}${editPath}`);
       console.log("edit path" + `${req.baseUrl}/${req.form.options.addStep}${editPath}`);
     } else {

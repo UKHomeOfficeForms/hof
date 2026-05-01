@@ -4,11 +4,11 @@
 const CountrySelect = require('./behaviours/country-select')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
-const CombineAndLoopFields = require('../../../').components.combineAndLoopFields;
 const Aggregate = require('./behaviours/aggregator');
 const { add } = require('lodash');
 module.exports = {
   name: 'sandbox',
+  params: '/:action?/:id?/:field?',
   steps: {
     '/landing-page': {
       fields: [
@@ -53,7 +53,7 @@ module.exports = {
     },
     '/name-details': {
       template: 'summary-name-list',
-      behaviours: [Aggregate],
+      behaviours: Aggregate,
       aggregateTo: 'otherNames',
       aggregateFrom: [
         'otherName',
@@ -61,11 +61,10 @@ module.exports = {
         'otherSurname',
       ],
       titleField: 'otherName',
-      addStep: ['other-name'],
-      next: '/email',
-      locals: {
-        loopedPage: true
-      }
+      addStep: 'other-name',
+      continueOnEdit: true,
+      locals: { showSaveAndExit: true },
+      next: '/dob'
     },
     '/dob': {
       fields: ['dateOfBirth'],
