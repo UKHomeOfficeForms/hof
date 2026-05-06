@@ -91,6 +91,23 @@
     "label": "Which country are you based in?",
     "hint": "Start to type the country name and options will appear"
   },
+  "hasOtherName": {
+    "legend": "Have you been known by any other names?",
+    "options": {
+      "yes": {
+        "label": "Yes"
+      },
+      "no": {
+        "label": "No"
+      }
+    }
+  },
+  "otherFirstName": {
+    "label": "Other first name"
+  },
+  "otherSurname": {
+    "label": "Other surname"
+  },
   "appealStages": {
     "label": "Appeal stage",
     "hint": "Choose an appeal stage from the drop down menu",

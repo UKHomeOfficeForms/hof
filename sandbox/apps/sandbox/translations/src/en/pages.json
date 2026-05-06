@@ -19,6 +19,12 @@
   "phone-number": {
     "header": "Enter your phone number"
   },
+  "other-name": {
+    "header": "Other names"
+  },
+  "name-details":{
+    "header": "Other names summary"
+  },
   "confirm": {
     "header": "Check your answers before submitting your application.",
     "sections": {
