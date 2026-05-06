@@ -4,9 +4,11 @@
 const CountrySelect = require('./behaviours/country-select')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
+const Aggregate = require('./behaviours/aggregator');
 
 module.exports = {
   name: 'sandbox',
+  params: '/:action?/:id?/:field?',
   steps: {
     '/landing-page': {
       fields: [
@@ -67,6 +69,34 @@ module.exports = {
     '/country-select': {
       behaviours: CountrySelect,
       fields: ['countrySelect'],
+      next: '/has-other-name'
+    },
+    '/has-other-name': {
+      fields: ['hasOtherName'],
+      forks: [{
+        target: '/name-details',
+        condition: {
+          field: 'hasOtherName',
+          value: 'yes'
+        }
+       }],
+       next: '/text-input-area'
+    },
+    '/other-name': {
+      fields: ['otherFirstName', 'otherSurname'],
+      next: '/name-details',
+      continueOnEdit: true
+    },
+    '/name-details': {
+      template: 'summary-name-list',
+      behaviours: Aggregate,
+      aggregateTo: 'otherNames',
+      aggregateFrom: [
+        'otherFirstName',
+        'otherSurname',
+      ],
+      titleField: 'otherFirstName',
+      addStep: 'other-name',
       next: '/text-input-area'
     },
     '/text-input-area': {
