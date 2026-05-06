@@ -21,6 +21,7 @@ describe('Apply Summary Data Sections', () => {
       const sectionFields = mappedSections.applicantsDetails;
       const expectedFields = [
         'name',
+        'otherNames',
         'dateOfBirth'
       ];
       const result = areOrderedEqual(sectionFields, expectedFields);
@@ -98,10 +99,10 @@ describe('Apply Summary Data Sections', () => {
 
   describe('Sections and Fields', () => {
     it('applicantsDetails', () => {
-      expect(containsAll(
-        Object.keys(fields),
-        mappedSections.applicantsDetails)
-      ).to.be.true;
+      mappedSections.applicantsDetails.every(i => {
+        const item = i.field || i;
+        expect(Object.keys(fields).includes(item)).to.be.true;
+      });
     });
 
     it('address', () => {

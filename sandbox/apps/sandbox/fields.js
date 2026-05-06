@@ -87,6 +87,18 @@ module.exports = {
     },
     validate: ['required']
   },
+  hasOtherName: {
+    mixin: 'radioGroup',
+    isPageHeading: 'true',
+    validate: ['required'],
+    options: ['yes', 'no']
+  },
+  otherFirstName: {
+    validate: ['required']
+  },
+  otherSurname: {
+    validate: ['required']
+  },
   complaintDetails: {
     mixin: 'textarea',
     // we want to ignore default formatters as we want

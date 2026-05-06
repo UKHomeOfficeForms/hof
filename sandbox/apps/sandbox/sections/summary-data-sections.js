@@ -7,6 +7,11 @@ module.exports = {
   applicantsDetails: [
     'name',
     {
+      step: '/name-details',
+      field: 'otherNames',
+      dependsOn: 'hasOtherName'
+    },
+    {
       field: 'dateOfBirth',
       parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
     }

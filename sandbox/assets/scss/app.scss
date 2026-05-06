@@ -23,6 +23,7 @@
 .autocomplete__input {
   background-color: transparent;
   position: relative;
+  @extend .govuk-input;
 }
 
 .autocomplete__hint {
@@ -95,7 +96,7 @@
 
 .autocomplete__menu--inline {
   position: relative;
-  @extend .govuk-list
+  @extend .govuk-list;
 }
 
 .autocomplete__option {
@@ -155,4 +156,7 @@
     font-size: 19px;
     line-height: 1.31579;
   }
+}
+.summary-list-key-not-bold{
+  font-weight: 400;
 }

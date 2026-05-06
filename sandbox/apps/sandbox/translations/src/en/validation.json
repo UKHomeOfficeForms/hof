@@ -40,6 +40,15 @@
     "required": "Enter an international phone number",
     "internationalPhoneNumber": "Enter a valid international phone number"
   },
+  "hasOtherName": {
+    "required": "Select an option below and press continue"
+  },
+  "otherFirstName":{
+    "default": "Enter your other first name"
+  },
+  "otherSurname":{
+    "default": "Enter your other surname"
+  },
   "complaintDetails": {
     "default": "Enter details about why you are making a complaint",
     "maxlength": "Keep to the {{maxlength}} character limit"

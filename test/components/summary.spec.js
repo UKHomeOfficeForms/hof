@@ -78,7 +78,7 @@ describe('summary behaviour', () => {
         ],
         'other-names': [
           {
-            step: '/other-names',
+            step: '/name-details',
             field: 'otherNames',
             dependsOn: 'hasOtherNames',
             addElementSeparators: true
@@ -90,8 +90,8 @@ describe('summary behaviour', () => {
           { fields: ['brpNumber', 'dateOfBirth'] },
         '/has-other-names':
           { fields: ['hasOtherNames'] },
-        '/other-names':
-          { fields: ['otherNames'] },
+        '/name-details':
+          { fields: ['otherNames', 'otherFirstName', 'otherSurname'] },
         '/range-addresses':
           { fields: ['locationAddresses'] }
       }
@@ -105,8 +105,16 @@ describe('summary behaviour', () => {
     // other names values
     req.sessionModel.set('otherNames', {
       aggregatedValues: [
-        { itemTitle: 'Jane', fields: [{ field: 'firstName', value: 'Jane' }, { field: 'surname', value: 'Smith' }] },
-        { itemTitle: 'Steve', fields: [{ field: 'firstName', value: 'Steve' }, { field: 'surname', value: 'Adams' }] }
+        { itemTitle: 'Jane',
+          fields: [
+            { field: 'otherFirstName', value: 'Jane' },
+            { field: 'otherSurname', value: 'Smith' }
+          ]},
+        { itemTitle: 'Steve',
+          fields: [
+            { field: 'otherFirstName', value: 'Steve' },
+            { field: 'otherSurname', value: 'Adams' }
+          ]}
       ]
     });
     // location addresses Values
@@ -159,14 +167,14 @@ describe('summary behaviour', () => {
         {
           fields: [
             {
-              changeLinkDescription: 'A first name'
+              changeLinkDescription: 'Your other first name'
             }
           ]
         },
         {
           fields: [
             {
-              changeLinkDescription: 'A surname'
+              changeLinkDescription: 'Your other surname'
             }
           ]
         }
@@ -200,19 +208,19 @@ describe('summary behaviour', () => {
           section: 'Does the applicant have other names?',
           fields: [
             {
-              label: 'First name',
+              label: 'Your other first name',
               value: 'Jane',
-              changeLink: 'test/other-names/edit/0/firstName?returnToSummary=true'
+              changeLink: 'test/name-details/edit/0/otherFirstName?returnToSummary=true'
             },
             {
-              label: 'Surname',
+              label: 'Other surname',
               value: 'Smith',
-              changeLink: 'test/other-names/edit/0/surname?returnToSummary=true'
+              changeLink: 'test/name-details/edit/0/otherSurname?returnToSummary=true'
             },
             {
-              label: 'First name',
+              label: 'Your other first name',
               value: 'Steve',
-              changeLink: 'test/other-names/edit/1/firstName?returnToSummary=true'
+              changeLink: 'test/name-details/edit/1/otherFirstName?returnToSummary=true'
             }
           ]
         }]
@@ -254,7 +262,7 @@ describe('summary behaviour', () => {
                 itemTitle: 'John',
                 fields: [
                   {
-                    field: 'otherName',
+                    field: 'otherFirstName',
                     value: 'John'
                   }
                 ],
@@ -264,7 +272,7 @@ describe('summary behaviour', () => {
                 itemTitle: 'Jane',
                 fields: [
                   {
-                    field: 'otherName',
+                    field: 'otherFirstName',
                     value: 'Jane'
                   }
                 ],
@@ -272,26 +280,26 @@ describe('summary behaviour', () => {
               }
             ]
           },
-          step: '/other-names',
+          step: '/name-details',
           field: 'otherNames'
         };
 
       behaviour.expandAggregatedFields(inputObj, req)
         .should.be.eql([
           {
-            changeLinkDescription: 'Your other name',
-            label: 'Other name',
+            changeLinkDescription: 'Your other first name',
+            label: 'Your other first name',
             value: 'John',
-            changeLink: 'test/other-names/edit/0/otherName?returnToSummary=true',
-            field: 'otherName',
+            changeLink: 'test/name-details/edit/0/otherFirstName?returnToSummary=true',
+            field: 'otherFirstName',
             index: 0
           },
           {
-            changeLinkDescription: 'Your other name',
-            label: 'Other name',
+            changeLinkDescription: 'Your other first name',
+            label: 'Your other first name',
             value: 'Jane',
-            changeLink: 'test/other-names/edit/1/otherName?returnToSummary=true',
-            field: 'otherName',
+            changeLink: 'test/name-details/edit/1/otherFirstName?returnToSummary=true',
+            field: 'otherFirstName',
             index: 1
           }
         ]);
@@ -370,20 +378,20 @@ describe('summary behaviour', () => {
     it('should return the correct result for aggregated fields', () => {
       behaviour.getFieldData('otherNames', req).should.eql(
         {
-          changeLinkDescription: 'Your other names',
+          changeLinkDescription: 'Is known by other names',
           field: 'otherNames',
           label: 'Other names',
-          step: '/other-names',
+          step: '/name-details',
           value: {
             aggregatedValues: [
               {
                 fields: [
                   {
-                    field: 'firstName',
+                    field: 'otherFirstName',
                     value: 'Jane'
                   },
                   {
-                    field: 'surname',
+                    field: 'otherSurname',
                     value: 'Smith'
                   }
                 ],
@@ -392,11 +400,11 @@ describe('summary behaviour', () => {
               {
                 fields: [
                   {
-                    field: 'firstName',
+                    field: 'otherFirstName',
                     value: 'Steve'
                   },
                   {
-                    field: 'surname',
+                    field: 'otherSurname',
                     value: 'Adams'
                   }
                 ],
@@ -408,7 +416,6 @@ describe('summary behaviour', () => {
       );
     });
   });
-
   describe('#validate', () => {
     let rateLimiterStub;
     let yieldStub;
