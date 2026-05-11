@@ -1,11 +1,11 @@
-{{$journeyHeader}}
-  {{> partials-validation-summary}}
-{{/journeyHeader}}
+{% block journeyHeader %}
+  {% include "partials/validation-summary.html" %}
+{% endblock %}
 
-{{$validationSummary}}
-  {{> partials-validation-summary}}
-{{/validationSummary}}
+{% block validationSummary %}
+  {% include "partials/validation-summary.html" %}
+{% endblock %}
 
-{{$propositionHeader}}
-  {{> partials-navigation}}
-{{/propositionHeader}}
+{% block propositionHeader %}
+  {% include "partials/navigation.html" %}
+{% endblock %}
