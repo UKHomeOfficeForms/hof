@@ -14,7 +14,7 @@ This allows you to specify fields to loop over and add as objects to a parent ar
   continueOnEdit: true
 },
 '/add-another-address-with-list': {
-  template: 'add-another-address-loop.html',
+  template: 'add-another-address-loop.njk',
   behaviours: CombineAndLoopFields({
     groupName: 'all-storage-addresses',
     fieldsToGroup: [

@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
+{% extends "layout.njk" %}
 
-{% from "partials/bullet-list.html" import bulletList %}
+{% from "partials/bullet-list.njk" import bulletList %}
 
 {% block propositionHeader %}{% endblock %}
 
@@ -9,7 +9,7 @@
 
   {% if data_link %}
     {% set ctx = data_link %}
-    {% include "partials/external-link.html" %}
+    {% include "partials/external-link.njk" %}
   {% endif %}
 
   <p class="govuk-body">{{ used_for }}</p>

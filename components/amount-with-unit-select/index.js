@@ -4,7 +4,7 @@ const hooks = require('./hooks');
 const path = require('path');
 const getFields = require('./fields');
 
-const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.html');
+const TEMPLATE = path.resolve(__dirname, './templates/amount-with-unit-select.njk');
 
 module.exports = (key, opts) => {
   if (!key) {

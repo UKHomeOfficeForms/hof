@@ -19,7 +19,7 @@
 
 {% block head %}
   {{ super() }}
-  {% include "partials/head.html" %}
+  {% include "partials/head.njk" %}
 {% endblock %}
 
 {% block pageTitle %}
@@ -39,7 +39,7 @@
 
 {% block bodyStart %}
   {% block cookieBanner %}
-   {% include "partials/cookie-banner.html" %}
+   {% include "partials/cookie-banner.njk" %}
   {% endblock %}
 {% endblock %}
 
@@ -76,7 +76,7 @@
 
 {% block beforeContent %}
   {% block containerStart %}
-    {% include "partials/back.html" %}
+    {% include "partials/back.njk" %}
   {% endblock %}
 {% endblock %}
 
@@ -129,5 +129,5 @@
     }());
   </script>
     {% block scripts %}{% endblock %}
-    {% include "partials/gatag.html" %}
+    {% include "partials/gatag.njk" %}
 {% endblock %}

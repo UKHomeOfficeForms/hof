@@ -19,7 +19,7 @@ const defaults = {
   sessionTimeoutWarningContent: false,
   exitFormContent: false,
   saveExitFormContent: false,
-  viewEngine: 'html',
+  viewEngine: 'njk',
   protocol: process.env.PROTOCOL || 'http',
   noCache: process.env.NO_CACHE || false,
   host: process.env.HOST || '0.0.0.0',

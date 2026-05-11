@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout.njk" %}
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block propositionHeader %}
-  {% include "partials/navigation.html" %}
+  {% include "partials/navigation.njk" %}
 {% endblock %}
  
 {% block content %}

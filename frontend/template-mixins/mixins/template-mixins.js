@@ -27,7 +27,7 @@ const PARTIALS = [
 // It should be given:
 // - options:
 //   - viewDirectory: the folder in which templates are found in.
-//   - viewEngine: the type of view, defaults to 'html'.
+//   - viewEngine: the type of view, defaults to 'njk'.
 //   - sharedTranslationsKey: used to find translations relatively within
 //     the translations.json. Useful for field and button labels.
 module.exports = function (options) {
@@ -99,7 +99,7 @@ module.exports = function (options) {
 
     // helper: resolve a template file path by trying express View, configured viewsDirectory and app roots
     function resolveTemplateFile(name) {
-      const viewExt = '.' + (options.viewEngine || 'html');
+      const viewExt = '.' + (options.viewEngine || 'njk');
       const engines = {};
       engines[viewExt] = {};
       const view = new View(name, {
@@ -176,7 +176,7 @@ module.exports = function (options) {
         return name;
       }
 
-      const viewExt = '.' + (options.viewEngine || 'html');
+      const viewExt = '.' + (options.viewEngine || 'njk');
       const candidates = [];
       candidates.push(path.resolve(name));
       candidates.push(path.resolve(name + viewExt));
@@ -723,7 +723,7 @@ module.exports = function (options) {
           );
           const ctx = Object.assign({}, res.locals, rendered);
           // try to render by template name first so relative imports/includes resolve via loader roots
-          const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.html';
+          const viewExt = (options && options.viewEngine) ? '.' + options.viewEngine : '.njk';
           const templateName = mixin.path + viewExt;
           try {
             return new nunjucks.runtime.SafeString(

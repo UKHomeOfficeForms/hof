@@ -10,7 +10,7 @@ const Emailer = require('./emailer');
 module.exports = class EmailService {
   constructor(opts) {
     const options = opts || {};
-    this.layout = options.layout === undefined ? path.resolve(__dirname, './views/layout.html') : options.layout;
+    this.layout = options.layout === undefined ? path.resolve(__dirname, './views/layout.njk') : options.layout;
     this.emailer = new Emailer(options);
   }
 

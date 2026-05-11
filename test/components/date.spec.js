@@ -176,7 +176,7 @@ describe('Date Component', () => {
 
       it('calls res.render with template & key.', () => {
         date.hooks['pre-render'](req, res, next);
-        const pathName = path.resolve(__dirname, '../../components/date/templates/date.html');
+        const pathName = path.resolve(__dirname, '../../components/date/templates/date.njk');
         expect(res.render).to.have.been.calledWith(pathName, sinon.match({key: 'date-field'}));
       });
 

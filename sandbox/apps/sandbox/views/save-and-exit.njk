@@ -1,11 +1,11 @@
-{% extends "layout.html" %}
+{% extends "layout.njk" %}
 
 {% block journeyHeader %}
   {{ t('journey.header') }}
 {% endblock %}
 
 {% block propositionHeader %}
-  {% include "partials/navigation.html" %}
+  {% include "partials/navigation.njk" %}
 {% endblock %}
 
 {% block mainContent %}

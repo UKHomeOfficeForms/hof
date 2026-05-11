@@ -87,7 +87,7 @@ module.exports = config => {
         apiError: null
       });
       if (step.template) {
-        req.form.options.template = path.resolve(__dirname, `./templates/${step.template}.html`);
+        req.form.options.template = path.resolve(__dirname, `./templates/${step.template}.njk`);
       }
       super.configure(req, res, callback);
     }
