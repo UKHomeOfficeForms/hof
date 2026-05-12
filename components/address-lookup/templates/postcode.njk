@@ -1,0 +1,8 @@
+{% extends "partials/page.njk" %}
+ {% block pageContent %}
+    {% for field in fields %}
+      {{ renderField(field) }}
+    {% endfor %}
+    <p class="govuk-body"><a class="govuk-link" href="{{ qs('step=manual') }}">{{ enterManually }}</a></p>
+    {{ inputSubmit("find-address") }}
+{% endblock %}
