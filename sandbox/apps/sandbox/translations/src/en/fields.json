@@ -108,6 +108,15 @@
   "otherSurname": {
     "label": "Other surname"
   },
+  "uk-address-postcode": {
+    "label": "Postcode"
+  },
+  "uk-address-select": {
+    "label": "Select the address"
+  },
+  "uk-address": {
+    "label": "Address"
+  },
   "appealStages": {
     "label": "Appeal stage",
     "hint": "Choose an appeal stage from the drop down menu",

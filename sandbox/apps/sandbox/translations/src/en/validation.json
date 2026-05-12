@@ -49,6 +49,16 @@
   "otherSurname":{
     "default": "Enter your other surname"
   },
+  "uk-address-postcode": {
+    "required": "Enter a postcode",
+    "postcode": "Enter a real postcode"
+  },
+  "uk-address-select": {
+    "required": "Select an address from the list"
+  },
+  "uk-address": {
+    "required": "Enter your address"
+  },
   "complaintDetails": {
     "default": "Enter details about why you are making a complaint",
     "maxlength": "Keep to the {{maxlength}} character limit"

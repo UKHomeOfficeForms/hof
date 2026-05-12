@@ -1,22 +1,21 @@
-{{<partials-page}}
-  {{$page-content}}
-    {{#postcode}}
+{% extends "partials/page.html" %}
+  {% block pageContent %}
+    {% if postcode %}
       <p>
-        <label>{{postcodeEntered}}</label>
-        <strong><span class="postcode">{{postcode}}</span></strong>
-        <strong><span class="link"><a class="change-postcode" href="{{#qs}}step=postcode{{/qs}}">{{editLink}}</a></span></strong>
+        <label>{{ postcodeEntered }}</label>
+        <strong><span class="postcode">{{ postcode }}</span></strong>
+        <strong><span class="link"><a class="change-postcode" href="{{ qs('step=postcode') }}">{{ editLink }}</a></span></strong>
       </p>
-    {{/postcode}}
-    {{#postcodeError}}
+    {% endif %}
+    {% if postcodeError %}
       <div class="alert-info">
         <span class="info-message">
-          {{postcodeError}}
+          {{ postcodeError }}
         </span>
       </div>
-    {{/postcodeError}}
-    {{#fields}}
-      {{#renderField}}{{/renderField}}
-    {{/fields}}
-    {{#input-submit}}continue{{/input-submit}}
-  {{/page-content}}
-{{/partials-page}}
+    {% endif %}
+    {% for field in fields %}
+      {{ renderField(field) | safe }}
+    {% endfor %}
+    {{ inputSubmit("continue") }}
+  {% endblock %}

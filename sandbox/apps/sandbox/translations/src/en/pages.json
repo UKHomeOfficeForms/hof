@@ -22,6 +22,15 @@
   "other-name": {
     "header": "Other names"
   },
+  "address-lookup": {
+    "edit": "Change",
+    "cantfind": "I can't find the address in the list",
+    "postcode-entered": "Postcode you entered: ",
+    "postcode-api": {
+      "not-found": "Sorry - we couldn't find any addresses for that postcode, enter your address manually",
+      "cant-connect": "Sorry - we couldn't connect to the postcode lookup service at this time, enter your address manually"
+    }
+  },
   "name-details":{
     "header": "Other names summary"
   },
@@ -31,6 +40,9 @@
       "applicantsDetails": {
         "header": "Applicant's details"
       },
+      "addressLookup": {
+      "header": "Address lookup"
+    },
       "address": {
         "header": "Address"
       },

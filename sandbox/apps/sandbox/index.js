@@ -5,11 +5,27 @@ const CountrySelect = require('./behaviours/country-select')
 const SummaryPageBehaviour = require('../../../').components.summary;
 const InternationalPhoneNumber = require('./behaviours/international-number');
 const Aggregate = require('./behaviours/aggregator');
+const AddressLookup = require('../../../').components.addressLookup;
 
 module.exports = {
   name: 'sandbox',
   params: '/:action?/:id?/:field?',
   steps: {
+    '/address-lookup': {
+  behaviours: AddressLookup({
+    addressKey: 'uk-address',
+    required: true,
+    apiSettings: {
+      // optional override; omit to use defaults.js values
+      // hostname: 'https://postcodeinfo.service.justice.gov.uk'
+    },
+    validate: {
+      allowedCountries: ['England', 'Wales', 'Scotland']
+    }
+  }),
+  next: '/landing-page'
+},
+
     '/landing-page': {
       fields: [
         'landing-page-radio'

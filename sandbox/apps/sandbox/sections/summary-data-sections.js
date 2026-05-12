@@ -22,6 +22,9 @@ module.exports = {
     'townOrCity',
     'postcode'
   ],
+  addressLookup: [
+    'uk-address'
+  ],
   income: [
     'incomeTypes'
   ],

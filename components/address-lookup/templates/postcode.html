@@ -1,9 +1,9 @@
-{{<partials-page}}
-  {{$page-content}}
-    {{#fields}}
-      {{#renderField}}{{/renderField}}
-    {{/fields}}
-    <p><span class="link"><a href="{{#qs}}step=manual{{/qs}}">{{enterManually}}</a></span></p>
-    {{#input-submit}}find-address{{/input-submit}}
-  {{/page-content}}
-{{/partials-page}}
+{% extends "partials/page.html" %}
+ {% block pageContent %}
+    {% for field in fields %}
+      {{ renderField(field) | safe }}
+    {% endfor %}
+    <p><span class="link"><a href="{{ qs('step=manual') }}">{{ enterManually }}</a></span></p>
+    {{ inputSubmit("find-address") }}
+{% endblock %}
+
