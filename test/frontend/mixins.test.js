@@ -287,7 +287,7 @@ describe('Template Mixins', () => {
       it('adds a `labelClassName` when set in field options', () => {
         res.locals.options.fields = {
           'field-name': {
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           }
         };
         middleware(req, res, next);
@@ -295,7 +295,7 @@ describe('Template Mixins', () => {
         expect(renderSpy).toHaveBeenCalledWith(
           expect.any(String),
           expect.objectContaining({
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           })
         );
       });
@@ -330,7 +330,7 @@ describe('Template Mixins', () => {
       it('overrides `formGroupClassName` when set in field options', () => {
         res.locals.options.fields = {
           'field-name': {
-            formGroupClassName: 'visuallyhidden'
+            formGroupClassName: 'govuk-visually-hidden'
           }
         };
         middleware(req, res, next);
@@ -338,7 +338,7 @@ describe('Template Mixins', () => {
         expect(renderSpy).toHaveBeenCalledWith(
           expect.any(String),
           expect.objectContaining({
-            formGroupClassName: 'visuallyhidden'
+            formGroupClassName: 'govuk-visually-hidden'
           })
         );
       });
@@ -380,11 +380,11 @@ describe('Template Mixins', () => {
         );
       });
 
-      it('allows configuration of a non-required input with a visuallyhidden label', () => {
+      it('allows configuration of a non-required input with a govuk-visually-hidden label', () => {
         res.locals.options.fields = {
           'field-name': {
             required: false,
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           }
         };
         middleware(req, res, next);
@@ -393,7 +393,7 @@ describe('Template Mixins', () => {
           expect.any(String),
           expect.objectContaining({
             required: false,
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           })
         );
       });
@@ -1117,7 +1117,7 @@ describe('Template Mixins', () => {
       it('adds `labelClassName` to existing default classes when set in field options', () => {
         res.locals.options.fields = {
           'field-name': {
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           }
         };
         middleware(req, res, next);
@@ -1125,7 +1125,7 @@ describe('Template Mixins', () => {
         expect(renderSpy).toHaveBeenCalledWith(
           expect.any(String),
           expect.objectContaining({
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           }));
       });
 
@@ -1668,7 +1668,7 @@ describe('Template Mixins', () => {
       it('adds `labelClassName` to the default class when set in field options', () => {
         res.locals.options.fields = {
           'field-name': {
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           }
         };
         middleware(req, res, next);
@@ -1676,7 +1676,7 @@ describe('Template Mixins', () => {
         expect(renderSpy).toHaveBeenCalledWith(
           expect.any(String),
           expect.objectContaining({
-            labelClassName: 'visuallyhidden'
+            labelClassName: 'govuk-visually-hidden'
           }));
       });
 
