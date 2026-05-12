@@ -1364,17 +1364,25 @@ The following transport options are available:
 
 #### `ses`
 
-[nodemailer-ses-transport](https://github.com/andris9/nodemailer-ses-transport)
+[nodemailer SES transport](https://nodemailer.com/transports/ses)
 
 ##### Options
 
 - `accessKeyId` <String>: AWS accessKeyId. Required.
-- `secretAccessKey` <String>: AWS accessKeyId. Required.
+- `secretAccessKey` <String>: AWS secret access key. Required.
 - `sessionToken` <String>
 - `region` <String>. Defaults to 'eu-west-1'.
-- `httpOptions` <String>
-- `rateLimit` <String>
-- `maxConnections` <String>
+- `httpOptions` <Object>: Optional top-level overrides passed to the AWS SDK v3 SES client.
+
+Requires `@aws-sdk/client-sesv2`.
+
+`rateLimit` and `maxConnections` are legacy options from `nodemailer-ses-transport` and are no longer used.
+
+##### Migration note (from `nodemailer-ses-transport`)
+
+- No config key changes are required for existing HOF `ses` transport users (`accessKeyId`, `secretAccessKey`, `sessionToken`, and `region` are still supported).
+- If you used `rateLimit` or `maxConnections`, move that control to your application layer (for example, queueing/rate-limiting before calling `send`).
+- `httpOptions` is treated as an optional object of top-level AWS SDK v3 SES client overrides.
 
 #### `debug`
 

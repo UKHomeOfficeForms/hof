@@ -1,29 +1,47 @@
 'use strict';
 
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 
 describe('transports/ses', () => {
-  let nodemailerSesTransport;
+  let SESv2Client;
+  let SendEmailCommand;
+  let sesClient;
   let sesTransport;
 
   beforeEach(() => {
-    nodemailerSesTransport = sinon.stub();
+    sesClient = { name: 'ses-client' };
+    SESv2Client = sinon.stub().returns(sesClient);
+    SendEmailCommand = function MockSendEmailCommand() {};
 
     sesTransport = proxyquire('../../../../components/emailer/transports/ses', {
-      'nodemailer-ses-transport': nodemailerSesTransport
+      '@aws-sdk/client-sesv2': {
+        SESv2Client,
+        SendEmailCommand
+      }
     });
   });
 
   it('returns an instance of ses transport', () => {
-    const transport = { transport: 'ses' };
-    nodemailerSesTransport.returns(transport);
     const options = {
       accessKeyId: 'foo',
       secretAccessKey: 'bar'
     };
+
     const result = sesTransport(options);
-    nodemailerSesTransport.should.have.been.calledWith(sinon.match(options));
-    result.should.equal(result);
+
+    SESv2Client.should.have.been.calledWith(sinon.match({
+      region: 'eu-west-1',
+      credentials: {
+        accessKeyId: 'foo',
+        secretAccessKey: 'bar'
+      }
+    }));
+    result.should.deep.equal({
+      SES: {
+        sesClient,
+        SendEmailCommand
+      }
+    });
   });
 
   it('throws if either accessKeyId or secretAccessKey are not passed', () => {
@@ -38,8 +56,10 @@ describe('transports/ses', () => {
       accessKeyId: 'foo',
       secretAccessKey: 'bar'
     };
+
     sesTransport(options);
-    nodemailerSesTransport.should.have.been.calledWith(sinon.match({
+
+    SESv2Client.should.have.been.calledWith(sinon.match({
       region: 'eu-west-1'
     }));
   });
@@ -50,8 +70,10 @@ describe('transports/ses', () => {
       secretAccessKey: 'bar',
       region: 'us-east-1'
     };
+
     sesTransport(options);
-    nodemailerSesTransport.should.have.been.calledWith(sinon.match({
+
+    SESv2Client.should.have.been.calledWith(sinon.match({
       region: 'us-east-1'
     }));
   });
@@ -62,9 +84,15 @@ describe('transports/ses', () => {
       secretAccessKey: 'bar',
       sessionToken: 'abc123'
     };
+
     sesTransport(options);
-    nodemailerSesTransport.should.have.been.calledWith(sinon.match({
-      sessionToken: 'abc123'
+
+    SESv2Client.should.have.been.calledWith(sinon.match({
+      credentials: {
+        accessKeyId: 'foo',
+        secretAccessKey: 'bar',
+        sessionToken: 'abc123'
+      }
     }));
   });
 
@@ -74,33 +102,26 @@ describe('transports/ses', () => {
       secretAccessKey: 'bar',
       httpOptions: { http: 'options' }
     };
+
     sesTransport(options);
-    nodemailerSesTransport.should.have.been.calledWith(sinon.match({
-      httpOptions: { http: 'options' }
+
+    SESv2Client.should.have.been.calledWith(sinon.match({
+      http: 'options'
     }));
   });
 
-  it('sets rateLimit option if it is defined', () => {
+  it('ignores legacy rateLimit and maxConnections options', () => {
     const options = {
       accessKeyId: 'foo',
       secretAccessKey: 'bar',
-      rateLimit: 0
+      rateLimit: 10,
+      maxConnections: 0
     };
-    sesTransport(options);
-    nodemailerSesTransport.should.have.been.calledWith(sinon.match({
-      rateLimit: 0
-    }));
-  });
 
-  it('sets maxConnections option if it is defined', () => {
-    const options = {
-      accessKeyId: 'foo',
-      secretAccessKey: 'bar',
-      maxConnections: 0
-    };
     sesTransport(options);
-    nodemailerSesTransport.should.have.been.calledWith(sinon.match({
-      maxConnections: 0
-    }));
+
+    const clientOptions = SESv2Client.firstCall.args[0];
+    should.equal(clientOptions.rateLimit, undefined);
+    should.equal(clientOptions.maxConnections, undefined);
   });
 });
