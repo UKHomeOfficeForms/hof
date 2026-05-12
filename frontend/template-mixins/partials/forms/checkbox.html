@@ -13,7 +13,7 @@
       <label for="{{ key }}"
         class="{% if className %}{{ className }} {% endif %}{% if invalid %}invalid-input{% endif %}">
         {{ label | safe }}
-        {% if error %}<span class="visuallyhidden">{{ error.message }}</span>{% endif %}
+        {% if error %}<span class="govuk-visually-hidden">{{ error.message }}</span>{% endif %}
       </label>
       {% if hint %}
       <div id="{{ key }}-hint" class="govuk-hint govuk-checkboxes__hint">

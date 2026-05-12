@@ -32,7 +32,7 @@ module.exports = {
   },
   street: {
     validate: ['notUrl', { type: 'maxlength', arguments: 50 }],
-    labelClassName: 'visuallyhidden'
+    labelClassName: 'govuk-visually-hidden'
   },
   townOrCity: {
     validate: ['required', 'notUrl',
@@ -47,7 +47,7 @@ module.exports = {
   incomeTypes: {
     isPageHeading: 'true',
     mixin: 'checkboxGroup',
-    labelClassName: 'visuallyhidden',
+    labelClassName: 'govuk-visually-hidden',
     validate: ['required'],
     options: [
       'salary',
@@ -75,7 +75,7 @@ module.exports = {
   },
   'int-phone-number': {
     validate: ['required'],
-    labelClassName: 'visuallyhidden'
+    labelClassName: 'govuk-visually-hidden'
   },
   countrySelect: {
     mixin: 'select',
@@ -83,7 +83,7 @@ module.exports = {
     className: ['typeahead'],
     options:[''].concat(require('homeoffice-countries').allCountries),
     legend: {
-      className: 'visuallyhidden'
+      className: 'govuk-visually-hidden'
     },
     validate: ['required']
   },

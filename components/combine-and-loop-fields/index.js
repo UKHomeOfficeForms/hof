@@ -86,7 +86,7 @@ module.exports = config => {
           'yes', 'no'
         ],
         legend: {
-          className: 'visuallyhidden'
+          className: 'govuk-visually-hidden'
         }
       }, req.form.options.fieldSettings);
 
