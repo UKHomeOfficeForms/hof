@@ -10,7 +10,9 @@ var skipToMain = require('./skip-to-main');
 var cookie = require('./govuk-cookies');
 var cookieSettings = require('./cookieSettings');
 var sessionDialog = require('./session-timeout-dialog');
+var formFocus = require('./form-focus');
 
+helpers.documentReady(formFocus);
 helpers.documentReady(cookieSettings.initialiseCookieBanner);
 helpers.documentReady(cookieSettings.initialiseCookiePage);
 helpers.documentReady(cookieSettings.onLoad);
