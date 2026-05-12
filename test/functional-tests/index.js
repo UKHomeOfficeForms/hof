@@ -239,7 +239,7 @@ describe('tests', () => {
         await testUtils.fillInputAndSubmit(browser, 'input', 'CR0 2EU');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.assertSearchParamEquals(browser, 'step', 'lookup');
-        await testUtils.click(browser, '#step a');
+        await testUtils.click(browser, 'a.govuk-back-link');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
 
@@ -250,10 +250,10 @@ describe('tests', () => {
         await testUtils.fillInputAndSubmit(browser, 'input', 'CR0 2EU');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.assertSearchParamEquals(browser, 'step', 'lookup');
-        await testUtils.click(browser, '.link a.cant-find');
+        await testUtils.click(browser, 'a.govuk-link.cant-find');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.assertSearchParamEquals(browser, 'step', 'manual');
-        await testUtils.click(browser, '#step a');
+        await testUtils.click(browser, 'a.govuk-back-link');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
 
@@ -261,10 +261,10 @@ describe('tests', () => {
         await testUtils.navigateAndAssert(browser, '/address-backlink-one', '/address-backlink-one');
         await browser.submitForm('form');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
-        await testUtils.click(browser, '.link a');
+        await testUtils.click(browser, 'a.govuk-link');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.assertSearchParamEquals(browser, 'step', 'manual');
-        await testUtils.click(browser, '#step a');
+        await testUtils.click(browser, 'a.govuk-back-link');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
 
@@ -275,7 +275,7 @@ describe('tests', () => {
         await testUtils.fillInputAndSubmit(browser, 'input', 'BN25 1XY');
         await testUtils.retrieveURLAndAssert(browser, '/address-backlink-two');
         await testUtils.assertSearchParamEquals(browser, 'step', 'address');
-        await testUtils.click(browser, '#step a');
+        await testUtils.click(browser, 'a.govuk-back-link');
         await testUtils.assertUrlEquals(browser, `http://localhost:${port}/address-backlink-two`, 'one');
       });
     });

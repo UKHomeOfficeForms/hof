@@ -1,0 +1,22 @@
+{% extends "partials/page.njk" %}
+  {% block pageContent %}
+    {% if postcode %}
+      <p class="govuk-body">{{ postcodeEntered }} 
+       <strong class="govuk-!-font-weight-bold"><span class="postcode">{{ postcode }}</span></strong>
+       <strong class="govuk-!-font-weight-bold"><a class="govuk-link change-postcode" href="{{ qs('step=postcode') }}">{{ editLink }}</a></strong>
+      </p>
+    {% endif %}
+    {% if postcodeError %}
+      <div class="alert-info">
+        <p class="govuk-body">
+          <span class="info-message">
+          {{ postcodeError }}
+          </span>
+        </p>
+      </div>
+    {% endif %}
+    {% for field in fields %}
+      {{ renderField(field) }}
+    {% endfor %}
+    {{ inputSubmit("continue") }}
+  {% endblock %}

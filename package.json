@@ -61,8 +61,6 @@
     "glob": "^7.2.3",
     "govuk-frontend": "~6.1",
     "helmet": "^3.23.3",
-    "hogan-express-strict": "^0.5.4",
-    "hogan.js": "^3.0.2",
     "homeoffice-countries": "^0.2.0",
     "i18n-future": "^2.0.1",
     "i18n-lookup": "^0.1.0",
