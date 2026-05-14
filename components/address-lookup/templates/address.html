@@ -1,17 +1,19 @@
 {% extends "partials/page.html" %}
   {% block pageContent %}
     {% if postcode %}
-      <p>
-        <label>{{ postcodeEntered }}</label>
-        <strong><span class="postcode">{{ postcode }}</span></strong>
-        <strong><span class="link"><a class="change-postcode" href="{{ qs('step=postcode') }}">{{ editLink }}</a></span></strong>
+      <p class="govuk-body">
+        <label class="govuk-label">{{ postcodeEntered }} a </label>
+        <span class="govuk-!-font-weight-bold postcode">{{ postcode }}</span>
+        <span class="link"><a class="govuk-link change-postcode" href="{{ qs('step=postcode') }}">{{ editLink }}</a></strong>
       </p>
     {% endif %}
     {% if postcodeError %}
       <div class="alert-info">
+        <p class="govuk-body">
         <span class="info-message">
           {{ postcodeError }}
         </span>
+        </p>
       </div>
     {% endif %}
     {% for field in fields %}

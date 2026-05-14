@@ -1,13 +1,13 @@
 {% extends "partials/page.html" %}
   {% block pageContent %}
-      <p>
-      <label>{{ postcodeEntered }}</label>
-      <strong><span class="postcode">{{ postcode }}</span></strong>
-      <strong><span class="link"><a class="change-postcode" href="{{ qs('step=postcode') }}">{{ editLink }}</a></span></strong>
+      <p class="govuk-body">
+      <label class="govuk-label">{{ postcodeEntered }} b</label>
+      <span class="govuk-!-font-weight-bold postcode">{{ postcode }}</span>
+      <span class="link"><a class="govuk-linkchange-postcode" href="{{ qs('step=postcode') }}">{{ editLink }}</a></span>
     </p>
     {% for field in fields %}
       {{ renderField(field) | safe }}
     {% endfor %}
-    <p><span class="link"><a class="cant-find" href="{{ qs('step=manual') }}">{{ cantFind }}</a></span></p>
+    <p class="govuk-body"><span class="link"><a class=" govuk-link cant-find" href="{{ qs('step=manual') }}">{{ cantFind }}</a></span></p>
     {{ inputSubmit("continue") }}
   {% endblock %}

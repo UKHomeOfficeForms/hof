@@ -5,9 +5,8 @@ const path = require('path');
 const querystring = require('querystring');
 const _ = require('lodash');
 
+const DefaultModel = require('./default-model');
 const defaults = require('./defaults');
-
-const POSTCODES_IO_URL = 'https://api.postcodes.io/postcodes';
 
 const conditionalTranslate = (key, t) => {
   let result = t(key);
@@ -64,31 +63,6 @@ const getConfig = key => ({
   }
 });
 
-async function fetchPostcodeResult(postcode) {
-  const encodedPostcode = encodeURIComponent((postcode || '').trim());
-  const response = await fetch(`${POSTCODES_IO_URL}/${encodedPostcode}`);
-
-  if (!response.ok) {
-    const err = new Error('Postcode lookup failed');
-    err.status = response.status;
-    throw err;
-  }
-
-  const payload = await response.json();
-  return payload.result;
-}
-
-function mapResultToAddress(result) {
-  const city = result.region || result.admin_district || result.parish;
-  const lines = [city, result.country, result.postcode].filter(Boolean);
-
-  return {
-    city,
-    country: result.country,
-    formatted_address: lines.join('\n')
-  };
-}
-
 module.exports = config => {
   const addressKey = config.addressKey;
   const required = config.required;
@@ -96,8 +70,13 @@ module.exports = config => {
     throw new Error('addressKey must be provided');
   }
 
+  const Model = config.Model || DefaultModel;
+  const apiSettings = config.apiSettings || {};
+  const validate = config.validate;
+
   return superclass => class extends superclass {
     configure(req, res, callback) {
+      this.model = new Model(_.merge({}, apiSettings, { validate }));
       req.query.step = req.query.step || 'postcode';
       const subSteps = getConfig(addressKey);
       const step = subSteps[req.query.step];
@@ -183,19 +162,20 @@ module.exports = config => {
       });
     }
 
+    process(req, res, callback) {
+      if (req.query.step === 'postcode') {
+        const postcode = req.form.values[`${addressKey}-postcode`];
+        this.model.set({ postcode });
+      }
+      super.process(req, res, callback);
+    }
+
     // eslint-disable-next-line consistent-return
     lookupPostcode(req, res, callback) {
-      const postcode = req.form.values[`${addressKey}-postcode`];
-
-      fetchPostcodeResult(postcode)
-        .then(result => {
-          if (result) {
-            const address = mapResultToAddress(result);
-            req.sessionModel.set(`${addressKey}-addresses`, [address]);
-            req.sessionModel.set(`${addressKey}-postcodeApiMeta`, {
-              city: address.city,
-              country: address.country
-            });
+      this.model.fetch()
+        .then(data => {
+          if (data.length) {
+            req.sessionModel.set(`${addressKey}-addresses`, data);
           } else {
             req.sessionModel.unset(`${addressKey}-addresses`);
             req.sessionModel.set(`${addressKey}-postcodeApiMeta`, {
@@ -209,7 +189,8 @@ module.exports = config => {
             messageKey: 'cant-connect'
           });
           // eslint-disable-next-line no-console
-          console.error('Postcode lookup error: ', `Code: ${err.status || 'unknown'}`);
+          console.error('Postcode lookup error: ',
+            `Code: ${err.status}; Detail: ${err.detail}`);
           return callback();
         });
     }
@@ -230,8 +211,33 @@ module.exports = config => {
       return super.saveValues(req, res, callback);
     }
 
+    // eslint-disable-next-line consistent-return
     validate(req, res, callback) {
-      return super.validate(req, res, callback);
+      if (req.query.step === 'postcode' && this.model.get('validate')) {
+        const key = `${addressKey}-postcode`;
+        const postcode = encodeURIComponent(req.form.values[key]);
+        this.model.validate(postcode)
+          .then(() => super.validate(req, res, callback))
+          .catch(e => {
+            let err = e;
+            // this code is set by the model for a validation error
+            if (err.status === 418) {
+              err = {
+                [key]: new this.ValidationError(key, {
+                  key,
+                  type: err.type,
+                  redirect: undefined
+                }, req, res)
+              };
+            // cannot connect to validation service, skip api validation
+            } else if (err.status === 403 || err.status === 404) {
+              return super.validate(req, res, callback);
+            }
+            return callback(err);
+          });
+      } else {
+        return super.validate(req, res, callback);
+      }
     }
 
     getBackLink(req, res) {
