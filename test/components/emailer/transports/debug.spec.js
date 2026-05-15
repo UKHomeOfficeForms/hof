@@ -37,7 +37,7 @@ describe('transports/debug', () => {
     debugTransport({ log: false }).send(message, sandbox(err => {
       expect(err).not.to.exist;
       fs.writeFile.should.have.been.calledOnce;
-      fs.writeFile.should.have.been.calledWith(sinon.match('abc123.html'), '<h1>Hello world</h1>');
+      fs.writeFile.should.have.been.calledWith(sinon.match('abc123.njk'), '<h1>Hello world</h1>');
     }, done));
   });
 
@@ -54,14 +54,14 @@ describe('transports/debug', () => {
     debugTransport({ log: false }).send(message, sandbox(err => {
       expect(err).not.to.exist;
       fs.writeFile.should.have.been.calledOnce;
-      fs.writeFile.should.have.been.calledWith(sinon.match('abc123.html'), expectation);
+      fs.writeFile.should.have.been.calledWith(sinon.match('abc123.njk'), expectation);
     }, done));
   });
 
   it('opens the file in a browser if open flag is set', done => {
     debugTransport({ open: true, log: false }).send(message, sandbox(err => {
       expect(err).not.to.exist;
-      cp.execSync.should.have.been.calledWith(sinon.match(/^open (.+)abc123.html$/));
+      cp.execSync.should.have.been.calledWith(sinon.match(/^open (.+)abc123.njk$/));
     }, done));
   });
 });

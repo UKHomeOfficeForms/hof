@@ -1,18 +1,18 @@
-{% extends "layout.html" %} 
+{% extends "layout.njk" %} 
 
-{% from "partials/form.html" import form %}
+{% from "partials/form.njk" import form %}
 
 {% block validationSummary %}
-  {% include "partials/validation-summary.html" %}
+  {% include "partials/validation-summary.njk" %}
 {% endblock %}
 
 {% block propositionHeader %}
-  {% include "partials/navigation.html" %}
+  {% include "partials/navigation.njk" %}
 {% endblock %}
 
 {% block mainContent %}
   {% call form(encoding=encoding, intro=intro, csrf_token) %}
     {% block pageContent %}{% endblock %}
   {% endcall %}
-  {% include "partials/session-timeout-warning.html" %}
+  {% include "partials/session-timeout-warning.njk" %}
 {% endblock %}

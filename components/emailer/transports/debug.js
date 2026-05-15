@@ -46,7 +46,7 @@ module.exports = options => {
         }
         const dir = options.dir || path.join(process.cwd(), '.emails');
         const messageId = options.filename || mail.message.messageId().split('@')[0].slice(1);
-        const outfile = path.resolve(dir, `${messageId}.html`);
+        const outfile = path.resolve(dir, `${messageId}.njk`);
 
         return mkdir(dir)
           .then(() => cidToBase64(html, mail.data.attachments))

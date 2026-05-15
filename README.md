@@ -1148,7 +1148,7 @@ fields.json
 
 HOF behaviour for showing summary pages
 
-The behaviour mixin will create a set of "locals" data which is compatible with [the `confirm` view from `hof-template-partials`](https://github.com/UKHomeOfficeForms/hof-template-partials/blob/master/views/confirm.html).
+The behaviour mixin will create a set of "locals" data which is compatible with [the `confirm` view from `hof-template-partials`](https://github.com/UKHomeOfficeForms/hof-template-partials/blob/master/views/confirm.njk).
 
 ### Usage
 
@@ -1268,7 +1268,7 @@ const emailer = EmailBehaviour({
     accessKeyId: '...',
     secretAccessKey: '...'
   },
-  template: path.resolve(__dirname, './views/emails/confirm.html'),
+  template: path.resolve(__dirname, './views/emails/confirm.njk'),
   from: 'confirmation@homeoffice.gov.uk',
   recipient: 'customer-email',
   subject: 'Application Successful'
@@ -1439,7 +1439,7 @@ By default, the framework uses the standard content provided by HOF. If you wish
   "saveExitFormContent": true // allows you to customise the content on the save-and-exit page
 ```
 
-To override the default session-timeout page completely, the path to the session-timeout.html should be set in the views property in the hof.settings.json file e.g. 
+To override the default session-timeout page completely, the path to the session-timeout.njk should be set in the views property in the hof.settings.json file e.g. 
 ```json
  "behaviours": [
     "hof/components/session-timeout-warning"
@@ -1905,7 +1905,7 @@ Use default summary and text from details object set in `pages.${route}.details`
 ```
 In your view file:
 ```
-{% from "partials/details-summary.html" import detailsComponent %}
+{% from "partials/details-summary.njk" import detailsComponent %}
 
 {# Default details component #}
 {{ detailsComponent(details) }}
@@ -1939,7 +1939,7 @@ To add a warning to a page, use text from `warning` set in `pages.${route}.warni
 ```
 In your view file:
 ```
-{% from "partials/warn.html" import warningComponent %}
+{% from "partials/warn.njk" import warningComponent %}
 
 {{ warningComponent(warning) }}
 ```
@@ -1999,7 +1999,7 @@ Set your table object in the relevant `.json` file:
 ```
 In your view file:
 ```
-{% from "partials/table.html" import tableComponent %}
+{% from "partials/table.njk" import tableComponent %}
 
 {{ tableComponent(test_table) }}
 
@@ -2018,7 +2018,7 @@ Other variations of a table component in HOF include:
 
     In your view file:
     ```
-    {% from "partials/table.html" import tableComponent %}
+    {% from "partials/table.njk" import tableComponent %}
 
     {{ tableComponent(test_table, gaContainerId, containerIdPurpose, containerIdExpires) }}
     ```
@@ -2031,7 +2031,7 @@ Other variations of a table component in HOF include:
 
     In your view file:
     ```
-    {% from "partials/table.html" import tableComponent %}
+    {% from "partials/table.njk" import tableComponent %}
 
     {{ cookiesTableComponent(test_table, cookieName) }}
     ```
@@ -2065,7 +2065,7 @@ Set your list items array in the relevant `.json` file:
 ```
 In your view file:
 ```
-{% from "partials/bullet-list.html" import bulletList %}
+{% from "partials/bullet-list.njk" import bulletList %}
 
 {{ bulletList(bullet_list_example.items) }}
 ```
@@ -2182,8 +2182,8 @@ There is an example implementation in [demo application](https://github.com/UKHo
 
 There is a sandbox application for developers to test components directly in hof called [sandbox](/sandbox)
 
-## Journey Header Navigation.html page
+## Journey Header Navigation.njk page
 
-- Navigation.html contains a journeyHeaderURL, which is set in the controller. 
+- Navigation.njk contains a journeyHeaderURL, which is set in the controller. 
 - getJourneyHeaderURL within the controller translates an empty baseURL to '/'.
 - The above helps fix broken journey header URLs in the GRO and UKVIC services which both have a baseURL's set to '/'.
