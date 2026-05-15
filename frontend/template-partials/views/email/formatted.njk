@@ -1,11 +1,11 @@
-{% extends "email/layout.html" %}
+{% extends "email/layout.njk" %}
   {% block emailContent %}
     {% if data %}
-      {% include "email/section-row.html" %}
+      {% include "email/section-row.njk" %}
       {% for field in fields}
         {% if field.value %}
           {% set field = field %}
-          {% include "email/data-row.html" %}
+          {% include "email/data-row.njk" %}
         {% endif %}
       {% endfor %}
     {% endif %}

@@ -1,16 +1,16 @@
-{% extends "layout.html" %}
+{% extends "layout.njk" %}
 
-{% from "partials/table.html" import tableComponent %}
-{% from "partials/bullet-list.html" import bulletList %}
-{% from "partials/inset-text.html" import insetTextComponent %}
-{% from "partials/session-cookies-table.html" import cookiesTableComponent %}
-{% from "partials/analytics-table.html" import analyticsTableComponent %}
+{% from "partials/table.njk" import tableComponent %}
+{% from "partials/bullet-list.njk" import bulletList %}
+{% from "partials/inset-text.njk" import insetTextComponent %}
+{% from "partials/session-cookies-table.njk" import cookiesTableComponent %}
+{% from "partials/analytics-table.njk" import analyticsTableComponent %}
 
   {% block propositionHeader %}{% endblock %}
 
   {% block validationSummary %}
     {% if hasGoogleAnalytics %}
-      {% include "partials/cookie-notification.html" %}
+      {% include "partials/cookie-notification.njk" %}
     {% endif %}
   {% endblock %}
 
@@ -73,10 +73,10 @@
                 {% if indent_ga %}
                   {{ insetTextComponent(indent_ga.content) }}
                 {% endif %}
-                {% include "partials/cookie-settings-radio.html" %}
+                {% include "partials/cookie-settings-radio.njk" %}
               </fieldset>
             </div>
-            {% include "partials/cookie-settings-button.html" %}
+            {% include "partials/cookie-settings-button.njk" %}
           </form>
         </div>
       </div>

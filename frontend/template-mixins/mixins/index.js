@@ -21,7 +21,7 @@ module.exports = (options, deprecated) => {
   options.fields = options.fields || {};
 
   options.viewsDirectory = options.viewsDirectory || path.resolve(__dirname, '../');
-  options.viewEngine = options.viewEngine || 'html';
+  options.viewEngine = options.viewEngine || 'njk';
   options.sharedTranslationsKey = options.sharedTranslationsKey || '';
 
   if (options.sharedTranslationsKey && !options.sharedTranslationsKey.match(/\.$/)) {

@@ -36,7 +36,7 @@ constructor(options) {
   - CSP formatted object enables Content Security Policy middleware and extends default CSP directives with your own.
   - If `gaTagId` is set, the CSP directives are auto-amended to include www.google-analytics.com as a source for js and images.
 
-- `viewEngine`: Name of the express viewEngine. Defaults to 'html'.
+- `viewEngine`: Name of the express viewEngine. Defaults to 'njk'.
 - `start`: Start the server listening when the bootstrap function is called. Defaults to `true`.
 - `getCookies`: Load 'cookies' view at `GET /cookies`.
 - `getTerms`: Load 'terms' view at `GET /terms-and-conditions`.

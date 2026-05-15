@@ -18,12 +18,12 @@ const options = opts => Object.assign({
   notifyApiKey: '123456',
   recipient: 'test@example.com',
   subject: 'confirmation email',
-  template: '/path/to/to/my/email/template.html'
+  template: '/path/to/to/my/email/template.njk'
 }, opts);
 
 describe('Notify Behaviour', () => {
   beforeEach(() => {
-    sinon.stub(fs, 'readFile').withArgs('/path/to/to/my/email/template.html').yieldsAsync(null, 'hello {{name}}');
+    sinon.stub(fs, 'readFile').withArgs('/path/to/to/my/email/template.njk').yieldsAsync(null, 'hello {{name}}');
     sinon.stub(Notify.prototype, 'send').returns(Promise.resolve());
   });
 
@@ -215,7 +215,7 @@ describe('Notify Behaviour', () => {
 
     it('calls back with error if template cannot be loaded', done => {
       const err = new Error('readfile failed');
-      fs.readFile.withArgs('/path/to/to/my/email/template.html').yieldsAsync(err);
+      fs.readFile.withArgs('/path/to/to/my/email/template.njk').yieldsAsync(err);
       controller.successHandler(req, {}, sandbox(e => {
         expect(e).to.equal(err);
       }, done));

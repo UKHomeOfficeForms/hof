@@ -29,7 +29,7 @@ describe('ga-tag', () => {
     beforeEach(() => {
       bannerContainer = document.createElement('div');
       bannerContainer.id = 'global-cookie-message';
-      bannerContainer.innerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-banner.html'), 'utf8');
+      bannerContainer.innerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-banner.njk'), 'utf8');
       document.body.appendChild(bannerContainer);
     });
 
@@ -126,7 +126,7 @@ describe('ga-tag', () => {
 
       const radioButtons = document.createElement('div');
       jsEnabled.appendChild(radioButtons);
-      radioButtons.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-settings-radio.html'), 'utf8');
+      radioButtons.outerHTML = fs.readFileSync(path.join(__dirname, '../../../frontend/template-partials/views/partials/cookie-settings-radio.njk'), 'utf8');
 
       const submitButton = document.createElement('div');
       jsEnabled.appendChild(submitButton);

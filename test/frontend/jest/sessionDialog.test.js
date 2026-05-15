@@ -2,7 +2,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const sessionTimeoutWarningHtml = fs.readFileSync(path.resolve(__dirname, '../../../frontend/template-partials/views/partials/session-timeout-warning.html'), 'utf8');
+const sessionTimeoutWarningHtml = fs.readFileSync(path.resolve(__dirname, '../../../frontend/template-partials/views/partials/session-timeout-warning.njk'), 'utf8');
 
 jest.dontMock('fs');
 

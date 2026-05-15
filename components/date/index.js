@@ -4,7 +4,7 @@ const _ = require('lodash');
 const path = require('path');
 const getFields = require('./fields');
 
-const TEMPLATE = path.resolve(__dirname, './templates/date.html');
+const TEMPLATE = path.resolve(__dirname, './templates/date.njk');
 
 // utility function taking the req.body, fields and key,
 // returns a map of values in the format:
