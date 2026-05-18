@@ -1768,7 +1768,7 @@ renderField
 This mixin takes a `key=value` query string and returns a query string with the extra params appended. If the key is already present in the query string, the value passed to the mixin is used
 
 ```html
-<a href="{% qs %}key=value{% endif %}">Click to append query</a>
+<a href="{{ qs('key=value') }}">Click to append query</a>
 ```
 
 ### renderField

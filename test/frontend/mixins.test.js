@@ -34,9 +34,11 @@ describe('Template Mixins', () => {
       locals: {
         options: {
           fields: {}
-        }
+        },
+        nunjucksEnv
       }
     };
+    req.res = res;
 
     next = jest.fn();
 
