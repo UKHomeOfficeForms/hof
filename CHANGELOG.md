@@ -1,4 +1,4 @@
-## 2026-05-12, Version 23.0.9 (Stable), @gregwolversonHO
+## 2026-05-12, Version 23.1.0 (Stable), @gregwolversonHO
 
 ### Changed
 - Replaced nodemailer-ses-transport library with @aws-sdk/client-sesv2 to remove dependency on deprecated aws-sdk-v2 library
