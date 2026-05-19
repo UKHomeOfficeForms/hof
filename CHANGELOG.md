@@ -1,3 +1,16 @@
+## 2026-05-19, Version 24.0.0 (Stable), @gregwolversonHO
+
+⚠️ Major release which removes nodemailer dependency and email functionality
+
+### Changed
+- Improved timeout dialog refresh behavior:
+- Removed built-in email functionality from HOF, including the emailer component and transport implementations.
+- Removed `nodemailer` and related transport dependencies from HOF.
+
+### Breaking Changes
+- Services that previously relied on HOF email functionality must now implement and maintain their own email sending logic. 
+- Services should migrate to [Gov.uk Notify](https://www.notifications.service.gov.uk) to send notification emails
+
 ## 2026-04-16, Version 23.0.4 (Stable), @PaolaDMadd-Pro
 
 ### Fixed
