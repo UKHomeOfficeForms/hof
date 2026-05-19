@@ -1,6 +1,6 @@
 'use strict';
 
-const ses = require('nodemailer-ses-transport');
+const { SESv2Client, SendEmailCommand } = require('@aws-sdk/client-sesv2');
 
 module.exports = options => {
   if (!options.accessKeyId) {
@@ -10,27 +10,29 @@ module.exports = options => {
     throw new Error('Required option `secretAccessKey` not found.');
   }
 
-  const opts = {
+  const credentials = {
     accessKeyId: options.accessKeyId,
     secretAccessKey: options.secretAccessKey
   };
 
-  opts.region = options.region || 'eu-west-1';
-
   if (options.sessionToken) {
-    opts.sessionToken = options.sessionToken;
+    credentials.sessionToken = options.sessionToken;
   }
 
-  if (options.httpOptions) {
-    opts.httpOptions = options.httpOptions;
+  const clientOptions = {
+    region: options.region || 'eu-west-1',
+    credentials
+  };
+
+  // Legacy v2-style http options are accepted as top-level client overrides.
+  if (options.httpOptions && typeof options.httpOptions === 'object') {
+    Object.assign(clientOptions, options.httpOptions);
   }
 
-  if (options.rateLimit !== undefined) {
-    opts.rateLimit = options.rateLimit;
-  }
-
-  if (options.maxConnections !== undefined) {
-    opts.maxConnections = options.maxConnections;
-  }
-  return ses(opts);
+  return {
+    SES: {
+      sesClient: new SESv2Client(clientOptions),
+      SendEmailCommand
+    }
+  };
 };
