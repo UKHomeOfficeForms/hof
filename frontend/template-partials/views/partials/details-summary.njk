@@ -1,11 +1,11 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% macro detailsComponent(details, customSummary=null, customText=null) %}
-  {% set summaryText = customSummary or details.summary or '' %}
-  {% set text = customText or details.text or '' %}
+  {% set summaryHtml = customSummary or details.summary or '' %}
+  {% set html = customText or details.text or '' %}
 
   {{ govukDetails({
-    summaryText: summaryText,
-    text: text
+    summaryHtml: summaryHtml,
+    html: html
   }) }}
 {% endmacro %}
