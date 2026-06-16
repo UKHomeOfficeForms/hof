@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    versioning-strategy: increase
+    schedule:
+      interval: weekly
+      time: "06:00"
+      day: "monday"
+      timezone: "Europe/London"
+    target-branch: "master"    
+    labels:
+      - dependencies
+    commit-message:
+      prefix: deps
+    pull-request-branch-name:
+      separator: "-"
+    rebase-strategy: auto
+    groups:
+      patch-and-minor:
+        update-types:
+          - patch
+          - minor
