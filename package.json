@@ -97,7 +97,7 @@
   },
   "devDependencies": {
     "@cucumber/cucumber": "^7.3.2",
-    "@cucumber/pretty-formatter": "^1.0.1",
+    "@cucumber/pretty-formatter": "^4.0.0",
     "@types/jest": "^30.0.0",
     "@vitest/coverage-v8": "^4.0.8",
     "@xmldom/xmldom": "~0.8.11",
