@@ -4,6 +4,9 @@
 [![npm version](https://badge.fury.io/js/hof.svg)](https://badge.fury.io/js/hof)
 [![Known Vulnerabilities](https://snyk.io/test/npm/hof/badge.svg)](https://snyk.io/test/npm/hof)
 
+> **WARNING - Breaking change from v24.0.0:** HOF no longer includes built-in email functionality and no longer depends on `nodemailer`.
+> Services must provide and maintain their own email sending implementation using [GOV.UK Notify](https://www.notifications.service.gov.uk).
+
 HOF (Home Office Forms) is a framework designed to assist developers in creating form-based workflows in a rapid, repeatable and secure way. It aims to reduce simple applications as much as possible to being configuration-only.
 
 ## Server Settings
