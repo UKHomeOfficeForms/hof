@@ -1,9 +1,8 @@
-## 2026-05-19, Version 24.0.0 (Stable), @gregwolversonHO
+## 2026-06-17, Version 24.0.0 (Stable), @gregwolversonHO, @nzorba
 
 ⚠️ Major release which removes nodemailer dependency and email functionality
 
 ### Changed
-- Improved timeout dialog refresh behavior:
 - Removed built-in email functionality from HOF, including the emailer component and transport implementations.
 - Removed `nodemailer` and related transport dependencies from HOF.
 
