@@ -140,7 +140,7 @@
     "exit": "true"
   },
   "resolutions": {
-    "form-data": "^2.5.6",
+    "form-data": "^4.0.6",
     "js-yaml": "^4.2.0",
     "qs": "^6.14.1",
     "serialize-javascript": "^7.0.3",
