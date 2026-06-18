@@ -1,7 +1,7 @@
 {
   "name": "hof",
   "description": "A bootstrap for HOF projects",
-  "version": "24.0.0",
+  "version": "24.1.0",
   "license": "MIT",
   "main": "index.js",
   "author": "HomeOffice",
@@ -89,7 +89,7 @@
     "uglify-js": "^3.19.3",
     "underscore": "^1.13.7",
     "urijs": "^1.19.11",
-    "uuid": "^11.1.1",    
+    "uuid": "^11.1.1",
     "winston": "^3.18.3"
   },
   "devDependencies": {
