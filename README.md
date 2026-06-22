@@ -1911,8 +1911,8 @@ In your view file:
 {{ detailsComponent(details) }}
 
 {# Set Override arguments - optional #}
-{% set overrideSummary = t('pages.test-page.details.custom-summary') %} {# This can also be an ordinary string #}
-{% set overrideText = t('pages.test-page.details.custom-text') %} {# This can also be an ordinary string #}
+{% set overrideSummary = t('pages.test-page.details.custom-summary') %} {# This can also be an ordinary string or html #}
+{% set overrideText = t('pages.test-page.details.custom-text') %} {# This can also be an ordinary string or html #}
 
 {# Override just default summary #}
 {{ detailsComponent(details, overrideSummary) }}
