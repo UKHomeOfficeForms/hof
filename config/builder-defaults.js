@@ -15,7 +15,8 @@ module.exports = {
     sourceMaps: false
   },
   js: {
-    sourceMaps: false
+    sourceMaps: false,
+    outDir: 'public'
   },
   translate: {
     src: 'apps/**/translations/src',
