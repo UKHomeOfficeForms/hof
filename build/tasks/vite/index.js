@@ -22,8 +22,8 @@ module.exports = config => {
   return vite.build({
     configFile: viteConfig,
     build: {
-        outDir: publicDirectory
-      }
+      outDir: publicDirectory
+    }
   });
 };
 module.exports.task = 'vite';
