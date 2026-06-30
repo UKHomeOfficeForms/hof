@@ -100,7 +100,7 @@ const getContentSecurityPolicy = (config, res) => {
     manifestSrc: ["'self'"]
   };
 
-  if (config.gaTagId) {
+  if (config.gaTagId || config.ga4TagId) {
     directives.styleSrc = directives.styleSrc.concat(gaDirectives.styleSrc);
     directives.scriptSrc = directives.scriptSrc.concat(gaDirectives.scriptSrc);
     directives.fontSrc = directives.fontSrc.concat(gaDirectives.fontSrc);

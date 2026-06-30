@@ -501,6 +501,32 @@ describe('hof server', () => {
           csp['connect-src'].should.include('https://region1.analytics.google.com');
         });
     });
+
+    it('CSP extends with google directives if ga4TagId set', () => {
+      const bs = bootstrap({
+        csp: {},
+        fields: 'fields',
+        gaTagId: '',
+        ga4TagId: 'G-1234ABC',
+        routes: [{
+          views: `${root}/apps/app_1/views`,
+          steps: {
+            '/one': {}
+          }
+        }]
+      });
+      return request(bs.server)
+        .get('/one')
+        .set('Cookie', ['myCookie=1234'])
+        .expect(res => {
+          const csp = getHeaders(res, 'content-security-policy');
+          csp['img-src'].should.include('www.google-analytics.com');
+          csp['script-src'].should.include('www.google-analytics.com');
+          csp['connect-src'].should.include('https://region1.google-analytics.com');
+          csp['connect-src'].should.include('https://region1.analytics.google.com');
+        });
+    });
+
     it('CSP keeps default directives and excludes google directives if gaTagId not set', () => {
       const bs = bootstrap({
         csp: {},
