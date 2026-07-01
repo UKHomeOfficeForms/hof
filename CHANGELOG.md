@@ -1,3 +1,8 @@
+## 2026-07-01 Verseion 24.4.0 (Stable), @meganjohnHO
+
+### Changed
+- Google Analytics domains now added into CSP on presence of `ga4TagId` or `gaTagId` (previously only on `gaTagId`).
+
 ## 2026-06-30, Version 24.3.1 (Stable), @gregwolversonHO
 
 ### Security
