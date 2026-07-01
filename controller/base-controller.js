@@ -234,11 +234,10 @@ module.exports = class BaseController extends EventEmitter {
     visited.add(value);
 
     for (const key in value) {
-      if (Object.prototype.hasOwnProperty.call(value, key)) {
-        if (this.hasInheritedEnumerableKey(value[key], visited)) {
-          return true;
-        }
-      } else {
+      if (
+        !Object.prototype.hasOwnProperty.call(value, key) ||
+        this.hasInheritedEnumerableKey(value[key], visited)
+      ) {
         return true;
       }
     }
