@@ -11,6 +11,7 @@ const ErrorClass = require('./validation-error');
 const Helpers = require('../utilities').helpers;
 const sanitisationBlacklistArray = require('../config/sanitisation-rules');
 
+// Always-on protection against prototype pollution payloads before request data is used by form configuration.
 const defaultPrototypePollutionProtection = {
   enabled: true,
   blockedKeys: ['__proto__', 'prototype', 'constructor'],
