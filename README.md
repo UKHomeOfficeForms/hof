@@ -139,6 +139,16 @@ Each task (except Vite) has a common configuration format with the following opt
 - `match` - defines the pattern for files to watch to trigger a rebuild of this task
 - `restart` - defines if this task should result in a server restart
 
+For Vite, the following configuration can be specified:
+- `outDir` - Specifies the output directory (relative to project root). Only changes only the build output location, does not change runtime static mounting.
+Example from hof settings:
+```js
+  "js": {
+    "outDir": './dist/public'
+  }
+```
+
+
 Additionally the server instance created by `watch` can be configured by setting `server` config. Available options are:
 
 - `cmd` - defines the command used to start the server
