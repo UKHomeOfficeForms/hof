@@ -11,6 +11,16 @@ const ErrorClass = require('./validation-error');
 const Helpers = require('../utilities').helpers;
 const sanitisationBlacklistArray = require('../config/sanitisation-rules');
 
+const defaultPrototypePollutionProtection = {
+  enabled: true,
+  blockedKeys: ['__proto__', 'prototype', 'constructor'],
+  blockedValues: {
+    body: ['__proto__'],
+    query: ['__proto__'],
+    params: ['__proto__', 'prototype', 'constructor']
+  }
+};
+
 module.exports = class BaseController extends EventEmitter {
   constructor(options) {
     if (!options) {
@@ -206,10 +216,124 @@ module.exports = class BaseController extends EventEmitter {
     callback();
   }
 
+  getPrototypePollutionProtectionOptions() {
+    return _.cloneDeep(defaultPrototypePollutionProtection);
+  }
+
+  hasInheritedEnumerableKey(value, seen) {
+    if (!_.isObjectLike(value)) {
+      return false;
+    }
+
+    const visited = seen || new Set();
+    if (visited.has(value)) {
+      return false;
+    }
+
+    visited.add(value);
+
+    for (const key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        if (this.hasInheritedEnumerableKey(value[key], visited)) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  hasBlockedKeyOrValue(value, blockedKeys, blockedValues, seen) {
+    if (_.isString(value)) {
+      return blockedValues.has(value);
+    }
+
+    if (!_.isObjectLike(value)) {
+      return false;
+    }
+
+    const visited = seen || new Set();
+    if (visited.has(value)) {
+      return false;
+    }
+
+    visited.add(value);
+
+    const ownKeys = Object.keys(value);
+    for (const key of ownKeys) {
+      if (blockedKeys.has(key)) {
+        return true;
+      }
+
+      if (this.hasBlockedKeyOrValue(value[key], blockedKeys, blockedValues, visited)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  logPrototypePollutionBlocked(req, details) {
+    if (req && typeof req.log === 'function') {
+      req.log('warn', 'security.prototype_pollution.blocked', details);
+      return;
+    }
+
+    if (_.get(this, 'options.logger.warn') && typeof this.options.logger.warn === 'function') {
+      this.options.logger.warn('security.prototype_pollution.blocked', details);
+    }
+  }
+
+  checkPrototypePollution(req) {
+    const protection = this.getPrototypePollutionProtectionOptions();
+    const blockedKeys = new Set(protection.blockedKeys);
+    const sources = {
+      body: req.body,
+      query: req.query,
+      params: req.params
+    };
+
+    for (const sourceName of Object.keys(sources)) {
+      const source = sources[sourceName];
+      if (!source) {
+        continue;
+      }
+
+      if (this.hasInheritedEnumerableKey(source)) {
+        return {
+          reason: 'inherited_key',
+          source: sourceName
+        };
+      }
+
+      const blockedValues = new Set(_.get(protection, `blockedValues.${sourceName}`, []));
+      if (this.hasBlockedKeyOrValue(source, blockedKeys, blockedValues)) {
+        return {
+          reason: 'blocked_key_or_value',
+          source: sourceName
+        };
+      }
+    }
+
+    return null;
+  }
+
   _configure(req, res, callback) {
     req.form = req.form || {};
     req.form.options = _.cloneDeep(this.options);
-    this.configure(req, res, callback);
+
+    const pollutionDetection = this.checkPrototypePollution(req);
+    if (pollutionDetection) {
+      this.logPrototypePollutionBlocked(req, pollutionDetection);
+      const err = new Error('Prototype pollution detected');
+      err.statusCode = 400;
+      err.code = 'PROTOTYPE_POLLUTION_DETECTED';
+      return callback(err);
+    }
+
+    return this.configure(req, res, callback);
   }
 
   configure(req, res, callback) {
