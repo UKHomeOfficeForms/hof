@@ -281,8 +281,18 @@ module.exports = class BaseController extends EventEmitter {
       return;
     }
 
-    if (_.get(this, 'options.logger.warn') && typeof this.options.logger.warn === 'function') {
-      this.options.logger.warn('security.prototype_pollution.blocked', details);
+    const logger = _.get(this, 'options.logger');
+    if (!logger) {
+      return;
+    }
+
+    if (typeof logger.warn === 'function') {
+      logger.warn('security.prototype_pollution.blocked', details);
+      return;
+    }
+
+    if (typeof logger.log === 'function') {
+      logger.log('warn', 'security.prototype_pollution.blocked', details);
     }
   }
 
@@ -301,17 +311,24 @@ module.exports = class BaseController extends EventEmitter {
         continue;
       }
 
-      if (this.hasInheritedEnumerableKey(source)) {
-        return {
-          reason: 'inherited_key',
-          source: sourceName
-        };
-      }
+      try {
+        if (this.hasInheritedEnumerableKey(source)) {
+          return {
+            reason: 'inherited_key',
+            source: sourceName
+          };
+        }
 
-      const blockedValues = new Set(_.get(protection, `blockedValues.${sourceName}`, []));
-      if (this.hasBlockedKeyOrValue(source, blockedKeys, blockedValues)) {
+        const blockedValues = new Set(_.get(protection, `blockedValues.${sourceName}`, []));
+        if (this.hasBlockedKeyOrValue(source, blockedKeys, blockedValues)) {
+          return {
+            reason: 'blocked_key_or_value',
+            source: sourceName
+          };
+        }
+      } catch (err) {
         return {
-          reason: 'blocked_key_or_value',
+          reason: 'scan_error',
           source: sourceName
         };
       }
@@ -328,7 +345,7 @@ module.exports = class BaseController extends EventEmitter {
     if (pollutionDetection) {
       this.logPrototypePollutionBlocked(req, pollutionDetection);
       const err = new Error('Prototype pollution detected');
-      err.statusCode = 400;
+      err.statusCode = 403;
       err.code = 'PROTOTYPE_POLLUTION_DETECTED';
       return callback(err);
     }

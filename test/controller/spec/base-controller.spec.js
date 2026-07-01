@@ -222,7 +222,7 @@ describe('Form Controller', () => {
         const err = cb.firstCall.args[0];
         err.should.be.instanceOf(Error);
         err.code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
-        err.statusCode.should.equal(400);
+        err.statusCode.should.equal(403);
         form.configure.should.not.have.been.called;
       });
 
@@ -313,6 +313,49 @@ describe('Form Controller', () => {
         fn.should.not.throw();
         cb.should.have.been.calledOnce;
         cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+      });
+
+      it('logs blocked payloads using logger.log fallback when req.log is unavailable', () => {
+        const logger = {
+          log: sinon.spy()
+        };
+
+        req.log = undefined;
+        form.options.logger = logger;
+        req.body = {
+          prototype: 'attack'
+        };
+
+        form._configure(req, res, cb);
+
+        logger.log.should.have.been.calledOnce;
+        logger.log.should.have.been.calledWith(
+          'warn',
+          'security.prototype_pollution.blocked',
+          sinon.match({
+            reason: 'blocked_key_or_value',
+            source: 'body'
+          })
+        );
+      });
+
+      it('fails closed when scan throws and does not crash request handling', () => {
+        req.body = {
+          nested: {
+            value: 'safe'
+          }
+        };
+
+        const blockedStub = sinon.stub(form, 'hasBlockedKeyOrValue')
+          .throws(new RangeError('Maximum call stack size exceeded'));
+
+        const fn = () => form._configure(req, res, cb);
+        fn.should.not.throw();
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+        form.configure.should.not.have.been.called;
+
+        blockedStub.restore();
       });
 
       it('cannot be disabled via controller options', () => {
