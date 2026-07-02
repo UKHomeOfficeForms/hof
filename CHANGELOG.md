@@ -1,4 +1,10 @@
-## 2026-07-01 Verseion 24.4.0 (Stable), @meganjohnHO
+## 2026-07-01, Version 24.4.0 (Stable), @vivekkumar-ho
+
+### Security
+- Added always-on prototype pollution protection to block dangerous keys and values in request body, query, and route params.
+- Prototype pollution attempts now return `400` with `PROTOTYPE_POLLUTION_DETECTED`.
+
+## 2026-07-01 Version 24.3.2 (Stable), @meganjohnHO
 
 ### Changed
 - Google Analytics domains now added into CSP on presence of `ga4TagId` or `gaTagId` (previously only on `gaTagId`).

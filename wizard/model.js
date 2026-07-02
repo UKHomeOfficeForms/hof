@@ -1,6 +1,7 @@
 'use strict';
 
 const Model = require('../model');
+const unsafeSessionModelKeys = new Set(['__proto__', 'prototype', 'constructor']);
 
 module.exports = class SessionModel extends Model {
   constructor(props, options) {
@@ -9,6 +10,10 @@ module.exports = class SessionModel extends Model {
 
     if (!key || typeof key !== 'string') {
       throw new Error('session-model - key must be defined');
+    }
+
+    if (unsafeSessionModelKeys.has(key)) {
+      throw new Error('session-model - key must not be __proto__, prototype, or constructor');
     }
 
     session[key] = session[key] || {};
