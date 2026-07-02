@@ -13,7 +13,6 @@ const sanitisationBlacklistArray = require('../config/sanitisation-rules');
 
 // Always-on protection against prototype pollution payloads before request data is used by form configuration.
 const defaultPrototypePollutionProtection = {
-  enabled: true,
   blockedKeys: ['__proto__', 'prototype', 'constructor'],
   blockedValues: {
     body: ['__proto__'],
@@ -319,7 +318,7 @@ module.exports = class BaseController extends EventEmitter {
           };
         }
 
-        const blockedValues = new Set(_.get(protection, `blockedValues.${sourceName}`, []));
+        const blockedValues = new Set(protection.blockedValues[sourceName] || []);
         if (this.hasBlockedKeyOrValue(source, blockedKeys, blockedValues)) {
           return {
             reason: 'blocked_key_or_value',
