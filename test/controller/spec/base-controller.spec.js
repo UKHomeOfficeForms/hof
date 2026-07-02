@@ -205,6 +205,171 @@ describe('Form Controller', () => {
       req.form.options.fields.field.should.equal('mutated');
       form.options.fields.field.should.equal('name');
     });
+
+    describe('prototype pollution protection', () => {
+      it('blocks nested blocked keys in request body', () => {
+        req.body = {
+          user: {
+            nested: {
+              constructor: 'malicious'
+            }
+          }
+        };
+
+        form._configure(req, res, cb);
+
+        cb.should.have.been.calledOnce;
+        const err = cb.firstCall.args[0];
+        err.should.be.instanceOf(Error);
+        err.code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+        err.statusCode.should.equal(403);
+        form.configure.should.not.have.been.called;
+      });
+
+      it('blocks `__proto__` values in request body and query', () => {
+        req.body = {
+          name: '__proto__'
+        };
+
+        form._configure(req, res, cb);
+
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+
+        cb.resetHistory();
+        form.configure.resetHistory();
+
+        req.body = {};
+        req.query = {
+          name: '__proto__'
+        };
+
+        form._configure(req, res, cb);
+
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+      });
+
+      it('blocks dangerous values in route params including `__proto__`', () => {
+        req.params = {
+          action: '__proto__'
+        };
+
+        form._configure(req, res, cb);
+
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+
+        cb.resetHistory();
+        form.configure.resetHistory();
+
+        req.params = {
+          action: 'constructor'
+        };
+
+        form._configure(req, res, cb);
+
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+      });
+
+      it('allows clean requests to pass through to controller configure', () => {
+        req.body = {
+          name: 'Jane Doe'
+        };
+        req.query = {
+          ref: 'safe'
+        };
+        req.params = {
+          action: 'change'
+        };
+
+        form._configure(req, res, cb);
+
+        form.configure.should.have.been.calledOnce.and.calledWith(req, res, cb);
+        cb.should.have.been.calledOnce;
+        expect(cb.firstCall.args[0]).to.be.undefined;
+      });
+
+      it('handles circular objects safely', () => {
+        const circular = {
+          safe: 'value'
+        };
+        circular.self = circular;
+        req.body = circular;
+
+        form._configure(req, res, cb);
+
+        form.configure.should.have.been.calledOnce.and.calledWith(req, res, cb);
+      });
+
+      it('blocks malicious payloads when request logger is unavailable', () => {
+        req.log = undefined;
+        req.body = {
+          prototype: 'attack'
+        };
+
+        const fn = () => form._configure(req, res, cb);
+        fn.should.not.throw();
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+      });
+
+      it('logs blocked payloads using logger.log fallback when req.log is unavailable', () => {
+        const logger = {
+          log: sinon.spy()
+        };
+
+        req.log = undefined;
+        form.options.logger = logger;
+        req.body = {
+          prototype: 'attack'
+        };
+
+        form._configure(req, res, cb);
+
+        logger.log.should.have.been.calledOnce;
+        logger.log.should.have.been.calledWith(
+          'warn',
+          'security.prototype_pollution.blocked',
+          sinon.match({
+            reason: 'blocked_key_or_value',
+            source: 'body'
+          })
+        );
+      });
+
+      it('fails closed when scan throws and does not crash request handling', () => {
+        req.body = {
+          nested: {
+            value: 'safe'
+          }
+        };
+
+        const blockedStub = sinon.stub(form, 'hasBlockedKeyOrValue')
+          .throws(new RangeError('Maximum call stack size exceeded'));
+
+        const fn = () => form._configure(req, res, cb);
+        fn.should.not.throw();
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+        form.configure.should.not.have.been.called;
+
+        blockedStub.restore();
+      });
+
+      it('cannot be disabled via controller options', () => {
+        form.options.prototypePollutionProtection = false;
+        req.params = {
+          action: '__proto__'
+        };
+
+        form._configure(req, res, cb);
+
+        cb.should.have.been.calledOnce;
+        cb.firstCall.args[0].code.should.equal('PROTOTYPE_POLLUTION_DETECTED');
+      });
+    });
   });
 
   describe('get', () => {
