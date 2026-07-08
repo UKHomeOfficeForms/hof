@@ -4,6 +4,65 @@
 - Added a reusable `selectionDrivenNavigation` component for HOF controllers so services can build selection-led journeys where users choose which items or sections to complete and HOF routes them through only those pages.
 - Added `wizard/util/selection-driven-navigation-resolver`, a declarative navigation resolver that supports ordered item journeys, conditional branches, symbolic targets such as `next-selected-item`, dynamic back links, and invalidation of skipped or deselected steps.
 
+## 2026-07-01, Version 24.4.0 (Stable), @vivekkumar-ho
+
+### Security
+- Added always-on prototype pollution protection to block dangerous keys and values in request body, query, and route params.
+- Prototype pollution attempts now return `403` with `PROTOTYPE_POLLUTION_DETECTED`.
+
+## 2026-07-01 Version 24.3.2 (Stable), @meganjohnHO
+
+### Changed
+- Google Analytics domains now added into CSP on presence of `ga4TagId` or `gaTagId` (previously only on `gaTagId`).
+
+## 2026-06-30, Version 24.3.1 (Stable), @gregwolversonHO
+
+### Security
+
+- Updated dependencies to resolve numerous critical, high and moderate vulnerabilities
+
+### Changed
+
+- Updated CHANGELOG to add entry for backdated changes
+
+## 2026-06-17, Version 24.0.0 (Stable), @gregwolversonHO, @nzorba
+
+⚠️ Major release which removes nodemailer dependency and email functionality
+
+### Changed
+- Removed built-in email functionality from HOF, including the emailer component and transport implementations.
+- Removed `nodemailer` and related transport dependencies from HOF.
+
+### Breaking Changes
+- Services that previously relied on HOF email functionality must now implement and maintain their own email sending logic. 
+- Services should migrate to [Gov.uk Notify](https://www.notifications.service.gov.uk) to send notification emails
+
+## 2026-05-12, Version 23.1.0 (Stable), @gregwolversonHO
+
+### Changed
+- Replaced nodemailer-ses-transport library with @aws-sdk/client-sesv2 to remove dependency on deprecated aws-sdk-v2 library
+- Replaced usage of nodemailer-ses-transport in the [emailer ses client](./components/emailer/transports/ses.js).
+
+## 2026-04-16, Version 23.0.4 (Stable), @PaolaDMadd-Pro
+
+### Fixed
+- Decoupled session timeout keep alive from analytics configuration.
+- Updated CSP defaults to always include `connect-src 'self'` so same-origin keep alive requests are allowed.
+- Updated GA CSP behavior to **extend** `connect-src` with analytics endpoints when `gaTagId` is set, rather than replacing defaults.
+
+### Changed
+- Improved timeout dialog refresh behavior:
+  * On keep alive success, `timeSessionRefreshed` is updated and timeout controller logic is restarted.
+  * On keep alive failure a console.error is triggered.
+
+### Tests
+- Added integration regression coverage for CSP:
+  * `gaTagId` set: GA and region analytics `connect-src` endpoints are present.
+  * `gaTagId` not set: default `connect-src 'self'` remains and GA region endpoints are absent.
+- Added frontend Jest coverage for timeout refresh behavior:
+  * Success path (`$.get().done`) updates refresh time and calls controller.
+
+
 ## 2026-03-18, Version 23.0.3 (Stable), @vinodhasamiyappan-ho
 
 ### Security

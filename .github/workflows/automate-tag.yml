@@ -31,8 +31,9 @@ jobs:
     runs-on: ubuntu-22.04
     if: |
       startsWith(github.ref, 'refs/heads/master') &&
-      !contains(github.event.head_commit.message, '[MAJOR]') &&
-      !contains(github.event.head_commit.message, '[MINOR]')
+      contains(github.event.head_commit.message, '[PATCH]') &&
+      !contains(github.event.head_commit.message, '[MINOR]') &&
+      !contains(github.event.head_commit.message, '[MAJOR]')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -49,8 +50,8 @@ jobs:
     runs-on: ubuntu-22.04
     if: |
       startsWith(github.ref, 'refs/heads/master') &&
-      !contains(github.event.head_commit.message, '[MAJOR]') &&
-      contains(github.event.head_commit.message, '[MINOR]')
+      contains(github.event.head_commit.message, '[MINOR]') &&
+      !contains(github.event.head_commit.message, '[MAJOR]')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -67,8 +68,7 @@ jobs:
     runs-on: ubuntu-22.04
     if: |
       startsWith(github.ref, 'refs/heads/master') &&
-      contains(github.event.head_commit.message, '[MAJOR]') &&
-      !contains(github.event.head_commit.message, '[MINOR]')
+      contains(github.event.head_commit.message, '[MAJOR]')
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

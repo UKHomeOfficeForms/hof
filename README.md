@@ -4,6 +4,9 @@
 [![npm version](https://badge.fury.io/js/hof.svg)](https://badge.fury.io/js/hof)
 [![Known Vulnerabilities](https://snyk.io/test/npm/hof/badge.svg)](https://snyk.io/test/npm/hof)
 
+> **WARNING - Breaking change from v24.0.0:** HOF no longer includes built-in email functionality and no longer depends on `nodemailer`.
+> Services must provide and maintain their own email sending implementation using [GOV.UK Notify](https://docs.notifications.service.gov.uk/node.html).
+
 HOF (Home Office Forms) is a framework designed to assist developers in creating form-based workflows in a rapid, repeatable and secure way. It aims to reduce simple applications as much as possible to being configuration-only.
 
 ## Server Settings
@@ -1567,163 +1570,14 @@ Translations for field labels are looked for in the following order:
 - `fields.${key}.label`
 - `fields.${key}.legend`
 
-## Emailer Component
-
-HOF behaviour to send emails
-
-### Usage
-
-```js
-const EmailBehaviour = require('hof').components.emailer;
-
-// configure email behaviour
-const emailer = EmailBehaviour({
-  transport: 'ses',
-  transportOptions: {
-    accessKeyId: '...',
-    secretAccessKey: '...'
-  },
-  template: path.resolve(__dirname, './views/emails/confirm.html'),
-  from: 'confirmation@homeoffice.gov.uk',
-  recipient: 'customer-email',
-  subject: 'Application Successful'
-});
-
-// in steps config
-steps: {
-  ...
-  '/confirm': {
-    behaviours: ['complete', emailer],
-    next: '/confirmation',
-    ...
-  },
-  ...
-}
-```
-
-### Options
-
-In addition to the options passed to `hof-emailer`, the following options can be used:
-
-- `recipient` - _Required_ - defines the address to which email will be sent. This can be set either as a key to retrieve an email address from the session, or explicitly to an email address.
-- `template` - _Required_ - defines the mustache template used to render the email content.
-- `subject` - defines the subject line of the email.
-- `parse` - parses the session model into an object used to populate the template.
-
-`recipient` and `subject` options can also be defined as functions, which will be passed a copy of the session model and a translation function as arguments, and should return a string value.
-
-```js
-// use a translated value for the email subject line
-const emailer = EmailBehaviour({
-  // ...
-  subject: (model, translate) => translate("email.success.subject"),
-});
-```
-
-## HOF Emailer
-
-An emailer service for HOF applications.
-
-### Installation
-
-```bash
-$ npm install hof-emailer --save
-```
-
-### Usage
-
-```js
-// first create an emailer instance
-const Emailer = require("hof").components.email.emailer;
-const emailer = new Emailer({
-  from: "sender@example.com",
-  transport: "smtp",
-  transportOptions: {
-    host: "my.smtp.host",
-    port: 25,
-  },
-});
-
-// then you can use your emailer to send emails
-const to = "recipient@example.com";
-const body = "This is the email body";
-const subject = "Important email!";
-emailer.send(to, body, subject).then(() => {
-  console.log(`Email sent to ${to}!`);
-});
-```
-
-### Options
-
-- `from`: <String>: Address to send emails from. Required.
-- `transport`: <String>: Select what mechanism to use to send emails. Defaults: 'smtp'.
-- `transportOptions`: <Object>: Set the options for the chosen transport, as defined below. Required.
-- `layout`: <String>: Optional path to use a custom layout for email content.
-
-### Transports
-
-The following transport options are available:
-
-#### `smtp`
-
-[nodemailer](https://github.com/nodemailer/nodemailer)
-
-##### Options
-
-- `host` <String>: Address of the mailserver. Required.
-- `port` <String|Number>: Port of the mailserver. Required.
-- `ignoreTLS` <Boolean>: Defaults to false.
-- `secure` <Boolean>: Defaults to true.
-- `auth.user` <String>: Mailserver authorisation username.
-- `auth.pass` <String>: Mailserver authorisation password.
-
-#### `ses`
-
-[nodemailer-ses-transport](https://github.com/andris9/nodemailer-ses-transport)
-
-##### Options
-
-- `accessKeyId` <String>: AWS accessKeyId. Required.
-- `secretAccessKey` <String>: AWS accessKeyId. Required.
-- `sessionToken` <String>
-- `region` <String>. Defaults to 'eu-west-1'.
-- `httpOptions` <String>
-- `rateLimit` <String>
-- `maxConnections` <String>
-
-#### `debug`
-
-A development option to write the html content of the email to a file for inspection.
-
-`transport: 'debug'`
-
-##### debug options
-
-- `dir` <String>: The location to save html to. Default: `./.emails`. This directory will be created if it does not exist.
-- `open` <Boolean>: If set to true, will automatically open the created html file in a browser.
-
-##### debug example
-
-```
-transport: 'debug'
-transportOptions: {
-  dir: './emails',
-  open: true
-}
-```
-
-#### `stub`
-
-Disables sending email. No options are required.
-
 ## Session Timeout Warning Component
 HOF component for customising session timeout related pages
 This feature allows you to customise the content related to the session timeout warning, including the messages displayed in the session timeout warning dialog and on the exit page after a user exits the form due to a session timeout.
 
 ### Usage
 
-By default, the session timeout is set to the redis session ttl. To bypass this and display the session timeout message before the redis session ttl the following evironment variables must be set:
-`CUSTOM_SESSION_EXPIRY` - e.g. `600`. Configure to expire before thte project's redis session ttl.
+By default, the session timeout is set to the redis session ttl. To bypass this and display the session timeout message before the redis session ttl the following environment variables must be set:
+`CUSTOM_SESSION_EXPIRY` - e.g. `600`. Configure to expire before the project's redis session ttl.
 `USE_CUSTOM_SESSION_TIMEOUT` -  `false` by default. When set to `true` the '/session-timeout' page can run before the session expires without triggering a `404` middleware error.
 
 To enable and customise the session timeout behaviour, you need to set the component and translations in your project's `hof.settings.json` file:
@@ -1752,13 +1606,29 @@ To override the default session-timeout page completely, the path to the session
     "hof/components/session-timeout-warning"
   ],
   "translations": "./apps/common/translations",
-   "views": ["./apps/common/views"], // allows you to overide the HOF default session-timeout page and use a custom one from the specified views
+   "views": ["./apps/common/views"], // allows you to override the HOF default session-timeout page and use a custom one from the specified views
    ...
 ```
 or in the project's `server.js` e.g.
 ```js
 settings.views = path.resolve(__dirname, './apps/common/views');
 ```
+
+
+### Session Timeout Keep-alive and CSP
+
+From version 23.0.4 , session timeout keep alive is now independent of analytics tags.
+
+- Default CSP always includes: `connect-src 'self'`
+- If `GA_TAG` (`gaTagId`) is configured:
+  - Google Analytics endpoints are added to `connect-src`.
+- If `GA_TAG` is not configured: Only default same-origin `connect-src` is used (no GA region endpoints).
+
+### Timeout Dialog Behavior
+When a user clicks **Stay on this page** in the timeout dialog:
+
+- If keep-alive succeeds:  session refresh timestamp is updated and the timeout countdown/controller is restarted.
+
 
 ### Customising content in `pages.json`
 Once the variables are set, you can customise the session timeout warning and exit messages in your project's pages.json:
