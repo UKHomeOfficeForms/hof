@@ -1,0 +1,48 @@
+name: Release Intent Preflight
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check-release-intent:
+    runs-on: ubuntu-22.04
+    permissions:
+      checks: write
+    steps:
+      - name: Check PR title for release keyword
+        id: keyword-check
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if echo "$TITLE" | grep -qiF '[MAJOR]'; then
+            echo "intent=MAJOR" >> "$GITHUB_OUTPUT"
+          elif echo "$TITLE" | grep -qiF '[MINOR]'; then
+            echo "intent=MINOR" >> "$GITHUB_OUTPUT"
+          elif echo "$TITLE" | grep -qiF '[PATCH]'; then
+            echo "intent=PATCH" >> "$GITHUB_OUTPUT"
+          else
+            echo "intent=NONE" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Check run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const intent = '${{ steps.keyword-check.outputs.intent }}';
+            const checks = {
+              MAJOR: { title: 'Release Detected: MAJOR (X.0.0)', summary: 'This PR will publish a **MAJOR** version on merge.' },
+              MINOR: { title: 'Release Detected: MINOR (0.X.0)', summary: 'This PR will publish a **MINOR** version on merge.' },
+              PATCH: { title: 'Release Detected: PATCH (0.0.X)', summary: 'This PR will publish a **PATCH** version on merge.' },
+              NONE:  { title: 'Silent Merge: no version will be published', summary: 'No release keyword found. Add `[PATCH]`, `[MINOR]`, or `[MAJOR]` to the PR title if a release is intended.' },
+            };
+
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'PR Release Intent',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'completed',
+              conclusion: 'neutral',
+              output: checks[intent],
+            });
