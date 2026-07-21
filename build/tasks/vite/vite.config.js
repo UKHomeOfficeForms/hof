@@ -7,7 +7,6 @@ import fs from 'fs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 
-const publicDirectory = resolve(process.cwd(), 'public');
 const entryFile = (() => {
   const src = resolve(process.cwd(), 'assets/js/index.js');
   if (fs.existsSync(src)) return src;
@@ -49,7 +48,6 @@ export default defineConfig({
   base: '/assets/',
   publicDir: 'static', // static files copied as-is
   build: {
-    outDir: publicDirectory,
     emptyOutDir: false,
     sourcemap: false,
     rollupOptions: {
