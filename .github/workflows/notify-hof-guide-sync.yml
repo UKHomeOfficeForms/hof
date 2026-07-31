@@ -100,22 +100,26 @@ jobs:
             }
           };
 
-          fetch(`https://api.github.com/repos/${guideOwner}/${guideName}/dispatches`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/vnd.github+json',
-              Authorization: `Bearer ${dispatchToken}`,
-              'X-GitHub-Api-Version': '2022-11-28',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-          }).then(async response => {
+          (async () => {
+            const response = await fetch(`https://api.github.com/repos/${guideOwner}/${guideName}/dispatches`, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/vnd.github+json',
+                Authorization: `Bearer ${dispatchToken}`,
+                'X-GitHub-Api-Version': '2022-11-28',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            });
+
             if (!response.ok) {
               throw new Error(`Dispatch failed (${response.status}): ${await response.text()}`);
             }
+
             console.log(`Dispatched hof-framework-changed to ${guideOwner}/${guideName}`);
-          }).catch(error => {
+          })().catch(error => {
             console.error(error.message);
             process.exit(1);
           });
+
           NODE
