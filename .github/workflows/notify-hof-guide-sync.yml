@@ -63,16 +63,16 @@ jobs:
           const fs = require('node:fs');
 
           const dispatchToken = process.env.DISPATCH_TOKEN;
-          const guideRepo = process.env.GUIDE_REPO || 'UKHomeOfficeForms/hof-guide-v2';
-          const [guideOwner, guideName] = guideRepo.split('/');
+          const guideRepo = (process.env.GUIDE_REPO || 'UKHomeOfficeForms/hof-guide-v2').trim();
+          const parts = guideRepo.split('/').filter(Boolean);
+          if (parts.length !== 2) {
+            throw new Error(`Invalid GUIDE_REPO value (expected "owner/name"): ${guideRepo}`);
+          }
+          const [guideOwner, guideName] = parts;
           const beforeSha = process.env.BEFORE_SHA;
           const afterSha = process.env.AFTER_SHA;
           const compareUrl = process.env.COMPARE_URL || '';
           const changelogOverride = process.env.CHANGELOG_NOTES_OVERRIDE || '';
-
-          if (!guideOwner || !guideName) {
-            throw new Error(`Invalid GUIDE_REPO value: ${guideRepo}`);
-          }
 
           const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
           const lines = changelog.split('\n');
