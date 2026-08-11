@@ -1,0 +1,125 @@
+name: Notify HOF Guide sync
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+    inputs:
+      before_sha:
+        description: Base commit SHA to compare from
+        required: true
+      after_sha:
+        description: Head commit SHA to compare to
+        required: true
+      changelog_notes:
+        description: Optional changelog notes override
+        required: false
+        default: ''
+      guide_repo:
+        description: Optional target guide repository (owner/name)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  notify-guide:
+    runs-on: ubuntu-22.04
+    if: github.repository == 'UKHomeOfficeForms/hof'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Create GitHub App token for guide repo dispatch
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.HOF_GUIDE_SYNC_APP_ID }}
+          private-key: ${{ secrets.HOF_GUIDE_SYNC_APP_PRIVATE_KEY }}
+          owner: ${{ vars.HOF_GUIDE_SYNC_APP_OWNER || 'UKHomeOfficeForms' }}
+          repositories: |
+            ${{ vars.HOF_GUIDE_REPO_NAME || 'hof-guide-v2' }}
+
+      - name: Dispatch framework change event to guide repository
+        env:
+          DISPATCH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GUIDE_REPO: ${{ inputs.guide_repo || vars.HOF_GUIDE_REPO || 'UKHomeOfficeForms/hof-guide-v2' }}
+          BEFORE_SHA: ${{ inputs.before_sha || github.event.before }}
+          AFTER_SHA: ${{ inputs.after_sha || github.sha }}
+          COMPARE_URL: ${{ github.event.compare }}
+          CHANGELOG_NOTES_OVERRIDE: ${{ inputs.changelog_notes || '' }}
+        run: |
+          if [ -z "$DISPATCH_TOKEN" ]; then
+            echo "GitHub App token was not created. Skipping guide sync dispatch."
+            exit 0
+          fi
+
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const dispatchToken = process.env.DISPATCH_TOKEN;
+          const guideRepo = (process.env.GUIDE_REPO || 'UKHomeOfficeForms/hof-guide-v2').trim();
+          const parts = guideRepo.split('/').filter(Boolean);
+          if (parts.length !== 2) {
+            throw new Error(`Invalid GUIDE_REPO value (expected "owner/name"): ${guideRepo}`);
+          }
+          const [guideOwner, guideName] = parts;
+          const beforeSha = process.env.BEFORE_SHA;
+          const afterSha = process.env.AFTER_SHA;
+          const compareUrl = process.env.COMPARE_URL || '';
+          const changelogOverride = process.env.CHANGELOG_NOTES_OVERRIDE || '';
+
+          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+          const lines = changelog.split('\n');
+          const firstHeadingIndex = lines.findIndex(line => /^##\s+/.test(line));
+
+          let excerpt = changelogOverride.trim() || 'No changelog notes found.';
+          if (!changelogOverride.trim() && firstHeadingIndex >= 0) {
+            const collected = [];
+            for (let i = firstHeadingIndex; i < lines.length; i += 1) {
+              if (i > firstHeadingIndex && /^##\s+/.test(lines[i])) break;
+              collected.push(lines[i]);
+            }
+            excerpt = collected.join('\n').trim() || excerpt;
+          }
+
+          const payload = {
+            event_type: 'hof-framework-changed',
+            client_payload: {
+              hof_owner: 'UKHomeOfficeForms',
+              hof_repo: 'hof',
+              before_sha: beforeSha,
+              after_sha: afterSha,
+              compare_url: compareUrl,
+              changelog_notes: excerpt
+            }
+          };
+
+          (async () => {
+            const response = await fetch(`https://api.github.com/repos/${guideOwner}/${guideName}/dispatches`, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/vnd.github+json',
+                Authorization: `Bearer ${dispatchToken}`,
+                'X-GitHub-Api-Version': '2022-11-28',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              throw new Error(`Dispatch failed (${response.status}): ${await response.text()}`);
+            }
+
+            console.log(`Dispatched hof-framework-changed to ${guideOwner}/${guideName}`);
+          })().catch(error => {
+            console.error(error.message);
+            process.exit(1);
+          });
+
+          NODE
