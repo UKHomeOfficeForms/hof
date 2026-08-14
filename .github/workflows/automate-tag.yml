@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [24.x, 26.x]
+        node-version: [22.x, 24.x, 26.x]
         redis-version: [7, 8, 8.4.2]
     steps:
       - uses: actions/checkout@v4
