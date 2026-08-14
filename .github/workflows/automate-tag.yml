@@ -24,7 +24,10 @@ jobs:
       - uses: borales/actions-yarn@v3.0.0
         with:
           cmd: install --frozen-lockfile
-      - run: npm test
+      - name: Install Playwright Chromium
+        run: yarn playwright install --with-deps chromium
+      - name: Run test suite
+        run: yarn test
 
   auto-tag-patch:
     needs: test
