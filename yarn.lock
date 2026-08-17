@@ -13,10 +13,10 @@
     "@csstools/css-tokenizer" "^3.0.3"
     lru-cache "^10.4.3"
 
-"@aws-sdk/client-sesv2@^3.1109.0":
-  version "3.1109.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-sesv2/-/client-sesv2-3.1109.0.tgz#7c732d0d2c80a4f9091a6452fc736e1a188717fb"
-  integrity sha512-wBrUNKC/kCCUAsqZAYWM2q8gZYcICRp2LUhTWoc9WCff41ny/vahxUpp1kYn5y31oDLKjNMONU4f+Bdy2k7k0g==
+"@aws-sdk/client-sesv2@^3.1110.0":
+  version "3.1110.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-sesv2/-/client-sesv2-3.1110.0.tgz#029fe65c2d8180939900f413385143e9b811b2f7"
+  integrity sha512-HcxyzL+rBpaNpkYfr/Dv8MxUhbuT3J8q4htbaBDxdKlW6rbUrW66bhHGOEX9RpA0Mp93F5w6L+/uysnlFzM4Ew==
   dependencies:
     "@aws-sdk/core" "^3.977.7"
     "@aws-sdk/credential-provider-node" "^3.972.79"
