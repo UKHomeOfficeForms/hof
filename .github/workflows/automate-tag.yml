@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [22.x, 24.x, 26.x]
         redis-version: [7, 8]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -38,7 +38,7 @@ jobs:
       !contains(github.event.head_commit.message, '[MINOR]') &&
       !contains(github.event.head_commit.message, '[MAJOR]')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -56,7 +56,7 @@ jobs:
       contains(github.event.head_commit.message, '[MINOR]') &&
       !contains(github.event.head_commit.message, '[MAJOR]')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -73,7 +73,7 @@ jobs:
       startsWith(github.ref, 'refs/heads/master') &&
       contains(github.event.head_commit.message, '[MAJOR]')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
