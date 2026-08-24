@@ -4,6 +4,15 @@ const path = require('path');
 const Import = require('../../../../build/helpers/resolver/import');
 
 describe('resolver import', () => {
+  ['hof', 'govuk_frontend_toolkit'].forEach(importUrl => {
+    it(`recognises an unscoped package entrypoint: ${importUrl}`, () => {
+      const imported = new Import(importUrl);
+
+      imported.packageName().should.equal(importUrl);
+      imported.isEntrypoint().should.equal(true);
+    });
+  });
+
   ['hof/frontend/themes/gov-uk/styles/govuk', 'hof\\frontend\\themes\\gov-uk\\styles\\govuk']
     .forEach(importUrl => {
       it(`parses an unscoped package path: ${importUrl}`, () => {
