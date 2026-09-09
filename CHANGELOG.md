@@ -1,4 +1,8 @@
-## [Unreleased]
+## 2026-09-14 Version 24.5.1 (Stable), @nzorba
+
+### Changed
+- Removed jQuery from the session timeout dialog and replaced its DOM operations with native browser APIs.
+- Removed the jQuery dependency and updated frontend tests to use native DOM APIs and `fetch`.
 
 ### Fixes
 - Added missing Welsh cookie page translation entries to match the English cookie configuration ((#710)[https://github.com/UKHomeOfficeForms/hof/pull/710])
@@ -6,6 +10,8 @@
 ### Chore & Maintenance
 - Removed the vulnerable PhantomJS-based functional test driver stack and migrated the functional test browser runner to Playwright ((#699)[https://github.com/UKHomeOfficeForms/hof/pull/699])
 - Updated node and Redis versions in testing matrix ((#700)[https://github.com/UKHomeOfficeForms/hof/pull/700])
+
+
 
 ## 2026-07-01, Version 24.4.0 (Stable), @vivekkumar-ho
 
