@@ -3,6 +3,16 @@
 
 window.dialogPolyfill = require('dialog-polyfill');
 
+function getTextContent(selector) {
+  const element = document.querySelector(selector);
+  return element ? element.textContent : '';
+}
+
+function dialogDatasetValue(key) {
+  const element = document.getElementById('js-modal-dialog');
+  return element ? element.dataset[key] : undefined;
+}
+
 // Modal dialog prototype
 window.GOVUK.sessionDialog = {
   el: document.getElementById('js-modal-dialog'),
@@ -11,25 +21,27 @@ window.GOVUK.sessionDialog = {
   fallBackElement: document.querySelector('.govuk-timeout-warning-fallback'),
   dialogIsOpenClass: 'dialog-is-open',
   timers: [],
-  warningTextPrefix: document.querySelector('.dialog-text-prefix').textContent,
+  warningTextPrefix: getTextContent('.dialog-text-prefix'),
   warningTextSuffix: '.',
-  warningText: document.querySelector('.dialog-text').textContent,
+  warningText: getTextContent('.dialog-text'),
   warningTextExtra: '',
 
   // Timer specific markup. If these are not present, timeout and redirection are disabled
-  timer: document.querySelector('#js-modal-dialog .timer'),
-  accessibleTimer: document.querySelector('#js-modal-dialog .at-timer'),
+  timer: document.querySelector('#js-modal-dialog') ? document.querySelector('#js-modal-dialog .timer') : null,
+  accessibleTimer: document.querySelector('#js-modal-dialog') ? document.querySelector('#js-modal-dialog .at-timer') : null,
 
-  secondsSessionTimeout: parseInt(document.querySelector('#js-modal-dialog').dataset.sessionTimeout, 10 || 1800),
-  secondsTimeoutWarning: parseInt(document.querySelector('#js-modal-dialog').dataset.sessionTimeoutWarning, 10 || 300),
-  timeoutRedirectUrl: document.querySelector('#js-modal-dialog').dataset.urlRedirect,
+  secondsSessionTimeout: parseInt(dialogDatasetValue('sessionTimeout'), 10 || 1800),
+  secondsTimeoutWarning: parseInt(dialogDatasetValue('sessionTimeoutWarning'), 10 || 300),
+  timeoutRedirectUrl: dialogDatasetValue('urlRedirect'),
   timeSessionRefreshed: new Date(),
 
   bindUIElements: function () {
-    window.GOVUK.sessionDialog.closeButton.addEventListener('click', function (e) {
-      e.preventDefault();
-      window.GOVUK.sessionDialog.closeDialog();
-    });
+    if (window.GOVUK.sessionDialog.closeButton) {
+      window.GOVUK.sessionDialog.closeButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.GOVUK.sessionDialog.closeDialog();
+      });
+    }
 
     // Close modal when ESC pressed
     document.addEventListener('keydown', function (e) {
@@ -277,10 +289,17 @@ window.GOVUK.sessionDialog = {
   },
 
   refreshSession: function () {
-    fetch('')
-      .then(function () {
+    return fetch('')
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Session refresh failed');
+        }
         window.GOVUK.sessionDialog.timeSessionRefreshed = new Date();
         window.GOVUK.sessionDialog.controller();
+      })
+      .catch(function (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
       });
   },
 
