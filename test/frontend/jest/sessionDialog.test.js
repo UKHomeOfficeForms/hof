@@ -85,6 +85,12 @@ describe('sessionDialog', () => {
     expect(closeDialog).toHaveBeenCalledTimes(1);
   });
 
+  it('should not throw when the close button is missing', () => {
+    sessionDialog.closeButton = null;
+
+    expect(() => sessionDialog.bindUIElements()).not.toThrow();
+  });
+
   it('should open the dialog', () => {
     const outsideButton = document.querySelector('#outside-button');
     const content = document.querySelector('#content');
@@ -255,12 +261,37 @@ describe('sessionDialog', () => {
 
     sessionDialog.timeSessionRefreshed = previousRefreshTime;
     const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => { });
-    window.fetch = jest.fn().mockResolvedValue({});
+    window.fetch = jest.fn().mockResolvedValue({ ok: true });
 
-
-    sessionDialog.refreshSession();
-    await Promise.resolve();
+    await sessionDialog.refreshSession();
     expect(sessionDialog.timeSessionRefreshed.getTime()).toBe(now.getTime());
     expect(controllerSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not update the session after an unsuccessful response', async () => {
+    const previousTime = sessionDialog.timeSessionRefreshed;
+    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => { });
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => { });
+    window.fetch = jest.fn().mockResolvedValue({ ok: false });
+
+    await sessionDialog.refreshSession();
+
+    expect(sessionDialog.timeSessionRefreshed).toBe(previousTime);
+    expect(controllerSpy).not.toHaveBeenCalled();
+    expect(consoleError).toHaveBeenCalledWith(expect.any(Error));
+  });
+
+  it('logs network failures without refreshing the session', async () => {
+    const previousTime = sessionDialog.timeSessionRefreshed;
+    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => { });
+    const error = new Error('Network failure');
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => { });
+    window.fetch = jest.fn().mockRejectedValue(error);
+
+    await sessionDialog.refreshSession();
+
+    expect(sessionDialog.timeSessionRefreshed).toBe(previousTime);
+    expect(controllerSpy).not.toHaveBeenCalled();
+    expect(consoleError).toHaveBeenCalledWith(error);
   });
 });
