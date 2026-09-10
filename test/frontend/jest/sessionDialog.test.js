@@ -7,10 +7,7 @@ const sessionTimeoutWarningHtml = fs.readFileSync(path.resolve(__dirname, '../..
 jest.dontMock('fs');
 
 describe('sessionDialog', () => {
-  let $;
   let sessionDialog;
-  let $body;
-  let $html;
   let options;
   let originalHTMLDialogElement;
 
@@ -22,16 +19,13 @@ describe('sessionDialog', () => {
   beforeEach(() => {
     jest.resetModules();
     window.GOVUK = {};
-    $ = require('jquery');
 
-    // Set up the initial DOM structure and jQuery elements for each test
+    // Set up the initial DOM structure and elements for each test
     document.body.innerHTML =
       `<div id='content'><button id="outside-button" type="button">Outside</button></div>` +
       sessionTimeoutWarningHtml.toString();
     require('../../../frontend/themes/gov-uk/client-js/session-timeout-dialog.js');
     sessionDialog = window.GOVUK.sessionDialog;
-    $html = $('html');
-    $body = $('body');
     options = {
       secondsSessionTimeout: 1800,
       secondsTimeoutWarning: 300
@@ -41,7 +35,7 @@ describe('sessionDialog', () => {
       sessionDialog.el.showModal = jest.fn();
       sessionDialog.el.close = jest.fn();
     }
-    sessionDialog.$fallBackElement = { classList: { add: jest.fn() } };
+    sessionDialog.fallBackElement = { classList: { add: jest.fn() } };
     window.dialogPolyfill = { registerDialog: jest.fn() };
     // Mock redirect to avoid jsdom navigation errors
     sessionDialog.redirect = jest.fn();
@@ -61,11 +55,11 @@ describe('sessionDialog', () => {
 
     jest.restoreAllMocks();
     jest.clearAllMocks();
-    if ($html && sessionDialog && sessionDialog.dialogIsOpenClass) {
-      $html.removeClass(sessionDialog.dialogIsOpenClass);
+    if (document.documentElement && sessionDialog && sessionDialog.dialogIsOpenClass) {
+      document.documentElement.classList.remove(sessionDialog.dialogIsOpenClass);
     }
-    if ($body && sessionDialog && sessionDialog.dialogIsOpenClass) {
-      $body.removeClass(sessionDialog.dialogIsOpenClass);
+    if (document.body && sessionDialog && sessionDialog.dialogIsOpenClass) {
+      document.body.classList.remove(sessionDialog.dialogIsOpenClass);
     }
   });
 
@@ -83,12 +77,18 @@ describe('sessionDialog', () => {
   });
 
   it('should close the dialog when the close button is clicked', () => {
-    const closeDialog = jest.spyOn(sessionDialog, 'closeDialog').mockImplementation(() => {});
+    const closeDialog = jest.spyOn(sessionDialog, 'closeDialog').mockImplementation(() => { });
 
     sessionDialog.init(options);
     document.querySelector('.js-dialog-close').click();
 
     expect(closeDialog).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not throw when the close button is missing', () => {
+    sessionDialog.closeButton = null;
+
+    expect(() => sessionDialog.bindUIElements()).not.toThrow();
   });
 
   it('should open the dialog', () => {
@@ -98,23 +98,23 @@ describe('sessionDialog', () => {
     outsideButton.focus();
     sessionDialog.openDialog();
 
-    expect($html.hasClass(sessionDialog.dialogIsOpenClass)).toBe(true);
-    expect($body.hasClass(sessionDialog.dialogIsOpenClass)).toBe(true);
+    expect(document.documentElement.classList.contains(sessionDialog.dialogIsOpenClass)).toBe(true);
+    expect(document.body.classList.contains(sessionDialog.dialogIsOpenClass)).toBe(true);
     expect(content.inert).toBe(true);
     expect(sessionDialog.el.showModal).toHaveBeenCalled();
-    expect(sessionDialog.$lastFocusedEl).toBe(outsideButton);
+    expect(sessionDialog.lastFocusedEl).toBe(outsideButton);
   });
 
   it('should close the dialog', () => {
-    const refreshSession = jest.spyOn(sessionDialog, 'refreshSession').mockImplementation(() => {});
+    const refreshSession = jest.spyOn(sessionDialog, 'refreshSession').mockImplementation(() => { });
     const content = document.querySelector('#content');
 
     sessionDialog.openDialog();
     expect(sessionDialog.isDialogOpen()).toBe(true);
     sessionDialog.closeDialog();
 
-    expect($html.hasClass(sessionDialog.dialogIsOpenClass)).toBe(false);
-    expect($body.hasClass(sessionDialog.dialogIsOpenClass)).toBe(false);
+    expect(document.documentElement.classList.contains(sessionDialog.dialogIsOpenClass)).toBe(false);
+    expect(document.body.classList.contains(sessionDialog.dialogIsOpenClass)).toBe(false);
     expect(content.inert).toBe(false);
     expect(sessionDialog.isDialogOpen()).toBe(false);
     expect(sessionDialog.el.close).toHaveBeenCalled();
@@ -125,7 +125,7 @@ describe('sessionDialog', () => {
     jest.useFakeTimers();
 
     const outsideButton = document.querySelector('#outside-button');
-    jest.spyOn(sessionDialog, 'refreshSession').mockImplementation(() => {});
+    jest.spyOn(sessionDialog, 'refreshSession').mockImplementation(() => { });
 
     outsideButton.focus();
     sessionDialog.openDialog();
@@ -221,7 +221,7 @@ describe('sessionDialog', () => {
 
     const result = sessionDialog.init(options);
 
-    expect(sessionDialog.$fallBackElement.classList.add).toHaveBeenCalledWith('govuk-!-display-block');
+    expect(sessionDialog.fallBackElement.classList.add).toHaveBeenCalledWith('govuk-!-display-block');
     expect(bindUIElements).not.toHaveBeenCalled();
     expect(controller).not.toHaveBeenCalled();
     expect(result).toBe(false);
@@ -244,7 +244,7 @@ describe('sessionDialog', () => {
     const bindUIElements = jest.spyOn(sessionDialog, 'bindUIElements');
     const controller = jest.spyOn(sessionDialog, 'controller');
 
-    sessionDialog.$timer = $([]);
+    sessionDialog.timer = null;
 
     const result = sessionDialog.init(options);
 
@@ -253,30 +253,45 @@ describe('sessionDialog', () => {
     expect(result).toBe(false);
   });
 
-  it('refreshSession updates timeSessionRefreshed and calls controller on success', () => {
+  it('refreshSession updates timeSessionRefreshed and calls controller on success', async () => {
     jest.useFakeTimers();
     const previousRefreshTime = new Date('2020-01-01T00:00:00.000Z');
     const now = new Date(previousRefreshTime.getTime() + (10 * 60 * 1000));
     jest.setSystemTime(now);
 
     sessionDialog.timeSessionRefreshed = previousRefreshTime;
-    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => {});
-    const requestMock = {
-      done: jest.fn(),
-      fail: jest.fn()
-    };
+    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => { });
+    window.fetch = jest.fn().mockResolvedValue({ ok: true });
 
-    requestMock.done.mockImplementation(cb => {
-      cb();
-      return requestMock;
-    });
-
-    requestMock.fail.mockReturnValue(requestMock);
-
-    jest.spyOn($, 'get').mockReturnValue(requestMock);
-
-    sessionDialog.refreshSession();
+    await sessionDialog.refreshSession();
     expect(sessionDialog.timeSessionRefreshed.getTime()).toBe(now.getTime());
     expect(controllerSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not update the session after an unsuccessful response', async () => {
+    const previousTime = sessionDialog.timeSessionRefreshed;
+    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => { });
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => { });
+    window.fetch = jest.fn().mockResolvedValue({ ok: false });
+
+    await sessionDialog.refreshSession();
+
+    expect(sessionDialog.timeSessionRefreshed).toBe(previousTime);
+    expect(controllerSpy).not.toHaveBeenCalled();
+    expect(consoleError).toHaveBeenCalledWith(expect.any(Error));
+  });
+
+  it('logs network failures without refreshing the session', async () => {
+    const previousTime = sessionDialog.timeSessionRefreshed;
+    const controllerSpy = jest.spyOn(sessionDialog, 'controller').mockImplementation(() => { });
+    const error = new Error('Network failure');
+    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => { });
+    window.fetch = jest.fn().mockRejectedValue(error);
+
+    await sessionDialog.refreshSession();
+
+    expect(sessionDialog.timeSessionRefreshed).toBe(previousTime);
+    expect(controllerSpy).not.toHaveBeenCalled();
+    expect(consoleError).toHaveBeenCalledWith(error);
   });
 });

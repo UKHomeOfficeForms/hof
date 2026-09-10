@@ -1,40 +1,50 @@
 /* eslint max-len: 0 */
 'use strict';
 
-const $ = require('jquery');
 window.dialogPolyfill = require('dialog-polyfill');
+
+function getTextContent(selector) {
+  const element = document.querySelector(selector);
+  return element ? element.textContent : '';
+}
+
+function dialogDatasetValue(key) {
+  const element = document.getElementById('js-modal-dialog');
+  return element ? element.dataset[key] : undefined;
+}
 
 // Modal dialog prototype
 window.GOVUK.sessionDialog = {
   el: document.getElementById('js-modal-dialog'),
-  $el: $('#js-modal-dialog'),
-  $lastFocusedEl: null,
-  $closeButton: $('.modal-dialog .js-dialog-close'),
-  $fallBackElement: $('.govuk-timeout-warning-fallback'),
+  lastFocusedEl: null,
+  closeButton: document.querySelector('.modal-dialog .js-dialog-close'),
+  fallBackElement: document.querySelector('.govuk-timeout-warning-fallback'),
   dialogIsOpenClass: 'dialog-is-open',
   timers: [],
-  warningTextPrefix: $('.dialog-text-prefix').text(),
+  warningTextPrefix: getTextContent('.dialog-text-prefix'),
   warningTextSuffix: '.',
-  warningText: $('.dialog-text').text(),
+  warningText: getTextContent('.dialog-text'),
   warningTextExtra: '',
 
   // Timer specific markup. If these are not present, timeout and redirection are disabled
-  $timer: $('#js-modal-dialog .timer'),
-  $accessibleTimer: $('#js-modal-dialog .at-timer'),
+  timer: document.querySelector('#js-modal-dialog') ? document.querySelector('#js-modal-dialog .timer') : null,
+  accessibleTimer: document.querySelector('#js-modal-dialog') ? document.querySelector('#js-modal-dialog .at-timer') : null,
 
-  secondsSessionTimeout: parseInt($('#js-modal-dialog').data('session-timeout'), 10 || 1800),
-  secondsTimeoutWarning: parseInt($('#js-modal-dialog').data('session-timeout-warning'), 10 || 300),
-  timeoutRedirectUrl: $('#js-modal-dialog').data('url-redirect'),
+  secondsSessionTimeout: parseInt(dialogDatasetValue('sessionTimeout'), 10 || 1800),
+  secondsTimeoutWarning: parseInt(dialogDatasetValue('sessionTimeoutWarning'), 10 || 300),
+  timeoutRedirectUrl: dialogDatasetValue('urlRedirect'),
   timeSessionRefreshed: new Date(),
 
   bindUIElements: function () {
-    window.GOVUK.sessionDialog.$closeButton.on('click', function (e) {
-      e.preventDefault();
-      window.GOVUK.sessionDialog.closeDialog();
-    });
+    if (window.GOVUK.sessionDialog.closeButton) {
+      window.GOVUK.sessionDialog.closeButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.GOVUK.sessionDialog.closeDialog();
+      });
+    }
 
     // Close modal when ESC pressed
-    $(document).keydown(function (e) {
+    document.addEventListener('keydown', function (e) {
       if (window.GOVUK.sessionDialog.isDialogOpen() && e.keyCode === 27) {
         window.GOVUK.sessionDialog.closeDialog();
       }
@@ -46,8 +56,8 @@ window.GOVUK.sessionDialog = {
   },
 
   isConfigured: function () {
-    return window.GOVUK.sessionDialog.$timer.length > 0 &&
-      window.GOVUK.sessionDialog.$accessibleTimer.length > 0 &&
+    return window.GOVUK.sessionDialog.timer &&
+      window.GOVUK.sessionDialog.accessibleTimer &&
       window.GOVUK.sessionDialog.secondsSessionTimeout &&
       window.GOVUK.sessionDialog.secondsTimeoutWarning &&
       window.GOVUK.sessionDialog.timeoutRedirectUrl;
@@ -55,7 +65,8 @@ window.GOVUK.sessionDialog = {
 
   openDialog: function () {
     if (!window.GOVUK.sessionDialog.isDialogOpen()) {
-      $('html, body').addClass(window.GOVUK.sessionDialog.dialogIsOpenClass);
+      document.documentElement.classList.add(window.GOVUK.sessionDialog.dialogIsOpenClass);
+      document.body.classList.add(window.GOVUK.sessionDialog.dialogIsOpenClass);
       window.GOVUK.sessionDialog.saveLastFocusedEl();
       window.GOVUK.sessionDialog.makePageContentInert();
       window.GOVUK.sessionDialog.el.showModal();
@@ -65,7 +76,8 @@ window.GOVUK.sessionDialog = {
 
   closeDialog: function () {
     if (window.GOVUK.sessionDialog.isDialogOpen()) {
-      $('html, body').removeClass(window.GOVUK.sessionDialog.dialogIsOpenClass);
+      document.documentElement.classList.remove(window.GOVUK.sessionDialog.dialogIsOpenClass);
+      document.body.classList.remove(window.GOVUK.sessionDialog.dialogIsOpenClass);
       window.GOVUK.sessionDialog.el.close();
       window.GOVUK.sessionDialog.el.open = false;
       window.GOVUK.sessionDialog.setFocusOnLastFocusedEl();
@@ -75,19 +87,19 @@ window.GOVUK.sessionDialog = {
   },
 
   saveLastFocusedEl: function () {
-    window.GOVUK.sessionDialog.$lastFocusedEl = document.activeElement;
-    if (!window.GOVUK.sessionDialog.$lastFocusedEl || window.GOVUK.sessionDialog.$lastFocusedEl === document.body) {
-      window.GOVUK.sessionDialog.$lastFocusedEl = null;
+    window.GOVUK.sessionDialog.lastFocusedEl = document.activeElement;
+    if (!window.GOVUK.sessionDialog.lastFocusedEl || window.GOVUK.sessionDialog.lastFocusedEl === document.body) {
+      window.GOVUK.sessionDialog.lastFocusedEl = null;
     } else if (document.querySelector) {
-      window.GOVUK.sessionDialog.$lastFocusedEl = document.querySelector(':focus');
+      window.GOVUK.sessionDialog.lastFocusedEl = document.querySelector(':focus');
     }
   },
 
   // Set focus back on last focused el when modal closed
   setFocusOnLastFocusedEl: function () {
-    if (window.GOVUK.sessionDialog.$lastFocusedEl) {
+    if (window.GOVUK.sessionDialog.lastFocusedEl) {
       window.setTimeout(function () {
-        window.GOVUK.sessionDialog.$lastFocusedEl.focus();
+        window.GOVUK.sessionDialog.lastFocusedEl.focus();
       }, 0);
     }
   },
@@ -222,15 +234,15 @@ window.GOVUK.sessionDialog = {
   },
 
   startCountdown: function () {
-    const $timer = window.GOVUK.sessionDialog.$timer;
-    const $accessibleTimer = window.GOVUK.sessionDialog.$accessibleTimer;
+    const timer = window.GOVUK.sessionDialog.timer;
+    const accessibleTimer = window.GOVUK.sessionDialog.accessibleTimer;
     let timerRunOnce = false;
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     const seconds = window.GOVUK.sessionDialog.secondsUntilSessionTimeout();
     const minutes = seconds / 60;
 
-    $timer.text(minutes + ' minute' + (minutes > 1 ? 's' : ''));
+    timer.textContent = minutes + ' minute' + (minutes > 1 ? 's' : '');
 
     (function countdown() {
       const secondsUntilSessionTimeout = window.GOVUK.sessionDialog.secondsUntilSessionTimeout();
@@ -250,17 +262,17 @@ window.GOVUK.sessionDialog = {
         const atText = window.GOVUK.sessionDialog.warningTextPrefix + countdownAtText + window.GOVUK.sessionDialog.warningTextSuffix + ' ' + window.GOVUK.sessionDialog.warningText;
         const extraText = '\n' + window.GOVUK.sessionDialog.warningTextExtra;
 
-        $timer.html(text + ' ' + extraText);
+        timer.innerHTML = text + ' ' + extraText;
 
         // Update screen reader friendly content every 20 secs
         if (secondsLeft % 20 === 0) {
           // Read out the extra content only once.
           // Don't read out on iOS VoiceOver which stalls on the longer text
           if (!timerRunOnce && !iOS) {
-            $accessibleTimer.text(atText + extraText);
+            accessibleTimer.textContent = atText + extraText;
             timerRunOnce = true;
           } else {
-            $accessibleTimer.text(atText);
+            accessibleTimer.textContent = atText;
           }
         }
 
@@ -277,10 +289,17 @@ window.GOVUK.sessionDialog = {
   },
 
   refreshSession: function () {
-    $.get('')
-      .done(function () {
+    return fetch('')
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Session refresh failed');
+        }
         window.GOVUK.sessionDialog.timeSessionRefreshed = new Date();
         window.GOVUK.sessionDialog.controller();
+      })
+      .catch(function (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
       });
   },
 
@@ -327,7 +346,7 @@ window.GOVUK.sessionDialog = {
   },
 
   init: function (options) {
-    $.extend(window.GOVUK.sessionDialog, options);
+    Object.assign(window.GOVUK.sessionDialog, options);
     if (window.GOVUK.sessionDialog.el && window.GOVUK.sessionDialog.isConfigured()) {
       // Native dialog is not supported by some browsers so use polyfill
       if (typeof HTMLDialogElement !== 'function') {
@@ -336,7 +355,7 @@ window.GOVUK.sessionDialog = {
           return true;
         } catch (error) {
           // Doesn't support polyfill (IE8) - display fallback element
-          window.GOVUK.sessionDialog.$fallBackElement.classList.add('govuk-!-display-block');
+          window.GOVUK.sessionDialog.fallBackElement.classList.add('govuk-!-display-block');
           return false;
         }
       }

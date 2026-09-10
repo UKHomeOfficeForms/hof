@@ -1,3 +1,9 @@
+## 2026-09-09 Version 24.5.1 (Stable), @nzorba
+
+### Changed
+- Removed jQuery from the session timeout dialog and replaced its DOM operations with native browser APIs.
+- Removed the jQuery dependency and updated frontend tests to use native DOM APIs and `fetch`.
+
 ## 2026-07-01, Version 24.4.0 (Stable), @vivekkumar-ho
 
 ### Security

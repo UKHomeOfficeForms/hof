@@ -1,11 +1,10 @@
 /* eslint-disable max-len */
 const validation = require('../../../../frontend/toolkit/assets/javascript/validation');
-const $ = require('jquery');
 const util = require('../lib/util');
 
 describe('Validation', function () {
   beforeEach(function () {
-    $('#test-container').append('<div id="content" />');
+    document.getElementById('test-container').insertAdjacentHTML('beforeend', '<div id="content" />');
   });
 
   it('exports a function', function () {
@@ -14,7 +13,7 @@ describe('Validation', function () {
 
   describe('summary', function () {
     beforeEach(function () {
-      $('#content').append('<div class="validation-summary" tabindex="-1">');
+      document.getElementById('content').insertAdjacentHTML('beforeend', '<div class="validation-summary" tabindex="-1">');
       validation();
     });
 
@@ -25,14 +24,14 @@ describe('Validation', function () {
 
   describe('form error groups', function () {
     beforeEach(function () {
-      $('#content').append('<div class="validation-summary" tabindex="-1">');
-      $('.validation-summary').append('<ul><li><a id="error" href="#input-group">Error</a></li></ul>');
-      $('#content').append('<div id="input-group">');
+      document.getElementById('content').insertAdjacentHTML('beforeend', '<div class="validation-summary" tabindex="-1">');
+      document.getElementsByClassName('validation-summary')[0].insertAdjacentHTML('beforeend', '<ul><li><a id="error" href="#input-group">Error</a></li></ul>');
+      document.getElementById('content').insertAdjacentHTML('beforeend', '<div id="input-group">');
     });
 
     describe('input element', function () {
       beforeEach(function () {
-        $('#input-group').append('<input type="text">');
+        document.getElementById('input-group').insertAdjacentHTML('beforeend', '<input type="text">');
         validation();
       });
 
@@ -44,7 +43,7 @@ describe('Validation', function () {
 
     describe('textarea element', function () {
       beforeEach(function () {
-        $('#input-group').append('<textarea>');
+        document.getElementById('input-group').appendChild(document.createElement('textarea'));
         validation();
       });
 
@@ -56,7 +55,7 @@ describe('Validation', function () {
 
     describe('select element', function () {
       beforeEach(function () {
-        $('#input-group').append('<select>');
+        document.getElementById('input-group').appendChild(document.createElement('select'));
         validation();
       });
 
