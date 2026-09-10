@@ -93,7 +93,7 @@ describe('character-count', function () {
       }, 1100);
     });
 
-    it('should not update the hint message if the value is the same length and there have been no input events', function () {
+    it('should not update the hint message if the value is the same length and there have been no input events', function (done) {
       document.getElementById('test').focus();
       setTimeout(function () {
         expect(document.getElementById('test-maxlength-hint').textContent).toContain('You have 10 characters remaining');
