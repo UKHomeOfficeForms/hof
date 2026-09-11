@@ -1,6 +1,7 @@
 'use strict';
 
-const moment = require('moment');
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat');
 const _ = require('lodash');
 const libPhoneNumber = require('libphonenumber-js/max');
 const deprecate = require('deprecate');
@@ -10,6 +11,8 @@ const emailValidator = require('./email');
 // and true (or truthy value) for *valid* input.
 const dateFormat = 'YYYY-MM-DD';
 let Validators;
+
+dayjs.extend(customParseFormat);
 
 module.exports = Validators = {
 
@@ -113,7 +116,7 @@ module.exports = Validators = {
   },
 
   date(value) {
-    return value === '' || Validators.regex(value, /\d{4}\-\d{2}\-\d{2}/) && moment(value, dateFormat).isValid();
+    return value === '' || Validators.regex(value, /\d{4}\-\d{2}\-\d{2}/) && dayjs(value, dateFormat, true).isValid();
   },
 
   'date-year'(value) {
@@ -131,12 +134,12 @@ module.exports = Validators = {
   // eslint-disable-next-line no-inline-comments, spaced-comment
   before(value, date) {
     // validator can also do before(value, [diff, unit][, diff, unit])
-    let valueDate = moment(value, dateFormat);
+    let valueDate = dayjs(value, dateFormat, true);
     let comparator;
     if (arguments.length === 2) {
       comparator = date;
     } else {
-      comparator = moment();
+      comparator = dayjs();
       const args = [].slice.call(arguments, 1);
       let diff;
       let unit;
@@ -151,12 +154,12 @@ module.exports = Validators = {
 
   after(value, date) {
     // validator can also do after(value, [diff, unit][, diff, unit])
-    let valueDate = moment(value, dateFormat);
+    let valueDate = dayjs(value, dateFormat, true);
     let comparator;
     if (arguments.length === 2) {
       comparator = date;
     } else {
-      comparator = moment();
+      comparator = dayjs();
       const args = [].slice.call(arguments, 1);
       let diff;
       let unit;
