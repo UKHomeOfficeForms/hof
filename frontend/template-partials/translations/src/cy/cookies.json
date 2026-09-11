@@ -1,7 +1,7 @@
 {
   "banner": {
-    "message": "Mae GOV.UK yn defnyddio cwcis i wneud y safle’n symlach",
-    "link": "Darganfyddwch fwy am gwcis"
+    "message": "Rydym yn defnyddio rhai cwcis hanfodol i wneud i'r wefan hon weithio.",
+    "link": "Gweld cwcis"
   },
   "header": "Cwcis",
   "intro": "Mae’r gwasanaeth hwn yn gosod ffeiliau bychan (a elwir yn ‘cwcis’) ar eich cyfrifiadur er mwyn:",
@@ -39,6 +39,11 @@
         "seen_cookie_message",
         "Yn gadael i ni wybod eich bod wedi gweld ein neges cwcis yn barod",
         "1 mis"
+      ],
+      [
+        "cookie_preferences",
+        "Rhowch wybod i ni eich bod wedi cadw eich gosodiadau caniatâd cwci",
+        "1 mis"
       ]
     ]
   },
@@ -56,6 +61,8 @@
   },
   "no-identify": "Nid oes unrhyw fanylion personol yn cael eu storio gyda’r wybodaeth hon, felly ni ellir eich adnabod.",
   "analytics-table": {
+    "containerIdExpires": "2 flynedd",
+    "containerIdPurpose": "Defnyddir er mwyn parhau'r sesiwn",
     "headers": [
       "Enw",
       "Pwrpas",
@@ -71,6 +78,11 @@
         "_gat",
         "Defnyddir i wasgu’r gyfradd ceisiadau",
         "10 munud"
+      ],
+      [
+        "_gid",
+        "Defnyddir i gyfrif ac olrhain y tudalennau rydych yn eu gweld",
+        "24 awr"
       ]
     ]
   },
