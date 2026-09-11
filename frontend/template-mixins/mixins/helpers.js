@@ -3,7 +3,7 @@
 
 const querystring = require('querystring');
 const path = require('path');
-const moment = require('moment');
+const { formatDate } = require('../../../utilities/date');
 
 const renderer = require('./render');
 
@@ -33,7 +33,7 @@ module.exports = options => (req, res, next) => {
     return function (txt) {
       txt = (txt || '').split('|');
       const value = hoganRender(txt[0], this);
-      return moment(value).format(txt[1] || 'D MMMM YYYY');
+      return formatDate(value, txt[1]);
     };
   };
 
