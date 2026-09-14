@@ -13,6 +13,11 @@ function dialogDatasetValue(key) {
   return element ? element.dataset[key] : undefined;
 }
 
+function parseTimeout(value, fallback) {
+  const parsedValue = parseInt(value, 10);
+  return Number.isNaN(parsedValue) ? fallback : parsedValue;
+}
+
 // Modal dialog prototype
 window.GOVUK.sessionDialog = {
   el: document.getElementById('js-modal-dialog'),
@@ -30,8 +35,8 @@ window.GOVUK.sessionDialog = {
   timer: document.querySelector('#js-modal-dialog') ? document.querySelector('#js-modal-dialog .timer') : null,
   accessibleTimer: document.querySelector('#js-modal-dialog') ? document.querySelector('#js-modal-dialog .at-timer') : null,
 
-  secondsSessionTimeout: parseInt(dialogDatasetValue('sessionTimeout'), 10 || 1800),
-  secondsTimeoutWarning: parseInt(dialogDatasetValue('sessionTimeoutWarning'), 10 || 300),
+  secondsSessionTimeout: parseTimeout(dialogDatasetValue('sessionTimeout'), 1800),
+  secondsTimeoutWarning: parseTimeout(dialogDatasetValue('sessionTimeoutWarning'), 300),
   timeoutRedirectUrl: dialogDatasetValue('urlRedirect'),
   timeSessionRefreshed: new Date(),
 

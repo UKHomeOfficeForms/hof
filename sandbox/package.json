@@ -17,7 +17,7 @@
   "dependencies": {
     "accessible-autocomplete": "^3.0.1",
     "govuk-frontend": "4.10",
-    "sass": "^1.101.0"
+    "sass": "^1.104.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

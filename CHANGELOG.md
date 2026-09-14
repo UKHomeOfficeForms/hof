@@ -1,4 +1,4 @@
-## 2026-09-14 Version 24.5.1 (Stable), @nzorba
+## 2026-09-14 Version 24.5.1 (Stable), @nzorba @dk4g
 
 ### Changed
 - Removed jQuery from the session timeout dialog and replaced its DOM operations with native browser APIs.
@@ -10,8 +10,6 @@
 ### Chore & Maintenance
 - Removed the vulnerable PhantomJS-based functional test driver stack and migrated the functional test browser runner to Playwright ((#699)[https://github.com/UKHomeOfficeForms/hof/pull/699])
 - Updated node and Redis versions in testing matrix ((#700)[https://github.com/UKHomeOfficeForms/hof/pull/700])
-
-
 
 ## 2026-07-01, Version 24.4.0 (Stable), @vivekkumar-ho
 

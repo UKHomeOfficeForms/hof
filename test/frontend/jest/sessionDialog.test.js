@@ -76,10 +76,21 @@ describe('sessionDialog', () => {
     expect(controller).toHaveBeenCalled();
   });
 
+  it('uses default timeout values when attributes are invalid', () => {
+    document.getElementById('js-modal-dialog').dataset.sessionTimeout = 'invalid';
+    document.getElementById('js-modal-dialog').dataset.sessionTimeoutWarning = 'invalid';
+    jest.resetModules();
+    window.GOVUK = {};
+
+    require('../../../frontend/themes/gov-uk/client-js/session-timeout-dialog.js');
+
+    expect(window.GOVUK.sessionDialog.secondsSessionTimeout).toBe(1800);
+    expect(window.GOVUK.sessionDialog.secondsTimeoutWarning).toBe(300);
+  });
+
   it('should close the dialog when the close button is clicked', () => {
     const closeDialog = jest.spyOn(sessionDialog, 'closeDialog').mockImplementation(() => { });
 
-    sessionDialog.init(options);
     document.querySelector('.js-dialog-close').click();
 
     expect(closeDialog).toHaveBeenCalledTimes(1);
