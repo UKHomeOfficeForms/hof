@@ -74,9 +74,9 @@ module.exports = (options, rateLimitType) => {
         }
         // if number of requests made is less than allowed maximum, log new entry
         const lastRequestLog = data[data.length - 1];
-        const potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime
-          .subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, 'minutes')
-          .unix();
+        currentRequestTime = currentRequestTime
+          .subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, 'minutes');
+        const potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime.unix();
         //  if interval has not passed since last request log, increment counter
         if (lastRequestLog[timestampName] > potentialCurrentWindowIntervalStartTimeStamp) {
           lastRequestLog[countName]++;
