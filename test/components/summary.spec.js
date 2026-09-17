@@ -2,7 +2,7 @@
 let SummaryBehaviour = require('../../components').summary;
 const mockTranslations = require('./translations/en/default');
 const Model = require('../../model');
-const moment = require('moment');
+const { formatDate } = require('../../utilities/date');
 const _ = require('lodash');
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
 
@@ -55,7 +55,7 @@ describe('summary behaviour', () => {
           'brpNumber',
           {
             field: 'dateOfBirth',
-            parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
+            parse: d => d && formatDate(d, PRETTY_DATE_FORMAT)
           }
         ],
         'range-addresses': [

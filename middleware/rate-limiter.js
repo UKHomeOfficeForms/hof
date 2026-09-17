@@ -1,5 +1,5 @@
 
-const moment = require('moment');
+const dayjs = require('dayjs');
 const redis = require('redis');
 const config = require('./../config/hof-defaults');
 
@@ -36,8 +36,8 @@ module.exports = (options, rateLimitType) => {
           logger.log('error', `Error with requesting redis session for rate limiting: ${err}`);
           return await closeConnection();
         }
-        const currentRequestTime = moment();
-        const windowStartTimestamp = moment().subtract(WINDOW_SIZE_IN_MINUTES, 'minutes').unix();
+        let currentRequestTime = dayjs();
+        const windowStartTimestamp = dayjs().subtract(WINDOW_SIZE_IN_MINUTES, 'minutes').unix();
         let oldRecord = false;
         let data;
         //  if no record is found , create a new record for user and store to redis
@@ -74,9 +74,9 @@ module.exports = (options, rateLimitType) => {
         }
         // if number of requests made is less than allowed maximum, log new entry
         const lastRequestLog = data[data.length - 1];
-        const potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime
-          .subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, 'minutes')
-          .unix();
+        currentRequestTime = currentRequestTime
+          .subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, 'minutes');
+        const potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime.unix();
         //  if interval has not passed since last request log, increment counter
         if (lastRequestLog[timestampName] > potentialCurrentWindowIntervalStartTimeStamp) {
           lastRequestLog[countName]++;

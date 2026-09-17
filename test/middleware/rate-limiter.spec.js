@@ -1,6 +1,6 @@
 'use strict';
 
-const moment = require('moment');
+const dayjs = require('dayjs');
 
 describe('rate-limiter', () => {
   let req;
@@ -27,22 +27,22 @@ describe('rate-limiter', () => {
     req.ip = 'default';
 
     const defaultMockData = [{
-      requestsTimeStamp: moment(staticTimeDay).subtract(2, 'minute').unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).subtract(2, 'minute').unix(),
       requestsCount: 2
     }];
 
     const oldMockData = [{
-      requestsTimeStamp: moment(staticTimeDay).subtract(6, 'minutes').unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).subtract(6, 'minutes').unix(),
       requestsCount: 20
     }];
 
     const recentMockData = [{
-      requestsTimeStamp: moment(staticTimeDay).unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).unix(),
       requestsCount: 20
     }];
 
     const submissionMockData = [{
-      submissionsTimeStamp: moment(staticTimeDay).subtract(2, 'minute').unix(),
+      submissionsTimeStamp: dayjs(staticTimeDay).subtract(2, 'minute').unix(),
       submissionsCount: 100
     }];
 
@@ -80,7 +80,7 @@ describe('rate-limiter', () => {
           return { get: getStub, set: setStub, quit: quitStub };
         }
       },
-      moment: () => moment(staticTimeDay)
+      dayjs: () => dayjs(staticTimeDay)
     });
   });
 
@@ -116,7 +116,7 @@ describe('rate-limiter', () => {
     await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
-      requestsTimeStamp: moment(staticTimeDay).unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).unix(),
       requestsCount: 1
     }]);
 
@@ -132,7 +132,7 @@ describe('rate-limiter', () => {
     await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
-      requestsTimeStamp: moment(staticTimeDay).unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).unix(),
       requestsCount: 1
     }]);
 
@@ -191,10 +191,10 @@ describe('rate-limiter', () => {
     await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
-      requestsTimeStamp: moment(staticTimeDay).subtract(2, 'minutes').unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).subtract(2, 'minutes').unix(),
       requestsCount: 2
     }, {
-      requestsTimeStamp: moment(staticTimeDay).subtract(1, 'minute').unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).subtract(1, 'minute').unix(),
       requestsCount: 1
     }]);
 
@@ -210,7 +210,7 @@ describe('rate-limiter', () => {
     await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     const data = JSON.stringify([{
-      requestsTimeStamp: moment(staticTimeDay).unix(),
+      requestsTimeStamp: dayjs(staticTimeDay).unix(),
       requestsCount: 21
     }]);
 
@@ -227,10 +227,10 @@ describe('rate-limiter', () => {
     await rateLimiter(mockOptions, 'submissions')(req, res, next);
 
     const data = JSON.stringify([{
-      submissionsTimeStamp: moment(staticTimeDay).subtract(2, 'minute').unix(),
+      submissionsTimeStamp: dayjs(staticTimeDay).subtract(2, 'minute').unix(),
       submissionsCount: 100
     }, {
-      submissionsTimeStamp: moment(staticTimeDay).subtract(1, 'minute').unix(),
+      submissionsTimeStamp: dayjs(staticTimeDay).subtract(1, 'minute').unix(),
       submissionsCount: 1
     }]);
 

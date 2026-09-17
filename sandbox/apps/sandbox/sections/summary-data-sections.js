@@ -1,4 +1,4 @@
-const moment = require('moment');
+const { formatDate } = require('../../../../utilities/date');
 const PRETTY_DATE_FORMAT = 'Do MMMM YYYY';
 const APPEAL_STAGES = require('../lib/staticAppealStages').getstaticAppealStages();
 const _ = require('lodash');
@@ -8,7 +8,7 @@ module.exports = {
     'name',
     {
       field: 'dateOfBirth',
-      parse: d => d && moment(d).format(PRETTY_DATE_FORMAT)
+      parse: d => d && formatDate(d, PRETTY_DATE_FORMAT)
     }
   ],
   address: [
