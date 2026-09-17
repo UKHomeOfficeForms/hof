@@ -2,15 +2,15 @@ const path = require('path');
 const glob = require('glob');
 
 module.exports = function (url, file, done) {
-  // if url starts with . or / then assume it's a local/relative path
-  if (['.', path.sep].indexOf(url.substr(0, 1)) > -1) {
+  // if url starts with . or a slash then assume it's a local/relative path
+  if (['.', '/', '\\'].indexOf(url.substr(0, 1)) > -1 || path.win32.isAbsolute(url)) {
     return done(null, true);
   }
 
   // otherwise construct a glob to match possible relative file paths
   const basedir = path.dirname(file);
 
-  const bits = url.split(path.sep);
+  const bits = url.split(/[\\/]/);
 
   let filename = bits.pop();
   const filepath = bits.join(path.sep);

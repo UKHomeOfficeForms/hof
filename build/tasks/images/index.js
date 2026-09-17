@@ -3,7 +3,6 @@
 
 const fs = require('fs');
 const chalk = require('chalk');
-const spawn = require('../../lib/spawn');
 
 module.exports = config => {
   if (!config.images) {
@@ -27,7 +26,7 @@ module.exports = config => {
       console.log(`${chalk.yellow('warning')}: Skipping missing images folder: ${src}`);
       return Promise.resolve();
     }
-    return spawn('cp', ['-r', `${src}/.`, imagesOutput]);
+    return fs.promises.cp(src, imagesOutput, { recursive: true });
   }))
     .catch(e => {
       if (e.code !== 'ENOENT') {
