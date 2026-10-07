@@ -6,10 +6,11 @@ describe('Notify', () => {
   let notifyClient;
   let Notify;
   let notify;
-  let req;
-  let nextStub;
+  let logger;
+  let randomUUID;
 
   const testTemplate = 'testTemplate';
+  const reference = 'f782dced-5d30-4d71-9ca8-e0fb5d3eea3f';
 
   const email = {
     subject: 'test-subject',
@@ -18,34 +19,18 @@ describe('Notify', () => {
   };
 
   beforeEach(() => {
-    req = {
-      form: {
-        values: {}
-      },
-      log: sinon.stub(),
-      sessionModel: {
-        get: sinon.stub(),
-        set: sinon.stub(),
-        unset: sinon.stub()
-      },
-      session: {
-        save: sinon.stub()
-      },
-      headers: {
-        referer: ''
-      }
-    };
-
-    nextStub = sinon.stub();
-
     notifyClient =  {
-      sendEmail: sinon.stub(NotifyClient.prototype, 'sendEmail')
+      sendEmail: sinon.stub(NotifyClient.prototype, 'sendEmail'),
+      prepareUpload: sinon.stub(NotifyClient.prototype, 'prepareUpload')
     };
+    logger = { log: sinon.stub() };
+    randomUUID = sinon.stub().returns(reference);
 
     notifyClient.sendEmail.resolves();
 
     Notify = proxyquire('../../../components/notify/notify', {
-      notifyClient
+      'node:crypto': { randomUUID },
+      '../../lib/logger': sinon.stub().returns(logger)
     });
   });
 
@@ -54,13 +39,13 @@ describe('Notify', () => {
   });
 
   describe('constructor', () => {
-    it('creates an instance', () => {
+    it('should create an instance', () => {
       notify = new Notify({
         notifyApiKey: '123456'
       });
     });
 
-    it('throws if notifyApiKey is not defined', () => {
+    it('should throw if notifyApiKey is not defined', () => {
       const make = opts => () => new Notify(opts);
       make().should.throw();
       make({ notifyApiKey: '123456' }).should.not.throw();
@@ -71,16 +56,78 @@ describe('Notify', () => {
     beforeEach(() => {
       const options = {
         notifyApiKey: '123456',
-        template: testTemplate
+        notifyTemplate: testTemplate
       };
       notify = new Notify(options);
     });
 
-    it('sendEmail is called with config templateId, emailAddress and personalisation values', () => {
-      return notify.send(email, req, nextStub)
-        .then(() => {
-          expect(notify.notifyClient.sendEmail).to.have.been.calledOnce;
-        });
+    it('should send the configured template, recipient, personalisation and UUID reference', async () => {
+      await notify.send(email);
+
+      expect(randomUUID).to.have.been.calledOnce;
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(testTemplate, email.recipient, {
+        personalisation: {
+          'email-subject': email.subject,
+          'email-body': email.body
+        },
+        reference
+      });
+      expect(notifyClient.prepareUpload).not.to.have.been.called;
+      expect(logger.log).to.have.been.calledOnceWithExactly('info', 'Email sent');
+    });
+
+    it('should generate a new reference for each email', async () => {
+      const secondReference = '6229b3f7-82e1-489e-99cf-3c593d3b23c0';
+      randomUUID.onSecondCall().returns(secondReference);
+
+      await notify.send(email);
+      await notify.send(email);
+
+      expect(randomUUID).to.have.been.calledTwice;
+      expect(notifyClient.sendEmail.firstCall.args[2].reference).to.equal(reference);
+      expect(notifyClient.sendEmail.secondCall.args[2].reference).to.equal(secondReference);
+    });
+
+    it('should prepare attachments and include them in personalisation', async () => {
+      const attachment = Buffer.from('test attachment');
+      const upload = { file: 'prepared attachment' };
+      notifyClient.prepareUpload.returns(upload);
+
+      await notify.send(Object.assign({}, email, { attachment }));
+
+      expect(notifyClient.prepareUpload).to.have.been.calledOnceWithExactly(attachment);
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(testTemplate, email.recipient, {
+        personalisation: {
+          'email-subject': email.subject,
+          'email-body': email.body,
+          'email-attachment': upload
+        },
+        reference
+      });
+    });
+
+    it('should preserve the original Notify error and log its response payload once', async () => {
+      const error = new Error('Notify request failed');
+      error.response = { data: { errors: [{ message: 'Invalid template' }] } };
+      notifyClient.sendEmail.rejects(error);
+
+      await expect(notify.send(email)).to.be.rejected.then(actualError => {
+        expect(actualError).to.equal(error);
+        expect(actualError.response).to.equal(error.response);
+      });
+
+      expect(logger.log).to.have.been.calledOnceWithExactly('error', error.response.data);
+    });
+
+    it('should preserve errors without a response and log their message once', async () => {
+      const error = new Error('Connection failed');
+      notifyClient.sendEmail.rejects(error);
+
+      await expect(notify.send(email)).to.be.rejected.then(actualError => {
+        expect(actualError).to.equal(error);
+      });
+
+      expect(logger.log).to.have.been.calledOnceWithExactly('error', error.message);
     });
   });
 });

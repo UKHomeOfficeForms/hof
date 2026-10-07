@@ -1,3 +1,12 @@
+## 2026-10-07 Version 24.5.2 (Stable), @vivekkumar-ho
+
+### Fixes
+- Preserved original Notify errors and their response payloads, and removed duplicate failure logging.
+
+### Chore & Maintenance
+- Replaced Notify email reference generation with Node.js `crypto.randomUUID`.
+- Added Notify coverage for email payloads, UUID references, attachments, and error propagation and logging.
+
 ## 2026-09-14 Version 24.5.1 (Stable), @nzorba @dk4g @dalglishdhandaHO
 
 ### Changed
