@@ -1,4 +1,4 @@
-## 2026-10-07 Version 24.5.2 (Stable), @vivekkumar-ho
+## 2026-10-07 Version 24.6.0 (Stable), @vivekkumar-ho
 
 ### Fixes
 - Preserved original Notify errors and their response payloads, and removed duplicate failure logging.
