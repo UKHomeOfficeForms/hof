@@ -1,7 +1,10 @@
 const path = require('path');
 
+const importSeparator = /[\\/]/;
+
 function Import(importUrl) {
   this.importUrl = importUrl;
+  this.segments = importUrl.split(importSeparator);
 }
 
 Import.prototype.isScoped = function () {
@@ -9,24 +12,18 @@ Import.prototype.isScoped = function () {
 };
 
 Import.prototype.packageName = function () {
-  if (this.isScoped()) {
-    return this.importUrl.split(path.sep, 2).join(path.sep);
-  }
-  return this.importUrl.split(path.sep, 1)[0];
+  const packageSegmentCount = this.isScoped() ? 2 : 1;
+  return this.segments.slice(0, packageSegmentCount).join('/');
 };
 
 Import.prototype.isEntrypoint = function () {
-  const safePathSplitPattern = new RegExp(path.sep + '.');
-  const pathSegmentCount = this.importUrl.split(safePathSplitPattern).length;
-
-  if (this.isScoped()) {
-    return pathSegmentCount === 2;
-  }
-  return pathSegmentCount === 1;
+  const packageSegmentCount = this.isScoped() ? 2 : 1;
+  return this.segments.length === packageSegmentCount;
 };
 
 Import.prototype.specifiedFilePath = function () {
-  return this.importUrl.slice(this.packageName().length);
+  const packageSegmentCount = this.isScoped() ? 2 : 1;
+  return path.join(...this.segments.slice(packageSegmentCount));
 };
 
 module.exports = Import;
