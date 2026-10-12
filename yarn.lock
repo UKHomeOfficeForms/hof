@@ -13,10 +13,10 @@
     "@csstools/css-tokenizer" "^3.0.3"
     lru-cache "^10.4.3"
 
-"@aws-sdk/client-sesv2@^3.1109.0":
-  version "3.1147.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-sesv2/-/client-sesv2-3.1147.0.tgz#0f4c06caa1fa0a5f074456718fd24d921cd4a5c7"
-  integrity sha512-Fv2buzcD/rPu3DA2dRoFlUKPc6vhHTPVr8La+4C+XS+qk3hSvwRPDQOYy1wmb02wCl7MgOkoIkTJZ7NZx2IMPw==
+"@aws-sdk/client-sesv2@^3.1148.0":
+  version "3.1148.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-sesv2/-/client-sesv2-3.1148.0.tgz#3b6c5b7f5fc0f3d1d924692f5ec237173a79024f"
+  integrity sha512-bjpHpgxtQESdz7pDHx+CkM4GEOm3dQ5tNSODsVskseSwb/DBsMpwJAnZAvCFGdjb9biIngtvL9ZI5myUJzUtcQ==
   dependencies:
     "@aws-sdk/core" "^3.978.1"
     "@aws-sdk/credential-provider-node" "^3.972.84"
@@ -6700,10 +6700,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.13.10:
-  version "1.13.14"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.13.14.tgz#cf4e4a9a9c113566fc19917adfac77f8a4adb9bf"
-  integrity sha512-llihgCcx0BFLksecLP+x1J+6JDE1GsXS1RN/LoPF6qcwpeQcnjj0lcvZxY8AzbEpYwyZWPZW/nDuqkqzm3amiw==
+libphonenumber-js@^1.13.15:
+  version "1.13.15"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.13.15.tgz#da973cc4b7cf178acff24bece8b9c2eefdf98818"
+  integrity sha512-AHdhEQeDFEJ4GKDAQ9AwxChy+v2kUILUB3TGQRpkXMkWePjXTU/WQEzWVQoIx/Gz8fE73Wr5SEuZCy2vk8jrMQ==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
@@ -7975,17 +7975,17 @@ pkg-types@^2.3.0:
     exsolve "^1.1.1"
     pathe "^2.0.3"
 
-playwright-core@1.63.0:
-  version "1.63.0"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.63.0.tgz#e57665bc32846c213ac39a1e4d5bc6228e76b376"
-  integrity sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==
+playwright-core@1.64.0:
+  version "1.64.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.64.0.tgz#a765f91dabd2b2cadd67e87439842c1d6c72c652"
+  integrity sha512-T9r+MZkTECl2+oUcZ26YgZzTrYidTsIhYYkJix+6iDOymOb1FB2RLLSOxRGnZGv5DStt+aduIVbt+E8WygXYpg==
 
-playwright@^1.62.1:
-  version "1.63.0"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.63.0.tgz#99b56f9f69b1b70c44f00bf84b2fe52348ae2511"
-  integrity sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg==
+playwright@^1.64.0:
+  version "1.64.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.64.0.tgz#c105a3ffe174d487a5927a6836a79778b1180742"
+  integrity sha512-kVzTnYFYEyQ9RGzBjNCd2+yEqWmVbxl3AHPynv3qQ6JTjv4a+kwRcnqQwIpuP3NnrnIrE/Q6wWAIAvMfIE2/Yg==
   dependencies:
-    playwright-core "1.63.0"
+    playwright-core "1.64.0"
 
 possible-typed-array-names@^1.0.0, possible-typed-array-names@^1.1.0:
   version "1.1.0"
