@@ -158,6 +158,39 @@ describe('Notify', () => {
         );
       });
 
+      it('should override the configured value with an email reply-to ID passed to send', async () => {
+        await notify.send(Object.assign({}, email, { emailReplyToId: 'override-reply-to-id' }));
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {
+              'email-subject': email.subject,
+              'email-body': email.body
+            },
+            reference,
+            emailReplyToId: 'override-reply-to-id'
+          }
+        );
+      });
+
+      it('should omit emailReplyToId when send is given an empty string', async () => {
+        await notify.send(Object.assign({}, email, { emailReplyToId: '' }));
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {
+              'email-subject': email.subject,
+              'email-body': email.body
+            },
+            reference
+          }
+        );
+      });
+
       it('should omit emailReplyToId when sendEmail is given an empty string', async () => {
         await notify.sendEmail(testTemplate, email.recipient, {}, '');
 

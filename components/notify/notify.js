@@ -52,7 +52,12 @@ module.exports = class Notify {
       );
     }
 
-    await this.sendEmail(this.notifyTemplate, email.recipient, personalisation);
+    await this.sendEmail(
+      this.notifyTemplate,
+      email.recipient,
+      personalisation,
+      email.emailReplyToId
+    );
   }
 };
 
