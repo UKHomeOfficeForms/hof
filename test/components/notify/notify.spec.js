@@ -135,6 +135,43 @@ describe('Notify', () => {
       );
     });
 
+    describe('with a configured email reply-to ID', () => {
+      beforeEach(() => {
+        notify = new Notify({
+          notifyApiKey: '123456',
+          notifyTemplate: testTemplate,
+          emailReplyToId: 'default-reply-to-id'
+        });
+      });
+
+      it('should override the configured value with a sendEmail argument', async () => {
+        await notify.sendEmail(testTemplate, email.recipient, {}, 'override-reply-to-id');
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {},
+            reference,
+            emailReplyToId: 'override-reply-to-id'
+          }
+        );
+      });
+
+      it('should omit emailReplyToId when sendEmail is given an empty string', async () => {
+        await notify.sendEmail(testTemplate, email.recipient, {}, '');
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {},
+            reference
+          }
+        );
+      });
+    });
+
     it('should generate a new reference for each email', async () => {
       const secondReference = '6229b3f7-82e1-489e-99cf-3c593d3b23c0';
       randomUUID.onSecondCall().returns(secondReference);
