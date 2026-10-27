@@ -1,3 +1,12 @@
+## 2026-10-27 Version 24.7.0 (Stable), @vivekkumar-ho
+
+### Added
+- Added optional `emailReplyToId` support to the Notify component. It can be set in the `Notify` constructor as a default for all emails, or passed as a fourth argument to `sendEmail()` to override the default for a single email.
+- Empty or missing `emailReplyToId` values are not sent, so GOV.UK Notify uses the service's default reply-to address. Existing consumers are unaffected.
+
+### Chore & Maintenance
+- Added Notify coverage for configured, per-call and empty `emailReplyToId` values.
+
 ## 2026-10-07 Version 24.6.0 (Stable), @vivekkumar-ho
 
 ### Fixes

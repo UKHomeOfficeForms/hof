@@ -14,14 +14,21 @@ module.exports = class Notify {
     this.notifyTemplate = options.notifyTemplate;
   }
 
-  async sendEmail(templateId, recipient, personalisation) {
+  async sendEmail(
+    templateId,
+    recipient,
+    personalisation,
+    emailReplyToId = this.options.emailReplyToId
+  ) {
     const reference = randomUUID();
+    const options = { personalisation, reference };
+
+    if (emailReplyToId) {
+      options.emailReplyToId = emailReplyToId;
+    }
 
     try {
-      await this.notifyClient.sendEmail(templateId, recipient, {
-        personalisation: personalisation,
-        reference
-      });
+      await this.notifyClient.sendEmail(templateId, recipient, options);
       this.logger.log('info', 'Email sent');
     } catch (error) {
       this.logger.log(

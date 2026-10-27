@@ -76,6 +76,65 @@ describe('Notify', () => {
       expect(logger.log).to.have.been.calledOnceWithExactly('info', 'Email sent');
     });
 
+    it('should include the configured email reply-to ID', async () => {
+      notify = new Notify({
+        notifyApiKey: '123456',
+        notifyTemplate: testTemplate,
+        emailReplyToId: 'reply-to-id'
+      });
+
+      await notify.send(email);
+
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+        testTemplate,
+        email.recipient,
+        {
+          personalisation: {
+            'email-subject': email.subject,
+            'email-body': email.body
+          },
+          reference,
+          emailReplyToId: 'reply-to-id'
+        }
+      );
+    });
+
+    it('should omit an empty configured email reply-to ID', async () => {
+      notify = new Notify({
+        notifyApiKey: '123456',
+        notifyTemplate: testTemplate,
+        emailReplyToId: ''
+      });
+
+      await notify.send(email);
+
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+        testTemplate,
+        email.recipient,
+        {
+          personalisation: {
+            'email-subject': email.subject,
+            'email-body': email.body
+          },
+          reference
+        }
+      );
+    });
+
+    it('should allow an email reply-to ID to be provided to sendEmail', async () => {
+      await notify.sendEmail(testTemplate, email.recipient, {}, 'reply-to-id');
+
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+        testTemplate,
+        email.recipient,
+        {
+          personalisation: {},
+          reference,
+          emailReplyToId: 'reply-to-id'
+        }
+      );
+    });
+
     it('should generate a new reference for each email', async () => {
       const secondReference = '6229b3f7-82e1-489e-99cf-3c593d3b23c0';
       randomUUID.onSecondCall().returns(secondReference);
