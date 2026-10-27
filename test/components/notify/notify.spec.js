@@ -76,6 +76,135 @@ describe('Notify', () => {
       expect(logger.log).to.have.been.calledOnceWithExactly('info', 'Email sent');
     });
 
+    it('should include the configured email reply-to ID', async () => {
+      notify = new Notify({
+        notifyApiKey: '123456',
+        notifyTemplate: testTemplate,
+        emailReplyToId: 'reply-to-id'
+      });
+
+      await notify.send(email);
+
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+        testTemplate,
+        email.recipient,
+        {
+          personalisation: {
+            'email-subject': email.subject,
+            'email-body': email.body
+          },
+          reference,
+          emailReplyToId: 'reply-to-id'
+        }
+      );
+    });
+
+    it('should omit an empty configured email reply-to ID', async () => {
+      notify = new Notify({
+        notifyApiKey: '123456',
+        notifyTemplate: testTemplate,
+        emailReplyToId: ''
+      });
+
+      await notify.send(email);
+
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+        testTemplate,
+        email.recipient,
+        {
+          personalisation: {
+            'email-subject': email.subject,
+            'email-body': email.body
+          },
+          reference
+        }
+      );
+    });
+
+    it('should allow an email reply-to ID to be provided to sendEmail', async () => {
+      await notify.sendEmail(testTemplate, email.recipient, {}, 'reply-to-id');
+
+      expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+        testTemplate,
+        email.recipient,
+        {
+          personalisation: {},
+          reference,
+          emailReplyToId: 'reply-to-id'
+        }
+      );
+    });
+
+    describe('with a configured email reply-to ID', () => {
+      beforeEach(() => {
+        notify = new Notify({
+          notifyApiKey: '123456',
+          notifyTemplate: testTemplate,
+          emailReplyToId: 'default-reply-to-id'
+        });
+      });
+
+      it('should override the configured value with a sendEmail argument', async () => {
+        await notify.sendEmail(testTemplate, email.recipient, {}, 'override-reply-to-id');
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {},
+            reference,
+            emailReplyToId: 'override-reply-to-id'
+          }
+        );
+      });
+
+      it('should override the configured value with an email reply-to ID passed to send', async () => {
+        await notify.send(Object.assign({}, email, { emailReplyToId: 'override-reply-to-id' }));
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {
+              'email-subject': email.subject,
+              'email-body': email.body
+            },
+            reference,
+            emailReplyToId: 'override-reply-to-id'
+          }
+        );
+      });
+
+      it('should omit emailReplyToId when send is given an empty string', async () => {
+        await notify.send(Object.assign({}, email, { emailReplyToId: '' }));
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {
+              'email-subject': email.subject,
+              'email-body': email.body
+            },
+            reference
+          }
+        );
+      });
+
+      it('should omit emailReplyToId when sendEmail is given an empty string', async () => {
+        await notify.sendEmail(testTemplate, email.recipient, {}, '');
+
+        expect(notifyClient.sendEmail).to.have.been.calledOnceWithExactly(
+          testTemplate,
+          email.recipient,
+          {
+            personalisation: {},
+            reference
+          }
+        );
+      });
+    });
+
     it('should generate a new reference for each email', async () => {
       const secondReference = '6229b3f7-82e1-489e-99cf-3c593d3b23c0';
       randomUUID.onSecondCall().returns(secondReference);
