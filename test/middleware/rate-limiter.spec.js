@@ -8,6 +8,7 @@ describe('rate-limiter', () => {
   let next;
   let loggerStub;
   let rateLimiter;
+  let connectStub;
   let getStub;
   let setStub;
   let quitStub;
@@ -20,6 +21,7 @@ describe('rate-limiter', () => {
     res = response();
     next = sinon.stub();
     loggerStub = sinon.stub();
+    connectStub = sinon.stub().resolves();
     getStub = sinon.stub();
     setStub = sinon.stub();
     quitStub = sinon.stub();
@@ -46,12 +48,12 @@ describe('rate-limiter', () => {
       submissionsCount: 100
     }];
 
-    getStub.withArgs('default').yields(null, JSON.stringify(defaultMockData));
-    getStub.withArgs('old_records').yields(null, JSON.stringify(oldMockData));
-    getStub.withArgs('recent_records').yields(null, JSON.stringify(recentMockData));
-    getStub.withArgs('submission_records').yields(null, JSON.stringify(submissionMockData));
-    getStub.withArgs('no_records').yields(null, null);
-    getStub.withArgs('error').yields('RedisError');
+    getStub.withArgs('default').resolves(JSON.stringify(defaultMockData));
+    getStub.withArgs('old_records').resolves(JSON.stringify(oldMockData));
+    getStub.withArgs('recent_records').resolves(JSON.stringify(recentMockData));
+    getStub.withArgs('submission_records').resolves(JSON.stringify(submissionMockData));
+    getStub.withArgs('no_records').resolves(null);
+    getStub.withArgs('error').rejects(new Error('RedisError'));
 
     mockOptions = {
       logger: { log: loggerStub },
@@ -77,7 +79,14 @@ describe('rate-limiter', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
-          return { get: getStub, set: setStub, quit: quitStub };
+          return {
+            connect: connectStub,
+            on: sinon.stub(),
+            get: getStub,
+            set: setStub,
+            quit: quitStub,
+            isOpen: true
+          };
         }
       },
       dayjs: () => dayjs(staticTimeDay)
@@ -92,6 +101,7 @@ describe('rate-limiter', () => {
     rateLimiter(mockOptions, 'requests')(req, res, next);
 
     loggerStub.should.have.been.calledOnce.calledWithExactly('error', 'Redis client does not exist!');
+    connectStub.should.not.have.been.called;
     getStub.should.not.have.been.called;
     setStub.should.not.have.been.called;
     quitStub.should.not.have.been.called;
@@ -102,12 +112,25 @@ describe('rate-limiter', () => {
     req.ip = 'error';
     await rateLimiter(mockOptions, 'requests')(req, res, next);
 
-    const errMsg = 'Error with requesting redis session for rate limiting: RedisError';
+    const errMsg = 'Error with requesting redis session for rate limiting: Error: RedisError';
 
     loggerStub.should.have.been.calledOnce.calledWithExactly(req.ip, errMsg);
+    connectStub.should.have.been.calledOnce;
     getStub.should.have.been.calledOnce;
     setStub.should.not.have.been.called;
     quitStub.should.have.been.calledOnce.calledWithExactly();
+    next.should.have.been.calledOnce.calledWithExactly(undefined);
+  });
+
+  it('logs an error and returns if Redis cannot connect', async () => {
+    connectStub.rejects(new Error('RedisError'));
+    await rateLimiter(mockOptions, 'requests')(req, res, next);
+
+    loggerStub.should.have.been.calledOnce.calledWithExactly(
+      'error',
+      'Error with requesting redis session for rate limiting: Error: RedisError'
+    );
+    getStub.should.not.have.been.called;
     next.should.have.been.calledOnce.calledWithExactly(undefined);
   });
 
@@ -247,13 +270,21 @@ describe('rate-limiter', () => {
     rateLimiter = proxyquire('../middleware/rate-limiter', {
       redis: {
         createClient: () => {
-          return { get: () => {
-            throw new Error('FAIL');
-          }, quit: quitStub };
+          return {
+            connect: connectStub,
+            on: sinon.stub(),
+            get: getStub,
+            set: () => {
+              throw new Error('FAIL');
+            },
+            quit: quitStub,
+            isOpen: true
+          };
         }
       }
     });
 
+    getStub.withArgs('default').resolves(null);
     await rateLimiter(mockOptions, 'requests')(req, res, next);
 
     loggerStub.should.not.have.been.called;
