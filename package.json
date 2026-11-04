@@ -34,7 +34,7 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
-    "@aws-sdk/client-sesv2": "^3.1157.0",
+    "@aws-sdk/client-sesv2": "^3.1160.0",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "aliasify": "^2.1.0",
@@ -83,7 +83,7 @@
     "redis": "^3.1.2",
     "reqres": "^3.0.1",
     "rimraf": "^3.0.2",
-    "sass": "^1.106.1",
+    "sass": "^1.107.0",
     "serve-static": "^1.16.3",
     "uglify-js": "^3.19.3",
     "underscore": "^1.13.8",
