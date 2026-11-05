@@ -1,3 +1,9 @@
+## 2026-11-05 Version 24.7.1 (Stable), @MikeMaratheftis
+
+### Changed
+- Updated minimatch and release-it
+- Pinned undici version
+
 ## 2026-10-27 Version 24.7.0 (Stable), @vivekkumar-ho
 
 ### Added
