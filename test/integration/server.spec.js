@@ -771,12 +771,20 @@ describe('hof server', () => {
     let redisClient;
     let reqMiddleware;
 
-    beforeEach(() => {
-      redisClient = redis.createClient();
+    beforeEach(async () => {
+      redisClient = redis.createClient({
+        socket: {
+          host: process.env.REDIS_HOST || '127.0.0.1',
+          port: Number(process.env.REDIS_PORT || 6379)
+        }
+      });
+      redisClient.on('error', () => {});
+      await redisClient.connect();
     });
 
-    afterEach(() => {
-      redisClient.del(reqMiddleware.ip);
+    afterEach(async () => {
+      await redisClient.del(reqMiddleware.ip);
+      await redisClient.quit();
     });
 
     it('does not set up rate limits for requests if they are disabled', () => {
@@ -804,11 +812,10 @@ describe('hof server', () => {
         .get('/a-static-page')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(async () => {
-          await redisClient.get(reqMiddleware.ip, (err, record) => {
-            const recordCount = _.sum(_.map(JSON.parse(record), obj => obj.requestsCount));
-            expect(recordCount).to.eq(0);
-          });
+        .then(async () => {
+          const record = await redisClient.get(reqMiddleware.ip);
+          const recordCount = _.sum(_.map(JSON.parse(record || '[]'), obj => obj.requestsCount));
+          expect(recordCount).to.eq(0);
         });
     });
 
@@ -837,11 +844,10 @@ describe('hof server', () => {
         .get('/a-static-page')
         .set('Cookie', ['myCookie=1234'])
         .expect(200)
-        .expect(async () => {
-          await redisClient.get(reqMiddleware.ip, (err, record) => {
-            const recordCount = _.sum(_.map(JSON.parse(record), obj => obj.requestsCount));
-            expect(recordCount).to.eq(1);
-          });
+        .then(async () => {
+          const record = await redisClient.get(reqMiddleware.ip);
+          const recordCount = _.sum(_.map(JSON.parse(record || '[]'), obj => obj.requestsCount));
+          expect(recordCount).to.eq(1);
         });
     });
   });
