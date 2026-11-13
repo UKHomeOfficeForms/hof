@@ -1,4 +1,10 @@
-## 2026-11-05 Version 24.7.1 (Stable), @MikeMaratheftis
+## 2026-11-13 Version 24.7.2 (Stable), @dalglishdhandaHO
+
+### Changed
+- Fixed the minimatch import for compatibility with minimatch 11
+
+
+## 2026-11-05 Version 24.7.1 (Unstable), @MikeMaratheftis
 
 ### Changed
 - Updated minimatch and release-it
