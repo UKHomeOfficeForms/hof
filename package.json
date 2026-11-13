@@ -93,7 +93,7 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^7.3.2",
+    "@cucumber/cucumber": "^13.3.0",
     "@cucumber/pretty-formatter": "^4.1.0",
     "@types/jest": "^30.0.0",
     "@vitest/coverage-v8": "^4.1.12",
