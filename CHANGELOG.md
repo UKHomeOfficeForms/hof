@@ -463,4 +463,3 @@ For testing purposes, you can use the following command to generate a random val
 * Fix router's optional paths
 * Set the app to trust proxy
 * Update cookies settings
-
