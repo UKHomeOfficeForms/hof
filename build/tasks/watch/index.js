@@ -7,7 +7,7 @@ const throttle = require('lodash').throttle;
 const uniq = require('lodash').uniq;
 const cp = require('child_process');
 const path = require('path');
-const match = require('minimatch');
+const { minimatch: match } = require('minimatch');
 const chalk = require('chalk');
 const extname = require('path').extname;
 
